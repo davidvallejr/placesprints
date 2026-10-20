@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Commit + push diário do Place Sprints ao GitHub (23h30). Instalar:
+     cp automacao/com.place2u.place-sprints.git.plist ~/Library/LaunchAgents/
+     launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.place2u.place-sprints.git.plist -->
+<plist version="1.0"><dict>
+  <key>Label</key><string>com.place2u.place-sprints.git</string>
+  <key>ProgramArguments</key><array>
+    <string>/bin/zsh</string><string>/Users/davidvallejr/place-sprints/scripts/git-auto.sh</string>
+  </array>
+  <key>StartCalendarInterval</key><dict><key>Hour</key><integer>23</integer><key>Minute</key><integer>30</integer></dict>
+  <key>StandardOutPath</key><string>/Users/davidvallejr/place-sprints/data/git-auto.log</string>
+  <key>StandardErrorPath</key><string>/Users/davidvallejr/place-sprints/data/git-auto.log</string>
+</dict></plist>
