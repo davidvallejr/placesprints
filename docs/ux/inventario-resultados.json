@@ -1,0 +1,267 @@
+{
+ "id": "resultados",
+ "pergunta": "Quais tipos de tarefa (e quais jeitos de executar) costumam trazer resultado mensurável nas contas do Mercado Livre? Ou seja, o que a operação deve fazer mais e o que deve rever.",
+ "usuarios": [
+  "CEO/sócio (David e o sócio): decidir o que priorizar no método e no plano de ação",
+  "Heads e líderes de squad: calibrar a distribuição de tarefas e ler o histórico por analista",
+  "Consultores e analistas: saber qual tipo de tarefa costuma funcionar e como deixar a tarefa medível (citar o MLB e preencher 'Concluído em')",
+  "Quem monta os Planos de Ação (/planos) e o Merovíngio (retroalimentação)"
+ ],
+ "acao_principal": "Ler o ranking 'Por tipo de tarefa' (limite inferior da taxa de melhora) para decidir quais tipos priorizar e quais rever no plano de ação.",
+ "acoes_secundarias": [
+  "Ver a cobertura de medição: quantas tarefas têm efeito medido, quantas estão em maturação, sem base ou valem para a conta inteira",
+  "Agir para medir mais: citar o ID do anúncio (MLB…) no card do Notion e preencher 'Concluído em' (orientação só em texto, sem link nem botão)",
+  "Consultar o histórico por analista (volume, melhorou/piorou, R$ associado)",
+  "Avaliar lançamentos e reativações: vendeu em 14 dias, receita, visitas/dia",
+  "Ver palavras recorrentes nos títulos das tarefas que funcionam",
+  "Entender a metodologia (antes/depois, controle, placebo, Wilson, reversão à média)",
+  "Navegar para Cliente, GMV, Integrações e Painel; usar o sino de avisos (alerta.js)"
+ ],
+ "secoes": [
+  {
+   "titulo": "Header (marca + nav)",
+   "conteudo": "Marca 'Place2u · Resultados' com link para /cliente (estilo inline). Nav: Cliente, GMV, Integrações, Painel. Sem indicação da página ativa.",
+   "ids_container": [],
+   "importancia": "media"
+  },
+  {
+   "titulo": "Título e subtítulo",
+   "conteudo": "h1 'O que melhor funciona' e parágrafo explicativo, os dois com style inline (clamp, max-width 70ch).",
+   "ids_container": [],
+   "importancia": "media"
+  },
+  {
+   "titulo": "Como cada tarefa é medida (.explica)",
+   "conteudo": "Bloco estático com 7 bullets densos de estatística (antes/depois 14d com defasagem, grupo de controle, teste de ruído com placebo p≤10% e ≥9 janelas ou |z|≥1,96, reversão à média ≥30%, confiança 0–100, lançamentos, Wilson 95% e mínimo de 5 tarefas) e o aviso 'Nada aqui é causalidade comprovada'. Aparece ANTES de qualquer dado.",
+   "ids_container": [],
+   "importancia": "baixa"
+  },
+  {
+   "titulo": "O que dá para medir hoje",
+   "conteudo": "Injetado pelo JS como .secao: subtítulo com n_clientes (27) e o total de tarefas do ML (802); 4 KPIs (.kpis/.kpi): Com efeito medido 100 (9 melhoraram · 24 pioraram · 67 sem efeito), Lançamentos 225 (51 venderam), Conta inteira 206, Sem base ou maturando 271. Faixa âmbar (.aviso-faixa) com as tarefas de canais não medidos (14 'canais', unidos por ' e ') e a orientação 'Para medir mais'. Quando há medidas confundidas pelo preço: linha 'N medidas fora do aprendizado por preço alterado na janela' (soma de mensurabilidade[].confundidas_preco).",
+   "ids_container": [
+    "mensura"
+   ],
+   "importancia": "alta"
+  },
+  {
+   "titulo": "Por tipo de tarefa",
+   "conteudo": "Tabela de 8 colunas (exceção declarada ao máximo de 6): Grupo · Tarefas · Melhorou (selo .estado.e-melhorou) · Sem efeito (.mudo, .opc) · Piorou (selo .estado.e-piorou) · Taxa de melhora ≥ (limite inferior de Wilson; o title traz a taxa observada) · Efeito mediano (.opc, .neg se < 0) · R$ associado (.neg se < 0). Zero fica sem selo (.mudo). Ordem da API intocada (teste-impacto). Amostra pequena VISÍVEL com selo 'amostra pequena' e botão 'Ocultar N tipos com amostra pequena'; selo '1 cliente' (title 'resultado daquele cliente, não do grupo'). Abaixo de 900px as colunas .opc somem. A 1ª célula é um button.lnk[data-drill=\"grupo|chave\"] que abre tr.det > div.drill com as tarefas do grupo (GET /api/resultados/tarefas, 50 por página, 'Mostrar mais', piorou primeiro): miniatura de 40px, título do anúncio ↗, tipo e título da tarefa com 'abrir tarefa ↗', aviso de preço (selo 'preço'), cliente (link /cliente?cliente=), analista, data de conclusão, selo do estado, efeito %, R$ e confiança.",
+   "ids_container": [
+    "tipos"
+   ],
+   "importancia": "alta"
+  },
+  {
+   "titulo": "Por nicho",
+   "conteudo": "Mesma tabela de 8 colunas e mesmo drill (grupo=nicho), por nicho curado (config/nichos.json; 'Sem nicho registrado'). Só nichos com n ≥ 5; o resto soma na linha 'Outros' (outros:true, grupos:n). No topo, o aviso de canal: 'Toda medição é do Mercado Livre (Shopee N, Amazon N e TikTok N tarefas concluídas nas contas conectadas, sem API conectada)', somado de mensurabilidade[].nao_mensuraveis.por_canal.",
+   "ids_container": [
+    "nichos"
+   ],
+   "importancia": "alta"
+  },
+  {
+   "titulo": "Por região",
+   "conteudo": "Mesma tabela e drill (grupo=regiao), pela região da UF da conta no ML (meli_contas.uf). Conta sem UF fica em 'Sem UF registrada'. Só regiões com n ≥ 5; o resto em 'Outros'.",
+   "ids_container": [
+    "regioes"
+   ],
+   "importancia": "media"
+  },
+  {
+   "titulo": "Nicho × tipo de tarefa",
+   "conteudo": "details#secNichoTipo recolhido, contador #nNichoTipo. Mesma tabela e drill (grupo=nicho_tipo, chave 'Nicho · Tipo'); só cruzamentos com n ≥ 5, sem linha 'Outros'.",
+   "ids_container": [
+    "secNichoTipo",
+    "nichoTipo"
+   ],
+   "importancia": "baixa"
+  },
+  {
+   "titulo": "Por analista",
+   "conteudo": "Mesma tabela de 8 colunas por pessoa (14 linhas, várias com R$ associado negativo). Subtítulo alerta que é histórico, não nota.",
+   "ids_container": [
+    "analistas"
+   ],
+   "importancia": "media"
+  },
+  {
+   "titulo": "Lançamentos e reativações",
+   "conteudo": "Tabela de 6 colunas (Grupo, Tarefas, Venderam na janela, Taxa com limite inferior, Receita, Visitas/dia mediana) por tipo. Hoje: 35 linhas, maioria com n=1.",
+   "ids_container": [
+    "lanc"
+   ],
+   "importancia": "media"
+  },
+  {
+   "titulo": "O que as tarefas que funcionam têm em comum",
+   "conteudo": "Tabela de 8 colunas por palavra do título com ≥5 ocorrências (7 palavras normalizadas sem acento: estrategia, otimizar, duplicacao…), ou um vazio-box.",
+   "ids_container": [
+    "secPalavras",
+    "palavras"
+   ],
+   "importancia": "baixa"
+  },
+  {
+   "titulo": "Footer + sino de avisos",
+   "conteudo": "Rodapé 'Place2u · Performance Estratégica em Marketplaces'. alerta.js injeta o sino fixo no canto inferior direito (#psSino, #psPainel, #psToasts), consulta /api/notificacoes a cada 8 s e põe o prefixo '(n) ' no document.title.",
+   "ids_container": [
+    "psSino",
+    "psPainel",
+    "psToasts"
+   ],
+   "importancia": "baixa"
+  }
+ ],
+ "kpis": [
+  "Clientes com conta conectada (n_clientes = 27)",
+  "Tarefas concluídas no ML mensuráveis (soma de mensuraveis = 802)",
+  "Com efeito medido = melhorou + piorou + sem_efeito (100 = 9 + 24 + 67)",
+  "Lançamentos (225) e lançamentos que venderam na janela (51)",
+  "Conta inteira, sem anúncio citado (206)",
+  "Sem base, em maturação ou sem controle (90 + 166 + 15 = 271)",
+  "Tarefas não medidas por canal (Shopee 991, Amazon 470, TikTok 130+103, Shopee2 126, Magalu 49…)",
+  "Por grupo: Tarefas (n), Melhorou, Sem efeito, Piorou, Taxa de melhora (taxa) e limite inferior Wilson (taxa_baixo), Efeito mediano (%), R$ associado (receita_incremental)",
+  "Lançamentos por grupo: Venderam, Taxa e limite inferior, Receita, Visitas/dia (mediana)",
+  "Dados que a API já entrega e a tela NÃO usa: confianca_media, taxa_alto, dias_ate_primeira_venda, lancamentos.por_subtipo (novo × reativado), lancamentos.por_analista, por_analista_tipo, ganho_associado/perda_associada, cobertura (de/até/dias) e medidas (80 tarefas)"
+ ],
+ "hooks_js": [
+  "#mensura ($('mensura'): recebe a seção 'O que dá para medir hoje' ou a faixa de erro)",
+  "#tipos ($('tipos'))",
+  "#nichos ($('nichos'): tabela por nicho + aviso de canal)",
+  "#regioes ($('regioes'))",
+  "#nichoTipo ($('nichoTipo'))",
+  "#secNichoTipo (details recolhido de Nicho × tipo, só no HTML: manter como âncora)",
+  "#nNichoTipo ($('nNichoTipo'): contador no summary)",
+  "[data-drill] (button.lnk na 1ª célula das tabelas com grupo: valor 'grupo|chave', grupo ∈ tipo|analista|nicho|regiao|nicho_tipo; abre tr.det > .drill logo abaixo; [data-drill-mais] pagina e tenta de novo; [data-pequenas] oculta/mostra a amostra pequena)",
+  "#analistas ($('analistas'))",
+  "#lanc ($('lanc'))",
+  "#palavras ($('palavras'))",
+  "#secPalavras (só no HTML, nenhum JS lê: manter como âncora)",
+  "Classes geradas pelo resultados.js que o CSS precisa estilizar: .secao, .sub (dentro de .secao), .kpis, .kpi, .rotulo, .valor, .detalhe, .aviso-faixa, .vazio-box, .tabela-wrap, table.t, th.n/td.n, .pos, .neg, .mudo, .selo, .selo.neutro",
+  "Elementos e classes estáticos estilizados: header, .marca (img + b), .header-links, main, footer, .explica (h4, ul, li)",
+  "alerta.js (carregado em todas as telas): cria #psSino, #psPainel, #psToasts e as classes .sino, .ico, .cont, .topo, .mini, .psItem, .psToast, .fechar, .nova, .sucesso, .alerta, .erro (com estilo próprio injetado num <style>; position fixed right/bottom 18px). Também reescreve document.title com o prefixo '(n) '. O redesenho não pode cobrir o canto inferior direito nem depender do <title> fixo.",
+  "Endpoints: GET /api/resultados/padroes e GET /api/resultados/tarefas?grupo=&chave=&f=&pagina= (resultados.js); GET /api/notificacoes?limite=100&desde=… e POST /api/notificacoes/lidas (alerta.js); GET /logo (img da marca, com onerror que esconde)"
+ ],
+ "classes_geradas_por_js": [
+  "secao",
+  "sub",
+  "kpis",
+  "kpi",
+  "rotulo",
+  "valor",
+  "detalhe",
+  "aviso-faixa",
+  "vazio-box",
+  "tabela-wrap",
+  "t",
+  "n",
+  "pos",
+  "neg",
+  "mudo",
+  "selo",
+  "neutro",
+  "psItem",
+  "psToast",
+  "sino",
+  "ico",
+  "cont",
+  "topo",
+  "mini",
+  "fechar",
+  "nova",
+  "sucesso",
+  "alerta",
+  "erro",
+  "lnk",
+  "opc",
+  "pequena",
+  "det",
+  "drill",
+  "dr-an",
+  "dr-img",
+  "estado",
+  "e-melhorou",
+  "e-piorou",
+  "e-sem_efeito",
+  "t-pag",
+  "aviso",
+  "info",
+  "linha",
+  "peq",
+  "amb",
+  "tab-grupo"
+ ],
+ "css_origem": "Dois CSS linkados e compartilhados. ui.css traz os tokens em :root (--laranja, --tinta, --cinza, --borda, --fundo-suave, --verde, --ambar, --verm, --azul, os *-suave, --sombra, --raio:16px), header, .marca, .header-links, main (max-width 1060px), .secao, .kpis/.kpi, .selo, .vazio-box, .aviso-faixa, .skeleton (existe, mas esta tela não usa) e footer; também é usado por promocoes, metodologia e gmv. ui-extra.css traz .tabela-wrap, table.t, .n, .pos/.neg/.mudo, .explica, ajustes de header/nav para mobile e foco em .tabela-wrap; também é usado por cliente, gmv, metodologia e promocoes. A tela não tem bloco <style>, mas tem style inline em resultados.html (link da marca, h1, p.sub, p do aviso de causalidade). alerta.js injeta o próprio <style> do sino e dos toasts. Não há dark mode. ATENÇÃO: o teste scripts/teste-promocoes-ui.mjs lê os tokens de ui.css (formato '--nome: #rrggbb', hex de 6 dígitos) e exige contraste ≥ 4,5:1 nos pares cinza/verde/ambar/verm/azul/laranja-escuro sobre branco e sobre os *-suave. Mudar esses tokens em ui.css pode quebrar esse teste.",
+ "links_navegacao": [
+  "/cliente (marca e nav)",
+  "/gmv",
+  "/integracoes",
+  "/ (Painel)",
+  "Entram nesta tela, com o rótulo 'O que funciona': cliente.html (nav), metodologia.html, processos.html, gmv.html, promocoes.html, gmv.js (texto) e cliente.js (seção 'Medição técnica por tarefa')",
+  "O corpo não tem nenhum link: nem para /metodologia, /planos, /analistas, nem para o Notion (a API manda a url de cada tarefa em medidas[], que a tela não usa)"
+ ],
+ "dependencias_externas": [
+  "Nenhuma CDN, nenhum Chart.js, nenhuma fonte externa (pilha de fontes do sistema -apple-system/Segoe UI/Roboto)",
+  "/logo (imagem servida pelo próprio servidor)",
+  "/alerta.js (sino de avisos, polling de 8 s em /api/notificacoes)",
+  "API interna GET /api/resultados/padroes (src/rotas-planos.js:543 → padroesGlobais() em src/lib/impacto-tarefas.js); payload de ~160 KB e ~1 s, porque inclui medidas[80] e por_analista_tipo, que a tela não usa"
+ ],
+ "testes_que_leem_esta_tela": [
+  "scripts/teste-sistemas.mjs — selos span.sis[data-sistema] desta tela: todo data-sistema existe em config/sistemas.json e bate com selos_sistema deste inventário",
+  "Nenhum scripts/teste-*.mjs lê src/web/resultados.html ou src/web/resultados.js. Rodei grep por 'resultados.html', 'resultados.js', '/resultados' e '/api/resultados' e não houve ocorrência em testes. As ocorrências de 'resultados' em teste-semanal-*.mjs e teste-diagnostico-comercial.mjs são de src/lib/semanal-resultados.js e do texto 'reunião de resultados', sem relação com esta tela.",
+  "Indireto (CSS compartilhado): scripts/teste-promocoes-ui.mjs:15 lê src/web/ui.css e no caso '58 · contraste ≥ 4,5:1…' (linhas 134-143) extrai os tokens com /--([a-z-]+)\\s*:\\s*(#[0-9a-fA-F]{6})/g e testa os pares ['laranja-escuro','#fff1e8'], ['laranja-escuro','#ffffff'], ['verde',--verde-suave], ['verde','#ffffff'], ['verde','#f6fbf6'], ['cinza','#ffffff'], ['cinza',--fundo-suave], ['cinza',--verm-suave], ['cinza',--ambar-suave], ['cinza','#f6fbf6'], ['azul',--azul-suave], ['ambar',--ambar-suave], ['ambar','#ffffff'], ['verm',--verm-suave], ['verm','#ffffff'] e ainda razao('#ffffff', --verm) ≥ 4,5.",
+  "Indireto (dados): scripts/teste-impacto.mjs:84-85 testa agruparPadroes. Exige amostra_pequena true para T1 (3/3) e false para T2 (8/10), e o assert.equal(g.por_tipo[0].chave, 'T2', 'ranking por limite inferior: T2 (8/10) acima de T1 (3/3, amostra pequena)'). A ordenação da API vem daqui; se o redesenho reordenar ou separar amostras pequenas, faça isso no front para não mexer nesse contrato.",
+  "Indireto (alerta.js): scripts/teste-notificacoes.mjs:32 lê src/web/alerta.js. Não editar o alerta.js no redesenho."
+ ],
+ "problemas_ux": [
+  "Hierarquia invertida: o bloco de metodologia (7 bullets de estatística: placebo, Wilson, z, reversão à média) vem antes de qualquer número. O sócio que quer 'limpo e estratégico' encontra uma aula antes da resposta.",
+  "Não há veredito: a tela não diz 'faça mais X' nem 'reveja Y'. A conclusão estratégica que os dados mostram (só 100 de 802 tarefas têm efeito medido, e 24 pioraram contra 9 que melhoraram) não aparece em destaque.",
+  "O topo do ranking é exatamente o que a metodologia manda ignorar: 'Duplicação de Anuncio' (n=3, amostra pequena) fica em 1º porque a ordenação é só pelo limite inferior. 23 das 26 linhas de 'Por tipo' são amostra pequena, e o sinal útil (Otimizar Anúncios n=37, Duplicação de Títulos n=19 com R$ -9.983) se perde no meio.",
+  "Tabelas largas demais: 8 colunas com min-width 640px, e Melhorou/Sem efeito/Piorou em três colunas numéricas que poderiam ser uma barra. No celular a tabela rola na horizontal dentro do card e a coluna Grupo some.",
+  "Tipos de tarefa duplicados por grafia, vindos do Notion: 'Duplicação de Anuncio', 'Duplicação de anúncios' e 'Duplicar Anúncio'; 'Otimizar Anúncios' e 'Otimizações anúncios'; 'CLIPS' e 'Inserir Clips'. Isso fragmenta a amostra e polui a leitura.",
+  "A faixa de 'não medidos' lista 14 entradas unidas por ' e ' ('991 tarefas de Shopee e 25 tarefas de Interno e 470 tarefas de Amazon e …'). Mistura canal real com o que não é canal (Interno, Geral, Entrada, Canva, Bling) e repete variações (Tiktok/TikTok, Shopee2/Shopee 2).",
+  "Erro de texto no estado sem outros canais: 'Nenhuma tarefa de outro canal não são medidas' (dupla negação e concordância errada).",
+  "A ação que mais aumenta o valor da tela ('cite o MLB no card e preencha Concluído em') está enterrada no fim de uma faixa âmbar, sem destaque e sem link para o Notion ou para /planos.",
+  "'Por analista' expõe um ranking de pessoas com R$ associado negativo (ex.: -4.450, -2.625) em tela aberta. É sensível para o time e fácil de ler como nota, apesar do aviso.",
+  "Dados sujos na tabela de analistas: um cliente aparece como analista ('Lalouí Cosméticos'), um nome vem com emoji ('Isa 🧠') e há nomes em minúsculas ('danielle nunes').",
+  "Lançamentos com 35 linhas, a maioria n=1. O recorte mais estratégico (novo × reativado: 178 reativados com 23% de venda e R$ 11,6 mil; 47 novos com 21%) já vem na API (por_subtipo) e não é mostrado.",
+  "A seção 'Palavras' tem pouco valor de decisão: as palavras vêm sem acento ('estrategia', 'duplicacao', 'otimizacao') e o efeito mediano é negativo em quem está no topo.",
+  "Nomes diferentes para a mesma tela: <title> 'O que melhor funciona', header 'Resultados', nav das outras telas 'O que funciona'.",
+  "A nav do header não indica a página ativa e não bate com a das outras telas (processos tem Distribuição/Analistas, metodologia tem O que funciona). Falta link para /metodologia, que é o par natural do bloco 'Como medimos'.",
+  "Estilos inline no HTML (marca, h1, subtítulo, aviso), fora do sistema de tokens.",
+  "Não há estado de carregamento: por cerca de 1 s aparecem só os títulos das seções sem conteúdo. O .skeleton existe no ui.css, mas a tela não usa.",
+  "O estado de erro é parcial: com HTTP != 200 só #mensura mostra a faixa e as outras 4 seções ficam com título e corpo vazio. Falha de rede ou de JSON vira uma promise rejeitada sem tratamento, sem nenhuma mensagem.",
+  "Sem contas conectadas (n_clientes 0) a tela mostra KPIs zerados e '0 cliente(s)', sem orientar a conectar em /integracoes.",
+  "Não diz a que período os números se referem: a API entrega cobertura de/até/dias (ex.: 10/05 a 06/10/2026) e a tela não mostra.",
+  "Payload de cerca de 160 KB, com medidas[80] e por_analista_tipo que a tela não usa.",
+  "Acessibilidade: tabelas sem <caption> e sem scope nos <th>; .tabela-wrap tem estilo de :focus-visible mas sem tabindex, então não dá para rolar pelo teclado; melhorou/piorou se distinguem só pela cor (verde/vermelho).",
+  "Os números 'R$ associado' e 'Efeito mediano' aparecem sem nenhuma indicação visual de confiança (confianca_media e taxa_alto vêm na API e não são usados)."
+ ],
+ "estados": [
+  "Carregando: inexistente (containers vazios, títulos de seção visíveis sem conteúdo até o fetch terminar, ~1 s)",
+  "Sucesso: as 5 áreas preenchidas pelo JS",
+  "Erro HTTP (!r.ok): faixa .aviso-faixa 'Não foi possível carregar os padrões.' só em #mensura; tipos/analistas/lanc/palavras ficam vazios",
+  "Erro de rede ou JSON inválido: sem tratamento (exceção não capturada), tela sem nenhuma mensagem",
+  "Vazio por tabela: .vazio-box 'Ainda não há tarefas medidas nesta categoria.'",
+  "Vazio de palavras: .vazio-box 'Ainda não há palavras com 5 ou mais tarefas medidas.'",
+  "Sem outros canais: texto 'Nenhuma tarefa de outro canal não são medidas…' (com o erro de concordância)",
+  "Amostra pequena por linha: selo .selo.neutro 'amostra pequena' (n < 5)",
+  "Sem conta ML conectada / n_clientes = 0: sem estado dedicado (KPIs zerados, sem CTA para /integracoes)",
+  "Avisos do sistema (alerta.js): sino com contador, toasts e prefixo '(n)' no título; painel vazio 'Nenhum aviso ainda…'"
+ ],
+ "recomendacao": "Transformar a tela numa página de decisão, na ordem pergunta → veredito → prova → detalhe, mantendo os ids #mensura, #tipos, #analistas, #lanc, #palavras e #secPalavras e as classes que o JS gera. (1) Header com a nav padrão das outras telas e a página ativa marcada, e um nome só: 'O que funciona', com o período (cobertura de/até) numa linha cinza abaixo do h1. (2) Uma faixa-veredito com três cartões calculados no front com os dados que já vêm de por_tipo (n ≥ 5): 'Fazer mais' (maior limite inferior e R$ positivo), 'Rever' (piorou > melhorou ou R$ negativo, ex.: Duplicação de Títulos) e 'Ainda sem prova' (quantidade de tipos com amostra pequena). Cada cartão mostra um número e uma frase, sem tabela. (3) A cobertura em #mensura como uma métrica-âncora ('100 de 802 tarefas com efeito medido · 12%'), uma barra empilhada (melhorou/sem efeito/piorou/lançamento/conta inteira/maturando) no lugar dos 4 KPIs soltos e um CTA único e visível 'Para medir mais: cite o MLB e preencha Concluído em'. Os canais não medidos ficam em 3 chips (Shopee, Amazon, TikTok) mais 'outros', sem a frase corrida. (4) 'Por tipo' enxuto, com 5 colunas (Tipo, Tarefas, resultado em mini barra verde/cinza/vermelha com rótulo textual, Taxa ≥, R$ associado), só n ≥ 5 visível e as amostras pequenas recolhidas em 'Mostrar N tipos com amostra pequena'. A ordenação da API não muda, para não quebrar o teste-impacto. (5) Lançamentos abrindo com o recorte novo × reativado (por_subtipo) em dois números e a tabela por tipo recolhida. (6) 'Por analista' dentro de um <details> 'Histórico por analista (uso interno)', fechado por padrão. (7) Palavras e o bloco 'Como medimos' (os 7 bullets mais o aviso de causalidade) em <details> no rodapé, com link para /metodologia. Também: skeleton no carregamento, try/catch que escreve o erro em todas as áreas, estilos inline trocados por classes, tokens de ui.css intocados (ou com contraste ≥ 4,5:1, por causa do teste-promocoes-ui) e o canto inferior direito livre para o sino do alerta.js. O resultado é uma tela que o sócio aprova em 10 segundos: o que funciona, o que rever, quanto disso dá para provar e qual é o próximo passo.",
+ "selos_sistema": {
+  "regra": "Selo discreto do sistema de origem (config/sistemas.json, 15/10/2026) ao lado do título da seção: span.sis[data-sistema], classe .sis em ui.css. Só tela interna; não muda id nem nº de colunas. Teste: scripts/teste-sistemas.mjs.",
+  "secoes": {
+   "Por tipo de tarefa": "merovingio",
+   "Por nicho": "merovingio",
+   "Por região": "merovingio",
+   "Lançamentos e reativações": "merovingio",
+   "#secNichoTipo": "merovingio",
+   "Histórico por analista": "merovingio",
+   "#secPalavras": "merovingio",
+   "Como medimos": "merovingio"
+  }
+ }
+}

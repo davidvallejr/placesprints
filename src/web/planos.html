@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Distribuição · Place Sprints</title>
+<link rel="stylesheet" href="/ui.css">
+<link rel="stylesheet" href="/tela-distribuicao.css">
+</head>
+<body data-pagina="distribuicao">
+<header class="ps-shell" id="psShell"></header>
+<script src="/shell.js"></script>
+<main class="pg">
+  <div class="pg-cab">
+    <div class="pg-titulo">
+      <h1>Distribuição de planos</h1>
+      <p class="pg-meta"><span>Nada vai ao Notion sem pré-visualização</span><span>no máximo 5 tarefas por cliente</span></p>
+    </div>
+    <div class="pg-acoes">
+      <details class="menu">
+        <summary class="btn" aria-label="Mais ações">⋯</summary>
+        <div class="menu-lista">
+          <button type="button" id="btnEquipe">Atualizar equipe</button>
+          <button type="button" id="btnSyncPrest">Atualizar prestadores do Notion</button>
+          <button type="button" id="btnNotionTodos" title="Relê a página, as bases e a base Informações de todos os clientes da central (só leitura no Notion)">Atualizar Notion de todos</button>
+          <button type="button" id="btnRelFrequencia" title="Semanal, quinzenal, mensal ou desligado para os clientes do escopo">Definir frequência dos relatórios</button>
+        </div>
+      </details>
+      <button type="button" class="btn" id="btnRelAntecipar" title="Gera o relatório dos últimos 7 dias dos clientes do escopo e envia ao Notion deles, depois de você ver a prévia">Enviar relatório antecipadamente</button>
+      <a id="lnkCsv" class="btn btn-fantasma" href="/api/planos/acoes.csv?tipo=total">CSV do escopo</a>
+    </div>
+  </div>
+
+  <section class="veredito" aria-label="Resumo">
+    <p class="veredito-frase" id="veredito"><span class="sk-linha"></span></p>
+    <div class="regua" id="regua" hidden></div>
+    <div class="kpis" id="kpis" aria-busy="true"></div>
+  </section>
+
+  <ol class="passos" id="passos">
+    <li class="atual">Escopo</li>
+    <li>Gerar <button type="button" class="btn" id="btnGerar">Gerar planos</button></li>
+    <li><a href="#secRevisar">Revisar</a></li>
+    <li>Enviar <button type="button" class="btn" id="btnPrevia">Pré-visualizar</button><button type="button" class="btn btn-primario" id="btnDistribuir" disabled>Criar tarefas no Notion</button></li>
+  </ol>
+  <div id="job" hidden aria-live="polite">
+    <div class="mudo peq" id="jobTxt"></div>
+    <div class="barra-progresso"><div id="jobBarra"></div></div>
+  </div>
+  <div id="resultado"></div>
+
+  <section class="bloco" id="secEscopo">
+    <div class="cartao">
+      <h2>Escopo</h2><span class="sis" data-sistema="arquiteto" title="Sistema de origem: Arquiteto">Arquiteto</span>
+      <p class="sub">Clientes sem base de tarefas no Notion, desligados ou congelados ficam de fora.</p>
+      <div class="seg" id="tipos">
+        <button type="button" data-t="total" class="on">Total</button><button type="button" data-t="squad">Por squad</button><button type="button" data-t="consultor">Por consultor</button><button type="button" data-t="selecao">Seleção de clientes</button>
+      </div>
+      <div class="linha" id="boxSquad" hidden><label class="sr" for="selSquad">Squad</label><select id="selSquad"></select></div>
+      <div class="linha" id="boxConsultor" hidden><label class="sr" for="selConsultor">Consultor</label><select id="selConsultor"></select></div>
+      <div id="boxSelecao" hidden>
+        <div class="linha"><label class="sr" for="busca">Filtrar clientes</label><input type="search" id="busca" placeholder="Filtrar clientes"><button type="button" class="btn btn-p" id="marcarVis">Marcar visíveis</button><button type="button" class="btn btn-fantasma btn-p" id="limpar">Limpar</button></div>
+        <div class="lista-cli mt-2" id="listaCli"></div>
+      </div>
+      <div class="linha mt-4">
+        <span>Escopo: <b class="contagem num" id="nEscopo">—</b> cliente(s)</span>
+        <label for="scoreMin">Prioridade mínima</label><input type="number" id="scoreMin" min="0" max="100" value="11" class="num">
+        <span class="ajuda-campo">0–100 · padrão 11: abaixo disso a ação fica no plano e não vai ao Notion</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloco" id="secRevisar">
+    <div class="bloco-cab"><h2>Revisar ações</h2><span class="sis" data-sistema="arquiteto" title="Sistema de origem: Arquiteto">Arquiteto</span><span class="mudo peq" id="nAcoes"></span></div>
+    <p class="sub">Aprovar ou descartar é decisão sua e a regeneração do plano nunca a desfaz. Só proposta ou aprovada vai ao Notion.</p>
+    <div class="filtros">
+      <label class="sr" for="fHor">Horizonte</label>
+      <select id="fHor"><option value="">Todos os horizontes</option><option value="72h">72 horas</option><option value="7d">7 dias</option><option value="30d">30 dias</option><option value="90d">90 dias</option></select>
+      <label class="sr" for="fSt">Status</label>
+      <select id="fSt"><option value="proposta,aprovada">Proposta + aprovada</option><option value="proposta">Proposta</option><option value="aprovada">Aprovada</option><option value="distribuida">No Notion</option><option value="descartada">Descartada</option><option value="obsoleta">Obsoleta</option><option value="proposta,aprovada,distribuida,descartada,obsoleta">Todas</option></select>
+      <label class="sr" for="fTxt">Buscar ação ou cliente</label>
+      <input type="search" id="fTxt" placeholder="Buscar ação ou cliente">
+      <div id="fltAvancado"></div>
+    </div>
+    <p class="aviso" id="fltAviso" hidden></p>
+    <div class="tabela-wrap fixa">
+      <table class="t">
+        <thead><tr><th><input type="checkbox" id="todas" aria-label="Marcar todas as ações visíveis"></th><th class="n">Prio</th><th>Cliente</th><th>Ação</th><th>Quando</th><th>Responsável</th><th>Status</th></tr></thead>
+        <tbody id="tbAcoes"></tbody>
+      </table>
+    </div>
+    <div class="t-pag" id="pagAcoes"></div>
+    <div class="barra-massa">
+      <button type="button" class="bt sec btn-p" data-st="aprovada">Aprovar marcadas</button>
+      <button type="button" class="bt sec btn-p" data-st="descartada">Descartar marcadas</button>
+      <button type="button" class="bt sec btn-p" data-st="proposta">Reabrir marcadas</button>
+      <label class="sr" for="selDelegar">Delegar as marcadas a</label>
+      <select id="selDelegar"><option value="">Automático (ficha do cliente → analista da conta → consultor)</option></select>
+      <button type="button" class="btn btn-p" id="btnDelegar">Delegar marcadas</button>
+      <span class="mudo peq" id="nPrest"></span>
+      <details class="menu">
+        <summary class="btn btn-p" aria-label="Mais ações em massa">⋯</summary>
+        <div class="menu-lista"><button type="button" class="menu-perigo" id="btnDesfazer">Desfazer no Notion</button></div>
+      </details>
+    </div>
+  </section>
+
+  <details class="recolhido" id="secClientes">
+    <summary>Planos por cliente <span class="n" id="nClientes"></span> <span class="sis" data-sistema="arquiteto" title="Sistema de origem: Arquiteto">Arquiteto</span></summary>
+    <p class="sub">O documento tem as 12 partes do roteiro do estrategista. A equipe abre numa gaveta.</p>
+    <div class="tabela-wrap fixa">
+      <table class="t">
+        <thead><tr><th>Cliente</th><th>Squad · Consultor</th><th class="n">Ações</th><th class="n">72h</th><th>Documento</th><th>Equipe</th></tr></thead>
+        <tbody id="tbClientes"></tbody>
+      </table>
+    </div>
+    <div class="t-pag" id="pagClientes"></div>
+  </details>
+
+  <details class="recolhido" id="secRelatorios">
+    <summary>Relatórios para o cliente <span class="n" id="nRelatorios"></span> <span class="sis" data-sistema="morpheus" title="Sistema de origem: Morpheus">Morpheus</span></summary>
+    <p class="sub">Programação dos relatórios curtos enviados ao Notion de cada cliente (Informações › Relatório de Sprints Place2u): resultados, atividades, desenvolvimento e próximos passos dos últimos 7 dias. O envio automático só roda para quem foi liberado e com o interruptor geral ligado.</p>
+    <p class="mini" id="relResumo"></p>
+    <div class="linha">
+      <span id="relAgendadorEstado"></span>
+      <button type="button" class="btn btn-p" id="btnVerificarBases" title="Confere, sem escrever, a base Informações de cada cliente">Verificar bases</button>
+      <button type="button" class="btn btn-p" id="btnLiberarProntos">Liberar envios para os prontos</button>
+      <button type="button" class="btn btn-p" id="btnAgendador">Ligar envios automáticos</button>
+      <a class="btn btn-fantasma btn-p" id="lnkRelatorioCsv" href="/api/relatorio/diagnostico.csv">CSV do diagnóstico</a>
+      <details class="menu">
+        <summary class="btn btn-p" aria-label="Mais ações dos relatórios">⋯</summary>
+        <div class="menu-lista"><button type="button" id="btnRelAnexar" title="Gera o PDF do relatório e anexa nas páginas já enviadas que ainda não têm o documento">Anexar PDF nos envios sem documento</button></div>
+      </details>
+    </div>
+    <div id="relJob" hidden aria-live="polite">
+      <div class="mudo peq" id="relJobTxt"></div>
+      <div class="barra-progresso"><div id="relJobBarra"></div></div>
+    </div>
+    <div class="tabela-wrap fixa mt-2">
+      <table class="t">
+        <thead><tr><th>Cliente</th><th>Frequência</th><th>Próximo envio</th><th>Último envio</th><th>Situação</th><th>Ações</th></tr></thead>
+        <tbody id="tbRelatorios"></tbody>
+      </table>
+    </div>
+    <div class="t-pag" id="pagRelatorios"></div>
+  </details>
+
+  <details class="recolhido" id="secAlertas">
+    <summary>Alertas ao cliente <span class="n" id="nAlertas"></span> <span class="sis" data-sistema="morpheus" title="Sistema de origem: Morpheus">Morpheus</span></summary>
+    <p class="sub">Pendência crítica do cliente (estoque dos produtos que mais vendem acabando, devolutiva parada além de 30 dias, conta sem acesso, pendência registrada pela equipe). O aviso interno com som soa na hora; a página de alerta vai ao Notion do cliente automaticamente se o automático estiver ligado e o cliente estiver liberado, ou à mão, com prévia.</p>
+    <p class="mini" id="alResumo"></p>
+    <div class="linha">
+      <span id="alAutoEstado"></span>
+      <button type="button" class="btn btn-p" id="btnAlertaAuto">Ligar alerta automático</button>
+    </div>
+    <div class="tabela-wrap fixa mt-2">
+      <table class="t">
+        <thead><tr><th>Cliente</th><th>Alerta</th><th>Gravidade</th><th>Situação</th><th>Ações</th></tr></thead>
+        <tbody id="tbAlertas"></tbody>
+      </table>
+    </div>
+    <div class="t-pag" id="pagAlertas"></div>
+  </details>
+
+  <details class="recolhido" id="secGargalos">
+    <summary>Gargalos da base <span class="sis" data-sistema="arquiteto" title="Sistema de origem: Arquiteto">Arquiteto</span></summary>
+    <p class="sub">Base inteira, não só o escopo: onde as ações se acumulam e o que falta nelas.</p>
+    <div id="gargalos"></div>
+  </details>
+
+  <details class="recolhido" id="secFeedback">
+    <summary>Respostas dos clientes ao relatório <span class="n" id="nFeedback"></span> <span class="sis" data-sistema="morpheus" title="Sistema de origem: Morpheus">Morpheus</span></summary>
+    <p class="sub">Só as mensagens dos grupos de WhatsApp do Mercado Livre que respondem ao plano do Merovíngio ou à pergunta do relatório: citou a nossa mensagem = certa; respondeu à pergunta nas 6 h seguintes, sem ser pedido ao consultor, falando do relatório ou listando assuntos = provável (o plano só conta por citação). O filtro descarta a conversa operacional; se algo escapar, descarte: o texto é apagado. Serve para desenhar o relatório semanal.</p>
+    <p class="mini" id="fbResumo"></p>
+    <div class="seg" id="fbTemas" role="group" aria-label="Filtrar por tema"></div>
+    <div class="linha">
+      <label class="sr" for="fbStatus">Situação</label>
+      <select id="fbStatus"><option value="">Todas menos descartadas</option><option value="novo">Novas</option><option value="revisado">Revisadas</option><option value="implementar">Implementar</option><option value="descartado">Descartadas</option></select>
+      <span class="mini" id="fbColeta"></span>
+      <button type="button" class="btn btn-p" id="btnFbColetar">Coletar respostas agora</button>
+    </div>
+    <div class="tabela-wrap fixa mt-2">
+      <table class="t">
+        <thead><tr><th>Cliente</th><th>Quando</th><th>Resposta</th><th>Tema</th><th>Confiança</th><th>Status</th></tr></thead>
+        <tbody id="tbFeedback"></tbody>
+      </table>
+    </div>
+  </details>
+
+  <details class="recolhido" id="secPerfilInfo">
+    <summary>O que os clientes querem receber <span class="n" id="nPerfilInfo"></span> <span class="sis" data-sistema="morpheus" title="Sistema de origem: Morpheus">Morpheus</span></summary>
+    <p class="sub">Perfil de informação de cada cliente: serviço, temas em ordem e nível, curado pela equipe ou confirmado das respostas no grupo. Todo relatório tem a base fixa (vendas, estoque e reposição, compras e previsibilidade, ações da semana); os temas pedidos sobem para o topo. Sugestão vinda das respostas só sugere: vira perfil quando alguém salva em Configurar, no painel do cliente.</p>
+    <div id="perfilInfoPlanos"></div>
+  </details>
+
+  <details class="recolhido" id="secRisco">
+    <summary>Clientes em risco <span class="n" id="nRisco"></span></summary>
+    <p class="sub">Reclamação, pedido de reembolso, ameaça jurídica ou insatisfação declarada, marcados por quem atende (líder, consultor ou CS), e os sinais que o sistema mede — que só sugerem, nunca marcam. Quem está em risco aberto recebe, todo dia 1, a prestação de contas e o dossiê de defesa do mês anterior no canal #growth do Discord (só equipe), com a chave abaixo ligada.</p>
+    <div id="riscoPlanos"></div>
+  </details>
+
+  <details class="recolhido" id="secAvisosAuto">
+    <summary>Avisos automáticos ao cliente <span class="n" id="nAvisosAuto"></span> <span class="sis" data-sistema="morpheus" title="Sistema de origem: Morpheus">Morpheus</span></summary>
+    <p class="sub">Só Mercado Livre. O que depende do cliente vira o plano semanal (terça 09h no fuso dele: estoque, próximo pedido, Full parado, preço mudado fora da Place2u, custos, perguntas, retornos e, em bloco próprio, os urgentes — estoque no fim dos campeões, despacho vencido, reclamação, reputação, anúncio pausado, queda depois de mudança de preço). Nada sai fora da terça (o urgente na hora nasce desligado). Só para cliente com integração Mercado Livre ativa, liberado por um líder ou consultor e com a chave geral ligada; texto no tom aprovado, auditado; o n8n só entrega e devolve o recibo.</p>
+    <p class="mini" id="avResumo"></p>
+    <div class="linha">
+      <span id="avAutoEstado"></span>
+      <button type="button" class="btn btn-p" id="btnGatilhosAuto">Ligar avisos automáticos</button>
+    </div>
+    <p class="mini" id="avLiberados"></p>
+    <div class="linha mt-2">
+      <span id="cdEstado"></span>
+      <button type="button" class="btn btn-p" id="btnConsultorDiscord">Ligar resumo ao consultor</button>
+    </div>
+    <p class="mini">Aviso interno ao consultor no canal do cliente no Discord («Webhook ML» da central; o cliente não está lá): resumo semanal terça 08h30 no fuso do cliente, antes do plano, marcando os 3 cargos do time e o consultor. Chave própria, nasce desligada; o time recebe em todos os clientes ML com canal — independe do WhatsApp do cliente.</p>
+    <div class="tabela-wrap fixa mt-2">
+      <table class="t">
+        <thead><tr><th>Cliente</th><th>Lote</th><th>Tipo</th><th>Situação</th><th>Canais</th><th>Quando</th></tr></thead>
+        <tbody id="tbAvisosFalhas"></tbody>
+      </table>
+    </div>
+  </details>
+</main>
+<footer class="pg-rodape">Place2u · Performance Estratégica em Marketplaces</footer>
+<script src="ficha.js"></script>
+<script src="alinhamentos.js"></script>
+<script src="gatilhos.js"></script>
+<script src="relatorio.js"></script>
+<script src="alertas.js"></script>
+<script src="dossie.js"></script>
+<script src="perfil-informacao.js"></script>
+<script src="/filtros.js"></script>
+<script src="planos.js"></script>
+<script src="/alerta.js" defer></script>
+</body>
+</html>

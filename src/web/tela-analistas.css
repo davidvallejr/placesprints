@@ -1,0 +1,12 @@
+/* Analistas · só o que o ui.css não cobre (carregado depois dele) */
+.nome-btn{font:inherit;font-weight:500}                       /* ui.css declara font:500 inherit, que é inválido e cai no padrão do navegador */
+.veredito-frase .nome-btn{font-weight:600;text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--borda-campo)}
+#ranking td:first-child:not([colspan]),#clientes td:first-child{white-space:nowrap}   /* nome numa linha; a tabela rola dentro do wrapper. O td do drill tem colspan e precisa quebrar texto */
+.drill .erro-bloco{background:var(--superficie)}                /* o drill já é --fundo-suave; o erro precisa se destacar dele */
+#ranking .tabela-wrap{container-type:inline-size}                /* celular: o drill ocupa a largura visível do wrapper e acompanha a rolagem lateral, em vez de ficar escondido à direita da tabela */
+@media (max-width:639px){.drill{position:sticky;left:0;max-width:calc(100cqw - 40px);overflow-x:auto}}   /* 40 = 2 × (12 do td + 8 da margem do .drill); as tabelas internas rolam dentro do drill em vez de vazar dele */
+.filtros-tela{margin-top:var(--e-6)}                           /* filtro do painel acima do ranking; o 1º bloco encosta nele */
+.filtros-tela+#conteudo>.bloco:first-child{margin-top:var(--e-4)}
+.filtros-tela:empty{display:none}
+#qualidade ul{padding-left:18px}
+#qualidade li{margin:4px 0}

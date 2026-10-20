@@ -1,0 +1,92 @@
+{
+  "$comentario": "Atribuição tarefa → resultado (Mercado Livre). Associação temporal AJUSTADA por grupo de controle e por ruído (placebo) — nunca causalidade comprovada. Ajustar janelas/limiares aqui.",
+  "janela_dias": 14,
+  "lag_dias_padrao": 3,
+  "lag_dias_por_tipo": {
+    "Duplicação de Títulos": 5,
+    "Cadastro de Produtos": 7,
+    "Criar Kits": 5,
+    "Oferta Relâmpago": 0,
+    "Duplicar Oferta Relâmpago": 0,
+    "Central de marketing": 1,
+    "Ajuste ADS": 2
+  },
+  "limiar_efeito_pct": 10,
+  "min_unidades_base": 5,
+  "min_unidades_controle": 10,
+  "min_placebos": 9,
+  "pct_ruido_forte": 80,
+  "z_forte": 1.96,
+  "min_n_padrao": 5,
+  "tipos_ignorados": [
+    "Reunião",
+    "Reunião de Alinhamento",
+    "Relatório",
+    "Relatório Semanal",
+    "Canal de transmissão",
+    "Minha página",
+    "Transmissão por Chat",
+    "Comunicação"
+  ],
+  "top_itens_serie": 200,
+  "dias_coleta": 150,
+  "visao_comprador_validade_horas": 6,
+  "janelas_adaptativas": [
+    14,
+    21,
+    28
+  ],
+  "min_visitas_base": 30,
+  "min_visitas_controle": 60,
+  "max_visitas_dormente_por_dia": 0.5,
+  "p_max_placebo": 0.1,
+  "limiar_reversao_pct": 30,
+  "base_longa_dias": 42,
+  "preco": {
+    "$nota": "Toda mudança de preço (até 1 centavo) tira 1 ponto da confiança da medida; mudança de limiar_confundidor_pct ou mais na janela (preço de lista registrado ou preço pago = receita ÷ unidades, este só com o mínimo de unidades nas duas janelas), em tarefa que NÃO é de preço, marca a medida como confundida pelo preço e a tira do aprendizado. Anúncio com mudança desse tamanho na janela sai do grupo de controle e a data entra nos placebos. Tarefa das familias_preco é a própria intervenção.",
+    "limiar_confundidor_pct": 3,
+    "familias_preco": [
+      "precos",
+      "oferta_relampago",
+      "campanhas_desconto"
+    ]
+  },
+  "estado": {
+    "$nota": "Mudança de ESTADO do anúncio na janela da medida (meli_item_mudanca, só ao cruzar fronteira: entrou/saiu de promoção, Ads ligado/desligado, foi/saiu do Full, estoque zerou/voltou, pausou/reativou) confunde a medida, exceto quando o campo é a própria intervenção da família da tarefa (intervencao). modo 'ativo': o anúncio com evento sai do controle, a data vira placebo, a confiança perde pontos_por_campo por campo e a medida sai do aprendizado (confundido_estado); 'so_confianca': só os pontos; 'observar': calcula e conta (coincide_estado), sem tirar nada. Famílias = ids de config/processos-curadoria.json.",
+    "modo": "ativo",
+    "campos": [
+      "promocao",
+      "ads",
+      "logistica",
+      "estoque_zero",
+      "status"
+    ],
+    "intervencao": {
+      "promocao": [
+        "oferta_relampago",
+        "campanhas_desconto",
+        "cupom"
+      ],
+      "ads": [
+        "ads"
+      ],
+      "logistica": [
+        "full"
+      ],
+      "estoque_zero": [
+        "full"
+      ],
+      "status": [
+        "status"
+      ]
+    },
+    "pontos_por_campo": 3
+  },
+  "snapshot": {
+    "$nota": "\"Como era\" do anúncio (meli_item_snapshot): curva A/B relida a cada ab_dias, C a cada c_dias; por coleta, no máximo max_itens_por_coleta anúncios e teto_ms de relógio — o resto fica para a próxima madrugada (declarado em restantes).",
+    "ab_dias": 1,
+    "c_dias": 7,
+    "max_itens_por_coleta": 150,
+    "teto_ms": 120000
+  }
+}

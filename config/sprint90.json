@@ -1,0 +1,78 @@
+{
+  "versao": "1.0.0",
+  "$doc": "Place Sprint 90 (self-service). Desenho: docs/desenho-place-sprint-90.md; operação: docs/sprint90.md. Dinheiro sempre em centavos. Decisões do David em 08/10/2026: comissão lida em D+30, pausa automática da assinatura após 30 dias de atraso (cancelar é humano), NF manual, host sprint90.place2u.com.br (env SPRINT90_PUBLIC_HOST).",
+  "termos_versao": "s90-v1",
+  "planos": {
+    "fixo": {
+      "rotulo": "Plano Fixo",
+      "centavos": 99700,
+      "comissao_pct": 0,
+      "mp_plano_ref": "s90-fixo",
+      "mp_link": "https://mpago.la/1Z8NaU7"
+    },
+    "crescimento": {
+      "rotulo": "Plano Crescimento",
+      "centavos": 45400,
+      "comissao_pct": 10,
+      "mp_plano_ref": "s90-crescimento",
+      "mp_link": "https://mpago.la/29955jZ"
+    }
+  },
+  "turma_fundadora": {
+    "vagas": 30,
+    "preco_travado_meses": 12
+  },
+  "duracao_dias": 90,
+  "publicacao_live": false,
+  "conferencia_min": 30,
+  "monitor_dias": 14,
+  "fechamento": {
+    "$doc": "A comissão da competência M (pedidos pagos criados em M) é lida 30 dias depois do último dia de M, descontando o que foi cancelado, reembolsado ou contestado até a leitura; a fatura sai no mesmo dia, com extrato pedido a pedido.",
+    "dias_apos_fim_mes": 30,
+    "hora": "06:30"
+  },
+  "fatura": {
+    "vencimento_dias": 7,
+    "carencia_dias": 5
+  },
+  "inadimplencia": {
+    "$doc": "Atraso contado do vencimento. Dia 1: aviso no painel. Depois da carência: estado inadimplente (bloqueia novas aprovações e execuções). Dia 30: pausa automática da assinatura no Mercado Pago. Cancelar é sempre decisão humana. Chargeback e conexão do ML caída nunca pausam sozinhos (vão para a equipe).",
+    "aviso_desde_dia": 1,
+    "pausar_assinatura_apos_dias": 30,
+    "cancelar_automatico": false,
+    "chargeback_pausa_automatica": false,
+    "conexao_caida_pausa_automatica": false
+  },
+  "nota_fiscal": {
+    "modo": "manual",
+    "prazo_dias_uteis": 5
+  },
+  "arrependimento_dias": 7,
+  "estorno_manual_dias_uteis": 2,
+  "expurgo_nao_pago_dias": 7,
+  "sessao_dias": 30,
+  "acesso_min": {
+    "retorno": 43200,
+    "painel": 43200,
+    "equipe": 15
+  },
+  "retencao": {
+    "eventos_ip_meses": 12,
+    "fiscal_anos": 5,
+    "pos_cancelamento_dias": 90
+  },
+  "comissao": {
+    "excluir_payment_status": [
+      "refunded",
+      "charged_back",
+      "in_mediation"
+    ],
+    "excluir_tags": [],
+    "fatia_min_minutos": 60
+  },
+  "mercadopago": {
+    "$doc": "Planos criados no painel do Mercado Pago em 09/10/2026 (conta Place2u, producao; cobranca no dia da adesao, duracao ilimitada, sem teste gratis, redirecionamento para a raiz do site). O id do preapproval_plan e lido pela API na F3 a partir do mp_plano_ref. A comissao nao e plano: e cobranca avulsa mensal (checkout/preferences) gerada pelo sistema na F4.",
+    "webhook_url": "https://sprint90.place2u.com.br/webhook/mp",
+    "webhook_configurado": false
+  }
+}

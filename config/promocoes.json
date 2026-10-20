@@ -1,0 +1,5 @@
+{
+  "$comentario": "Coleta de promoções do Mercado Livre (SÓ LEITURA) para todos os clientes conectados, em lotes por madrugada (laço diário do server.js, depois da coleta de vendas). coleta_para_todos = padrão da base quando perfil_cliente.coleta_promocoes é NULL; o interruptor por cliente (Cliente → Configurar, 'Coletar promoções do Mercado Livre') vence. lote_por_madrugada = quantos clientes por noite: quem nunca coletou vai primeiro, depois a coleta mais antiga.",
+  "coleta_para_todos": true,
+  "lote_por_madrugada": 5
+}

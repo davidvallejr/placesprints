@@ -1,0 +1,21 @@
+{
+  "$doc": "Prestação de contas (versão cliente) e Dossiê de defesa (versão interna/jurídica) — src/lib/dossie.js, docs/dossie-prestacao-contas.md. Números só aqui; frases da varredura de admissão de erro em minúsculas, comparadas sem acento.",
+  "frases_admissao": ["erro nosso", "erro da nossa parte", "falha nossa", "falha da nossa parte", "problema interno", "esquecemos", "nos esquecemos", "nossa culpa", "culpa nossa", "desculpe o erro", "desculpa o erro", "desculpe a falha", "desculpa a falha", "erramos", "nos equivocamos", "foi um erro", "falha da equipe", "falha do time", "erro da equipe", "erro do time", "nao fizemos", "deixamos passar", "esqueci", "me esqueci", "errei", "erro meu", "falha minha", "me equivoquei", "me desculpe", "desculpa pelo", "desculpa pela", "desculpe pelo", "desculpe pela", "peço desculpas", "sorry"],
+  "dias_registro_tardio": 3,
+  "janela_resposta_dias": 7,
+  "prazo_pendencia_dias": 3,
+  "max_evidencias": 8,
+  "max_bytes_evidencia": 1500000,
+  "max_exemplos": 4,
+  "max_periodo_dias": 400,
+  "mensal": {
+    "$doc": "Tick do dia 1 às 09:00 (fuso abaixo): as duas versões do mês anterior para cada cliente com risco ABERTO, enviadas ao n8n (fluxo place-dossie → canal #growth do Discord, só equipe). Chave sync_estado.dossie_mensal_ligado nasce DESLIGADA. Idempotente por (cliente, competência); até max_tentativas de entrega; PDF acima de max_bytes_arquivo vai só como aviso com o caminho no painel.",
+    "dia": 1,
+    "hora": "09:00",
+    "fuso": "America/Sao_Paulo",
+    "webhook": "/webhook/place-dossie",
+    "canal": "1040645309023391845",
+    "max_tentativas": 3,
+    "max_bytes_arquivo": 8388608
+  }
+}

@@ -1,0 +1,7 @@
+/* Integrações: só ajustes da tabela de clientes; todo o resto vem do /ui.css (tokens, shell, template, componentes). */
+#tb td:first-child a{text-decoration:none}
+#tb td:first-child a:hover{text-decoration:underline}
+@media (min-width:640px){#tb td.direita{white-space:nowrap}}   /* botão da linha e o "⋯" lado a lado; no celular a célula vira cartão e pode quebrar */
+@media (max-width:639px){#tb td.direita{text-align:left}}      /* no cartão, o rótulo "Ações" alinha com os outros rótulos */
+#tb tr:nth-child(n+4) details.menu .menu-lista{top:auto;bottom:calc(100% + 4px)}   /* da 4ª linha em diante o "⋯" abre para cima: o wrapper .fixa (overflow:auto) cortava o menu das linhas de baixo */
+@media (max-width:639px){#custosPainel .cu-topo h2{order:-2}#custosFechar{order:-1}}   /* no celular: título + Fechar na 1ª linha; "Seu nome" + campo + Atualizar juntos na 2ª (sem mexer nos ids nem na ordem do HTML) */

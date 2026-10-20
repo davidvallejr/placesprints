@@ -1,0 +1,45 @@
+{
+  "$comentario": "Cada campo aceita uma LISTA de nomes candidatos — o primeiro que existir na base vence. Ajuste por aqui, nunca no código. O schema padrão abaixo já cobre as bases '🛠️ Tarefas - {Cliente}' da Place2u.",
+  "propriedades": {
+    "titulo": ["Tarefas", "Tarefa", "Nome", "Name"],
+    "cliente": ["Cliente"],
+    "projeto": ["Projeto"],
+    "sprint": ["Sprint"],
+    "processo": ["Processo", "Área", "Area", "Canal"],
+    "responsavel": ["Responsável", "Responsavel", "Owner"],
+    "status": ["Status"],
+    "prioridade": ["Prioridade", "Priority", "Tag"],
+    "data_inicio": ["Início", "Inicio", "Data de início", "Data"],
+    "prazo": ["Prazo", "Deadline", "Data limite"],
+    "data_conclusao": ["Concluído em", "Data de Conclusão", "Data de conclusão"],
+    "esforco": ["Peso", "Esforço", "Esforco", "Pontos", "Horas"],
+    "resultado_esperado": ["Resultado esperado"],
+    "resultado_alcancado": ["Resultado alcançado", "Resultado alcancado"],
+    "impacto": ["Impacto"],
+    "bloqueio": ["Bloqueio", "Impedimento"],
+    "proximo_passo": ["Próximo passo", "Proximo passo", "Próximos passos"],
+    "visivel_cliente": ["Exibir ao cliente", "Visível ao cliente", "Cliente vê"],
+    "descricao": ["Descrição", "Descricao"],
+    "tipo_demanda": ["Demandas", "Demanda"],
+    "etiquetas": ["Tag", "Tags", "Etiquetas", "Etiqueta"]
+  },
+  "status_normalizacao": {
+    "$comentario": "Relacione os status reais do Notion às 7 categorias universais: nao_iniciada | andamento | validacao | concluida | bloqueada | dependencia_cliente | cancelada. Comparação sem acento e sem caixa. O 1º nome de dependencia_cliente é o que o sistema grava no Notion.",
+    "nao_iniciada": ["Não iniciada", "Nao iniciada", "A fazer", "Backlog", "To do", "Not started", "Pendente", "Segundo Plano"],
+    "andamento": ["Em andamento", "Fazendo", "In progress", "Executando", "Em execução", "Acompanhamento"],
+    "validacao": ["Em validação", "Validação", "Revisão", "Review", "Aguardando aprovação", "QA"],
+    "concluida": ["Concluída", "Concluida", "Concluído", "Feito", "Done", "Finalizada", "Entregue"],
+    "bloqueada": ["Bloqueada", "Bloqueado", "Impedida", "Travada", "Blocked", "Problemas na tarefa"],
+    "dependencia_cliente": ["Aguardando Devolutiva do Cliente", "Aguardando cliente", "Dependência do cliente"],
+    "cancelada": ["Cancelada", "Cancelado", "Descartada", "Não será feita"]
+  },
+  "sprint_automatico": {
+    "$comentario": "Quando a base NÃO tem propriedade Sprint, o sistema deriva o sprint pela data da tarefa (data_inicio > prazo > data_conclusao > last_edited). modo: 'mensal' (Sprint 2026-09) ou 'quinzenal' (Sprint 2026-09 Q1/Q2). Se a base tiver a propriedade, ela prevalece.",
+    "modo": "mensal"
+  },
+  "linha_relatorio_semanal": {
+    "$comentario": "Como a linha do Relatório Semanal se identifica dentro do quadro de tarefas do cliente (para o consultor achar/filtrar e para o sync saber que não é uma tarefa comum). 'propriedade' aceita lista de candidatos; 'valor' precisa bater com uma opção já cadastrada no select (senão o Notion cria a opção automaticamente na primeira publicação).",
+    "canal": { "propriedade": ["Canal"], "valor": "Relatório" },
+    "demanda": { "propriedade": ["Demandas", "Demanda"], "valor": "Relatório Semanal" }
+  }
+}

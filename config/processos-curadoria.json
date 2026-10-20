@@ -1,0 +1,836 @@
+{
+  "$comentario": "Curadoria sobre o catálogo extraído do Manual do Analista (config/processos-base.json): o MAPA oficial por canal, o que cada processo é (tipo, quem executa, evidência, critério de conclusão, prazo de referência), as regras gerais do plano (Manual cap. 5) e as FAMÍLIAS de demanda do Notion (as demandas chegam com dezenas de grafias; o sistema aprende por família). Edite aqui, nunca no código. Fontes: Manual do Analista Place2u, Playbook do Setor Operacional, treinamento de Duplicação Estratégica.",
+  "versao": "1.0",
+  "fontes": [
+    "Manual do Analista Place2u",
+    "Playbook do Setor Operacional",
+    "Estratégia de Duplicação de Anúncios (treinamento interno)",
+    "MAPA"
+  ],
+  "canais": {
+    "ML": "Mercado Livre",
+    "SHO": "Shopee",
+    "AMZ": "Amazon"
+  },
+  "mapa": {
+    "SHO": [
+      {
+        "nome": "Cadastro de Produtos",
+        "processo": "6.1"
+      },
+      {
+        "nome": "Adicionar Variações",
+        "processo": "6.4"
+      },
+      {
+        "nome": "Ficha Técnica",
+        "processo": "6.12"
+      },
+      {
+        "nome": "Duplicação de Produtos",
+        "processo": "6.17"
+      },
+      {
+        "nome": "Impulsionar anúncio",
+        "processo": "7.13"
+      },
+      {
+        "nome": "Ativar anúncio",
+        "processo": "7.9"
+      },
+      {
+        "nome": "Inativar anúncio",
+        "processo": "7.10"
+      },
+      {
+        "nome": "Excluir anúncio",
+        "processo": "7.11"
+      },
+      {
+        "nome": "Otimizar anúncio",
+        "processo": "7.6"
+      },
+      {
+        "nome": "Ativar desconto",
+        "processo": "9.7"
+      },
+      {
+        "nome": "Minha promoção",
+        "processo": "9.7"
+      },
+      {
+        "nome": "Criar Cupom",
+        "processo": "9.8"
+      },
+      {
+        "nome": "Cupom de loja",
+        "processo": "9.8"
+      },
+      {
+        "nome": "Oferta Relâmpago",
+        "processo": "9.9"
+      },
+      {
+        "nome": "Ajustar Categoria",
+        "processo": "6.8"
+      },
+      {
+        "nome": "Ajustar SKU",
+        "processo": "6.9"
+      }
+    ],
+    "ML": [
+      {
+        "nome": "Cadastro de produto",
+        "processo": "6.1"
+      },
+      {
+        "nome": "Adicionar variações",
+        "processo": "6.4"
+      },
+      {
+        "nome": "Ajustar produto (Editar)",
+        "processo": "6.7"
+      },
+      {
+        "nome": "Ajustar SKU",
+        "processo": "6.9"
+      },
+      {
+        "nome": "Alterar EAN",
+        "processo": "6.11"
+      },
+      {
+        "nome": "Ficha técnica",
+        "processo": "6.12"
+      },
+      {
+        "nome": "Tabela de medidas",
+        "processo": "6.13"
+      },
+      {
+        "nome": "Duplicação de produtos",
+        "processo": "6.17"
+      }
+    ],
+    "AMZ": [
+      {
+        "nome": "Como duplicar anúncios",
+        "processo": "6.18"
+      },
+      {
+        "nome": "Vincular anúncios Amazon",
+        "processo": "12.8"
+      },
+      {
+        "nome": "Atualizar preços",
+        "processo": "9.2"
+      },
+      {
+        "nome": "Cadastro de produtos",
+        "processo": "6.1"
+      },
+      {
+        "nome": "Editar anúncios",
+        "processo": "7.4"
+      },
+      {
+        "nome": "Como criar campanha de cupom",
+        "processo": "9.8"
+      },
+      {
+        "nome": "Como resgatar um anúncio",
+        "processo": "7.3"
+      },
+      {
+        "nome": "Como configurar o faturador",
+        "processo": "15.1"
+      },
+      {
+        "nome": "Como criar remessa para o FBA",
+        "processo": "11.13"
+      }
+    ]
+  },
+  "sequencia_logica": [
+    {
+      "k": "saude",
+      "rotulo": "Saúde da conta e riscos",
+      "ordem": 1
+    },
+    {
+      "k": "disponibilidade",
+      "rotulo": "Disponibilidade (estoque, anúncios ativos, vínculos)",
+      "ordem": 2
+    },
+    {
+      "k": "cadastro",
+      "rotulo": "Cadastros e duplicações",
+      "ordem": 3
+    },
+    {
+      "k": "otimizacao",
+      "rotulo": "Otimização de anúncios (título, imagem, preço, descrição)",
+      "ordem": 4
+    },
+    {
+      "k": "trafego_promocao",
+      "rotulo": "Tráfego pago e ações promocionais",
+      "ordem": 5
+    },
+    {
+      "k": "expansao",
+      "rotulo": "Expansão de catálogo",
+      "ordem": 6
+    }
+  ],
+  "regras_gerais": {
+    "sequencia": "Saúde da conta e riscos → disponibilidade → cadastros e duplicações → otimização de anúncios → tráfego pago e promoções → expansão de catálogo (Manual 5.2). Cadastros e duplicações vêm ANTES das otimizações: não se otimiza o que ainda não está no ar.",
+    "movimentar_diariamente": "Todos os sellers devem ter a conta movimentada pelo menos uma vez por dia: não se dedica um dia inteiro a um único cliente, nem se acumulam as tarefas de um cliente em poucos dias (Manual 5.1).",
+    "responsavel": "Toda ação tem UM único responsável nominal (Manual 5.11). Quando a ação depende do cliente, o responsável é o cliente e o analista fica com o acompanhamento e a cobrança. Ação com etapas de pessoas diferentes vira linhas separadas.",
+    "prazos": [
+      {
+        "tipo": "problema_critico",
+        "ate_dias": 2,
+        "texto": "Problema crítico: mesmo dia, até 48h."
+      },
+      {
+        "tipo": "acao_imediata",
+        "ate_dias": 3,
+        "texto": "Ação imediata: até 3 dias úteis."
+      },
+      {
+        "tipo": "cadastro",
+        "ate_dias": null,
+        "texto": "Cadastros e duplicações: antes de qualquer otimização daquele produto."
+      },
+      {
+        "tipo": "otimizacao",
+        "ate_dias": 14,
+        "texto": "Otimizações de anúncio: de 1 a 2 semanas, conforme o volume."
+      },
+      {
+        "tipo": "segundo_plano",
+        "ate_dias": 28,
+        "texto": "Segundo plano: de 2 a 4 semanas ou alinhado à data sazonal."
+      }
+    ],
+    "criterio_conclusao": "Dois níveis: conclusão de EXECUÇÃO (a ação foi feita) e de RESULTADO (gerou o efeito esperado, com métrica e prazo de reavaliação). Critério verificável por outra pessoa, de preferência com número, quantidade ou estado (Manual 5.13).",
+    "evidencia": [
+      "ANTES: print da situação original (métrica, anúncio, preço, penalidade) com data e conta/loja",
+      "EXECUÇÃO: print da alteração feita (ou do chamado, com protocolo)",
+      "DEPOIS: print do resultado após o prazo de avaliação",
+      "COMUNICAÇÃO: pedidos e retornos do cliente nas ações dependentes"
+    ],
+    "nome_do_arquivo": "cliente_ID-ação_antes_AAAA-MM-DD",
+    "registro": "Antes e depois de cada ação no card do Notion (MAPA); dúvida, problema ou erro vira comentário no card e é reportado ao consultor (Manual 1.8, 3.13)."
+  },
+  "processos": {
+    "6.1": {
+      "tipo": "cadastro",
+      "demanda": "Cadastro de Produtos",
+      "executor": "analista",
+      "aliases": [
+        "cadastro de produto",
+        "cadastro de produtos",
+        "cadastrar produto",
+        "cadastro de anuncio"
+      ],
+      "evidencia": [
+        "print do anúncio publicado (link)",
+        "print da ficha técnica preenchida",
+        "antes/depois: produto sem anúncio → anúncio ativo"
+      ],
+      "criterio": "Anúncio publicado e ativo, com título no padrão, todas as fotos, ficha técnica obrigatória preenchida, preço, estoque e SKU conferidos na página pública.",
+      "prazo": "Antes de qualquer otimização do produto.",
+      "atencao": "Nunca invente informação que não está no material do cliente; faltou dado obrigatório → comentário no card e reporte ao consultor."
+    },
+    "6.4": {
+      "tipo": "cadastro",
+      "demanda": "Adicionar Variações",
+      "executor": "analista",
+      "aliases": [
+        "adicionar variacoes",
+        "adicionar variacao",
+        "criar variacoes"
+      ],
+      "evidencia": [
+        "print do anúncio com as variações antes e depois"
+      ],
+      "criterio": "Todas as cores/tamanhos no mesmo anúncio, com estoque, SKU e foto por variação, conferidos na página pública.",
+      "prazo": "Junto do cadastro ou como ação imediata (até 3 dias úteis)."
+    },
+    "6.7": {
+      "tipo": "otimizacao",
+      "demanda": "Ajustar Anúncios",
+      "executor": "analista",
+      "aliases": [
+        "ajustar produto",
+        "editar anuncio",
+        "ajustar anuncio"
+      ],
+      "evidencia": [
+        "print/texto do antes e do depois da alteração",
+        "print do botão Confirmar salvo (cada seção tem o seu)"
+      ],
+      "criterio": "Alteração salva e visível na página pública do anúncio, com antes e depois registrados no card.",
+      "prazo": "Ação imediata (até 3 dias úteis) ou otimização (1 a 2 semanas)."
+    },
+    "6.8": {
+      "tipo": "otimizacao",
+      "demanda": "Ajustar Categoria",
+      "executor": "analista",
+      "aliases": [
+        "ajustar categoria",
+        "trocar categoria",
+        "corrigir categoria"
+      ],
+      "evidencia": [
+        "print da categoria antes e depois",
+        "print da ficha técnica revisada para a nova categoria"
+      ],
+      "criterio": "Categoria correta confirmada e atributos obrigatórios da nova categoria preenchidos.",
+      "prazo": "Ação imediata (categoria errada reduz exposição e pode bloquear).",
+      "atencao": "Ao trocar a categoria a ficha técnica muda: revise os atributos antes de atualizar."
+    },
+    "6.9": {
+      "tipo": "disponibilidade",
+      "demanda": "Ajustar SKU",
+      "executor": "analista",
+      "aliases": [
+        "ajustar sku",
+        "corrigir sku",
+        "alterar sku"
+      ],
+      "evidencia": [
+        "print do SKU antes e depois",
+        "print do vínculo com o ERP conferido"
+      ],
+      "criterio": "SKU idêntico no marketplace e no ERP, com o vínculo conferido (estoque e nota funcionando).",
+      "prazo": "Ação imediata (até 3 dias úteis).",
+      "atencao": "Alterar o SKU pode quebrar o vínculo com o ERP: confira depois (12.8 e 12.9)."
+    },
+    "6.11": {
+      "tipo": "disponibilidade",
+      "demanda": "Alterar EAN",
+      "executor": "analista",
+      "aliases": [
+        "alterar ean",
+        "ajustar ean",
+        "corrigir ean"
+      ],
+      "evidencia": [
+        "print do EAN antes e depois por variação"
+      ],
+      "criterio": "EAN correto em cada variação e salvo, conferido no anúncio.",
+      "prazo": "Ação imediata (até 3 dias úteis)."
+    },
+    "6.12": {
+      "tipo": "otimizacao",
+      "demanda": "Preencher Ficha Técnica",
+      "executor": "analista",
+      "aliases": [
+        "ficha tecnica",
+        "preencher ficha tecnica",
+        "completar ficha tecnica"
+      ],
+      "evidencia": [
+        "print da ficha técnica antes e depois (% de preenchimento)"
+      ],
+      "criterio": "Campos obrigatórios e complementares preenchidos; ficha completa conferida no anúncio.",
+      "prazo": "Otimização: 1 a 2 semanas."
+    },
+    "6.13": {
+      "tipo": "otimizacao",
+      "demanda": "Tabela de Medidas",
+      "executor": "analista",
+      "aliases": [
+        "tabela de medidas",
+        "guia de medidas"
+      ],
+      "evidencia": [
+        "print da tabela de medidas publicada"
+      ],
+      "criterio": "Tabela de medidas preenchida e visível para o comprador.",
+      "prazo": "Otimização: 1 a 2 semanas."
+    },
+    "6.17": {
+      "tipo": "cadastro",
+      "demanda": "Duplicação de Anúncios",
+      "executor": "analista",
+      "duplicacao": true,
+      "aliases": [
+        "duplicacao de produtos",
+        "duplicacao de produto",
+        "duplicar anuncio",
+        "duplicar anuncios",
+        "duplicacao de anuncio",
+        "duplicacao de anuncios",
+        "duplicacao"
+      ],
+      "evidencia": [
+        "print do anúncio ORIGINAL (intocado) e da duplicata publicada",
+        "print do que variou (título, capa, categoria, preço, quantidade) com a hipótese",
+        "link de cada duplicata"
+      ],
+      "criterio": "Duplicatas publicadas com variação real e visível (não só a descrição), palavras-chave do nicho de cada uma, objetivo e volume definidos pelo consultor, monitoramento ativo e original intacto.",
+      "prazo": "Cadastros e duplicações antes das otimizações.",
+      "atencao": "Nunca duplique sem objetivo definido; a variação precisa ser visível e ter hipótese. Plano da duplicação vem do consultor (config/duplicacao.json)."
+    },
+    "6.18": {
+      "tipo": "cadastro",
+      "demanda": "Duplicação de Anúncios",
+      "executor": "analista",
+      "duplicacao": true,
+      "aliases": [
+        "como duplicar anuncios",
+        "duplicar anuncio amazon"
+      ],
+      "evidencia": [
+        "print do ASIN de origem e do novo anúncio criado",
+        "print do que variou"
+      ],
+      "criterio": "Novo anúncio criado a partir do ASIN, com título, imagens e ficha ajustados e a oferta ativa.",
+      "prazo": "Cadastros e duplicações antes das otimizações."
+    },
+    "7.3": {
+      "tipo": "saude",
+      "demanda": "Corrigir Anúncios",
+      "executor": "analista",
+      "aliases": [
+        "resgatar anuncio",
+        "recuperar anuncio bloqueado",
+        "como resgatar um anuncio"
+      ],
+      "evidencia": [
+        "print do anúncio bloqueado (antes)",
+        "print do anúncio reativado/oferta recriada (depois)"
+      ],
+      "criterio": "Anúncio bloqueado sem justificativa válida recuperado e ativo; não é a primeira tentativa: antes, abra chamado no canal oficial (23.6).",
+      "prazo": "Problema crítico: mesmo dia, até 48h.",
+      "atencao": "Só recrie a oferta quando o bloqueio não tem justificativa válida."
+    },
+    "7.4": {
+      "tipo": "otimizacao",
+      "demanda": "Ajustar Anúncios",
+      "executor": "analista",
+      "aliases": [
+        "editar anuncios",
+        "ajustar anuncio amazon"
+      ],
+      "evidencia": [
+        "print do antes e do depois da edição"
+      ],
+      "criterio": "Edição salva e visível no anúncio, com antes e depois no card.",
+      "prazo": "Ação imediata ou otimização, conforme o impacto."
+    },
+    "7.6": {
+      "tipo": "otimizacao",
+      "demanda": "Otimizar Anúncios",
+      "executor": "analista",
+      "aliases": [
+        "otimizar anuncio",
+        "otimizar anuncios",
+        "melhorar anuncios",
+        "otimizacoes anuncios"
+      ],
+      "evidencia": [
+        "prints do anúncio antes (imagens, título, atributos) e depois",
+        "métrica acompanhada e data da reavaliação"
+      ],
+      "criterio": "Imagens, título, marca, atributos e descrição revisados no padrão; métrica (CTR/conversão) reavaliada no prazo definido (ex.: CTR acima de 1,5% após 14 dias).",
+      "prazo": "Otimização: 1 a 2 semanas; reavaliar em 14 dias."
+    },
+    "7.9": {
+      "tipo": "disponibilidade",
+      "demanda": "Reativar Anúncio",
+      "executor": "analista",
+      "aliases": [
+        "ativar anuncio",
+        "reativar anuncio",
+        "ativar anuncios"
+      ],
+      "evidencia": [
+        "print do anúncio inativo (antes) e ativo (depois)"
+      ],
+      "criterio": "Anúncio ativo, com estoque, visível na busca.",
+      "prazo": "Ação imediata (até 3 dias úteis)."
+    },
+    "7.10": {
+      "tipo": "disponibilidade",
+      "demanda": "Inativar Anúncio",
+      "executor": "analista",
+      "aliases": [
+        "inativar anuncio",
+        "pausar anuncio"
+      ],
+      "evidencia": [
+        "print do anúncio ativo (antes) e inativo (depois), com o motivo"
+      ],
+      "criterio": "Anúncio inativado e motivo registrado no card.",
+      "prazo": "Ação imediata."
+    },
+    "7.11": {
+      "tipo": "disponibilidade",
+      "demanda": "Excluir Anúncios",
+      "executor": "analista",
+      "aliases": [
+        "excluir anuncio",
+        "excluir anuncios",
+        "apagar anuncio"
+      ],
+      "evidencia": [
+        "print do anúncio e do histórico antes de excluir",
+        "autorização do consultor/cliente registrada"
+      ],
+      "criterio": "Anúncio excluído com autorização registrada (exclusão é irreversível).",
+      "prazo": "Ação imediata, com aprovação.",
+      "atencao": "Exclusão apaga o histórico do anúncio: peça aprovação antes."
+    },
+    "7.13": {
+      "tipo": "trafego_promocao",
+      "demanda": "Impulsionar Anúncio",
+      "executor": "analista",
+      "aliases": [
+        "impulsionar anuncio",
+        "impulsionar anuncios"
+      ],
+      "evidencia": [
+        "print do impulsionamento ativo (verba, período)"
+      ],
+      "criterio": "Impulsionamento ativo no anúncio certo, com verba e período definidos e leitura de 7 dias.",
+      "prazo": "Ação imediata (até 3 dias úteis).",
+      "dependencias": [
+        "verba do cliente"
+      ]
+    },
+    "9.2": {
+      "tipo": "otimizacao",
+      "demanda": "Atualizar Preços",
+      "executor": "analista",
+      "aliases": [
+        "atualizar precos",
+        "atualizar preco",
+        "ajustar preco"
+      ],
+      "evidencia": [
+        "print do preço antes e depois",
+        "aprovação de margem do cliente"
+      ],
+      "criterio": "Preço atualizado conforme a estratégia aprovada e conferido na página pública.",
+      "prazo": "Ação imediata (até 3 dias úteis).",
+      "dependencias": [
+        "aprovação de preço ou margem mínima do cliente"
+      ]
+    },
+    "9.6": {
+      "tipo": "trafego_promocao",
+      "demanda": "Campanhas de Desconto",
+      "executor": "analista",
+      "aliases": [
+        "campanhas de desconto",
+        "campanha de desconto",
+        "ativar desconto campanha"
+      ],
+      "evidencia": [
+        "print da campanha ativada (anúncios, desconto, período)"
+      ],
+      "criterio": "Anúncios inscritos nas campanhas abertas, com desconto dentro da margem aprovada.",
+      "prazo": "Ação imediata para campanhas já abertas.",
+      "dependencias": [
+        "margem mínima aprovada pelo cliente"
+      ]
+    },
+    "9.7": {
+      "tipo": "trafego_promocao",
+      "demanda": "Campanhas de Desconto",
+      "executor": "analista",
+      "aliases": [
+        "ativar desconto",
+        "minha promocao"
+      ],
+      "evidencia": [
+        "print da promoção criada (produtos, desconto, período)"
+      ],
+      "criterio": "Promoção ativa nos produtos certos, com desconto e período corretos.",
+      "prazo": "Ação imediata.",
+      "dependencias": [
+        "margem mínima aprovada pelo cliente"
+      ]
+    },
+    "9.8": {
+      "tipo": "trafego_promocao",
+      "demanda": "Cupom",
+      "executor": "analista",
+      "aliases": [
+        "criar cupom",
+        "cupom",
+        "cupom de loja",
+        "campanha de cupom"
+      ],
+      "evidencia": [
+        "print do cupom criado (valor, regra, período)"
+      ],
+      "criterio": "Cupom ativo, com regra, valor e período conforme o plano e dentro da margem.",
+      "prazo": "Ação imediata.",
+      "dependencias": [
+        "margem mínima aprovada pelo cliente"
+      ]
+    },
+    "9.9": {
+      "tipo": "trafego_promocao",
+      "demanda": "Oferta Relâmpago",
+      "executor": "analista",
+      "aliases": [
+        "oferta relampago",
+        "criar oferta relampago",
+        "duplicar oferta relampago"
+      ],
+      "evidencia": [
+        "print da oferta criada (produtos, horário, preço)"
+      ],
+      "criterio": "Oferta ativa no horário definido; preço da oferta 1 centavo abaixo do preço da promoção em vigor (regra da operação).",
+      "prazo": "Ação imediata (agendada).",
+      "dependencias": [
+        "margem mínima aprovada pelo cliente"
+      ]
+    },
+    "11.13": {
+      "tipo": "disponibilidade",
+      "demanda": "Planejamento full",
+      "executor": "analista",
+      "aliases": [
+        "remessa fba",
+        "criar remessa fba",
+        "envio para fba"
+      ],
+      "evidencia": [
+        "print da remessa criada (itens, quantidades, data)",
+        "protocolo/ID da remessa"
+      ],
+      "criterio": "Remessa criada com os itens e quantidades aprovados e a etiqueta/ID registrado no card.",
+      "prazo": "Ação imediata, conforme a janela de reposição.",
+      "dependencias": [
+        "estoque do cliente"
+      ]
+    },
+    "12.8": {
+      "tipo": "disponibilidade",
+      "demanda": "Análise das Integrações",
+      "executor": "analista",
+      "aliases": [
+        "vincular anuncios",
+        "vincular anuncios amazon",
+        "mapear anuncios"
+      ],
+      "evidencia": [
+        "print do mapeamento antes e depois"
+      ],
+      "criterio": "Anúncios existentes vinculados ao produto do ERP (estoque e nota fiscal corretos).",
+      "prazo": "Ação imediata."
+    },
+    "15.1": {
+      "tipo": "saude",
+      "demanda": "Configurar Faturador",
+      "executor": "analista",
+      "aliases": [
+        "configurar faturador",
+        "como configurar o faturador"
+      ],
+      "evidencia": [
+        "print das configurações do Faturador salvas"
+      ],
+      "criterio": "Faturador configurado e emitindo NF-e; relatório de notas extraído quando solicitado.",
+      "prazo": "Ação imediata.",
+      "dependencias": [
+        "dados fiscais do cliente"
+      ]
+    }
+  },
+  "familias": [
+    {
+      "id": "oferta_relampago",
+      "nome": "Oferta Relâmpago",
+      "rx": [
+        "oferta rel[aâ]mpago",
+        "relampago"
+      ]
+    },
+    {
+      "id": "full",
+      "nome": "Full",
+      "rx": [
+        "\\bfull\\b",
+        "\\bfba\\b"
+      ]
+    },
+    {
+      "id": "duplicacao",
+      "nome": "Duplicação de anúncios",
+      "rx": [
+        "duplic",
+        "clonar",
+        "anunciar semelhante"
+      ]
+    },
+    {
+      "id": "cupom",
+      "nome": "Cupom",
+      "rx": [
+        "cupom"
+      ]
+    },
+    {
+      "id": "campanhas_desconto",
+      "nome": "Campanhas de desconto",
+      "rx": [
+        "desconto",
+        "minha promo",
+        "promoc(ao|oes)",
+        "central de marketing"
+      ]
+    },
+    {
+      "id": "ads",
+      "nome": "Ads",
+      "rx": [
+        "\\bads\\b",
+        "impulsionar",
+        "patrocin"
+      ]
+    },
+    {
+      "id": "custos",
+      "nome": "Custos e margem",
+      "rx": [
+        "custo",
+        "margem",
+        "planilha de custo"
+      ]
+    },
+    {
+      "id": "cadastro",
+      "nome": "Cadastro de produtos",
+      "rx": [
+        "cadastro",
+        "cadastrar",
+        "exportar"
+      ]
+    },
+    {
+      "id": "variacoes",
+      "nome": "Variações",
+      "rx": [
+        "varia[cç]"
+      ]
+    },
+    {
+      "id": "ficha",
+      "nome": "Ficha técnica",
+      "rx": [
+        "ficha tecnica"
+      ]
+    },
+    {
+      "id": "imagens",
+      "nome": "Imagens e vídeos",
+      "rx": [
+        "imagem",
+        "imagens",
+        "video",
+        "conteudo a",
+        "a\\+"
+      ]
+    },
+    {
+      "id": "kits",
+      "nome": "Kits",
+      "rx": [
+        "\\bkit"
+      ]
+    },
+    {
+      "id": "precos",
+      "nome": "Preços",
+      "rx": [
+        "atualizar preco",
+        "ajustar preco",
+        "preco"
+      ]
+    },
+    {
+      "id": "status",
+      "nome": "Ativar / inativar / excluir anúncio",
+      "rx": [
+        "ativar anuncio",
+        "reativar",
+        "inativar",
+        "excluir",
+        "pausar anuncio"
+      ]
+    },
+    {
+      "id": "corrigir",
+      "nome": "Corrigir anúncios",
+      "rx": [
+        "corrigir",
+        "correcao"
+      ]
+    },
+    {
+      "id": "otimizar",
+      "nome": "Otimizar anúncios",
+      "rx": [
+        "otimiz",
+        "melhorar anuncio",
+        "qualidade do anuncio",
+        "ajustar anuncio",
+        "ajuste anuncio",
+        "verificar anuncio",
+        "estrategia ima"
+      ]
+    },
+    {
+      "id": "afiliados",
+      "nome": "Afiliados",
+      "rx": [
+        "afiliad"
+      ]
+    },
+    {
+      "id": "transmissao",
+      "nome": "Transmissão por chat",
+      "rx": [
+        "transmiss",
+        "carrinho abandonado",
+        "canal de transmiss"
+      ]
+    },
+    {
+      "id": "loja",
+      "nome": "Decoração e gestão da loja",
+      "rx": [
+        "decora",
+        "\\bstore\\b",
+        "otimizar store"
+      ]
+    },
+    {
+      "id": "pesquisa",
+      "nome": "Pesquisa de mercado",
+      "rx": [
+        "pesquisa"
+      ]
+    },
+    {
+      "id": "interna",
+      "nome": "Reunião, relatório e análise",
+      "rx": [
+        "reuniao",
+        "relatorio",
+        "analise",
+        "processo de entrada"
+      ]
+    }
+  ]
+}

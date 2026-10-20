@@ -1,0 +1,97 @@
+{
+ "name": "Place Sprints · Teste de canal",
+ "nodes": [
+  {
+   "parameters": {
+    "httpMethod": "POST",
+    "path": "place-gatilhos-teste",
+    "authentication": "headerAuth",
+    "responseMode": "onReceived",
+    "options": {}
+   },
+   "id": "wh",
+   "name": "Webhook teste",
+   "type": "n8n-nodes-base.webhook",
+   "typeVersion": 2,
+   "position": [
+    0,
+    0
+   ]
+  },
+  {
+   "parameters": {
+    "jsCode": "const b = $input.first().json.body ?? $input.first().json;\nreturn [{ json: { lote_id: b.lote_id || ('teste-' + Date.now()), tipo: 'teste', cliente_rotulo: b.cliente_rotulo || '', assunto: 'Place2u · teste do canal de avisos', texto: 'Este é o canal de avisos automáticos da Place2u para a sua operação. Se recebeu esta mensagem, está tudo certo. Nenhum dado foi enviado.', canais: { [b.canal]: { ligado: true, destino: b.destino } } } }];"
+   },
+   "id": "code",
+   "name": "Mensagem fixa de teste",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    260,
+    0
+   ]
+  },
+  {
+   "parameters": {
+    "workflowId": {
+     "__rl": true,
+     "mode": "id",
+     "value": "2fTWSJTzfzyfWi0w"
+    },
+    "workflowInputs": {
+     "mappingMode": "passThrough"
+    },
+    "options": {}
+   },
+   "id": "ex",
+   "name": "Executar «Avisos ao cliente (entrega)»",
+   "type": "n8n-nodes-base.executeWorkflow",
+   "typeVersion": 1.2,
+   "position": [
+    520,
+    0
+   ]
+  },
+  {
+   "parameters": {
+    "content": "## Teste de canal\nChama a entrega (2fTWSJTzfzyfWi0w) pelo nó «Chamado por outro fluxo» (Execute Workflow Trigger, passthrough) — sem esse nó na entrega o n8n recusa com «Missing node to start execution» e o webhook já respondeu 200. O teste NÃO devolve recibo ao Place Sprints: a tela diz «pedido aceito pelo n8n; confirme o recebimento»."
+   },
+   "id": "nota",
+   "name": "Leia-me",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    0,
+    -260
+   ]
+  }
+ ],
+ "connections": {
+  "Webhook teste": {
+   "main": [
+    [
+     {
+      "node": "Mensagem fixa de teste",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Mensagem fixa de teste": {
+   "main": [
+    [
+     {
+      "node": "Executar «Avisos ao cliente (entrega)»",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "settings": {
+  "executionOrder": "v1",
+  "timezone": "America/Sao_Paulo"
+ }
+}

@@ -1,0 +1,61 @@
+{
+  "$comentario": "Regras da Matriz Eisenhower por tipo de demanda — editável sem mexer em código, mesmo padrão do mapeamento.json. Cada tipo declara: se é estruturalmente URGENTE (perde valor com o tempo, mesmo sem hora marcada — chat ao vivo, oferta relâmpago), se é ESTRATÉGICA (mexe com receita/reputação do cliente — mesmo conceito do CATEGORIAS_ESTRATEGICAS do Place Task Intelligence: ads/ofertas/precificação), e um tempo de referência em minutos (pra orçar o dia). 'tipos' casa pelo campo tipo_demanda (propriedade 'Demandas' do Notion); 'padroes_titulo' é o fallback por regex no título quando tipo_demanda vier vazio.",
+
+  "tipos": {
+    "Transmissão por Chat": { "urgente": true, "estrategica": false, "minutos": 15 },
+    "Oferta Relâmpago": { "urgente": true, "estrategica": true, "minutos": 15 },
+    "Campanha de Cupom": { "urgente": true, "estrategica": true, "minutos": 20 },
+    "Campanha de Oferta": { "urgente": true, "estrategica": true, "minutos": 20 },
+    "Campanhas de Desconto": { "urgente": true, "estrategica": true, "minutos": 20 },
+    "Campanha ADS": { "urgente": false, "estrategica": true, "minutos": 30 },
+    "Ajuste Campanha ADS": { "urgente": false, "estrategica": true, "minutos": 20 },
+    "Ajuste ADS": { "urgente": false, "estrategica": true, "minutos": 20 },
+    "Impulsionar Anúncio": { "urgente": false, "estrategica": true, "minutos": 15 },
+    "Atualizar Preços": { "urgente": false, "estrategica": true, "minutos": 15 },
+    "Corrigir Preços": { "urgente": true, "estrategica": true, "minutos": 15 },
+    "Precificação estratégica": { "urgente": false, "estrategica": true, "minutos": 30 },
+    "Otimizar Anúncios": { "urgente": false, "estrategica": false, "minutos": 40 },
+    "Ajustar Anúncios": { "urgente": false, "estrategica": false, "minutos": 40 },
+    "Melhorar Anúncios": { "urgente": false, "estrategica": false, "minutos": 40 },
+    "Corrigir Anúncios": { "urgente": true, "estrategica": false, "minutos": 30 },
+    "Criar Imagens": { "urgente": false, "estrategica": false, "minutos": 40 },
+    "Melhorar Imagens": { "urgente": false, "estrategica": false, "minutos": 30 },
+    "Ajustar Imagens": { "urgente": false, "estrategica": false, "minutos": 30 },
+    "Criar Novas Imagens": { "urgente": false, "estrategica": false, "minutos": 40 },
+    "Preencher Ficha Técnica": { "urgente": false, "estrategica": false, "minutos": 25 },
+    "Cadastro de Produtos": { "urgente": false, "estrategica": false, "minutos": 30 },
+    "Cadastrar Produtos": { "urgente": false, "estrategica": false, "minutos": 30 },
+    "Exportar Novos Produtos": { "urgente": false, "estrategica": false, "minutos": 20 },
+    "Criar Kits": { "urgente": false, "estrategica": false, "minutos": 30 },
+    "Denunciar Falsificadores": { "urgente": true, "estrategica": true, "minutos": 20 },
+    "Acompanhamento de vendas": { "urgente": false, "estrategica": true, "minutos": 15 },
+    "analise de métricas": { "urgente": false, "estrategica": true, "minutos": 30 },
+    "Reunião de Alinhamento": { "urgente": true, "estrategica": true, "minutos": 30 },
+    "Chamado": { "urgente": true, "estrategica": false, "minutos": 15 },
+    "Urgência Oculta": { "urgente": true, "estrategica": true, "minutos": 20 }
+  },
+
+  "padroes_titulo": {
+    "$comentario": "Fallback quando tipo_demanda vier vazio (ex.: cliente antigo ou base sem o campo Demandas preenchido) — regex sem acento/caixa contra o título.",
+    "transmiss.*chat": { "urgente": true, "estrategica": false, "minutos": 15 },
+    "oferta.*rel[aâ]mpago": { "urgente": true, "estrategica": true, "minutos": 15 },
+    "otimiza.*padr.*place|otimiza.*anuncio": { "urgente": false, "estrategica": false, "minutos": 40 },
+    "duplica[çc][aã]o": { "urgente": false, "estrategica": false, "minutos": 50 },
+    "campanha|cupom|desconto|promo": { "urgente": true, "estrategica": true, "minutos": 20 },
+    "ads|patrocinad": { "urgente": false, "estrategica": true, "minutos": 25 },
+    "pre[çc]o|precifica": { "urgente": false, "estrategica": true, "minutos": 20 }
+  },
+
+  "padrao": { "urgente": false, "estrategica": false, "minutos": 30 },
+
+  "delegar": {
+    "$comentario": "Um tipo vira candidato a delegação quando se repete N+ vezes no mês para o mesmo responsável E o tempo de referência é baixo (baixo julgamento/complexidade) E NÃO é estratégico (estratégico = só quem já tem mais experiência decide, nunca delega às cegas).",
+    "frequencia_minima_mes": 8,
+    "minutos_maximo": 20
+  },
+
+  "eliminar": {
+    "$comentario": "Uma tarefa aberta vira candidata a eliminar/cancelar quando está parada há muitos dias sem conclusão nem bloqueio ativo registrado — nunca apagada automaticamente, só sinalizada para a liderança decidir.",
+    "dias_parada_minimo": 45
+  }
+}

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Analistas · Place Sprints</title>
+<link rel="stylesheet" href="/ui.css">
+<link rel="stylesheet" href="/tela-analistas.css">
+</head>
+<body data-pagina="analistas">
+<header class="ps-shell" id="psShell"></header>
+<script src="/shell.js"></script>
+<main class="pg">
+  <div class="pg-cab">
+    <div class="pg-titulo">
+      <h1>Analistas</h1>
+      <p class="pg-meta"><span id="metaOficial">Lista oficial de analistas</span><span>Fonte: Notion</span></p>
+    </div>
+    <div class="pg-acoes">
+      <details class="menu">
+        <summary class="btn" aria-label="Mais ações">⋯</summary>
+        <div class="menu-lista"><button type="button" id="btnSync">Atualizar lista do Notion</button></div>
+      </details>
+    </div>
+  </div>
+
+  <section class="veredito" aria-label="Resumo">
+    <p class="veredito-frase" id="veredito">Lendo a carteira do time…</p>
+    <div class="regua" id="regua" hidden></div>
+    <div class="kpis" id="kpis" aria-busy="true">
+      <div class="kpi"><div class="sk-linha"></div><div class="sk-linha"></div></div>
+      <div class="kpi"><div class="sk-linha"></div><div class="sk-linha"></div></div>
+      <div class="kpi"><div class="sk-linha"></div><div class="sk-linha"></div></div>
+      <div class="kpi"><div class="sk-linha"></div><div class="sk-linha"></div></div>
+    </div>
+    <p class="kpis-sec" id="kpisSec" hidden></p>
+  </section>
+
+  <div class="proxima" id="proxima" hidden>
+    <span class="proxima-rotulo">Próxima ação</span>
+    <span class="proxima-texto" id="proximaTexto"></span>
+    <button class="btn btn-primario" type="button" id="proximaBtn"></button>
+  </div>
+
+  <div id="filtros" class="filtros-tela" aria-label="Filtros do painel"></div>
+
+  <div id="conteudo">
+    <section class="bloco" id="blocoRanking">
+      <div class="bloco-cab"><h2>Ranking do time</h2></div>
+      <p class="sub">Entregas em 28 dias e carteira aberta por analista. Clique no nome para abrir a carteira; clique no cabeçalho para ordenar.</p>
+      <div id="ranking" aria-busy="true"><div class="sk-tabela"></div></div>
+    </section>
+
+    <section class="bloco" id="blocoClientes">
+      <div class="bloco-cab"><h2>Clientes travados</h2></div>
+      <p class="sub">Bloqueadas e paradas há mais de 30 dias, por gravidade.</p>
+      <div id="clientes" aria-busy="true"><div class="sk-tabela"></div></div>
+    </section>
+
+    <details class="recolhido" id="secEntrega">
+      <summary>O que o time entrega (90 dias) <span class="n" id="nTipos"></span></summary>
+      <div id="entrega" aria-busy="true"><div class="sk-tabela"></div></div>
+    </details>
+
+    <details class="recolhido" id="secQualidade">
+      <summary>Qualidade do dado</summary>
+      <div id="qualidade"><div class="sk-linha"></div><div class="sk-linha"></div></div>
+    </details>
+  </div>
+</main>
+<footer class="pg-rodape">Fonte: Notion · crédito compartilhado em cards com mais de um responsável</footer>
+<script src="/filtros.js"></script>
+<script src="analistas.js"></script>
+<script src="/alerta.js" defer></script>
+</body>
+</html>

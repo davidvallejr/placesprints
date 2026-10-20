@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Servidor do Place Sprints (porta 3012) como LaunchAgent: sobe no login (RunAtLoad) e volta sozinho se cair (KeepAlive).
+  Pré-condição da F3 do Place Sprint 90 (webhook do Mercado Pago, conferência agendada e leitura da comissão exigem processo de pé).
+  Ver docs/sprint90.md e docs/desenho-place-sprint-90.md (D22).
+
+  NÃO CARREGAR enquanto o processo atual, iniciado por nohup com scripts/dev.sh, estiver de pé.
+  Os dois disputam a porta 3012: o agente morre ao subir, o KeepAlive tenta de novo a cada 10 s e enche data/server.log.
+
+  MIGRAR do nohup para este agente (na janela combinada de reinício, com o David):
+    1. Ver quem está na porta:      lsof -nP -iTCP:3012 -sTCP:LISTEN
+    2. Copiar e validar o plist:    cp ~/place-sprints/automacao/com.place2u.place-sprints.servidor.plist ~/Library/LaunchAgents/
+                                    plutil -lint ~/Library/LaunchAgents/com.place2u.place-sprints.servidor.plist
+    3. Parar o processo nohup:      kill PID_DO_PASSO_1
+                                    while lsof -nP -iTCP:3012 -sTCP:LISTEN >/dev/null; do sleep 1; done
+    4. Carregar o agente:           launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.place2u.place-sprints.servidor.plist
+    5. Conferir:                    launchctl print gui/$(id -u)/com.place2u.place-sprints.servidor | grep -E "state|pid"
+                                    curl -s -o /dev/null -w "%{http_code}\n" http://127.0.0.1:3012/
+                                    tail -n 30 ~/place-sprints/data/server.log
+
+  Comandos completos (com o vigia e o backup): docs/autogestao-instalar.md.
+
+  DEPOIS DA MIGRAÇÃO este passa a ser o fluxo de reinício (nunca mais nohup com o agente carregado):
+    reiniciar:   launchctl kickstart -k gui/$(id -u)/com.place2u.place-sprints.servidor
+    desligar:    launchctl bootout gui/$(id -u)/com.place2u.place-sprints.servidor
+    voltar ao nohup: desligar o agente primeiro, depois subir o nohup como antes.
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.place2u.place-sprints.servidor</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/zsh</string>
+    <string>/Users/davidvallejr/place-sprints/scripts/dev.sh</string>
+  </array>
+  <key>WorkingDirectory</key><string>/Users/davidvallejr/place-sprints</string>
+  <key>RunAtLoad</key><true/>
+  <key>KeepAlive</key><true/>
+  <!-- autogestão A1 (15/10/2026): no mínimo 30 s entre reinícios (antes: 10 s, enchendo o log num disco cheio); o freio de disco do dev.sh recusa subir com < 1 GB -->
+  <key>ThrottleInterval</key><integer>30</integer>
+  <key>ProcessType</key><string>Interactive</string>
+  <key>StandardOutPath</key><string>/Users/davidvallejr/place-sprints/data/server.log</string>
+  <key>StandardErrorPath</key><string>/Users/davidvallejr/place-sprints/data/server.log</string>
+</dict>
+</plist>

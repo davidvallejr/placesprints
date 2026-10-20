@@ -1,0 +1,9 @@
+{
+  "_": "Página pública do resultado /d/<token> (16/10/2026). timer_minutos: a análise fica visível por esse tempo a partir da 1ª abertura conectada (expira_em persistido por token; nunca ressuscita). dobras_visiveis: quantas seções do diagnóstico vão ao navegador — as demais NÃO saem do servidor (só esqueleto). whatsapp: só dígitos com DDI. mensagem: texto exato do wa.me (o apelido do ML entra em linha nova quando existir).",
+  "timer_minutos": 15,
+  "dobras_visiveis": 2,
+  "whatsapp": "5513991589002",
+  "mensagem": "Conectei minha conta e quero uma análise diagnóstica com um especialista",
+  "texto_bloqueio": "Você está vendo as 2 primeiras partes da análise. O diagnóstico completo (anúncios, Ads, reputação, estoque e as 5 prioridades) é apresentado por um especialista da Place2u.",
+  "botao": "Você gostaria de falar com os nossos especialistas?"
+}

@@ -1,0 +1,431 @@
+{
+ "id": "promocoes",
+ "pergunta": "Em quais campanhas com rebate do Mercado Livre este cliente deve entrar agora sem ficar abaixo do piso de margem (MC), e quais anúncios importantes vão ficar sem promoção, para que a decisão vire um plano aprovado e auditável?",
+ "usuarios": [
+  "Consultor/analista de performance da conta ML (opera a rodada: coleta, revisa o analista, marca e aprova sugestões, gera o plano)",
+  "Dono/sócio/CEO da Place2u como aprovador ('Seu nome — quem aprova / marca'): aprova o plano e é o único que pode ligar a execução ao vivo",
+  "Gestor de squad/head que confere a saúde da rodada (rodada fechada, descobertos, pendências) e a Auditoria"
+ ],
+ "acao_principal": "Revisar as oportunidades de rebate da aba Elegíveis (marcar pelo dono ou aprovar a sugestão do analista) e transformá-las num plano dry-run aprovado (aba Plano: Gerar plano, depois Aprovar plano). A execução ao vivo fica travada por padrão.",
+ "acoes_secundarias": [
+  "Trocar de cliente pela busca (#q → /api/clientes/busca) ou pela lista de clientes com ML conectado (#chipsClientes)",
+  "Informar 'Seu nome' (#quem, guardado em localStorage 'promo_quem'): obrigatório para qualquer ação que grava",
+  "Coletar agora (#btnColetar), com opção de 'atualizar vendas antes' (#chkVendas); é um job com progresso em #progresso",
+  "Rodar analista (prévia), Aplicar analista (com confirmação em linha) e Aprovar todas as sugestões 🤖 (confirmação em linha com contagem e escopo)",
+  "Filtrar Elegíveis (busca, curva, situação, só ≥ piso, incluir sem rebate), paginar e abrir os Detalhes do anúncio (candidatas, Marcar/Recusar/Limpar/Aprovar, ordem direta, protegido)",
+  "Exportar CSV (elegíveis, descobertos, plano, auditoria)",
+  "Vigiar a cobertura: trocar a janela do vigia (#selDias) e ver descobertos, cobertura incerta, rebate pior, derrubadas e participando",
+  "Ver a aba Relâmpago (slots SMART, só pelo painel do ML)",
+  "Criar e remover regras por SKU (Livre / N% / Revisar toda rodada)",
+  "Custos: importar custo por SKU (colar texto), salvar a configuração (pisos, imposto, dias do vigia, janela, máx. itens, hedge), ver SKUs sem custo e custos efetivos vindos de ERP/planilha (link /integracoes?custos=)",
+  "Custos: vincular custo ↔ anúncio (07/10). 'Custos sem anúncio' com candidatos por semelhança (Confirmar / Não é este) e campo 'ID do anúncio (MLB…)'; 'Anúncios sem custo' (por faturamento) com 'Escolher custo' (busca na datalist #cvCustos) e Vincular; 'Custo por anúncio' com a origem e Desvincular no manual. Atalho 'Vincular custo' na célula SEM CUSTO de Elegíveis",
+  "Interrogatório: responder divergências (nota / IGNORAR / regra por SKU), desativar aprendizados",
+  "Plano: escolher um plano antigo (#selPlano), aprovar, executar (prompt EXECUTAR, só com a chave 1 ligada), sincronizar e recarregar após uma falha",
+  "Auditoria: ler os eventos e exportar"
+ ],
+ "secoes": [
+  {
+   "titulo": "Header (marca + nav)",
+   "conteudo": "Marca 'Place2u · Promoções' que hoje leva para /cliente, não para o painel. Nav: Plano do cliente, Integrações, GMV, O que funciona, Painel executivo. O header usa ui.css e é diferente do header.topo do Painel executivo (styles.css).",
+   "ids_container": [],
+   "importancia": "baixa"
+  },
+  {
+   "titulo": "Barra do topo: trocar de cliente + Seu nome",
+   "conteudo": "Busca em pílula ('Trocar de cliente (nome ou CNPJ)') com dropdown de resultados (.res-item / .res-vazio). Ao lado, o campo 'Seu nome' (quem aprova / marca), exigido por todas as ações que gravam.",
+   "ids_container": [
+    "q",
+    "resultados",
+    "quem"
+   ],
+   "importancia": "media"
+  },
+  {
+   "titulo": "Faixa fixa de aviso de decisão",
+   "conteudo": "Faixa âmbar que aparece sempre, inclusive na tela de escolha: 'Este módulo recomenda; quem decide e executa é você… execução ao vivo desligada por padrão'.",
+   "ids_container": [
+    "avisoDecisao"
+   ],
+   "importancia": "baixa"
+  },
+  {
+   "titulo": "Tela de escolha de cliente (sem ?cliente=)",
+   "conteudo": "'Qual cliente?': chips de todos os clientes com ML conectado (hoje são 31, só 3 com coleta), cada um com '· coleta dd/mm/aaaa' ou '· sem coleta'. Não há ordenação por prioridade nem número por cliente.",
+   "ids_container": [
+    "telaEscolha",
+    "chipsClientes"
+   ],
+   "importancia": "alta"
+  },
+  {
+   "titulo": "Cabeçalho do cliente",
+   "conteudo": "Nome do cliente (h2) e chips de configuração: Piso de MC, relâmpago, imposto (efetivo ou fallback), execução LIGADA/DESLIGADA. Botão principal preenchido 'Coletar agora' e o checkbox 'atualizar vendas antes (lento)'.",
+   "ids_container": [
+    "telaCliente",
+    "titulo",
+    "chips",
+    "btnColetar",
+    "chkVendas"
+   ],
+   "importancia": "alta"
+  },
+  {
+   "titulo": "Faixa de coleta incompleta",
+   "conteudo": "Faixa vermelha (aviso-faixa ruim) que só aparece quando a coleta não está 'concluida': 'Coleta parcial: números abaixo podem estar incompletos… N leitura(s) falharam'.",
+   "ids_container": [
+    "faixaColeta"
+   ],
+   "importancia": "alta"
+  },
+  {
+   "titulo": "Linha de status da coleta",
+   "conteudo": "Selo 'coleta fresca / VELHA / PARCIAL / sem coleta', data/hora e 'há N h', o aviso 'refaça a coleta: não se analisa foto velha', 'sem dados de vendas' ou 'vendas até', e o span de progresso do job em andamento.",
+   "ids_container": [
+    "status",
+    "progresso"
+   ],
+   "importancia": "media"
+  },
+  {
+   "titulo": "Banner do invariante (rodada fechada)",
+   "conteudo": "Bloco verde ou vermelho com '✔ Rodada fechada' ou '✖ Rodada NÃO está fechada', os itens do checklist (✔/✖ N rótulo), a coleta velha e o texto técnico de read-back ('read-back: X elegíveis ≥ piso, N protegidos descobertos em 7d (janela do KPI) · 14d…').",
+   "ids_container": [
+    "invariante"
+   ],
+   "importancia": "media"
+  },
+  {
+   "titulo": "Pendências e limites declarados",
+   "conteudo": "<details> '<N> pendência(s) e limite(s) declarado(s) — nada aqui é inventado', com tagzinha do código cru (NEEDS_EXTERNAL_DATA, ATENCAO, NOT_AVAILABLE…) e o texto. Abre sozinho quando há NEEDS_EXTERNAL_DATA, ATENCAO ou falha de leitura, ou seja, quase sempre. Em clientes reais é aqui que fica o bloqueio de verdade (sem imposto, sem custo).",
+   "ids_container": [
+    "pendencias"
+   ],
+   "importancia": "media"
+  },
+  {
+   "titulo": "KPIs (7 cartões iguais)",
+   "conteudo": "Elegíveis a rebate · ≥ piso · Marcadas (sugestões 🤖 aguardando / barradas) · Participando (com rebate) · Descobertos (protegidos em N dias) · Cobertura incerta · Sem custo (SKUs sem custo). Classes alerta/ruim. Grid de 7 colunas, 3 abaixo de 1000px e 2 no mobile.",
+   "ids_container": [
+    "kpis"
+   ],
+   "importancia": "alta"
+  },
+  {
+   "titulo": "Abas (8 chips)",
+   "conteudo": "Elegíveis · Participando e cobertura · Relâmpago · Regras por SKU · Custos · Interrogatório · Plano · Auditoria. São botões .f-chip com aria-pressed, montados uma vez a partir de ABAS. A aba ativa vai para ?aba= via replaceState.",
+   "ids_container": [
+    "abas"
+   ],
+   "importancia": "alta"
+  },
+  {
+   "titulo": "Aba Elegíveis",
+   "conteudo": "Barra de filtros (busca, curva, situação com contadores, só ≥ piso, incluir sem rebate). Barra de ações com 4 botões de mesmo peso: Rodar analista (prévia), Aplicar analista (preenchido), Aprovar todas as sugestões 🤖, Exportar CSV. Abaixo: confirmação em linha, frase longa de total/legenda 🤖/👤 e a tabela de 9 colunas (Curva, Anúncio+badges, Fat. 30d, Campanha atual, Melhor elegível, MC, 🤖, 👤, Detalhes). A linha tr.det expansível traz a tabela de candidatas com Marcar/Recusar/Limpar/Aprovar 🤖, ordem direta e protegido. Paginador ← Anterior / página X de Y / Próxima →. Na coluna MC: a origem do custo ('custo: % da conta' ou 'custo: manual / SKU / SKU normalizado / herdado', com o SKU de custo quando não é o próprio) e, na célula SEM CUSTO com 'custo' faltando, o atalho 'Vincular custo' (data-acao='vincular-custo') que abre a aba Custos com o anúncio em foco.",
+   "ids_container": [
+    "conteudo",
+    "fQ",
+    "fCurva",
+    "fSit",
+    "fPiso",
+    "fSem",
+    "btnAprovarTodas",
+    "elCsv",
+    "confTodas",
+    "elTotal",
+    "elCorpo"
+   ],
+   "importancia": "alta"
+  },
+  {
+   "titulo": "Aba Participando e cobertura",
+   "conteudo": "Seções empilhadas: (1) 'Protegidos que ficam descobertos', com select de janela #selDias, link CSV e tabela Curva/Anúncio/Fat/Cobre até/Saída (MARCAR / SUGERIR MANUAL). (2) 'Cobertura incerta — confirmar (N)'. (3) Exceções em details.evid. (4) 'Rebate pior no ar', com ganho por venda e por mês. (5) 'Derrubadas antes do prazo', só quando houver. (6) 'Participando e cobertura (N)', com todas as ofertas started/pending.",
+   "ids_container": [
+    "conteudo",
+    "selDias"
+   ],
+   "importancia": "alta"
+  },
+  {
+   "titulo": "Aba Relâmpago",
+   "conteudo": "Faixa âmbar de avisos (LIGHTNING ignoradas) e a tabela Curva/Anúncio/Fat/Slots candidatos/Já no ar/🤖/👤. Só leitura, a execução é pelo painel do ML.",
+   "ids_container": [
+    "conteudo"
+   ],
+   "importancia": "media"
+  },
+  {
+   "titulo": "Aba Regras por SKU",
+   "conteudo": "Caixa .explica com as regras (Livre, N%, Revisar toda rodada), o formulário #formRegra (MLB, SKU, Status, N%, Nota, Salvar regra) e a tabela de regras com o botão Remover (usa confirm() nativo).",
+   "ids_container": [
+    "conteudo",
+    "formRegra",
+    "btnSalvarRegra"
+   ],
+   "importancia": "media"
+  },
+  {
+   "titulo": "Aba Custos",
+   "conteudo": "Faixa de pendências de custo vindas do ERP/planilha, quando houver. Depois o vínculo custo ↔ anúncio (GET /api/custos/vinculos, carregado junto; se falhar, só essas seções mostram o erro): 'Custos sem anúncio (N)' (cada custo com até 5 candidatos: miniatura, título, MLB, 'semelhança N%', Confirmar / Não é este, e o campo 'ID do anúncio (MLB…)' validado ^MLB[0-9]{6,12}$ + Vincular), 'Anúncios sem custo (N)' (por faturamento 30d; campo 'Escolher custo' com a datalist #cvCustos + Vincular; o anúncio vindo do atalho de Elegíveis sobe para o topo, destacado, com o foco em #cvFoco) e 'Custo por anúncio (N)' (Anúncio, SKU de custo, Origem do custo: manual / SKU / SKU normalizado / herdado, Quem / quando, Desvincular só no manual, com PS.confirmar). 50 por vez com 'Mostrar mais'. Depois: 'Importar custos por SKU' (textarea SKU;custo + fonte); 'Configuração do cliente' (piso_mc, piso_relampago, imposto_pct, dias_vigia, janela_cobertura_dias, execucao_max_itens, hedge); 'Elegíveis a rebate sem custo (N)'; 'SKUs sem custo cadastrado (N)'; 'Custos efetivos (N)' com Fonte/Campo do ERP/Frescor (bloco <custos-erp>); e 'Como funciona: de onde vem a MC'.",
+   "ids_container": [
+    "conteudo",
+    "formCustos",
+    "btnImportar",
+    "resImport",
+    "formConfig",
+    "btnSalvarConfig",
+    "cvCustos",
+    "cvFoco"
+   ],
+   "importancia": "alta"
+  },
+  {
+   "titulo": "Aba Interrogatório",
+   "conteudo": "Caixa .explica com o resumo, grupos de divergência (.pr-q) com perguntas e um details 'Responder' com o formulário .frmAprend, lembretes 'Revisar toda rodada' e a tabela de Aprendizados com Desativar.",
+   "ids_container": [
+    "conteudo"
+   ],
+   "importancia": "media"
+  },
+  {
+   "titulo": "Aba Plano",
+   "conteudo": "Barra com 'Gerar plano (dry-run)' (preenchido) e o select de planos #selPlano. Caixa 'Como funciona'. Bloco do plano: id, selo do estado, criado/expira, aprovado por, contagens, botões Aprovar plano e Exportar CSV. Tabela Ação/Anúncio/Campanha/Motivo/Chamada exata (JSON cru). Depois: bloco 'Execução DESLIGADA' (travado) ou 'Execução LIGADA — dinheiro vivo' (perigo) com Executar e Recarregar; o alerta de execução interrompida ou com erro; e o 'Resultado da execução' com tabela HTTP e o botão Sincronizar.",
+   "ids_container": [
+    "conteudo",
+    "selPlano"
+   ],
+   "importancia": "alta"
+  },
+  {
+   "titulo": "Aba Auditoria",
+   "conteudo": "Botão Exportar CSV, a legenda e a tabela de 300 eventos (Quando, Evento, Anúncio, Campanha, Autor, Detalhe com JSON truncado).",
+   "ids_container": [
+    "conteudo"
+   ],
+   "importancia": "baixa"
+  },
+  {
+   "titulo": "Footer + toasts",
+   "conteudo": "Footer técnico ('só leitura nas APIs; execução travada por duas chaves'). Dois toasts fixos no rodapé central: #toast (role=status) e #toastErro (role=alert). O alerta.js injeta o sino fixo no canto inferior direito (#psSino) e #psToasts.",
+   "ids_container": [
+    "toast",
+    "toastErro"
+   ],
+   "importancia": "baixa"
+  }
+ ],
+ "kpis": [
+  "Elegíveis a rebate (k.elegiveis): anúncios com campanha elegível",
+  "≥ piso (k.elegiveis_ge_piso): MC ≥ piso do anúncio",
+  "Marcadas (k.marcadas) + detalhe: k.sugeridas sugestões 🤖 aguardando · k.sugeridas_barradas barradas",
+  "Participando (k.participando) + k.participando_rebate com rebate",
+  "Descobertos (k.descobertos): protegidos em config.dias_vigia dias; '—' sem série de vendas",
+  "Cobertura incerta (k.cobertura_incerta): data só da campanha-mãe",
+  "Sem custo (k.sem_custo) + k.skus_sem_custo SKUs sem custo cadastrado",
+  "Chips de config: Piso de MC %, relâmpago %, imposto (efetivo/fallback/não configurado), execução LIGADA/DESLIGADA",
+  "Selo de coleta (fresca/VELHA/PARCIAL/erro/sem coleta, idade em h) e a data 'vendas até'",
+  "Invariante: rodada fechada sim/não + read-back (elegíveis ≥ piso, protegidos descobertos por janela, rebate-pior)",
+  "Na aba Plano: entradas, hedge, puladas, ignoradas, anúncios; na execução: entrou provado / sem prova / incertas / recusadas / não enviadas",
+  "Na aba Participando: ganho por venda e ganho por mês no rebate pior"
+ ],
+ "hooks_js": [
+  "#q (input de busca; listener 'input')",
+  "#resultados (dropdown; hidden + innerHTML)",
+  "#quem (Seu nome; value/focus/change → localStorage 'promo_quem')",
+  "#telaEscolha (hidden)",
+  "#chipsClientes (innerHTML)",
+  "#telaCliente (hidden)",
+  "#titulo (textContent)",
+  "#chips (innerHTML)",
+  "#btnColetar (onclick = coletar)",
+  "#chkVendas (checked)",
+  "#faixaColeta (aviso .erro da coleta parcial/erro + aviso .info 'Coleta desligada para este cliente' quando o resumo traz coleta_ligada:false, com o link para /cliente?cliente=&aba=configurar — o interruptor 'Coletar promoções do Mercado Livre' fica em Cliente → Configurar)",
+  "#status",
+  "#progresso (span criado DENTRO do innerHTML de #status; o acompanhar() escreve nele)",
+  "#invariante",
+  "#pendencias",
+  "#kpis",
+  "#abas (innerHTML montado 1x a partir de ABAS; seletor '#abas .f-chip')",
+  "#conteudo (alvo de pintar()/innerHTML de todas as abas)",
+  "#toast e #toastErro (textContent; regiões vivas que nunca podem receber hidden)",
+  "PAINEIS = ['chips','status','invariante','pendencias','kpis','faixaColeta'] (limparTela)",
+  "IDs criados pelo JS: #fQ, #fCurva, #fSit (7 options: os textos são reescritos com os contadores), #fPiso, #fSem, #btnAprovarTodas, #elCsv (href), #confTodas, #elTotal, #elCorpo, #btnCancelarTodas, #selDias, #formRegra, #btnSalvarRegra, #formCustos, #btnImportar, #resImport, #formConfig, #btnSalvarConfig, #selPlano, #cvCustos (datalist dos custos efetivos na aba Custos), #cvFoco (campo 'Escolher custo' do anúncio vindo do atalho de Elegíveis; S.focoCusto vale uma pintura), #dlgPor (dialog.dlg criado sob demanda para perguntar o nome do vínculo)",
+  "Detecção 'if (!$('fQ'))': a barra de filtros de Elegíveis só é pintada se #fQ não existir; recriar #fQ apaga o que se digita",
+  "Classe .busca-wrap (closest: clique fora fecha #resultados)",
+  "Classe .f-chip + .on + aria-pressed nos botões de #abas (classList.toggle('on'))",
+  "Seletor 'button.btn,button.btn-mini' (sincOcupado desabilita durante o job e marca data-por-job)",
+  "tr.det: o botão data-acao='det' faz el.closest('tr').nextElementSibling. A linha de detalhe TEM de ser o irmão imediato da linha do anúncio",
+  "closest('tr.det') + querySelector('.chkOrdem') (checkbox de ordem direta dentro do detalhe)",
+  "Classe .frmAprend (querySelectorAll; forms do Interrogatório com data-item, data-sku, data-padrao, data-contexto)",
+  "Delegação global document click → closest('[data-acao]'); valores: abrir, aba, det, pag, marcar, aprovar, aprovar-todas, aprovar-todas-ok, aprovar-todas-nao, protegido, analista-previa, analista-aplicar, analista-aplicar-ok, rm-regra, off-aprend, plano-gerar, plano-aprovar, plano-recarregar, plano-executar, plano-sync, vincular-custo (atalho de Elegíveis), cv-vincular, cv-recusar, cv-manual, cv-escolher, cv-desvincular (vínculo custo ↔ anúncio: acaoVinculo), mais com data-k cv_custos | cv_anuncios | cv_vinculados",
+  "Classe .pr-vinc: os botões cv-manual e cv-escolher acham o campo por el.closest('.pr-vinc').querySelector('input'); o botão e o campo têm de ficar dentro do mesmo .pr-vinc",
+  "Atributos data-* lidos pelo JS: data-c, data-k, data-item, data-pid, data-v, data-preco, data-mc, data-p, data-foco ('ant'/'prox'), data-plano, data-mlb, data-sku, data-id, data-padrao, data-contexto, data-por-job",
+  "DATA_FOCO = foco,item,pid,v,k,id,mlb,sku (seletorFoco restaura o foco por id ou data-* após repintar)",
+  "Seletores '[data-acao=\"plano-aprovar\"],[data-acao=\"plano-executar\"]' (desabilitados após uma falha)",
+  "Atributo [hidden] (closest('[hidden]') em pintarEm; tr.det hidden)",
+  "Nomes dos campos (FormData): mlb, sku, tipo, n, nota | texto, fonte | piso_mc, piso_relampago, imposto_pct, dias_vigia, janela_cobertura_dias, execucao_max_itens, hedge_cobertura | acao, parametro, resposta",
+  "Chaves das abas (URL ?aba=): elegiveis, participando, relampago, regras, custos, interrogatorio, plano, auditoria (ABAS_FORM = custos, regras, interrogatorio)",
+  "Marcadores no fonte: // <puro> … // </puro> e // <custos-erp> … // </custos-erp> (os testes extraem e executam esses trechos). O vínculo custo ↔ anúncio mora no <custos-erp> (ROT_ORIGEM, TIT_ORIGEM, normMlb, h*, secaoVinculos): construtores puros, toda interpolação por esc()/fmtR()/h*()",
+  "localStorage 'promo_quem' (Seu nome) e 'ps_perfil_por' (quem vincula custo ↔ anúncio: ps_perfil_por, senão #quem, senão pergunta em #dlgPor; sempre com try/catch)",
+  "URL /promocoes?cliente=…&aba=… (pushState/replaceState/popstate)"
+ ],
+ "classes_geradas_por_js": [
+  "res-item",
+  "sub",
+  "res-vazio",
+  "f-chip",
+  "on",
+  "mudo",
+  "peq",
+  "neg",
+  "pos",
+  "vazio-box",
+  "skeleton",
+  "chip",
+  "laranja",
+  "aviso-faixa",
+  "ruim",
+  "selo",
+  "bom",
+  "atencao",
+  "neutro",
+  "progresso",
+  "pr-inv",
+  "ok",
+  "it",
+  "pr-pend",
+  "tagzinha",
+  "impacto",
+  "fato",
+  "kpi",
+  "rotulo",
+  "valor",
+  "detalhe",
+  "alerta",
+  "pr-filtros",
+  "btn",
+  "cheio",
+  "btn-mini",
+  "sel",
+  "perigo",
+  "n-acoes",
+  "pr-pag",
+  "tabela-wrap",
+  "t (table.t)",
+  "n (td.n / th.n)",
+  "lin-marcada",
+  "det (tr.det)",
+  "curva",
+  "cA / cB / cC (curva c${curva})",
+  "pr-badges",
+  "pr-det-t",
+  "pr-obs",
+  "pr-acoes",
+  "pr-chk",
+  "chkOrdem",
+  "secao",
+  "explica",
+  "pr-form",
+  "v (label.v)",
+  "col2",
+  "pr-q",
+  "perg",
+  "evid (details.evid)",
+  "box",
+  "frmAprend",
+  "pr-bloco",
+  "travado",
+  "pr",
+  "pr-plano-it",
+  "acao-ENTRAR / acao-PULAR / acao-IGNORAR (acao-${i.acao})",
+  "estilos inline no JS: style=\"display:flex;gap:10px;flex-wrap:wrap;align-items:center\", style=\"margin-top:8px|10px\", style=\"margin:8px 0 0\", style=\"margin:6px 0\", style=\"margin:14px 0 4px\"",
+  "pr-vinc",
+  "pr-vinc-an",
+  "foco",
+  "pr-cand",
+  "pr-cand-txt",
+  "pr-thumb",
+  "pr-semimg",
+  "pr-manual",
+  "t-pag"
+ ],
+ "css_origem": "Três folhas linkadas, sem <style> inline no HTML: (1) src/web/ui.css, a base compartilhada: tokens :root, header, .busca, .resultados, .res-item, .cab, .chips/.chip, .btn, .kpis/.kpi (4 colunas), .selo, .secao, .f-chip, .tagzinha, .btn-mini, details.evid, .vazio-box, .aviso-faixa, .skeleton e footer. (2) src/web/ui-extra.css: .tabs, .tabela-wrap, table.t, .pos/.neg/.mudo, .explica e o foco. (3) src/web/promocoes.css: um :root que sobrepõe --laranja-escuro/--verde/--cinza/--azul por contraste (o teste lê esses tokens), main 1200px, as classes .pr-*, .kpis com 7 colunas, .curva, .acao-*, toasts e responsivo em 1000 e 560px. Há ainda estilos inline: style=\"text-decoration:none\" na marca e onerror no logo (HTML), mais margens e flex nos templates do JS. O alerta.js injeta um <style> próprio (#psSino, #psPainel, #psToasts, com cores fixas em hex). O Painel executivo (index.html) usa outra folha (styles.css) e outro header (header.topo), por isso hoje as telas não têm um sistema visual único.",
+ "links_navegacao": [
+  "/cliente (marca/logo e 'Plano do cliente')",
+  "/integracoes",
+  "/gmv",
+  "/resultados ('O que funciona')",
+  "/ ('Painel executivo')",
+  "/integracoes?custos=<cliente> (aba Custos: cartão de custos ERP/planilha)",
+  "/promocoes?cliente=…&aba=… (navegação interna)",
+  "Downloads: /api/promocoes/exportar.csv?…&tipo=elegiveis|descobertos|plano|auditoria",
+  "Links externos: permalink do anúncio no Mercado Livre (target=_blank)",
+  "Entradas para esta tela vindas de outras: cliente.html (nav 'Promoções') e cliente.js (botão 'Promoções do cliente'). O Painel executivo não tem link para Promoções"
+ ],
+ "dependencias_externas": [
+  "Nenhuma CDN, biblioteca ou webfont: fonte do sistema (-apple-system/Segoe UI/Roboto)",
+  "/logo (imagem servida pelo próprio servidor, com onerror que esconde)",
+  "/alerta.js (sino de notificações global, com CSS próprio injetado; consulta /api/notificacoes a cada 8 s)",
+  "APIs locais: /api/clientes/busca, /api/promocoes/clientes, /resumo, /elegiveis, /participando, /relampago, /regras-sku (GET/POST/DELETE), /custos, /custos/importar, /config, /interrogatorio, /aprendizados, /aprendizados/desativar, /planos, /plano (GET e POST gerar), /plano/aprovar, /plano/executar, /plano/sync, /job/:id, /coletar, /analista, /aprovar-analista, /marcar, /protegido, /auditoria, /exportar.csv; vínculo custo ↔ anúncio: GET /api/custos/vinculos, POST /api/custos/vincular | /recusar | /desvincular (rotas-custos.js; JSON obrigatório, 'por' obrigatório)",
+  "Diálogos nativos: confirm() em plano-aprovar e rm-regra, prompt('EXECUTAR') em plano-executar; Desvincular custo usa PS.confirmar (shell.js), com confirm() só se o shell faltar"
+ ],
+ "testes_que_leem_esta_tela": [
+  "scripts/teste-promocoes-ui.mjs, estrutura: precisa de '// <puro>' e '// </puro>' em promocoes.js, e o trecho tem de exportar esc, fmtR, fmtPct, brData, brHora, filtrosPadrao, filtrosAtivos, coletaConcluida, temLimiteFalha, avisoColeta, kpiVal, semVendas, curvaTag, fatTxt, impostoChip, vazioElegiveis, msgSemDescobertos, opcoesDias, paginaAlvo, textoAprovarTodas, estadoSelo, botaoExecutar, GRAVAM, seletorFoco, criarRender, vazioFato, desfechoColeta, desfechoAprovacao, parDoBotao, desfechoExecucao, textoReadback, textoAplicar, ehMarcaHumana, ehIncerta, ABAS_FORM. O script inteiro roda num vm e o fim tem de expor S, abrir, escolher, mostrarAba, recarregarResumo, abaElegiveis, abaPlano, coletar, toast, sincOcupado",
+  "teste-promocoes-ui.mjs, DOM falso: só existem os elementos com /\\sid=\"([^\"]+)\"/ no HTML ou num innerHTML atribuído pelo JS (id precedido de espaço). #fSit precisa de exatamente 7 options. confirm() lança erro nos fluxos 'aprovar-todas' e 'analista-aplicar'",
+  "teste-promocoes-ui.mjs, HTML: /id=\"toastErro\"[^>]*role=\"alert\"|role=\"alert\"[^>]*id=\"toastErro\"/ ; /id=\"toast\"[^>]*role=\"status\"[^>]*aria-live=\"polite\"|role=\"status\"[^>]*id=\"toast\"/ ; doesNotMatch /id=\"toast(Erro)?\"[^>]*\\bhidden\\b/ ; doesNotMatch /role=\"tablist\"/ no HTML e /role=\"tab\"/ no JS",
+  "teste-promocoes-ui.mjs, CSS de contraste: o primeiro /:root\\{[^}]*\\}/ de promocoes.css e os tokens de ui.css lidos com /--([a-z-]+)\\s*:\\s*(#[0-9a-fA-F]{6})/ (só hex de 6 dígitos). Pares que precisam de ≥ 4,5:1: laranja-escuro sobre #fff1e8 e #ffffff; verde sobre verde-suave, #ffffff e #f6fbf6; cinza sobre #ffffff, fundo-suave, verm-suave, ambar-suave e #f6fbf6; azul sobre azul-suave; ambar sobre ambar-suave e #ffffff; verm sobre verm-suave e #ffffff; #ffffff sobre verm",
+  "teste-promocoes-ui.mjs, KPIs (marcação exata rótulo→valor): /Descobertos<\\/div><div class=\"valor\">—<\\/div>/ ; /Descobertos<\\/div><div class=\"valor\">1<\\/div>/ ; /Descobertos<\\/div><div class=\"valor\">3<\\/div>/ ; /Cobertura incerta<\\/div><div class=\"valor\">1<\\/div>/ ; doesNotMatch /<div class=\"valor\">0<\\/div>/ em coleta parcial",
+  "teste-promocoes-ui.mjs, painéis: #chips /22,0%/ e /imposto 12,0% \\(fallback custos_cliente\\)/ (sem /não configurado/) ; #faixaColeta /Coleta parcial: números abaixo podem estar incompletos/ ; #status /coleta PARCIAL/, /sem dados de vendas/, doesNotMatch /há\\s+h\\b/ ; #pendencias /<details open>/ ; #invariante /✔ Rodada fechada/, /✖ Rodada NÃO está fechada/, /3 protegidos descobertos em 7d/ (doesNotMatch /6 protegidos descobertos/) ; #titulo textContent = nome do cliente",
+  "teste-promocoes-ui.mjs, #elCorpo: /Coleta parcial/ ; doesNotMatch /fato da conta/ ; doesNotMatch /R\\$ 0,00/ e /curva cC/ sem vendas ; /sem série de vendas: curva indeterminada/ ; /curva cA/ ; /pr-pag/ ; /página 2 de 2/ ; doesNotMatch /Nenhum anúncio com esses filtros/ ; /data-item=\"MLB2\" aria-expanded=\"true\">Fechar/ ; /data-item=\"MLB1\" aria-expanded=\"false\">Detalhes/ ; exatamente 1 ocorrência de /<tr class=\"det\" hidden>/g ; /data-acao=\"aprovar\" data-item=\"MLB1\" data-pid=\"P1\" data-preco=\"95\" data-mc=\"30.68\">Aprovar 🤖 R\\$ 95,00 · MC 30,7%</ ; o elemento #fQ não pode ser recriado entre buscas (assert.equal(T.el('fQ'), fq))",
+  "teste-promocoes-ui.mjs, #confTodas: /Aprovar 2 anúncio\\(s\\)/, /TODO o cliente/, /filtros da tela NÃO limitam/, /1 sugestão\\(ões\\) barrada\\(s\\)/, /Você tem 2 aprovação\\(ões\\) 🤖/ ; fica vazio ('') depois de confirmar",
+  "teste-promocoes-ui.mjs, #conteudo Participando: /Sem série de vendas/ ; doesNotMatch /Nenhum protegido descoberto nesta janela/ ; /<option value=\"10\" selected>10<\\/option>/ ; /exportar\\.csv\\?cliente=A&tipo=descobertos&dias=10/ ; exatamente 1 /SUGERIR MANUAL/g ; /CONFIRMAR COBERTURA/ ; /Cobertura incerta — confirmar \\(1\\)/ ; doesNotMatch /<b>01\\/03\\/2027<\\/b>/ ; /cobertura incerta<\\/span><div class=\"mudo peq\">data só da campanha-mãe: 01\\/03\\/2027/ ; /Derrubadas antes do prazo \\(3\\)/ ; /lista item a item não foi gravada/ ; /1 já venceram/ ; /MLB77/ ; /P-77/ ; /01\\/12\\/2026/ ; /Sem leitura confiável \\(coleta parcial\\)/ ; doesNotMatch /Nenhum caso de rebate pior no ar\\./ e /Nenhum anúncio com participação ativa nesta coleta\\./ ; #selDias recriado e com o foco de volta",
+  "teste-promocoes-ui.mjs, #conteudo Custos: doesNotMatch /Nenhum anúncio elegível sem custo\\./ e /Todos os SKUs têm custo\\./ ; /name=\"imposto_pct\" type=\"number\" step=\"any\"/ ; /name=\"piso_mc\" type=\"number\" step=\"any\"/ ; /name=\"piso_relampago\" type=\"number\" step=\"any\"/ ; /name=\"dias_vigia\" type=\"number\" step=\"1\"/ ; doesNotMatch /step=\"0\\.5\"/ (só dentro da aba Custos)",
+  "teste-promocoes-ui.mjs, #conteudo Plano/Relâmpago/Auditoria: /data-acao=\"plano-executar\" >Executar/ (com o espaço antes do '>') ; /data-acao=\"plano-executar\" disabled/ ; /pode ter enviado chamadas/ ; /data-acao=\"plano-recarregar\"/ ; /EXPIRADO/ e doesNotMatch /plano-executar/ quando expirado ; /data-plano=\"PL-A\" data-acao=\"plano-aprovar\"/ (nesta ordem de atributos) ; /Execução com ERRO — nenhuma chamada enviada/ ; /DESLIGADA durante a execução/ ; /Resposta \\/ motivo/ ; /execução interrompida: a chave 1/ ; /🤖 gravada na rodada de Ana/ ; /👤 David/ (doesNotMatch /👤 Ana/) ; /Sem eventos ainda/ ; doesNotMatch /Gerar plano/ na Auditoria",
+  "teste-promocoes-ui.mjs, toasts: #toastErro /Seu nome/, /confira a Auditoria/, /Não consegui abrir o plano escolhido/, /Coleta de A PARCIAL/, /3 leitura\\(s\\) falharam/, /vendas NÃO atualizadas: timeout na série/, /Coleta de A concluída.*vendas NÃO atualizadas: sem permissão/, /Nenhuma sugestão aprovada · 1 bloqueada\\(s\\) por recusa do dono/, /NADA foi aprovado/, /ERRO: nenhuma chamada foi enviada.*DESLIGADA/, /⚠ 2 aprovação\\(ões\\) 🤖 REVOGADA\\(S\\)/ ; #toast /Coleta de A concluída/",
+  "scripts/teste-custos-ui.mjs: marcadores '// <custos-erp>' e '// </custos-erp>' (dentro de <puro>) ; /carregar\\(t, `\\/api\\/promocoes\\/custos\\?cliente=\\$\\{C\\(\\)\\}`\\)/ no promocoes.js ; todo $('id') literal e todo aria-controls/aria-labelledby/for/data-copiar-de de promocoes.js/html precisa existir como /\\bid=\"([^\"$]+)\"/ no promocoes.html ou no promocoes.js ; heurística de XSS no <custos-erp> (toda ${} folha passa por esc/fmtR/fmtPct/enc/frescorCusto/faixaPendCustos/secaoCustos/h*) ; sem confirm/prompt/alert no <custos-erp> ; node --check src/web/promocoes.js",
+  "teste-custos-ui.mjs, construtores: secaoCustos /Campo do ERP/, /Frescor/, /mostrando 2 de 5/, /href=\"\\/integracoes\\?custos=%3Cimg/, /planilha do dono/, /manual \\(sem prazo\\)/, /Custos cadastrados \\(1\\)/, /Nenhum custo por SKU/ ; frescorCusto /selo bom\">em dia · há 10 d/, /selo atencao\">custo velho/, /custo velho · há 3,5 d/, /não visto desde 01\\/10\\/2026/, /sem prazo/ ; faixaPendCustos /tagzinha\">custo velho</, /custos=A%20B/",
+  "scripts/teste-promocoes-rotas-mc.mjs: não lê o HTML/JS da tela. Só garante que GET /promocoes pelo túnel dá 403 (guard em server.js), sem impacto no layout",
+  "Nenhum teste lê ui-extra.css. Mudar tokens de ui.css afeta o teste de contraste de promocoes",
+  "teste-promocoes-ui.mjs, vínculo custo ↔ anúncio: seções 'Custos sem anúncio', 'Anúncios sem custo', 'Custo por anúncio'; Confirmar → POST /api/custos/vincular com por de ps_perfil_por e toast 'Custo vinculado: <SKU> → <MLB>'; MLB inválido não chama a API; atalho 'Vincular custo' leva à aba Custos com #cvFoco; Desvincular passa por PS.confirmar; falha da rota de vínculos não derruba a aba",
+  "teste-custos-ui.mjs, vínculo: toda chamada /api/custos/* (inclusive vincular/recusar/desvincular, registradas em laço em rotas-custos.js) precisa estar na tabela 10.1 de docs/integracao-custos-erp-SPEC.md; secaoVinculos com sonda escapada"
+ ],
+ "problemas_ux": [
+  "Não existe um 'próximo passo' claro. Antes do conteúdo empilham-se até 6 faixas de estado (aviso de decisão, faixa de coleta, status, invariante, pendências, 7 KPIs). Com dados reais (Agrinorte: 38 elegíveis, 0 ≥ piso, 37 sem custo, 12 descobertos, imposto não configurado) a tela abre como um muro de vermelho e âmbar",
+  "O bloqueio real (sem imposto, sem custo, logo nenhuma MC e nada recomendado) fica enterrado no texto das pendências e na aba Custos, a 5ª de 8. Nada aponta o usuário até ela",
+  "Os 7 KPIs têm o mesmo peso e não há número-manchete. 'Cobertura incerta' e 'Sem custo' competem com 'Elegíveis ≥ piso', que é a oportunidade de fato. O detalhe dos cartões usa jargão ('data só da campanha-mãe: confirmar em /items/{id}/prices')",
+  "8 abas em chips iguais aos de cliente, sem agrupar por fluxo. A ordem não segue o trabalho: configuração (Regras, Custos) fica entre Relâmpago e Plano, e Auditoria e Interrogatório têm o mesmo destaque das abas de decisão",
+  "Botão primário ambíguo: 'Coletar agora', 'Aplicar analista' e 'Gerar plano' são todos .btn.cheio e às vezes aparecem juntos. A barra de Elegíveis tem 4 ações de mesmo peso mais 5 filtros com rótulos longos",
+  "Emojis como interface (🤖/👤 em cabeçalhos de coluna, botões e toasts; ✔/✖/⚠ no invariante e nos toasts) quebram o visual premium e limpo. Vários textos com emoji são verificados pelos testes, então a troca exige cuidado",
+  "Texto demais e técnico na tela: frase-legenda longa em #elTotal, caixas .explica abertas em todas as abas, códigos crus (NEEDS_EXTERNAL_DATA, NOT_AVAILABLE, started+pending, PRICE_MATCHING, offer_id, dry-run, read-back, hedge) e o JSON da chamada exata na tabela do plano",
+  "'Seu nome' fica solto no topo, ao lado da busca, sem dizer que é obrigatório. O usuário só descobre ao clicar e receber um toast vermelho",
+  "Header diferente do Painel executivo (outra folha, outro header). A marca leva para /cliente, não para o painel. O nav não marca a página atual e não tem Comercial, Planos, Processos e Analistas. O Painel executivo não leva a Promoções",
+  "Tela de escolha fraca: 31 chips soltos (só 3 com coleta), sem ordem por prioridade e sem número por cliente (descobertos, oportunidades, coleta velha). O sócio não tem visão de carteira",
+  "Os chips de config misturam informação neutra e alerta: 'imposto não configurado' aparece como chip cinza, igual a 'Piso de MC 20,0%'",
+  "O progresso do job só aparece num span dentro de #status, fácil de não ver. Durante o job os botões ficam desabilitados sem explicação visível",
+  "Confirmações inconsistentes: aprovar todas e aplicar analista confirmam em linha, mas aprovar plano e remover regra usam confirm() nativo e executar usa prompt('EXECUTAR'). Diálogo nativo não tem cara de produto premium",
+  "A faixa 'recomenda / decide você' aparece sempre, inclusive na escolha de cliente, e repete o que o bloco 'Execução DESLIGADA' e o footer já dizem",
+  "Mobile: 7 KPIs viram 4 linhas, tabelas de 9 colunas com min-width de 640px, header quebra em várias linhas, e o toast central pode ficar sobre o sino do alerta.js (fixo no canto inferior direito)",
+  "Estados de carregamento pobres: a lista de clientes fica vazia sem skeleton enquanto carrega, os KPIs e chips somem durante a troca de cliente, e o skeleton é único (120px) para qualquer aba",
+  "Estilos inline nos templates do JS (flex e margens) e tabelas de detalhe com fonte de 10,5 a 11,5px atrapalham a consistência e a leitura",
+  "Dentro da aba Participando o mais crítico vem primeiro (descobertos), mas a lista completa 'Participando e cobertura' fica no fim de uma página longa sem âncoras"
+ ],
+ "estados": [
+  "Tela de escolha (sem ?cliente): carregando (sem skeleton) | lista de clientes com '· coleta dd/mm' ou '· sem coleta' | vazio 'Nenhum cliente com conta Mercado Livre conectada. Conecte pela tela de integrações.' | erro (vazio-box com a mensagem)",
+  "Busca de cliente: menos de 3 caracteres = oculta | resultados | 'Nenhum cliente com esse nome ou CNPJ.' | erro",
+  "Abrindo cliente: painéis limpos + skeleton em #conteudo. Se o resumo falha (ex.: 404 'cliente sem conta Mercado Livre conectada'), aparece vazio-box com a mensagem",
+  "Sem coleta: selo 'sem coleta' + 'rode \"Coletar agora\"', KPIs '—', Elegíveis 'Faça a primeira coleta'",
+  "Coleta concluída e fresca (selo bom) | VELHA (selo ruim + 'refaça a coleta: não se analisa foto velha') | parcial / erro / rodando (faixa vermelha #faixaColeta, KPIs '—', vazios que não afirmam fato)",
+  "Sem dados de vendas (série indisponível ou vazia): curva e Fat. 30d '—', KPIs Descobertos e Cobertura incerta '—', vigia declara que não avaliou",
+  "Job em andamento por cliente (coletando / planejando / executando): progresso em #progresso, botões .btn/.btn-mini desabilitados (data-por-job), toast se tentar gravar",
+  "Sem 'Seu nome': toast vermelho + foco em #quem, nada é enviado",
+  "Invariante verde ('✔ Rodada fechada') ou vermelho ('✖ Rodada NÃO está fechada')",
+  "Pendências: details fechado, ou aberto quando há NEEDS_EXTERNAL_DATA / ATENCAO / falha de leitura",
+  "Elegíveis: tabela | filtro zerou ('Nenhum anúncio com esses filtros.') | sem elegíveis como fato da conta | coleta com falhas | página fora do intervalo (volta à última) | confirmação em linha (aprovar todas / aplicar analista) | linha de detalhe aberta (S.abertos)",
+  "Participando: descobertos | 'Nenhum protegido descoberto nesta janela.' | cobertura incerta | exceções | rebate pior vazio (fato ou sem leitura) | derrubadas com lista ou só contagem | participando vazio",
+  "Regras / Custos / Interrogatório (abas de formulário, não são repintadas no fim da coleta): vazios 'Nenhuma regra por SKU…', 'Nenhum custo por SKU…', 'Sem divergências abertas.', 'Ainda sem revisão sua…', 'Nenhum aprendizado registrado.', linhas rejeitadas na importação",
+  "Plano: nenhum plano | dry-run (Aprovar) | aprovado | EXPIRADO | executando | executado (selo bom só com prova) | executado_parcial | erro | cancelado | execução DESLIGADA (bloco travado) | LIGADA (bloco perigo + Executar) | bloqueado após falha (Executar desabilitado + Recarregar plano) | sync com 'SEM leitura' ou suspeito",
+  "Auditoria: lista ou 'Sem eventos ainda.'",
+  "Toasts: neutro (#toast, 3,5 s) e erro (#toastErro, 7 s); só um visível por vez",
+  "Erro de qualquer aba: vazio-box com a mensagem. Resposta obsoleta (OBSOLETA) é descartada em silêncio"
+ ],
+ "recomendacao": "A tela deve virar um funil direcional de uma página, com a mesma casca visual do Painel executivo (header único com a página atual marcada e a marca levando a /). Ordem proposta: (1) Topo enxuto: nome do cliente, troca de cliente, um único selo de saúde da coleta ('Coleta fresca · há 1 h' ou 'Refaça a coleta') e um só botão primário 'Coletar agora'. 'Seu nome' vira uma pílula de identidade discreta, mas visível como obrigatória. (2) Um cartão 'Próximo passo' que junta, numa frase e num botão, o que hoje está espalhado em #faixaColeta, #status, #invariante e #pendencias, calculado com o estado que já existe: sem coleta → coletar; coleta velha ou parcial → refazer; sem imposto ou sem custo → 'Configurar custos' (abre a aba Custos); sugestões pendentes → aprovar; marcadas sem plano → gerar plano; plano em dry-run → aprovar. O detalhe técnico (read-back, códigos de pendência) fica num 'Ver detalhes' recolhido, e os IDs atuais continuam como contêineres. (3) Quatro KPIs-manchete: Oportunidades ≥ piso, Protegidos descobertos (risco), Sem custo (bloqueio) e Participando. Elegíveis, Marcadas e Cobertura incerta descem para uma linha secundária menor, mantendo a marcação rotulo→valor que os testes exigem. (4) Abas reagrupadas na ordem do trabalho, com as mesmas chaves de URL e o mesmo .f-chip/.on/aria-pressed: Oportunidades (Elegíveis), Cobertura (Participando), Relâmpago, Plano; e um grupo secundário mais discreto 'Configuração' (Custos, Regras) e 'Histórico' (Interrogatório, Auditoria). (5) Dentro de cada aba, um único botão preenchido: em Elegíveis, 'Aplicar analista' ou 'Aprovar sugestões'; prévia e CSV viram ações-texto. Caixas .explica recolhidas em 'Como funciona', códigos crus traduzidos para rótulos com o código no title, e 🤖/👤 mantidos apenas nos textos que os testes verificam, dentro de tags neutras 'Analista'/'Você'. A tela de escolha vira uma lista de carteira ordenada por prioridade (sem coleta, coleta velha, descobertos), não chips soltos. Tudo por CSS e marcação estática, sem renomear nenhum id, classe usada pelo JS, data-acao ou texto verificado em teste-promocoes-ui.mjs e teste-custos-ui.mjs."
+}

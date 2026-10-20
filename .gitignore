@@ -1,0 +1,10 @@
+*.enc
+*.log
+.DS_Store
+.env
+chromeprof/
+data/
+node_modules/
+nohup.out
+scratchpad/
+scripts/bin/

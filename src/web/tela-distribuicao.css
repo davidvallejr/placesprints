@@ -1,0 +1,15 @@
+/* Distribuição (/planos): só o que o ui.css não cobre. Tokens vêm de /ui.css. */
+.barra-massa details.menu .menu-lista{top:auto;bottom:calc(100% + 4px)}   /* barra fica no rodapé: o menu abre para cima */
+tr.fichaLinha>td{padding:0;border:0}                                        /* a linha só hospeda a gaveta */
+.gaveta>.linha>.btn{margin-left:auto}
+#secEscopo .ajuda-campo{flex-basis:100%}
+#scoreMin{width:80px}
+.passos>li>.btn{margin-left:var(--e-1)}
+#passos>li{flex-wrap:wrap}                                                  /* no celular o passo Enviar quebra em vez de cortar o primário */
+#passos .btn-primario{flex:1 1 auto}                                        /* só cresce quando cai sozinho na 2ª linha */
+.veredito-frase>.sk-linha{display:block;width:60%}                          /* span inline ignora height: o skeleton do veredito sumia */
+.kpi .valor .mudo{color:var(--cinza-claro)}                                 /* "—" de sem dado (5.4) */
+#fltAvancado{display:contents}                                              /* o botão "Filtros" fica na linha dos filtros simples; chips e painel caem abaixo */
+#fltAvancado>.flt-chips,#fltAvancado>.flt-painel{flex-basis:100%}
+#fltAvancado>.flt-chips:empty{display:none}
+#fltAvancado .flt-chip{height:auto;min-height:28px;padding-block:3px}      /* chip de período é longo: no celular quebra em 2 linhas em vez de vazar da altura fixa */

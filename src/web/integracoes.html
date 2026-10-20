@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Integrações · Place Sprints</title>
+<link rel="stylesheet" href="/ui.css">
+<link rel="stylesheet" href="/tela-integracoes.css">
+</head>
+<body data-pagina="integracoes">
+<header class="ps-shell" id="psShell"></header>
+<script src="/shell.js"></script>
+<main class="pg">
+  <div class="pg-cab">
+    <div class="pg-titulo">
+      <h1>Integrações</h1>
+      <p class="pg-meta"><span>Tokens cifrados</span><span>nunca pedimos senha do marketplace</span></p>
+    </div>
+    <div class="pg-acoes">
+      <a class="btn" id="btnLinksCsv" href="/api/integracoes/links.csv?status=desconectado" title="Um link de conexão do Mercado Livre por cliente que ainda não conectou, num CSV pronto para enviar">Baixar links de quem não conectou</a>
+    </div>
+  </div>
+
+  <section class="veredito" aria-label="Resumo">
+    <p class="veredito-frase" id="veredito">Lendo as conexões do Mercado Livre…</p>
+    <div class="regua" id="regua" hidden></div>
+    <div class="kpis" id="cards" aria-busy="true"><div class="kpi sk-kpi"></div><div class="kpi sk-kpi"></div><div class="kpi sk-kpi"></div></div>
+  </section>
+
+  <div class="proxima" id="proxima" hidden>
+    <span class="proxima-rotulo">Próxima ação</span>
+    <span class="proxima-texto" id="proximaTexto"></span>
+    <button class="btn btn-primario" type="button" id="proximaBtn"></button>
+  </div>
+
+  <section class="bloco" id="secLista">
+    <div class="bloco-cab"><h2 id="tituloLista">Precisa de ação</h2><span class="sis" data-sistema="trinity" title="Sistema de origem: Trinity">Trinity</span></div>
+    <p class="sub" id="subLista">Conexões caídas primeiro, depois quem opera ML e ainda não conectou</p>
+    <div class="filtros">
+      <label class="sr" for="fq">Filtrar clientes</label>
+      <input id="fq" type="text" placeholder="Filtrar clientes…" size="22">
+      <button class="f-chip on" type="button" data-f="acao" aria-pressed="true">Precisa de ação <span class="n"></span></button>
+      <button class="f-chip" type="button" data-f="conectado" aria-pressed="false">Conectados <span class="n"></span></button>
+      <button class="f-chip" type="button" data-f="desconectado" aria-pressed="false">Sem conexão <span class="n"></span></button>
+      <button class="f-chip" type="button" data-f="todos" aria-pressed="false">Todos <span class="n"></span></button>
+      <select id="fplano" aria-label="Filtrar por plano"><option value="">Todos os planos</option></select>
+      <label class="linha"><input type="checkbox" id="fdesl"> mostrar desligados</label>
+    </div>
+    <div class="tabela-wrap fixa" id="tabela" tabindex="-1"><table class="empilha">
+      <thead><tr><th>Cliente</th><th>Mercado Livre</th><th>Outros canais</th><th>Custos</th><th>Situação</th><th>Ações</th></tr></thead>
+      <tbody id="tb"><tr><td colspan="6"><div class="sk-tabela"></div></td></tr></tbody>
+    </table></div>
+  </section>
+
+  <!-- gaveta lateral só por CSS (#custosPainel:not([hidden]) no ui.css); o JS continua alternando hidden -->
+  <section id="custosPainel" hidden aria-labelledby="custosTitulo">
+    <div class="cu-topo">
+      <h2 id="custosTitulo" tabindex="-1">Custos por SKU</h2><span class="sis" data-sistema="smith" title="Sistema de origem: Smith">Smith</span>
+      <label class="linha mini" for="custosQuem">Seu nome <input id="custosQuem" size="14" maxlength="80" autocomplete="name" placeholder="quem está alterando"></label>
+      <button class="btn btn-p" type="button" id="custosAtualizar">Atualizar</button>
+      <button class="btn btn-p" type="button" id="custosFechar">Fechar</button>
+    </div>
+    <p class="nota">Só leitura de ERP/planilha: nada é escrito no Bling, no Tiny nem na conta do Mercado Livre. O casamento é pelo SKU do anúncio, sem adivinhar; custo vazio ou zero nunca vira custo.</p>
+    <div class="mini" id="custosMsg" role="status" aria-live="polite"></div>
+    <div class="cu-erro" id="custosErro" role="alert"></div>
+    <div id="custosCorpo"></div>
+  </section>
+
+  <section class="bloco" id="secS90" aria-labelledby="tituloS90">
+    <div class="bloco-cab"><h2 id="tituloS90">Assinantes Sprint 90</h2><span class="sis" data-sistema="trinity" title="Sistema de origem: Trinity">Trinity</span><label class="linha mini" for="s90Quem">Seu nome <input id="s90Quem" size="14" maxlength="80" autocomplete="name" placeholder="líder ou consultor"></label></div>
+    <p class="sub" id="subS90">Contas do autoatendimento (fora da central): situação, conexão do Mercado Livre e link de acesso para entregar ao cliente</p>
+    <div id="s90Corpo" aria-busy="true"><div class="sk-tabela"></div></div>
+    <div class="cu-url" id="s90LinkBox" hidden><code id="s90Link"></code><button class="btn btn-p" type="button" id="s90Copiar">Copiar</button></div>
+    <div class="mini" id="s90Msg" role="status" aria-live="polite"></div>
+    <details class="recolhido" id="s90Nova">
+      <summary>Nova conta Sprint 90</summary>
+      <form class="cu-form" id="s90Form" autocomplete="off">
+        <label>Responsável <input name="nome" maxlength="120" required></label>
+        <label>Loja <input name="loja" maxlength="80" required></label>
+        <label>E-mail <input name="email" type="email" maxlength="160" required></label>
+        <label>WhatsApp <input name="telefone" maxlength="40"></label>
+        <label>Faixa de faturamento <input name="faixa" maxlength="60"></label>
+        <label>Plano <select name="plano"><option value="fixo">Fixo</option><option value="crescimento">Crescimento</option></select></label>
+        <label class="linha"><input type="checkbox" name="piloto"> Conta de piloto ou demonstração (aceita os termos ainda em rascunho)</label>
+        <div><button class="btn" type="submit" id="s90Criar">Ver prévia e criar</button></div>
+      </form>
+    </details>
+  </section>
+
+  <section class="bloco" id="secSaudeSistema" aria-labelledby="tituloSaudeSistema">
+    <div class="bloco-cab"><h2 id="tituloSaudeSistema">Saúde do sistema</h2><span class="sis" data-sistema="trinity" title="Sistema de origem: Trinity">Trinity</span></div>
+    <p class="sub" id="subSaudeSistema">Cada parte do sistema com o limiar dela. Problema que passa do limiar vira incidente com dono e prazo; volta ao normal por duas leituras seguidas e fecha sozinho. Sem leitura aparece como sem dado, nunca como ok.</p>
+    <div class="tabela-wrap"><table class="empilha">
+      <thead><tr><th>Sistema</th><th>Sinal</th><th>Estado</th><th>Valor</th><th>Incidente</th><th>Dono</th></tr></thead>
+      <tbody id="saudeSistema"><tr><td colspan="6"><div class="sk-tabela"></div></td></tr></tbody>
+    </table></div>
+    <p class="mini" id="saudeSistemaNota" role="status" aria-live="polite"></p>
+  </section>
+
+  <details class="recolhido" id="secConfig">
+    <summary>Configuração técnica <span class="n" id="configEstado"></span> <span class="sis" data-sistema="trinity" title="Sistema de origem: Trinity">Trinity</span></summary>
+    <div id="avisoConfig"></div>
+    <div id="roadmap"></div>
+  </details>
+
+  <dialog class="dlg" id="dlgSegredo" aria-labelledby="dlgTitulo">
+    <h3 id="dlgTitulo">Webhook da planilha de custos</h3>
+    <div class="aviso"><b>O segredo aparece só agora.</b> Copie o Apps Script pronto (ou a URL e o segredo) antes de fechar: depois ele não é mostrado de novo — perdeu, rotacione. Cole direto no Apps Script (não mande por e-mail/WhatsApp) e use um webhook por planilha: a cópia da planilha leva o segredo junto.</div>
+    <div class="mini" id="dlgAviso" role="status"></div>
+    <p class="mini">URL</p>
+    <div class="cu-url"><code id="dlgUrl"></code><button class="btn btn-p" type="button" data-copiar-de="dlgUrl">Copiar</button></div>
+    <p class="mini">Segredo (mostrado uma única vez)</p>
+    <div class="cu-url"><code id="dlgSeg"></code><button class="btn btn-p" type="button" data-copiar-de="dlgSeg">Copiar</button></div>
+    <label class="mini" for="dlgScript">Apps Script pronto (URL e segredo já preenchidos)</label>
+    <textarea id="dlgScript" rows="8" readonly spellcheck="false"></textarea>
+    <button class="btn btn-p" type="button" id="dlgCopiarScript" data-copiar-de="dlgScript">Copiar Apps Script pronto</button>
+    <ol class="mini mt-4">
+      <li>Na planilha, aba <b>Custos</b>: A = SKU (formato “Texto simples”), B = MLB (opcional), C = Custo, D = Status (o script escreve). Linha 1 = cabeçalho.</li>
+      <li>Extensões → Apps Script: apague o conteúdo do arquivo, cole o script e salve.</li>
+      <li>Rode a função <code>instalar</code> uma vez e autorize; depois <b>apague a função <code>instalar</code></b> (o segredo fica só nas propriedades do script).</li>
+      <li>Menu <b>Custos → Sincronizar agora</b>: a coluna Status mostra OK, EM ANÁLISE, RECUSADO no painel ou REJEITADO por linha.</li>
+    </ol>
+    <form method="dialog" class="dlg-rodape"><button class="btn">Fechar (o segredo some da tela)</button></form>
+  </dialog>
+</main>
+<footer class="pg-rodape">Fonte: Mercado Livre (OAuth oficial) e Notion · Bling, Tiny e planilha só em leitura</footer>
+<script src="integracoes.js"></script>
+<script src="/alerta.js" defer></script>
+</body>
+</html>

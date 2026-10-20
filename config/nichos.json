@@ -1,0 +1,21 @@
+{
+  "_doc": "Mapa curado do nicho (clientes_central.nicho, texto livre da central) → nicho canônico usado nos recortes de /resultados e na retroalimentação. As grafias são comparadas sem acento, sem caixa e sem pontuação. Grafia fora do mapa fica com o próprio nome. sem_nicho: grafias que não dizem o nicho (viram 'Sem nicho registrado'). Curado em 07/10/2026 a partir dos valores reais da central.",
+  "sem_nicho": ["", "Não informado", "Multinicho", "Mix", "Variedades", "Diversos", "Teste"],
+  "nichos": {
+    "Moda": ["Moda", "Moda Feminina", "Vestuário", "Confecção", "Moda Infantil", "Roupas infantis", "Moda Íntima", "Moda Fitness", "Biquini", "Camisetas masculinas", "Uniformes", "Calçados"],
+    "Cosméticos": ["Cosméticos", "Cosmético", "Perfumes", "Perfume", "Saboaria Artesanal"],
+    "Pet": ["Pet", "Pet Shop"],
+    "Eletrônicos": ["Eletrônicos", "Eletrônicos Smartwatch", "Celular", "Acessórios para Celular"],
+    "Informática": ["Informática"],
+    "Automotivo": ["Automotivo", "Auto Peças", "Acessórios automotivos", "Som Automotivo", "Aditivos para combustíveis"],
+    "Motos e bicicletas": ["Motopeças", "Peças Bicicletas e Motos", "Cilismo", "Ciclismo"],
+    "Material de construção": ["Material de construção", "Tintas", "Mármore", "Peças para portão"],
+    "Casa e decoração": ["Decoração", "Decoração e Acessórios", "Quadros", "Cama mesa e banho", "Utilidades domésticas"],
+    "Descartáveis e embalagens": ["Descartáveis", "Descartáveis e Utilidades", "Embalagens e Descartáveis"],
+    "EPI": ["EPI", "Epi e Descartaveis"],
+    "Saúde e farmácia": ["Farmácia", "Drogaria", "Produtos Ortopédicos e hospitalares"],
+    "Produtos naturais e suplementos": ["Produtos Naturais", "Encapsulado"],
+    "Personalizados e brindes": ["Personalizados", "Brindes", "Sublimação", "Bordados e Estampas"],
+    "Alimentos e bebidas": ["Bebida", "CAFETERIA CAFÉS ESPECIAIS"]
+  }
+}

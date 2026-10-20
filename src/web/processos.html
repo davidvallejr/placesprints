@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Processos · Place Sprints</title>
+<link rel="stylesheet" href="/ui.css">
+<link rel="stylesheet" href="/tela-processos.css">
+</head>
+<body data-pagina="processos">
+<header class="ps-shell" id="psShell"></header>
+<script src="/shell.js"></script>
+<main class="pg">
+  <div class="pg-cab">
+    <div class="pg-titulo">
+      <h1>Processos</h1>
+      <p class="pg-meta" id="meta"><span>Carregando o MAPA de tarefas</span></p>
+      <p class="pg-pergunta">Como cada tarefa é feita, com qual evidência e quando está concluída?</p>
+    </div>
+  </div>
+
+  <div class="seg" id="abas" hidden></div>
+  <div class="campo" id="campoBusca" hidden>
+    <label for="busca">Buscar tarefa</label>
+    <input class="busca" id="busca" type="search" placeholder="Ex.: variações, promoção, ficha técnica" autocomplete="off">
+    <p class="ajuda-campo">Procura no nome, no passo a passo, no caminho e no critério de conclusão. O termo fica guardado ao trocar de canal.</p>
+  </div>
+
+  <div id="conteudo" aria-busy="true">
+    <div class="sk-linha"></div>
+    <div class="sk-linha"></div>
+    <div class="skeleton mt-4"></div>
+    <div class="skeleton mt-2"></div>
+    <div class="skeleton mt-2"></div>
+  </div>
+
+  <details class="recolhido" id="secRegras" hidden>
+    <summary>Regras do método <span class="n">8</span></summary>
+    <p class="sub">Valem para toda tarefa, em qualquer canal (Manual do Analista, capítulo 5).</p>
+    <div class="grade" id="regras"></div>
+  </details>
+</main>
+<footer class="pg-rodape">Fonte: Manual do Analista e treinamento de Duplicação estratégica · dados de configuração, sem ligação com o Notion ou o ML</footer>
+<script src="processos.js"></script>
+<script src="/alerta.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "$doc": "Regra do David (12/10/2026): TODA mensagem ao time no Discord (canal do cliente no Mercado Livre, só equipe — o cliente não tem acesso) marca estes 3 cargos, mais o consultor do cliente quando a central tiver o 'Discord ID Consultor ML'. IDs lidos do servidor Place2u (guild 799348804339105862) pelo bot 'Discord Bot account' em 12/10; os 3 cargos estão como mencionáveis. Usado por scripts/resumo-time-discord.mjs e pelo aviso automático ao consultor (src/lib/consultor-discord.js).",
+  "guild_id": "799348804339105862",
+  "mencoes_obrigatorias": [
+    { "id": "1517119651522547774", "rotulo": "Head de canais" },
+    { "id": "799352939873173575", "rotulo": "Consultor Especialista Marketplace" },
+    { "id": "1356270093516013569", "rotulo": "Especialista em Supervisão de Projetos Operacionais" }
+  ],
+  "marcar_consultor_do_cliente": true,
+  "canal": "Webhook ML"
+}

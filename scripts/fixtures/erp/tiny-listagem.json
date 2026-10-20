@@ -1,0 +1,34 @@
+{
+  "_fonte_doc": "https://api-docs.erp.olist.com/api-reference/produtos/listar-produtos.md",
+  "_aviso": "construída a partir da documentação; não é captura real. NÃO CONFIRMADO: nome do envelope (itens/paginacao), formato e fuso de dataAlteracao, limit máximo, variações como linhas da listagem.",
+  "_requisicao": "GET /public-api/v3/produtos?limit=100&offset=<offset>&situacao=<A|I>  (chave das páginas = '<situacao>:<offset>')",
+  "paginas": {
+    "A:0": {
+      "itens": [
+        { "id": 1001, "sku": "CAN-001", "descricao": "Caneca branca 325 ml", "tipo": "S", "situacao": "A", "dataAlteracao": "2026-10-01 14:30:00", "tipoVariacao": "N",
+          "precos": { "preco": 49.9, "precoPromocional": null, "precoCusto": 36.32, "precoCustoMedio": 35.1 } },
+        { "id": 1002, "sku": "CAN-002", "descricao": "Caneca preta 325 ml", "tipo": "S", "situacao": "A", "dataAlteracao": "2026-09-20 09:00:00", "tipoVariacao": "N",
+          "precos": { "preco": 52.0, "precoPromocional": null, "precoCusto": null, "precoCustoMedio": 12.5 } },
+        { "id": 1003, "sku": "CAN-003", "descricao": "Caneca sem custo informado", "tipo": "S", "situacao": "A", "dataAlteracao": "2026-09-18 08:00:00", "tipoVariacao": "N",
+          "precos": { "preco": 40.0, "precoPromocional": null, "precoCusto": 0, "precoCustoMedio": 0 } }
+      ],
+      "paginacao": { "limit": 100, "offset": 0, "total": 5 }
+    },
+    "A:3": {
+      "itens": [
+        { "id": 2000, "sku": "CAMISA", "descricao": "Camiseta básica (pai)", "tipo": "V", "situacao": "A", "dataAlteracao": "2026-09-30 10:00:00", "tipoVariacao": "P",
+          "precos": { "preco": 59.9, "precoPromocional": null, "precoCusto": null, "precoCustoMedio": null } },
+        { "id": 3000, "sku": "KIT-2CAN", "descricao": "Kit 2 canecas", "tipo": "K", "situacao": "A", "dataAlteracao": "2026-09-29 11:00:00", "tipoVariacao": "N",
+          "precos": { "preco": 89.9, "precoPromocional": null, "precoCusto": 70, "precoCustoMedio": null } }
+      ],
+      "paginacao": { "limit": 100, "offset": 3, "total": 5 }
+    },
+    "I:0": {
+      "itens": [
+        { "id": 1004, "sku": "CAN-OLD", "descricao": "Caneca fora de linha", "tipo": "S", "situacao": "I", "dataAlteracao": "2026-05-02 16:45:00", "tipoVariacao": "N",
+          "precos": { "preco": 39.9, "precoPromocional": null, "precoCusto": 20, "precoCustoMedio": null } }
+      ],
+      "paginacao": { "limit": 100, "offset": 0, "total": 1 }
+    }
+  }
+}

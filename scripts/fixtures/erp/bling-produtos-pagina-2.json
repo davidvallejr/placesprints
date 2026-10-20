@@ -1,0 +1,10 @@
+{
+  "_fonte_doc": "https://github.com/tempont/bling-erp-api-python/blob/HEAD/specs/bling-openapi-reference.json (SPEC-CÓPIA; conferir em https://developer.bling.com.br/referencia)",
+  "_aviso": "construída a partir da documentação; não é captura real. O teste completa a página até 100 itens. NÃO CONFIRMADO: pai de variação (formato 'V') vir DEPOIS da variação; precoCusto como string decimal (o conector repassa bruto).",
+  "_requisicao": "GET /Api/v3/produtos?criterio=5&pagina=2&limite=100 (a página 3 vem com data vazio)",
+  "data": [
+    { "id": 2001, "idProdutoPai": 0, "nome": "Camiseta (pai das variações)", "codigo": "PAI-V", "preco": 59.9, "precoCusto": 0, "tipo": "P", "situacao": "A", "formato": "V", "estoque": { "saldoVirtualTotal": 7 } },
+    { "id": 2002, "idProdutoPai": 0, "nome": "Custo em texto decimal", "codigo": "STR-CUSTO", "preco": 79.9, "precoCusto": "36.3200000000", "tipo": "P", "situacao": "A", "formato": "S", "estoque": { "saldoVirtualTotal": 4 } },
+    { "id": 2003, "idProdutoPai": 0, "nome": "Custo negativo", "codigo": "NEG-1", "preco": 79.9, "precoCusto": -5, "tipo": "P", "situacao": "A", "formato": "S", "estoque": { "saldoVirtualTotal": 4 } }
+  ]
+}

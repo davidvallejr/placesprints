@@ -1,0 +1,1302 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Place Sprint 90</title>
+<meta name="description" content="Conecte sua conta do Mercado Livre, receba o relatório da sua operação e otimize seus anúncios com o motor da Place2u. Você aprova, o sistema executa.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: central de comando. Fundo marinho profundo, dados em ciano, marca Place2u (laranja) só nas ações. Uma linha de montagem isométrica atravessa a página. */
+:root{
+  --bg:#050D1A;
+  --bg-2:#071426;
+  --panel:#0A1B31;
+  --panel-2:#0D2240;
+  --line:#173254;
+  --line-2:#21456F;
+  --ink:#EAF2FA;
+  --mute:#8EA6C0;
+  --dim:#5C7896;
+  --cyan:#2BD9FF;
+  --cyan-soft:rgba(43,217,255,.14);
+  --teal:#19E3C3;
+  --teal-soft:rgba(25,227,195,.14);
+  --brand:#FF6B1A;
+  --brand-ink:#1A0A00;
+  --gold:#FFC857;
+  --gold-soft:rgba(255,200,87,.14);
+  --red:#FF5C6C;
+  --red-soft:rgba(255,92,108,.14);
+  --f-display:"Sora","Segoe UI",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  --r:12px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3,h4{font-family:var(--f-display);line-height:1.15;margin:0;text-wrap:balance;letter-spacing:-.015em}
+p{margin:0}
+a{color:var(--cyan)}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1180px;margin-inline:auto;padding-inline:clamp(16px,4vw,32px)}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan)}
+.lead{color:var(--mute);font-size:18px;max-width:62ch}
+.num{font-variant-numeric:tabular-nums}
+.mono{font-family:var(--f-mono)}
+.sec{padding-block:clamp(64px,9vw,112px)}
+.sec-head{display:grid;gap:14px;margin-bottom:40px;max-width:760px}
+.sec-head h2{font-size:clamp(28px,4vw,44px)}
+.tag-demo{display:inline-flex;align-items:center;gap:6px;font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(255,200,87,.35);background:var(--gold-soft);padding:3px 8px;border-radius:999px;white-space:nowrap}
+
+/* Botões */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border-radius:10px;padding:14px 22px;font-weight:600;font-size:16px;text-decoration:none;border:1px solid transparent;transition:transform .15s,background .15s,border-color .15s}
+.btn-primary{background:var(--brand);color:var(--brand-ink);box-shadow:0 0 0 1px rgba(255,107,26,.5),0 10px 30px -10px rgba(255,107,26,.6)}
+.btn-primary:hover{transform:translateY(-1px);background:#FF7E36}
+.btn-ghost{border-color:var(--line-2);color:var(--ink);background:rgba(13,34,64,.6)}
+.btn-ghost:hover{border-color:var(--cyan)}
+.btn-sm{padding:9px 14px;font-size:14px;border-radius:8px}
+
+/* Navegação */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(5,13,26,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:24px;height:64px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-family:var(--f-display);font-weight:700;font-size:18px}
+.logo svg{width:28px;height:28px;border-radius:7px}
+.nav-links{display:flex;gap:22px;margin-left:auto}
+.nav-links a{color:var(--mute);text-decoration:none;font-size:14px}
+.nav-links a:hover{color:var(--ink)}
+@media (max-width:860px){.nav-links{display:none}.nav .btn{margin-left:auto}}
+
+/* Hero */
+.hero{position:relative;padding-block:clamp(40px,6vw,72px) clamp(48px,6vw,80px);overflow:hidden;background:radial-gradient(900px 500px at 75% 30%,rgba(43,217,255,.10),transparent 60%),radial-gradient(700px 400px at 10% 90%,rgba(25,227,195,.06),transparent 60%)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:clamp(24px,4vw,56px);align-items:center}
+@media (max-width:980px){.hero-grid{grid-template-columns:1fr}}
+.hero-copy{display:grid;gap:22px;min-width:0}
+.brandline{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.wordmark{font-family:var(--f-display);font-weight:800;font-size:clamp(46px,7vw,84px);line-height:.92;letter-spacing:-.04em;background:linear-gradient(180deg,#FFFFFF 10%,#9FE9FF 95%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.wordmark span{display:inline-block;color:var(--cyan);-webkit-text-fill-color:var(--cyan);text-shadow:0 0 28px rgba(43,217,255,.55)}
+.hero h1{font-size:clamp(22px,2.6vw,30px);font-weight:600;color:var(--ink)}
+.hero .lead{font-size:clamp(16px,1.6vw,19px)}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px}
+.trust{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:13px;color:var(--mute)}
+.trust span{display:inline-flex;align-items:center;gap:8px}
+.trust i{width:6px;height:6px;border-radius:50%;background:var(--teal);box-shadow:0 0 8px var(--teal)}
+.hero-art{position:relative;min-width:0}
+.hero-art svg{width:100%;height:auto;display:block;overflow:visible}
+.fit{border:1px solid rgba(255,200,87,.35);background:var(--gold-soft);border-radius:12px;padding:14px 16px;font-size:15px;color:var(--ink);line-height:1.5}
+.fit b{color:var(--gold)}
+.fit span{display:block;margin-top:6px;font-family:var(--f-mono);font-size:13px;color:var(--ink)}
+.incluso{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;margin-bottom:22px;font-size:13.5px;color:var(--mute)}
+.incluso b{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--cyan);font-weight:500;margin-right:4px}
+.incluso span{border:1px solid var(--line-2);border-radius:999px;padding:5px 11px;background:var(--bg-2);color:var(--ink)}
+.mp-box{border:1px solid var(--line-2);border-radius:12px;background:var(--bg-2);padding:14px;display:grid;gap:12px}
+.mp-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.mp-logo{display:inline-flex;align-items:center;gap:8px;font-family:var(--f-display);font-weight:700;font-size:15px}
+.mp-logo i{width:22px;height:22px;border-radius:6px;background:#009EE3;display:grid;place-items:center}
+.mp-logo i::before{content:"";width:12px;height:8px;border:2px solid #fff;border-radius:6px/4px;border-top-color:transparent;border-bottom-color:transparent}
+.mp-today{display:flex;justify-content:space-between;gap:10px;align-items:baseline;border-top:1px solid var(--line);padding-top:10px;font-size:14px}
+.mp-today b{font-family:var(--f-display);font-size:22px;font-variant-numeric:tabular-nums}
+
+/* Dores */
+.pain-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
+@media (max-width:1060px){.pain-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:680px){.pain-grid{grid-template-columns:1fr}}
+.pain{position:relative;text-align:left;border:1px solid var(--line);background:linear-gradient(180deg,var(--panel),var(--bg-2));border-radius:var(--r);padding:20px;display:grid;gap:10px;align-content:start;transition:border-color .2s,transform .2s}
+.pain:hover,.pain[aria-expanded="true"]{border-color:var(--cyan);transform:translateY(-2px)}
+.pain h3{font-size:17px;font-weight:600}
+.pain .ic{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:var(--cyan-soft);color:var(--cyan)}
+.pain .ic svg{width:18px;height:18px}
+.pain .cons{font-size:14px;color:var(--mute)}
+.pain .fix{font-size:14px;color:var(--teal);border-top:1px dashed var(--line-2);padding-top:10px}
+.bridge{margin-top:28px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px;border:1px solid rgba(255,200,87,.35);background:var(--gold-soft);border-radius:999px;padding:12px 22px;font-weight:600;text-align:center}
+.moment{margin-top:48px;border:1px solid var(--line);border-radius:16px;background:var(--panel);padding:clamp(18px,3vw,28px);display:grid;gap:18px}
+.moment h3{font-size:20px}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{border:1px solid var(--line-2);background:var(--bg-2);border-radius:999px;padding:9px 16px;font-size:14px;color:var(--mute)}
+.chip[aria-pressed="true"]{border-color:var(--cyan);color:var(--ink);background:var(--cyan-soft)}
+.moment-out{border-left:3px solid var(--cyan);padding:4px 0 4px 16px;color:var(--ink);max-width:70ch}
+
+/* Três movimentos */
+.moves{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--panel)}
+@media (max-width:860px){.moves{grid-template-columns:1fr}}
+.move{padding:clamp(20px,3vw,32px);display:grid;gap:12px;align-content:start;position:relative;min-width:0}
+.move+.move{border-left:1px solid var(--line)}
+@media (max-width:860px){.move+.move{border-left:0;border-top:1px solid var(--line)}}
+.move .k{font-family:var(--f-mono);font-size:12px;color:var(--cyan);letter-spacing:.1em}
+.move h3{font-size:24px}
+.move p{color:var(--mute)}
+.move ul{margin:4px 0 0;padding:0;list-style:none;display:grid;gap:6px;font-size:14px}
+.move li{display:flex;gap:8px}
+.move li::before{content:"";flex:none;width:6px;height:6px;margin-top:9px;border-radius:2px;background:var(--teal)}
+.move .who{margin-top:auto;font-family:var(--f-mono);font-size:12px;color:var(--dim)}
+.move .who b{color:var(--gold);font-weight:500}
+
+/* Linha de montagem */
+.linha{position:relative}
+.linha-track{position:relative}
+.linha-sticky{display:grid;gap:22px}
+.rail{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;position:relative}
+.rail::before{content:"";position:absolute;left:4%;right:4%;top:21px;height:2px;background:var(--line-2)}
+.rail-fill{position:absolute;left:4%;top:21px;height:2px;background:linear-gradient(90deg,var(--teal),var(--cyan));box-shadow:0 0 12px var(--cyan);width:0;transition:width .5s ease}
+.st{position:relative;display:grid;justify-items:center;gap:8px;background:none;border:0;padding:0;color:var(--mute);min-width:0}
+.st .dot{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;border:1px solid var(--line-2);background:var(--bg-2);font-family:var(--f-mono);font-size:13px;color:var(--mute);transition:all .3s;position:relative;z-index:1}
+.st .nm{font-size:13px;font-weight:500;text-align:center}
+.st.done .dot{border-color:var(--teal);color:var(--teal)}
+.st.on .dot{border-color:var(--cyan);color:var(--bg);background:var(--cyan);box-shadow:0 0 0 6px rgba(43,217,255,.15),0 0 24px rgba(43,217,255,.6)}
+.st.on .nm{color:var(--ink)}
+@media (max-width:620px){.st .nm{font-size:11px}.st .dot{width:36px;height:36px;border-radius:10px}.rail::before,.rail-fill{top:17px}}
+.stage{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(18px,3vw,40px);align-items:stretch}
+@media (max-width:900px){.stage{grid-template-columns:1fr}}
+.stage-text{display:grid;gap:14px;align-content:center;min-width:0}
+.stage-text .k{font-family:var(--f-mono);font-size:12px;color:var(--cyan);letter-spacing:.12em;text-transform:uppercase}
+.stage-text h3{font-size:clamp(24px,3vw,34px)}
+.stage-text p{color:var(--mute)}
+.stage-text .facts{display:grid;gap:8px;margin:6px 0 0;padding:0;list-style:none}
+.stage-text .facts li{display:flex;gap:10px;font-size:15px}
+.stage-text .facts li::before{content:"";flex:none;width:14px;height:14px;margin-top:5px;border-radius:4px;border:1.5px solid var(--teal);background:var(--teal-soft)}
+.stage-text .msg{font-family:var(--f-display);font-weight:600;font-size:18px;color:var(--ink);border-left:3px solid var(--brand);padding-left:14px}
+.stage-nav{display:flex;gap:10px;margin-top:6px}
+.screen{position:relative;border:1px solid var(--line-2);border-radius:16px;background:linear-gradient(180deg,#0B1F3A,#081629);padding:18px;min-height:400px;overflow:hidden;box-shadow:0 30px 80px -30px rgba(43,217,255,.25),inset 0 1px 0 rgba(255,255,255,.04);min-width:0}
+.screen::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(43,217,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(43,217,255,.05) 1px,transparent 1px);background-size:24px 24px;pointer-events:none;mask-image:linear-gradient(180deg,#000,transparent 85%)}
+.screen-bar{position:relative;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;font-family:var(--f-mono);font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.08em}
+.screen-bar .live{display:inline-flex;align-items:center;gap:6px;color:var(--teal)}
+.screen-bar .live::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 8px var(--teal);animation:pulse 1.6s infinite}
+@keyframes pulse{50%{opacity:.35}}
+.pane{position:relative;display:grid;gap:12px}
+.pane[hidden]{display:none!important}
+@media (min-width:901px){
+  .linha-track.scrolly{height:calc(6 * 85vh)}
+  .linha-track.scrolly .linha-sticky{position:sticky;top:calc(env(safe-area-inset-top,0px) + 80px)}
+}
+
+/* Elementos de tela */
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--line);background:rgba(5,13,26,.55);border-radius:10px;padding:10px 12px;font-size:14px;min-width:0}
+.row .l{display:flex;align-items:center;gap:10px;min-width:0}
+.row .l span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pill{font-family:var(--f-mono);font-size:11px;padding:3px 8px;border-radius:999px;white-space:nowrap;border:1px solid}
+.p0{color:var(--red);border-color:rgba(255,92,108,.4);background:var(--red-soft)}
+.p1{color:var(--gold);border-color:rgba(255,200,87,.4);background:var(--gold-soft)}
+.p2{color:var(--cyan);border-color:rgba(43,217,255,.35);background:var(--cyan-soft)}
+.p3{color:var(--mute);border-color:var(--line-2);background:transparent}
+.ok{color:var(--teal);border-color:rgba(25,227,195,.4);background:var(--teal-soft)}
+.bar{height:6px;border-radius:99px;background:var(--line);overflow:hidden;flex:1;min-width:60px}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--cyan));border-radius:99px;transition:width 1.2s ease}
+.kv{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.kv div{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:rgba(5,13,26,.5);min-width:0}
+.kv small{display:block;font-family:var(--f-mono);font-size:10.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em}
+.kv b{font-family:var(--f-display);font-size:20px;font-variant-numeric:tabular-nums}
+.note{font-size:12.5px;color:var(--dim)}
+.connect-card{display:grid;grid-template-columns:auto 1fr auto 1fr auto;align-items:center;gap:10px;padding:18px;border:1px solid var(--line);border-radius:12px;background:rgba(5,13,26,.55)}
+.node{width:64px;height:64px;border-radius:14px;display:grid;place-items:center;border:1px solid var(--line-2);background:var(--panel-2);font-family:var(--f-mono);font-size:10px;text-align:center;color:var(--mute)}
+.node.ml{background:#FFE600;color:#2D3277;font-weight:600;font-family:var(--f-body);font-size:11px;line-height:1.1;border-color:#FFE600}
+.node.ps{border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 20px rgba(43,217,255,.3)}
+.wire{height:2px;background:repeating-linear-gradient(90deg,var(--cyan) 0 8px,transparent 8px 14px);background-size:28px 2px;animation:flow 1s linear infinite;opacity:.8}
+@keyframes flow{to{background-position:28px 0}}
+.lock{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:var(--teal-soft);border:1px solid var(--teal);color:var(--teal)}
+.tree{display:grid;gap:10px}
+.tree-top{justify-self:center;border:1px solid var(--line-2);border-radius:10px;padding:8px 16px;text-align:center;background:rgba(5,13,26,.6)}
+.tree-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.tree-node{border:1px solid var(--line);border-radius:10px;padding:10px;text-align:center;background:rgba(5,13,26,.6);min-width:0}
+.tree-node.bad{border-color:var(--red);background:var(--red-soft)}
+.tree-node small{display:block;font-family:var(--f-mono);font-size:10.5px;color:var(--dim);text-transform:uppercase}
+.tree-node b{font-family:var(--f-display);font-size:17px}
+.tree-node em{display:block;font-style:normal;font-size:12px;color:var(--mute)}
+.tree-node.bad em{color:var(--red)}
+.arche{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:14px}
+.formula{font-family:var(--f-mono);font-size:12px;color:var(--mute);border:1px dashed var(--line-2);border-radius:10px;padding:10px 12px;line-height:1.7}
+.formula b{color:var(--cyan);font-weight:500}
+
+/* Antes e depois */
+.ba-toggle{display:inline-flex;border:1px solid var(--line-2);border-radius:999px;padding:3px;background:var(--bg-2)}
+.ba-toggle button{border:0;background:none;padding:6px 14px;border-radius:999px;font-size:13px;color:var(--mute)}
+.ba-toggle button[aria-pressed="true"]{background:var(--cyan);color:var(--bg);font-weight:600}
+.listing{display:grid;grid-template-columns:150px minmax(0,1fr);gap:14px;border:1px solid var(--line);border-radius:12px;padding:12px;background:rgba(5,13,26,.6)}
+@media (max-width:460px){.listing{grid-template-columns:104px minmax(0,1fr);gap:10px;padding:10px}.thumbs{grid-template-columns:repeat(4,1fr)}}
+.photo{position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden;max-width:100%;display:grid;place-items:center;background:#C9CDD3;transition:background .6s}
+.photo svg{width:72%;height:auto;transition:transform .6s,filter .6s}
+.photo.pro{background:radial-gradient(circle at 50% 40%,#FFFFFF,#DCEBFA 60%,#9FC4E8)}
+.photo.pro svg{transform:scale(1.06);filter:drop-shadow(0 12px 14px rgba(0,30,70,.35))}
+.photo .stamp{position:absolute;left:8px;bottom:8px;font-family:var(--f-mono);font-size:10px;background:rgba(5,13,26,.85);color:var(--ink);padding:2px 6px;border-radius:5px}
+.thumbs{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:6px}
+.thumbs i{aspect-ratio:1;border-radius:4px;background:var(--line)}
+.thumbs i.f{background:linear-gradient(135deg,#DCEBFA,#7FB2E0)}
+.ld{display:grid;gap:8px;min-width:0}
+.ld .t{font-weight:600;font-size:15px;line-height:1.35}
+.ld .meta{display:grid;gap:5px;font-size:13px}
+.ld .meta div{display:flex;justify-content:space-between;gap:8px;border-bottom:1px dashed var(--line);padding-bottom:4px}
+.ld .meta span:last-child{font-family:var(--f-mono);font-size:12px;text-align:right}
+.bad-t{color:var(--red)}
+.good-t{color:var(--teal)}
+.exec-steps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.exec-steps div{font-size:11px;text-align:center;border:1px solid var(--line);border-radius:8px;padding:7px 4px;color:var(--dim);background:rgba(5,13,26,.5);transition:all .3s;line-height:1.25}
+.exec-steps div.on{border-color:var(--teal);color:var(--teal);background:var(--teal-soft)}
+.exec-steps div.you{border-color:var(--brand);color:var(--brand);background:rgba(255,107,26,.1)}
+@media (max-width:520px){.exec-steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.loopback{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--mute);border:1px dashed var(--cyan);border-radius:10px;padding:10px 12px}
+.loopback svg{flex:none;color:var(--cyan)}
+
+/* Simulador */
+.sim{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px}
+@media (max-width:900px){.sim{grid-template-columns:1fr}}
+.sim-panel{border:1px solid var(--line);border-radius:16px;background:var(--panel);padding:clamp(16px,2.5vw,24px);display:grid;gap:16px;align-content:start;min-width:0}
+.sim-panel h3{font-size:18px}
+.sim-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
+.log{font-family:var(--f-mono);font-size:12.5px;line-height:1.7;background:#04101F;border:1px solid var(--line);border-radius:12px;padding:14px;min-height:300px;max-height:420px;overflow:auto;display:grid;align-content:start;gap:2px}
+.log .ln{display:flex;gap:10px;opacity:0;transform:translateY(4px);animation:in .35s forwards}
+@keyframes in{to{opacity:1;transform:none}}
+.log .ts{color:var(--dim);flex:none}
+.log .ok-t{color:var(--teal)}
+.log .warn-t{color:var(--gold)}
+.log .err-t{color:var(--red)}
+.log .cy{color:var(--cyan)}
+.log .idle{color:var(--dim)}
+.approve-box{border:1px solid var(--brand);background:rgba(255,107,26,.08);border-radius:12px;padding:14px;display:grid;gap:10px}
+.approve-box .fields{display:grid;gap:6px}
+.approve-box label{display:flex;align-items:center;gap:10px;font-size:14px}
+.approve-box input{accent-color:var(--brand);width:16px;height:16px}
+.sim-steps{display:grid;gap:6px;margin:0;padding:0;list-style:none;counter-reset:s}
+.sim-steps li{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--dim);counter-increment:s}
+.sim-steps li::before{content:counter(s);width:22px;height:22px;border-radius:6px;display:grid;place-items:center;font-family:var(--f-mono);font-size:11px;border:1px solid var(--line-2)}
+.sim-steps li.on{color:var(--ink)}
+.sim-steps li.on::before{border-color:var(--cyan);color:var(--cyan)}
+.sim-steps li.done{color:var(--mute)}
+.sim-steps li.done::before{content:"✓";border-color:var(--teal);color:var(--teal);background:var(--teal-soft)}
+.history{width:100%;border-collapse:collapse;font-size:13px}
+.history th,.history td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+.history th{font-family:var(--f-mono);font-size:10.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em;font-weight:500}
+.tbl-wrap{overflow-x:auto}
+
+/* Painel */
+.dash{border:1px solid var(--line-2);border-radius:18px;background:linear-gradient(180deg,#0A1B31,#071426);box-shadow:0 0 0 1px rgba(43,217,255,.08),0 40px 120px -40px rgba(43,217,255,.35);display:grid;grid-template-columns:220px minmax(0,1fr);overflow:hidden;min-height:560px}
+@media (max-width:900px){.dash{grid-template-columns:1fr}}
+.side{border-right:1px solid var(--line);padding:18px 12px;display:grid;gap:4px;align-content:start;background:rgba(5,13,26,.5)}
+@media (max-width:900px){.side{border-right:0;border-bottom:1px solid var(--line);display:flex;overflow-x:auto;padding:10px;gap:6px}}
+.side .brandmini{display:flex;align-items:center;gap:8px;font-family:var(--f-display);font-weight:700;padding:4px 10px 14px}
+@media (max-width:900px){.side .brandmini{display:none}}
+.side button{display:flex;align-items:center;gap:10px;border:0;background:none;text-align:left;padding:10px 12px;border-radius:9px;color:var(--mute);font-size:14px;white-space:nowrap}
+.side button:hover{color:var(--ink);background:rgba(43,217,255,.06)}
+.side button[aria-selected="true"]{background:var(--cyan-soft);color:var(--ink);box-shadow:inset 2px 0 0 var(--cyan)}
+.side .badge{margin-left:auto;font-family:var(--f-mono);font-size:10.5px;background:var(--brand);color:var(--brand-ink);border-radius:99px;padding:1px 7px;font-weight:600}
+.main{padding:clamp(14px,2.5vw,24px);display:grid;gap:16px;align-content:start;min-width:0}
+.main-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px}
+.main-head h3{font-size:20px}
+.main-head .sub{font-size:13px;color:var(--mute)}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+@media (max-width:760px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.kpi{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:rgba(5,13,26,.5);display:grid;gap:4px;min-width:0}
+.kpi small{font-family:var(--f-mono);font-size:10.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em}
+.kpi b{font-family:var(--f-display);font-size:24px;font-weight:600;font-variant-numeric:tabular-nums}
+.kpi em{font-style:normal;font-size:12px;color:var(--mute)}
+.card{border:1px solid var(--line);border-radius:12px;padding:14px;background:rgba(5,13,26,.5);min-width:0}
+.card h4{font-size:14px;font-weight:600;margin-bottom:10px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.card h4 small{font-family:var(--f-mono);font-weight:400;font-size:11px;color:var(--dim)}
+.grid2{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:12px}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}}
+.chart svg{width:100%;height:auto;display:block}
+.act{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:rgba(5,13,26,.5)}
+.act b{font-size:14px;font-weight:600;display:block}
+.act span{font-size:12.5px;color:var(--mute)}
+.act .ev{font-family:var(--f-mono);font-size:12px;text-align:right;white-space:nowrap}
+@media (max-width:560px){.act{grid-template-columns:auto minmax(0,1fr)}.act .ev{grid-column:2;text-align:left}}
+.list{display:grid;gap:8px}
+.empty{font-size:14px;color:var(--mute);border:1px dashed var(--line-2);border-radius:10px;padding:16px;text-align:center}
+.cmp{display:grid;gap:10px}
+.cmp .r{display:grid;grid-template-columns:140px minmax(0,1fr) 70px;gap:10px;align-items:center;font-size:13px}
+@media (max-width:520px){.cmp .r{grid-template-columns:100px minmax(0,1fr) 56px}}
+.cmp .track{height:12px;border-radius:4px;background:var(--line);position:relative;overflow:hidden}
+.cmp .track i{position:absolute;inset:0 auto 0 0;border-radius:4px}
+
+/* Jornada 90 */
+.journey{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+@media (max-width:900px){.journey{grid-template-columns:1fr}}
+.phase{position:relative;border:1px solid var(--line);border-radius:16px;background:var(--panel);padding:22px;display:grid;gap:12px;align-content:start;min-width:0}
+.phase .days{font-family:var(--f-mono);font-size:12px;color:var(--cyan);letter-spacing:.08em}
+.phase h3{font-size:22px}
+.phase p{color:var(--mute);font-size:15px}
+.phase ul{margin:0;padding:0;list-style:none;display:grid;gap:6px;font-size:14px}
+.phase li{display:flex;gap:8px}
+.phase li::before{content:"";flex:none;width:6px;height:6px;margin-top:9px;border-radius:2px;background:var(--cyan)}
+.phase .proof{font-size:13px;color:var(--teal);border-top:1px dashed var(--line-2);padding-top:10px}
+.journey-line{height:4px;border-radius:99px;margin-bottom:18px;background:linear-gradient(90deg,var(--teal),var(--cyan) 50%,var(--brand));box-shadow:0 0 16px rgba(43,217,255,.4)}
+
+
+/* Planos */
+.plans{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr) minmax(0,1.1fr);gap:16px;align-items:stretch}
+@media (max-width:1000px){.plans{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.calc{grid-column:1/-1}}
+@media (max-width:640px){.plans{grid-template-columns:minmax(0,1fr)}}
+.plan{border:1px solid var(--line-2);border-radius:16px;background:var(--panel);padding:24px;display:grid;gap:14px;align-content:start;position:relative;min-width:0}
+.plan.feat{border-color:var(--brand);box-shadow:0 0 0 1px rgba(255,107,26,.3),0 30px 60px -30px rgba(255,107,26,.45)}
+.plan .flag{position:absolute;top:-12px;left:24px;font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;background:var(--brand);color:var(--brand-ink);padding:3px 10px;border-radius:99px;font-weight:600}
+.plan h3{font-size:20px}
+.plan .for{font-size:14px;color:var(--mute)}
+.price{font-family:var(--f-display);font-weight:700;font-size:44px;letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1}
+.price small{font-size:16px;font-weight:500;color:var(--mute);letter-spacing:0}
+.price-extra{font-family:var(--f-mono);font-size:14px;color:var(--teal)}
+.plan ul{margin:0;padding:0;list-style:none;display:grid;gap:8px;font-size:14.5px}
+.plan li{display:flex;gap:9px}
+.plan li::before{content:"";flex:none;width:14px;height:14px;margin-top:5px;border-radius:50%;background:var(--teal-soft);border:1.5px solid var(--teal)}
+.plan .btn{margin-top:auto}
+.calc{border:1px solid var(--line-2);border-radius:16px;background:linear-gradient(180deg,#0D2240,#0A1B31);padding:24px;display:grid;grid-template-columns:minmax(0,1fr);gap:16px;align-content:start;min-width:0}
+.calc h3{font-size:20px}
+.calc label{font-size:14px;color:var(--mute)}
+.money-in{display:flex;align-items:center;gap:8px;border:1px solid var(--line-2);border-radius:10px;background:var(--bg);padding:10px 14px}
+.money-in span{font-family:var(--f-mono);color:var(--mute)}
+.money-in input{flex:1;min-width:0;width:100%;background:none;border:0;color:var(--ink);font-family:var(--f-display);font-size:24px;font-weight:600;font-variant-numeric:tabular-nums;outline:none}
+input[type=range]{width:100%;accent-color:var(--cyan)}
+.calc-out{display:grid;gap:8px}
+.calc-out .r{display:flex;justify-content:space-between;gap:10px;font-size:15px;border-bottom:1px dashed var(--line);padding-bottom:7px}
+.calc-out .r b{font-family:var(--f-mono);font-weight:500;font-variant-numeric:tabular-nums}
+.verdict{border-radius:10px;padding:12px 14px;background:var(--teal-soft);border:1px solid rgba(25,227,195,.4);font-size:15px}
+.verdict b{color:var(--teal)}
+.calc .note{font-size:12.5px}
+
+/* FAQ */
+.faq{display:grid;gap:10px;max-width:880px}
+.faq details{border:1px solid var(--line);border-radius:12px;background:var(--panel);overflow:hidden}
+.faq summary{list-style:none;cursor:pointer;padding:16px 18px;font-weight:600;display:flex;justify-content:space-between;gap:16px;align-items:center}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-family:var(--f-mono);font-size:20px;color:var(--cyan);transition:transform .2s;flex:none}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details[open]{border-color:var(--line-2)}
+.faq .a{padding:0 18px 18px;color:var(--mute);max-width:72ch}
+
+/* CTA final e inscrição */
+.final{position:relative;overflow:hidden;border-top:1px solid var(--line);background:radial-gradient(800px 400px at 50% 0%,rgba(255,107,26,.12),transparent 60%),radial-gradient(900px 500px at 50% 100%,rgba(43,217,255,.10),transparent 60%)}
+.final-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(24px,4vw,56px);align-items:start}
+@media (max-width:900px){.final-grid{grid-template-columns:1fr}}
+.final h2{font-size:clamp(28px,4vw,44px)}
+.seats{display:flex;flex-wrap:wrap;gap:16px;margin-top:8px}
+.seats div{border:1px solid var(--line-2);border-radius:12px;padding:12px 16px;background:var(--panel)}
+.seats b{display:block;font-family:var(--f-display);font-size:26px}
+.seats span{font-size:13px;color:var(--mute)}
+.join{border:1px solid var(--line-2);border-radius:18px;background:var(--panel);padding:clamp(18px,3vw,28px);display:grid;gap:18px;min-width:0}
+.join-steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.join-steps span{font-family:var(--f-mono);font-size:11px;text-align:center;padding:6px 4px;border-radius:7px;border:1px solid var(--line);color:var(--dim)}
+.join-steps span.on{border-color:var(--cyan);color:var(--cyan)}
+.join-steps span.done{border-color:var(--teal);color:var(--teal)}
+.opt{display:grid;gap:10px}
+.opt label{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line-2);border-radius:12px;padding:14px;cursor:pointer;background:var(--bg-2)}
+.opt input{margin-top:4px;accent-color:var(--brand)}
+.opt label:has(input:checked){border-color:var(--brand);background:rgba(255,107,26,.07)}
+.opt b{display:block}
+.opt small{color:var(--mute);font-size:13px}
+.fld{display:grid;gap:6px}
+.fld label{font-size:13px;color:var(--mute)}
+.fld input,.fld select{background:var(--bg);border:1px solid var(--line-2);border-radius:9px;padding:11px 12px;color:var(--ink);font:inherit;font-size:15px;width:100%;min-width:0}
+.fld input[aria-invalid="true"]{border-color:var(--red)}
+.fld .err{font-size:12.5px;color:var(--red);min-height:1em}
+.fields2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:520px){.fields2{grid-template-columns:1fr}}
+.summary{display:grid;gap:6px;font-size:14px;border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--bg-2)}
+.summary div{display:flex;justify-content:space-between;gap:12px}
+.summary span:first-child{color:var(--mute)}
+.summary span:last-child{text-align:right}
+.join-nav{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.pending{border:1px solid rgba(255,200,87,.4);background:var(--gold-soft);border-radius:12px;padding:14px;display:grid;gap:8px;font-size:14px}
+.pending b{color:var(--gold)}
+.ck{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--mute);cursor:pointer}
+.ck input{margin-top:4px;accent-color:var(--brand);flex:none}
+.ck+.err{font-size:12.5px;color:var(--red);margin-top:-8px}
+
+footer{border-top:1px solid var(--line);padding-block:32px}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;align-items:center;font-size:14px;color:var(--mute)}
+footer .logo{font-size:16px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="#topo" aria-label="Place2u, início">
+      <svg viewBox="0 0 400 400" aria-hidden="true"><rect width="400" height="400" fill="#FF6B1A"/><path d="M113 176 c2 22 6 44 16 63 c14 28 39 49 71 49 c30 0 52 -20 60 -48 c4 -13 5 -27 5 -41 V 143 c0 -16 8 -24 24 -24 h 27" fill="none" stroke="#FCFCFC" stroke-linecap="round" stroke-width="31"/><circle cx="152" cy="327" r="17" fill="#FCFCFC"/><circle cx="252" cy="327" r="17" fill="#FCFCFC"/></svg>
+      Place2u
+    </a>
+    <nav class="nav-links" aria-label="Seções">
+      <a href="#como">Como funciona</a>
+      <a href="#linha">O motor</a>
+      <a href="#painel">Painel</a>
+      <a href="#planos">Planos</a>
+      <a href="#duvidas">Dúvidas</a>
+      <a href="/c/painel" rel="nofollow">Já é cliente? Entrar</a>
+    </nav>
+    <a class="btn btn-primary btn-sm" href="#entrar" data-evt="cta_nav">Quero meu Place Sprint</a>
+  </div>
+</header>
+
+<main id="topo">
+
+<!-- 01 HERO -->
+<section class="hero" aria-labelledby="hero-t">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <div class="brandline">
+        <span class="eyebrow">Place2u · Mercado Livre · Programa de 90 dias</span>
+      </div>
+      <div class="wordmark" aria-label="Place Sprint 90">PLACE SPRINT <span>90</span></div>
+      <h1 id="hero-t">Seu marketplace trabalhando de forma mais inteligente. Mesmo quando você está ocupado.</h1>
+      <p class="lead">Conecte sua conta. O sistema analisa seus anúncios, entrega o relatório da sua operação e prepara as otimizações. Você aprova com um clique e ele executa.</p>
+      <div class="fit"><b>Feito para quem vende no Mercado Livre</b> e quer uma operação profissional sem pagar uma assessoria.<span class="num">A partir de R$ 454/mês + 10% do faturamento aprovado.</span></div>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#entrar" data-evt="cta_hero">Quero ativar meu Place Sprint</a>
+        <a class="btn btn-ghost" href="#como" data-evt="cta_hero_como">Ver como funciona</a>
+      </div>
+      <div class="trust">
+        <span><i></i>Autorização oficial do Mercado Livre</span>
+        <span><i></i>Nada muda sem sua aprovação</span>
+        <span><i></i>Sem reunião e sem consultor</span>
+      </div>
+    </div>
+    <div class="hero-art">
+      <svg id="iso" viewBox="0 0 720 400" role="img" aria-label="Linha de montagem do Place Sprint: seis estações ligadas por uma esteira de dados, com o núcleo de inteligência no centro"></svg>
+    </div>
+  </div>
+</section>
+
+<!-- 02 DOR -->
+<section class="sec" aria-labelledby="dor-t" style="padding-top:clamp(40px,6vw,72px)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">O desafio de vender no Mercado Livre</span>
+      <h2 id="dor-t">Você tem os produtos. Mas quem está trabalhando para fazer seus anúncios evoluírem?</h2>
+      <p class="lead">Toque em cada situação para ver o que ela custa e o que o Place Sprint faz.</p>
+    </div>
+    <div class="pain-grid" id="pains"></div>
+    <div class="bridge"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>O Place Sprint transforma os dados da sua conta em ações.</div>
+
+    <div class="moment" aria-labelledby="moment-t">
+      <h3 id="moment-t">Qual é o seu momento?</h3>
+      <div class="chips" role="group" aria-label="Escolha seu momento">
+        <button class="chip" data-m="0" aria-pressed="false">Ainda estou começando</button>
+        <button class="chip" data-m="1" aria-pressed="true">Já vendo, mas quero melhorar</button>
+        <button class="chip" data-m="2" aria-pressed="false">Tenho muitos produtos para cadastrar</button>
+        <button class="chip" data-m="3" aria-pressed="false">Tenho vendas, mas não tenho tempo</button>
+      </div>
+      <p class="moment-out" id="moment-out" aria-live="polite"></p>
+    </div>
+  </div>
+</section>
+
+<!-- 03 TRÊS MOVIMENTOS -->
+<section class="sec" id="como" aria-labelledby="como-t" style="background:var(--bg-2);border-block:1px solid var(--line)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Como funciona</span>
+      <h2 id="como-t">Três movimentos. O trabalho pesado fica com o sistema.</h2>
+      <p class="lead">Você não monta planilha, não contrata analista e não espera reunião. Você conecta, lê o relatório e decide o que otimizar.</p>
+    </div>
+    <div class="moves">
+      <div class="move">
+        <span class="k">01 · INTEGRE</span>
+        <h3>Conecte sua conta</h3>
+        <p>Um clique leva você à tela oficial do Mercado Livre. Você autoriza e o sistema começa a ler a sua operação na hora.</p>
+        <ul>
+          <li>Sem compartilhar senha</li>
+          <li>Acesso cifrado e revogável</li>
+          <li>Primeira leitura e primeiro diagnóstico automáticos</li>
+        </ul>
+        <span class="who">Quem faz: <b>você</b>, em 2 minutos</span>
+      </div>
+      <div class="move">
+        <span class="k">02 · RECEBA</span>
+        <h3>O relatório da sua operação</h3>
+        <p>O que está travando suas vendas, em quais anúncios, quanto isso custa e por onde começar. Tudo com o número que sustenta cada ponto.</p>
+        <ul>
+          <li>Curva ABC e anúncios que mais pesam</li>
+          <li>Onde a venda quebra: visita, conversão ou ticket</li>
+          <li>Até 5 prioridades por semana, não 50</li>
+        </ul>
+        <span class="who">Quem faz: <b>o sistema</b>, toda semana</span>
+      </div>
+      <div class="move">
+        <span class="k">03 · OTIMIZE</span>
+        <h3>Você aprova, ele executa</h3>
+        <p>Para cada prioridade, o sistema prepara a melhoria: ficha técnica, descrição, preço com a sua margem e, quando a geração de imagens estiver ativa na sua conta, imagens. O título só é proposto onde o Mercado Livre ainda permite. Você revisa e aprova campo a campo.</p>
+        <ul>
+          <li>Simulação antes de publicar</li>
+          <li>Publicação após a sua aprovação</li>
+          <li>Antes e depois medidos em cada ação</li>
+        </ul>
+        <span class="who">Quem faz: <b>você aprova</b>, o sistema executa</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 LINHA DE MONTAGEM -->
+<section class="sec linha" id="linha" aria-labelledby="linha-t">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">O motor por dentro</span>
+      <h2 id="linha-t">Uma linha de montagem inteligente para o seu marketplace</h2>
+      <p class="lead">Seis estações conectadas. O dado entra na primeira, vira ação na quinta e volta como aprendizado para a primeira. Role a página ou toque em cada estação.</p>
+    </div>
+    <div class="linha-track" id="linha-track">
+      <div class="linha-sticky">
+        <div class="rail" role="tablist" aria-label="Estações da linha de montagem">
+          <div class="rail-fill" id="rail-fill"></div>
+        </div>
+        <div class="stage">
+          <div class="stage-text" id="stage-text" aria-live="polite"></div>
+          <div class="screen" id="screen">
+            <div class="screen-bar"><span id="screen-title">Estação 01 · Conectar</span><span class="live">Sistema ativo</span></div>
+            <div class="pane" id="pane-0"></div>
+            <div class="pane" id="pane-1" hidden></div>
+            <div class="pane" id="pane-2" hidden></div>
+            <div class="pane" id="pane-3" hidden></div>
+            <div class="pane" id="pane-4" hidden></div>
+            <div class="pane" id="pane-5" hidden></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 SIMULADOR -->
+<section class="sec" id="simular" aria-labelledby="sim-t" style="background:var(--bg-2);border-block:1px solid var(--line)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Veja o sistema trabalhando</span>
+      <h2 id="sim-t">Simule uma otimização do começo ao fim</h2>
+      <p class="lead">Um anúncio fictício passa pela linha de montagem. No meio do caminho, o sistema para e pede a sua aprovação, exatamente como acontece na sua conta.</p>
+    </div>
+    <div class="sim">
+      <div class="sim-panel">
+        <div class="sim-head">
+          <h3>Garrafa Térmica Inox 500 ml</h3>
+          <span class="tag-demo">Demonstração</span>
+        </div>
+        <div class="listing">
+          <div>
+            <div class="photo" id="sim-photo"><svg viewBox="0 0 100 140" aria-hidden="true"><rect x="34" y="6" width="32" height="14" rx="4" fill="#4A5361"/><rect x="30" y="18" width="40" height="8" rx="3" fill="#7C8796"/><path d="M28 30h44v92c0 8-6 12-12 12H40c-6 0-12-4-12-12z" fill="#9AA6B5"/><path d="M34 34h6v94h-6z" fill="#fff" opacity=".35"/><rect x="28" y="70" width="44" height="18" fill="#2D6CDF" opacity=".85"/></svg><span class="stamp" id="sim-stamp">foto atual</span></div>
+            <div class="thumbs" id="sim-thumbs" aria-hidden="true"><i class="f"></i><i class="f"></i><i></i><i></i><i></i><i></i><i></i></div>
+          </div>
+          <div class="ld">
+            <div class="t" id="sim-title">Garrafa Termica Inox 500ml Agua</div>
+            <div class="meta">
+              <div><span>Ficha técnica</span><span id="sim-ficha" class="bad-t">4 de 22</span></div>
+              <div><span>Galeria</span><span id="sim-gal" class="bad-t">2 de 7 fotos</span></div>
+              <div><span>Descrição</span><span id="sim-desc" class="bad-t">1 linha</span></div>
+              <div><span>Conversão</span><span id="sim-conv">0,9% · conta 2,1%</span></div>
+              <div><span>Status</span><span id="sim-status">Aguardando análise</span></div>
+            </div>
+          </div>
+        </div>
+        <ol class="sim-steps" id="sim-steps">
+          <li>Ler o anúncio e o histórico</li>
+          <li>Analisar a cadeia de venda</li>
+          <li>Identificar problemas</li>
+          <li>Montar o plano</li>
+          <li>Preparar as melhorias</li>
+          <li>Pedir a sua aprovação</li>
+          <li>Simular, publicar e conferir</li>
+        </ol>
+        <div class="cta-row">
+          <button class="btn btn-primary" id="sim-run" data-evt="sim_start">Simular uma otimização</button>
+          <button class="btn btn-ghost" id="sim-reset" hidden>Recomeçar</button>
+        </div>
+      </div>
+      <div class="sim-panel">
+        <div class="sim-head">
+          <h3>Registro da execução</h3>
+          <span class="note">Nenhuma conta real é alterada</span>
+        </div>
+        <div class="log" id="log" role="log" aria-live="polite"><div class="ln idle"><span class="ts">--:--:--</span><span>Clique em “Simular uma otimização” para começar.</span></div></div>
+        <div class="approve-box" id="approve" hidden>
+          <b>Sua aprovação é necessária</b>
+          <span class="note" style="color:var(--mute)">Marque o que pode ir ao ar. O que você não marcar não é publicado.</span>
+          <div class="fields">
+            <label><input type="checkbox" checked id="ap-ficha"> Ficha técnica: 18 atributos preenchidos</label>
+            <label><input type="checkbox" checked id="ap-desc"> Descrição estruturada</label>
+            <label><input type="checkbox" checked id="ap-gal"> Galeria: 5 imagens novas</label>
+            <label><input type="checkbox" id="ap-preco"> Preço: de R$ 89,90 para R$ 84,90</label>
+          </div>
+          <button class="btn btn-primary btn-sm" id="ap-go" data-evt="sim_approve">Aprovar e publicar</button>
+        </div>
+        <div class="tbl-wrap" id="hist-wrap" hidden>
+          <table class="history" aria-label="Histórico da execução">
+            <thead><tr><th>Campo</th><th>Antes</th><th>Depois</th><th>Status</th></tr></thead>
+            <tbody id="hist"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 PAINEL -->
+<section class="sec" id="painel" aria-labelledby="painel-t">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Seu centro de operações</span>
+      <h2 id="painel-t">Tudo em um único painel</h2>
+      <p class="lead">Sem analista e sem reunião. O que precisa da sua decisão aparece primeiro. Toque nas abas.</p>
+    </div>
+    <div class="dash">
+      <div class="side" role="tablist" aria-label="Menu do painel" id="side">
+        <div class="brandmini"><svg width="22" height="22" viewBox="0 0 400 400" aria-hidden="true"><rect width="400" height="400" rx="60" fill="#FF6B1A"/><path d="M113 176 c2 22 6 44 16 63 c14 28 39 49 71 49 c30 0 52 -20 60 -48 c4 -13 5 -27 5 -41 V 143 c0 -16 8 -24 24 -24 h 27" fill="none" stroke="#FCFCFC" stroke-linecap="round" stroke-width="31"/></svg>Place Sprint</div>
+      </div>
+      <div class="main" id="dash-main"></div>
+    </div>
+    <p class="note" style="margin-top:12px">Painel com dados ilustrativos de uma conta fictícia. Não são resultados de clientes da Place2u.</p>
+  </div>
+</section>
+
+<!-- 07 JORNADA -->
+<section class="sec" id="jornada" aria-labelledby="jor-t" style="background:var(--bg-2);border-block:1px solid var(--line)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Programa completo</span>
+      <h2 id="jor-t">A jornada dos 90 dias</h2>
+      <p class="lead">O sistema segue a ordem que funciona: primeiro a saúde da conta, depois o anúncio, só então o tráfego. Ads nunca vem antes de anúncio otimizado.</p>
+    </div>
+    <div class="journey-line" aria-hidden="true"></div>
+    <div class="journey">
+      <div class="phase">
+        <span class="days">DIAS 01–30</span>
+        <h3>Estruturação</h3>
+        <p>Diagnóstico, prioridades e o primeiro ciclo de execução.</p>
+        <ul>
+          <li>Conexão e primeiro relatório</li>
+          <li>Saúde da conta e estoque</li>
+          <li>Ficha técnica e cadastros</li>
+          <li>Primeiras 5 prioridades executadas</li>
+        </ul>
+        <p class="proof">Prova da fase: catálogo ativo com ficha revisada</p>
+      </div>
+      <div class="phase">
+        <span class="days">DIAS 31–60</span>
+        <h3>Evolução</h3>
+        <p>Otimização dos anúncios que mais pesam e leitura do que funcionou.</p>
+        <ul>
+          <li>Imagens e descrições dos anúncios curva A</li>
+          <li>Preço revisado com a sua margem</li>
+          <li>Medição de antes e depois de cada ação aprovada</li>
+          <li>Primeiras medições de antes e depois</li>
+        </ul>
+        <p class="proof">Prova da fase: conversão dos anúncios otimizados</p>
+      </div>
+      <div class="phase">
+        <span class="days">DIAS 61–90</span>
+        <h3>Consolidação</h3>
+        <p>Tráfego sobre anúncio pronto e preparação do próximo ciclo.</p>
+        <ul>
+          <li>Recomendações de Ads e promoções para os anúncios já otimizados — você aplica no Mercado Livre e marca como feito; o sistema mede</li>
+          <li>Novas oportunidades priorizadas</li>
+          <li>Regras ajustadas ao que funcionou na sua conta</li>
+          <li>Plano do próximo ciclo</li>
+        </ul>
+        <p class="proof">Prova da fase: faturamento × ritmo de antes do programa</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 09 PLANOS -->
+<section class="sec" id="planos" aria-labelledby="pla-t" style="background:var(--bg-2);border-block:1px solid var(--line)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Planos</span>
+      <h2 id="pla-t">Escolha como começar</h2>
+      <p class="lead">Mesma inteligência e mesmas entregas. Você escolhe só a forma de pagar: uma entrada menor mais um percentual do que vender, ou um valor fixo.</p>
+    </div>
+    <div class="incluso" aria-label="Incluso nos dois planos"><b>Incluso nos dois</b><span>Diagnóstico da conta</span><span>Relatório semanal</span><span>Plano de ação</span><span>Ficha técnica e descrição</span><span>Imagens com IA (quando ativo na sua conta)</span><span>Publicação com sua aprovação</span><span>Antes e depois medidos</span></div>
+    <div class="plans">
+      <div class="plan feat">
+        <span class="flag">Para começar pagando pouco</span>
+        <h3>Plano Crescimento</h3>
+        <p class="for">Entrada menor. O resto você paga conforme vende.</p>
+        <div class="price num">R$ 454<small>/mês</small></div>
+        <div class="price-extra">+ 10% do faturamento bruto aprovado</div>
+        <ul><li>Se não vender no mês, paga só os R$ 454</li><li>10% lidos direto da API, sem planilha</li><li>Cancele quando quiser</li><li>Tudo o que foi feito fica na sua conta</li></ul>
+        <a class="btn btn-primary" href="#entrar" data-plano="crescimento" data-evt="plan_cresc">Quero o Plano Crescimento</a>
+      </div>
+      <div class="plan">
+        <h3>Plano Fixo</h3>
+        <p class="for">Para quem prefere saber o custo exato todo mês.</p>
+        <div class="price num">R$ 997<small>/mês</small></div>
+        <ul><li>Sem percentual sobre as vendas</li><li>Compensa acima de R$ 5.430 por mês</li><li>Cancele quando quiser</li><li>Tudo o que foi feito fica na sua conta</li></ul>
+        <a class="btn btn-ghost" href="#entrar" data-plano="fixo" data-evt="plan_fixo">Quero o Plano Fixo</a>
+      </div>
+      <div class="calc" aria-labelledby="calc-t">
+        <h3 id="calc-t">Calcule seu plano</h3>
+        <label for="fat">Quanto você fatura por mês no Mercado Livre?</label>
+        <div class="money-in"><span>R$</span><input id="fat" inputmode="numeric" autocomplete="off" value="5.000" aria-describedby="calc-note"></div>
+        <input type="range" id="fat-range" min="0" max="100000" step="500" value="5000" aria-label="Faturamento mensal">
+        <div class="calc-out" aria-live="polite">
+          <div class="r"><span>Plano Fixo</span><b id="c-fixo">R$ 997,00</b></div>
+          <div class="r"><span>Plano Crescimento</span><b id="c-cresc">R$ 954,00</b></div>
+          <div class="r"><span>Diferença</span><b id="c-diff">R$ 43,00</b></div>
+        </div>
+        <div class="verdict" id="c-verdict"></div>
+        <p class="note" id="calc-note">Simulação. Faturamento bruto aprovado = pedidos pagos no Mercado Livre, menos cancelados e pedidos com reembolso ou contestação identificados pela API até o fechamento, 30 dias depois do fim do mês; você confere o extrato pedido a pedido antes de pagar. Os dois planos custam o mesmo quando o faturamento chega a R$ 5.430 por mês.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 FAQ -->
+<section class="sec" id="duvidas" aria-labelledby="faq-t">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Dúvidas</span>
+      <h2 id="faq-t">Perguntas frequentes</h2>
+    </div>
+    <div class="faq">
+      <details><summary>Preciso conhecer o Mercado Livre a fundo?</summary><div class="a">Não. O relatório explica cada ponto em linguagem direta e o sistema prepara a melhoria. O que você precisa saber é o custo dos seus produtos: sem ele, o sistema não sugere preço nem desconto.</div></details>
+      <details><summary>Preciso entregar minha senha?</summary><div class="a">Não. A conexão usa a autorização oficial do Mercado Livre. Você autoriza na tela deles, o acesso fica cifrado e você pode desconectar quando quiser. A autorização inclui permissão de escrita, que o sistema só usa quando você aprova uma mudança.</div></details>
+      <details><summary>A IA pode alterar preços sem autorização?</summary><div class="a">Não. Preço, ficha, descrição, imagens e título só vão ao ar depois da sua aprovação, campo a campo. Se a proposta mudar depois que você aprovou, a aprovação antiga deixa de valer e o sistema pede de novo.</div></details>
+      <details><summary>O sistema funciona para quem está começando?</summary><div class="a">Funciona melhor para quem já vende, porque o diagnóstico usa seus pedidos e visitas. Para quem ainda não tem histórico, o foco é cadastro e ficha técnica, e as estimativas ficam mais limitadas até existir dado.</div></details>
+      <details><summary>Preciso participar de reuniões?</summary><div class="a">Não. Tudo acontece no painel: relatório, plano e aprovações, cada ponto explicado com os dados da sua conta.</div></details>
+      <details><summary>O que o sistema executa e o que só recomenda?</summary><div class="a">Executa o que tem executor: o diagnóstico da conta, as até 5 prioridades da semana e, nos anúncios que você já tem, ficha técnica, descrição e preço preparados para você aprovar campo a campo, além de imagens com IA quando a geração estiver ativa na sua conta. Depois de publicado, confere por leitura se o Mercado Livre aplicou. O resto ele recomenda com o passo a passo: Ads, estoque, promoções e campanhas. Você aplica no Mercado Livre, marca como feito e o sistema mede o antes e depois. Criação de anúncio novo e cópias de anúncios existentes ficam fora desta versão. Nesta primeira turma, a publicação automática no Mercado Livre é ativada depois do piloto; até lá, cada mudança aprovada aparece em prévia e vai ao ar com a supervisão da equipe da Place2u.</div></details>
+      <details><summary>Como entro no painel?</summary><div class="a">Pelo link de acesso que aparece na página de retorno do pagamento. Guarde esse link: nesta versão não enviamos e-mail, e todos os avisos ficam no próprio painel. Dentro do painel você pode gerar um novo link para guardar. Se perder o link, fale com a Place2u pelo site place2u.com.br e a equipe gera um novo acesso para você.</div></details>
+      <details><summary>Posso cancelar quando quiser?</summary><div class="a">Sim, pelo próprio painel, sem multa. O cancelamento encerra as próximas cobranças da assinatura; no Plano Crescimento, a comissão das vendas até a data do cancelamento ainda é lida e cobrada com extrato. Tudo o que foi publicado continua na sua conta do Mercado Livre. Nos primeiros 7 dias após o primeiro pagamento, estorno integral (direito de arrependimento).</div></details>
+      <details><summary>Posso desistir depois de contratar?</summary><div class="a">Sim. Nos primeiros 7 dias depois do primeiro pagamento, você pode desistir pelo painel e recebe o estorno integral do que pagou, no mesmo meio de pagamento, pelo Mercado Pago (direito de arrependimento, art. 49 do Código de Defesa do Consumidor).</div></details>
+      <details><summary>Existe garantia de faturamento?</summary><div class="a">Não. O Place Sprint 90 é sem garantia de faturamento, de vendas ou de posição na busca. Ninguém controla o algoritmo do Mercado Livre, e prometer ranking ou vendas seria desonesto. O que o sistema garante é transparência: toda estimativa mostra premissas e cenários, e toda ação tem antes e depois medidos.</div></details>
+      <details><summary>Como é calculada a comissão do Plano Crescimento?</summary><div class="a">R$ 454 por mês mais 10% do faturamento bruto aprovado no Mercado Livre: pedidos pagos criados no mês, menos cancelados e pedidos com reembolso ou contestação identificados pela API até o fechamento; você confere o extrato pedido a pedido antes de pagar. Cobrada à parte, com extrato, no painel (cartão, boleto ou Pix). Se você não vender no mês, paga só os R$ 454.</div></details>
+      <details><summary>Quando a comissão é cobrada?</summary><div class="a">A comissão de cada mês é lida 30 dias depois do fim do mês, para que cancelamentos, reembolsos e contestações já tenham aparecido. Exemplo: as vendas de março são lidas em 30 de abril. No mesmo dia, a cobrança aparece no painel com o extrato pedido a pedido e vence em 7 dias. Se algum pedido do extrato estiver errado, ou for cancelado depois da leitura, você contesta pelo próprio extrato.</div></details>
+      <details><summary>E se eu atrasar um pagamento?</summary><div class="a">Desde o primeiro dia de atraso, o painel mostra um aviso. Depois de 5 dias de carência, a conta fica inadimplente: relatório e extrato continuam abertos, mas novas aprovações ficam bloqueadas até o pagamento. Com 30 dias de atraso, a assinatura é pausada automaticamente. Cancelar nunca é automático: é sempre decisão de uma pessoa, sua ou da equipe da Place2u.</div></details>
+      <details><summary>Emite nota fiscal?</summary><div class="a">Sim. A Place2u emite a nota fiscal de cada pagamento, da assinatura e da comissão, em até 5 dias úteis depois da confirmação do pagamento, com os dados fiscais que você informar.</div></details>
+      <details><summary>O que acontece com os meus dados?</summary><div class="a">Os dados da sua conta do Mercado Livre são usados só para o diagnóstico, o plano, as melhorias que você aprovar e a medição. Pelo painel você pode pedir a exclusão da conta (a cópia dos seus dados é pedida à Place2u e entregue em até 15 dias): a assinatura é cancelada e pedimos ao Mercado Livre a revogação do acesso. Faturas, pagamentos e o registro do aceite ficam guardados por 5 anos, por obrigação fiscal e para defesa de direitos. Detalhes no <a href="/c/privacidade">Aviso de Privacidade</a>.</div></details>
+      <details><summary>Funciona na Shopee e na Amazon?</summary><div class="a">Ainda não. Nesta versão, o programa atende só o Mercado Livre.</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- 11 CTA FINAL + ENTRADA -->
+<section class="sec final" id="entrar" aria-labelledby="fin-t">
+  <div class="wrap final-grid">
+    <div style="display:grid;gap:18px;min-width:0">
+      <span class="eyebrow">Turma fundadora</span>
+      <h2 id="fin-t">Você já cuida do seu negócio. Deixe a tecnologia cuidar da evolução dos seus anúncios.</h2>
+      <p class="lead">Ative o Place Sprint 90 e comece a estruturar sua operação com inteligência artificial.</p>
+      <div class="seats">
+        <div><b class="num">30</b><span>contas na turma fundadora</span></div>
+        <div><b class="num">12 meses</b><span>de preço travado</span></div>
+      </div>
+    </div>
+    <div class="join" id="join">
+      <div class="join-steps" aria-hidden="true">
+        <span id="js-0" class="on">1 · Plano</span><span id="js-1">2 · Dados</span><span id="js-2">3 · Resumo</span><span id="js-3">4 · Pagamento</span>
+      </div>
+      <form id="join-form" novalidate>
+        <div class="opt" data-step="0">
+          <label><input type="radio" name="plano" value="crescimento" checked><span><b>Plano Crescimento</b><small>R$ 454/mês + 10% do faturamento bruto aprovado</small></span></label>
+          <label><input type="radio" name="plano" value="fixo"><span><b>Plano Fixo</b><small>R$ 997/mês</small></span></label>
+        </div>
+        <div data-step="1" hidden style="display:grid;gap:12px">
+          <div class="fld"><label for="j-nome">Seu nome</label><input id="j-nome" autocomplete="name"><span class="err" id="e-nome"></span></div>
+          <div class="fields2">
+            <div class="fld"><label for="j-email">E-mail</label><input id="j-email" type="email" autocomplete="email"><span class="err" id="e-email"></span></div>
+            <div class="fld"><label for="j-zap">WhatsApp</label><input id="j-zap" type="tel" autocomplete="tel" placeholder="(13) 99999-9999"><span class="err" id="e-zap"></span></div>
+          </div>
+          <div class="fields2">
+            <div class="fld"><label for="j-loja">Nome da loja no Mercado Livre</label><input id="j-loja"><span class="err" id="e-loja"></span></div>
+            <div class="fld"><label for="j-fat">Faturamento mensal</label><select id="j-fat"><option selected>Prefiro não informar</option><option>Ainda não vendo</option><option>Até R$ 5 mil</option><option>R$ 5 mil a R$ 20 mil</option><option>R$ 20 mil a R$ 40 mil</option><option>Acima de R$ 40 mil</option></select></div>
+          </div>
+        </div>
+        <div data-step="2" hidden style="display:grid;gap:12px">
+          <div class="summary" id="sum"></div>
+          <label class="ck"><input type="checkbox" id="j-aceite" name="aceite"><span>Li e aceito os <a href="/c/termos" target="_blank" rel="noopener">Termos de Uso e o Contrato de Adesão</a>. Sei que a autorização do Mercado Livre inclui permissão de escrita, usada só depois da minha aprovação, e que não há garantia de faturamento, vendas ou posição na busca.</span></label>
+          <span class="err" id="e-aceite"></span>
+          <label class="ck"><input type="checkbox" id="j-consentimento" name="consentimento"><span>Li o <a href="/c/privacidade" target="_blank" rel="noopener">Aviso de Privacidade</a> e autorizo o tratamento dos meus dados e dos dados da minha conta do Mercado Livre para as finalidades descritas nele.</span></label>
+          <span class="err" id="e-consentimento"></span>
+          <p class="note">Ao continuar, você vai para o pagamento seguro no Mercado Pago. Na volta, a página de retorno entrega o seu link de acesso ao painel: guarde-o, porque nesta versão não enviamos e-mail. A conexão com o Mercado Livre acontece logo depois, com a sua autorização.</p>
+        </div>
+        <div data-step="3" hidden style="display:grid;gap:12px">
+          <div class="mp-box">
+            <div class="mp-head"><span class="mp-logo"><i aria-hidden="true"></i>Mercado Pago</span><span class="pill ok">pagamento seguro</span></div>
+            <div class="summary" id="mp-sum"></div>
+            <div class="mp-today"><span id="mp-today-l">Você paga hoje</span><b id="mp-today" class="num">R$ 454,00</b></div>
+            <p class="note" id="mp-after"></p>
+            <!-- ponytail: etapa 4 (09/10) abre o plano de assinatura criado no painel do Mercado Pago (links em config/sprint90.json). Nada é enviado por este site; a F3 troca o link pelo /c/assinar (same-origin) com aceite + retorno automático. -->
+            <a class="btn btn-primary" id="mp-assinar" href="https://mpago.la/29955jZ" target="_blank" rel="noopener" data-fixo="https://mpago.la/1Z8NaU7" data-crescimento="https://mpago.la/29955jZ">Assinar no Mercado Pago</a>
+            <p class="note" id="mp-depois"><b>Depois do pagamento:</b> a Place2u confirma a assinatura e cria o seu acesso em até 1 dia útil, entregando o link do painel pelo WhatsApp informado. Nesta versão a liberação é feita pela equipe; nenhum dado deste formulário é enviado por este site.</p>
+            <p class="note">Assinatura mensal no cartão de crédito pelo Mercado Pago. No Plano Crescimento, a comissão de cada mês vem como cobrança à parte no painel, 30 dias depois do fim do mês (cartão, boleto ou Pix), com o extrato antes de pagar.</p>
+          </div>
+        </div>
+        <div class="join-nav" style="margin-top:18px">
+          <button type="button" class="btn btn-ghost btn-sm" id="j-back" hidden>Voltar</button>
+          <button type="submit" class="btn btn-primary" id="j-next" style="margin-left:auto">Continuar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a class="logo" href="#topo"><svg viewBox="0 0 400 400" aria-hidden="true"><rect width="400" height="400" fill="#FF6B1A"/><path d="M113 176 c2 22 6 44 16 63 c14 28 39 49 71 49 c30 0 52 -20 60 -48 c4 -13 5 -27 5 -41 V 143 c0 -16 8 -24 24 -24 h 27" fill="none" stroke="#FCFCFC" stroke-linecap="round" stroke-width="31"/><circle cx="152" cy="327" r="17" fill="#FCFCFC"/><circle cx="252" cy="327" r="17" fill="#FCFCFC"/></svg>Place2u</a>
+    <span>Place2u · Inteligência e execução para marketplaces · <a href="/c/painel" rel="nofollow">Já é cliente? Entrar no painel</a> · <a href="/c/termos">Termos</a> · <a href="/c/privacidade">Privacidade</a></span>
+  </div>
+</footer>
+
+<script>
+(function(){
+"use strict";
+var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+var $ = function(s,r){return (r||document).querySelector(s);};
+var $$ = function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));};
+var NS = "http://www.w3.org/2000/svg";
+var brl = new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL"});
+var brl0 = new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL",maximumFractionDigits:0});
+function el(tag,attrs,parent){var e=document.createElementNS(NS,tag);for(var k in attrs){e.setAttribute(k,attrs[k]);}if(parent){parent.appendChild(e);}return e;}
+function h(html){var d=document.createElement("div");d.innerHTML=html.trim();return d.firstChild;}
+function track(name){try{window.dataLayer=window.dataLayer||[];window.dataLayer.push({event:name});}catch(e){}}
+document.addEventListener("click",function(e){var t=e.target.closest("[data-evt]");if(t){track(t.getAttribute("data-evt"));}});
+
+/* ---------- HERO ISOMÉTRICO ---------- */
+(function hero(){
+  var svg = $("#iso"); if(!svg) return;
+  var S=32, OX=340, OY=100; var labels=[];
+  function P(x,y,z){z=z||0;return [OX+(x-y)*S*0.866, OY+(x+y)*S*0.5 - z*S];}
+  function pts(a){return a.map(function(p){return p[0].toFixed(1)+","+p[1].toFixed(1);}).join(" ");}
+  var defs = el("defs",{},svg);
+  var g1 = el("linearGradient",{id:"gTop",x1:"0",y1:"0",x2:"1",y2:"1"},defs);
+  el("stop",{offset:"0","stop-color":"#16365C"},g1); el("stop",{offset:"1","stop-color":"#0E2644"},g1);
+  var glow = el("filter",{id:"glow",x:"-50%",y:"-50%",width:"200%",height:"200%"},defs);
+  el("feGaussianBlur",{stdDeviation:"3",result:"b"},glow);
+  var mg = el("feMerge",{},glow); el("feMergeNode",{in:"b"},mg); el("feMergeNode",{in:"SourceGraphic"},mg);
+
+  /* chão em grade */
+  var floor = el("g",{opacity:"0.55"},svg);
+  for(var i=-1;i<=12;i++){var a=P(i,-1.5),b=P(i,8.5);el("line",{x1:a[0],y1:a[1],x2:b[0],y2:b[1],stroke:"#173254","stroke-width":"0.8"},floor);}
+  for(var j=-1.5;j<=8.5;j++){var c=P(-1,j),d=P(12,j);el("line",{x1:c[0],y1:c[1],x2:d[0],y2:d[1],stroke:"#173254","stroke-width":"0.8"},floor);}
+  var plate = [P(-1,-1.5),P(12,-1.5),P(12,8.5),P(-1,8.5)];
+  el("polygon",{points:pts(plate),fill:"rgba(43,217,255,0.03)",stroke:"#21456F","stroke-width":"1"},svg);
+
+  /* esteira (ciclo fechado) */
+  var loop=[[1,1],[5.5,1],[10,1],[10,6],[5.5,6],[1,6],[1,1]];
+  var d="M"+loop.map(function(p){var q=P(p[0],p[1],0.05);return q[0].toFixed(1)+" "+q[1].toFixed(1);}).join(" L")+" Z";
+  el("path",{d:d,fill:"none",stroke:"#0B2745","stroke-width":"14","stroke-linejoin":"round"},svg);
+  el("path",{d:d,fill:"none",stroke:"#21456F","stroke-width":"1"},svg);
+  var flowLine = el("path",{id:"belt",d:d,fill:"none",stroke:"#2BD9FF","stroke-width":"1.6","stroke-dasharray":"4 10",opacity:"0.9",filter:"url(#glow)"},svg);
+  if(!reduce){el("animate",{attributeName:"stroke-dashoffset",from:"0",to:"-56",dur:"1.4s",repeatCount:"indefinite"},flowLine);}
+
+  /* caixas */
+  function box(x,y,w,dd,hh,opt){
+    var g=el("g",{},svg);
+    var top=[P(x,y,hh),P(x+w,y,hh),P(x+w,y+dd,hh),P(x,y+dd,hh)];
+    var left=[P(x,y+dd,0),P(x+w,y+dd,0),P(x+w,y+dd,hh),P(x,y+dd,hh)];
+    var right=[P(x+w,y,0),P(x+w,y+dd,0),P(x+w,y+dd,hh),P(x+w,y,hh)];
+    el("polygon",{points:pts(left),fill:opt.left||"#0A1B31",stroke:"#21456F","stroke-width":"1"},g);
+    el("polygon",{points:pts(right),fill:opt.right||"#071426",stroke:"#21456F","stroke-width":"1"},g);
+    var t=el("polygon",{points:pts(top),fill:"url(#gTop)",stroke:opt.edge||"#2BD9FF","stroke-width":"1.2"},g);
+    return {g:g,top:t};
+  }
+  var stations=[
+    {x:0,y:0,n:"01 Conectar"},{x:4.5,y:0,n:"02 Analisar"},{x:9,y:0,n:"03 Diagnosticar"},
+    {x:9,y:5,n:"04 Planejar"},{x:4.5,y:5,n:"05 Executar"},{x:0,y:5,n:"06 Medir"}
+  ];
+  /* ordem de desenho: x+y crescente */
+  var order = stations.map(function(s,i){return {s:s,i:i};}).sort(function(a,b){return (a.s.x+a.s.y)-(b.s.x+b.s.y);});
+  var tops=[];
+  /* núcleo central */
+  var coreDrawn=false;
+  function drawCore(){
+    var c=box(4.8,2.6,1.4,1.4,1.6,{edge:"#19E3C3"});
+    c.top.setAttribute("fill","rgba(25,227,195,0.25)");
+    var tp=P(5.5,3.3,1.6), hp=P(5.5,3.3,5.4);
+    var beam=el("line",{x1:tp[0],y1:tp[1],x2:hp[0],y2:hp[1]+22,stroke:"#19E3C3","stroke-width":"2",opacity:"0.7",filter:"url(#glow)"},svg);
+    /* holograma */
+    var hg=el("g",{transform:"translate("+hp[0].toFixed(1)+" "+hp[1].toFixed(1)+")"},svg);
+    var R=26,ring=[];for(var k=0;k<6;k++){var ang=Math.PI/3*k-Math.PI/2;ring.push([R*Math.cos(ang),R*Math.sin(ang)]);}
+    var spin=el("g",{},hg);el("polygon",{points:ring.map(function(p){return p[0].toFixed(1)+","+p[1].toFixed(1);}).join(" "),fill:"rgba(43,217,255,0.08)",stroke:"#2BD9FF","stroke-width":"1.2",filter:"url(#glow)"},spin);
+    for(var a=0;a<6;a++){for(var b2=a+2;b2<6;b2++){el("line",{x1:ring[a][0],y1:ring[a][1],x2:ring[b2][0],y2:ring[b2][1],stroke:"#2BD9FF","stroke-width":"0.6",opacity:"0.55"},spin);}}
+    el("circle",{r:"4",fill:"#2BD9FF",filter:"url(#glow)"},hg);
+    var lbl=el("text",{x:"0",y:"-36","text-anchor":"middle","font-family":"JetBrains Mono, monospace","font-size":"10",fill:"#8EA6C0","letter-spacing":"1"},hg); lbl.textContent="DIAGNÓSTICO + MEDIÇÃO";
+    if(!reduce){el("animateTransform",{attributeName:"transform",type:"rotate",from:"0",to:"360",dur:"24s",repeatCount:"indefinite"},spin);}
+    /* fios do holograma até as estações */
+    stations.forEach(function(s){var q=P(s.x+1,s.y+1,1.3);el("line",{x1:hp[0],y1:hp[1],x2:q[0],y2:q[1],stroke:"#2BD9FF","stroke-width":"0.6",opacity:"0.25","stroke-dasharray":"2 4"},svg);});
+    coreDrawn=true;
+  }
+  order.forEach(function(o){
+    if(!coreDrawn && (o.s.x+o.s.y)>7.5){drawCore();}
+    var b=box(o.s.x,o.s.y,2,2,1.2,{});
+    tops[o.i]=b.top;
+    /* tela em cima da estação */
+    var sc=[P(o.s.x+0.45,o.s.y+0.5,1.2),P(o.s.x+1.55,o.s.y+0.5,1.2),P(o.s.x+1.55,o.s.y+1.5,1.2),P(o.s.x+0.45,o.s.y+1.5,1.2)];
+    el("polygon",{points:pts(sc),fill:"rgba(43,217,255,0.12)",stroke:"rgba(43,217,255,0.5)","stroke-width":"0.8"},b.g);
+    var lp=P(o.s.x+2,o.s.y+2,0);
+    labels.push([lp[0]+8,lp[1]+8,o.s.n]);
+  });
+  if(!coreDrawn){drawCore();}
+  labels.forEach(function(L){var bg=el("rect",{x:(L[0]-4).toFixed(1),y:(L[1]-11).toFixed(1),width:(L[2].length*6.8+8).toFixed(1),height:"16",rx:"4",fill:"rgba(5,13,26,0.85)",stroke:"#21456F"},svg);var t=el("text",{x:L[0].toFixed(1),y:L[1].toFixed(1),"font-family":"JetBrains Mono, monospace","font-size":"11",fill:"#C9DAEA"},svg);t.textContent=L[2];});
+  /* pacotes na esteira */
+  if(!reduce){
+    for(var p=0;p<7;p++){
+      var pk=el("rect",{x:"-5",y:"-4",width:"10",height:"8",rx:"2",fill:p%3===0?"#19E3C3":"#2BD9FF",filter:"url(#glow)"},svg);
+      var am=el("animateMotion",{dur:"14s",repeatCount:"indefinite",begin:(-p*2)+"s"},pk);
+      el("mpath",{href:"#belt"},am);
+    }
+  }
+  /* painéis flutuantes */
+  function panel(x,y,w,hh,kind){
+    var g=el("g",{},svg);
+    el("rect",{x:x,y:y,width:w,height:hh,rx:"8",fill:"rgba(10,27,49,0.85)",stroke:"#21456F"},g);
+    if(kind==="bars"){var vals=[6,9,7,12,10,15,13,18,16,21];vals.forEach(function(v,i){el("rect",{x:x+12+i*((w-24)/10),y:y+hh-10-v*2.2,width:((w-24)/10)-3,height:v*2.2,rx:"1.5",fill:i>6?"#19E3C3":"#2BD9FF",opacity:i>6?"1":"0.6"},g);});
+      var tt=el("text",{x:x+12,y:y+16,"font-family":"JetBrains Mono, monospace","font-size":"9.5",fill:"#8EA6C0"},g);tt.textContent="VENDAS · 28 DIAS";}
+    if(kind==="list"){var tx=el("text",{x:x+12,y:y+16,"font-family":"JetBrains Mono, monospace","font-size":"9.5",fill:"#8EA6C0"},g);tx.textContent="PLANO DA SEMANA";
+      var rows=[["P0","#FF5C6C"],["P0","#FF5C6C"],["P1","#FFC857"],["P2","#2BD9FF"]];
+      rows.forEach(function(r,i){var yy=y+30+i*15;el("rect",{x:x+12,y:yy-8,width:"20",height:"11",rx:"3",fill:"none",stroke:r[1]},g);var pt=el("text",{x:x+22,y:yy+0.5,"text-anchor":"middle","font-family":"JetBrains Mono, monospace","font-size":"7.5",fill:r[1]},g);pt.textContent=r[0];el("rect",{x:x+38,y:yy-5,width:(w-60)*(1-i*0.15),height:"5",rx:"2",fill:"#21456F"},g);});}
+    return g;
+  }
+  panel(8,8,150,92,"list");
+  panel(562,4,150,92,"bars");
+  /* estação ativa em ciclo */
+  var act=0;
+  function light(){tops.forEach(function(t,i){if(!t)return;t.setAttribute("fill",i===act?"rgba(43,217,255,0.45)":"url(#gTop)");t.setAttribute("filter",i===act?"url(#glow)":"");});act=(act+1)%6;}
+  light(); if(!reduce){setInterval(light,1800);}
+})();
+
+/* ---------- DORES ---------- */
+(function pains(){
+  var data=[
+    {t:"Falta de tempo",c:"A rotina da loja consome o dia e os anúncios ficam do jeito que nasceram.",f:"O sistema revisa a conta toda semana sem você abrir uma planilha.",i:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'},
+    {t:"Falta de conhecimento técnico",c:"Ficha técnica, posição de imagem, catálogo e Ads: cada detalhe mexe na venda.",f:"O relatório diz o que fazer em linguagem direta, com o número de cada ponto.",i:'<path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/>'},
+    {t:"Anúncios que não convertem",c:"Visita sem venda é dinheiro que o Mercado Livre manda e você deixa passar.",f:"O sistema aponta se o problema está na visita, na conversão ou no ticket.",i:'<path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/>'},
+    {t:"Imagens e ofertas fracas",c:"Foto simples e descrição curta perdem para o concorrente na mesma busca.",f:"Galeria e descrição preparadas pela IA, fiéis ao produto, para você aprovar.",i:'<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/>'},
+    {t:"Custo de montar uma equipe",c:"Analista, designer e consultor custam mais do que muita loja fatura.",f:"A partir de R$ 454 por mês, mais um percentual do que você vende.",i:'<circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5"/><circle cx="17" cy="9" r="2.5"/><path d="M15.5 14.5c3 0 5.5 1.5 5.5 4.5"/>'}
+  ];
+  var box=$("#pains");
+  data.forEach(function(d,k){
+    var b=h('<button class="pain" aria-expanded="false"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+d.i+'</svg></span><h3>'+d.t+'</h3><p class="cons">'+d.c+'</p><p class="fix" hidden>'+d.f+'</p></button>');
+    b.addEventListener("click",function(){var open=b.getAttribute("aria-expanded")==="true";b.setAttribute("aria-expanded",String(!open));b.querySelector(".fix").hidden=open;});
+    box.appendChild(b);
+  });
+  var msgs=[
+    "Comece pela base: o sistema revisa ficha técnica e descrição dos anúncios que você já publicou. Quando as vendas chegarem, o relatório passa a mostrar onde crescer.",
+    "É o cenário em que o Place Sprint mais rende: com histórico de vendas, o relatório aponta os anúncios que mais pesam e as poucas ações que movem o resultado.",
+    "O sistema prepara ficha técnica, descrição e, quando ativo, galeria dos anúncios que você já tem, e você aprova antes de publicar. Os anúncios com mais potencial entram primeiro. Cadastro de anúncio novo fica fora desta versão.",
+    "Você recebe o relatório pronto e aprova as melhorias pelo painel em poucos minutos por semana. Sem reunião e sem equipe para coordenar."
+  ];
+  var out=$("#moment-out");
+  function pick(i){$$(".chip").forEach(function(c){c.setAttribute("aria-pressed",String(c.getAttribute("data-m")===String(i)));});out.textContent=msgs[i];track("momento_"+i);}
+  $$(".chip").forEach(function(c){c.addEventListener("click",function(){pick(+c.getAttribute("data-m"));});});
+  out.textContent=msgs[1];
+})();
+
+/* ---------- LINHA DE MONTAGEM ---------- */
+(function linha(){
+  var st=[
+    {n:"Conectar",k:"Estação 01",t:"Conecte sua conta sem compartilhar sua senha.",p:"Você clica, autoriza na tela oficial do Mercado Livre e volta. O sistema guarda o acesso cifrado e começa a primeira leitura sozinho.",f:["Autorização oficial (OAuth), nunca senha","Acesso cifrado; a permissão de escrita só é usada quando você aprova algo","Desconecte quando quiser"]},
+    {n:"Analisar",k:"Estação 02",t:"A IA analisa sua operação para encontrar oportunidades.",p:"Pedidos, visitas, Ads, preço, estoque e ficha técnica de cada anúncio. Os últimos 28 dias comparados com os 28 anteriores.",f:["Dados diários por anúncio","Curva ABC: foco no que pesa no faturamento","Sua conversão comparada com a média da própria conta"]},
+    {n:"Diagnosticar",k:"Estação 03",t:"Descubra o que precisa melhorar e por onde começar.",p:"Faturamento é visitas × conversão × ticket. O sistema mostra qual desses elos quebrou e em quais anúncios.",f:["Cada problema com o número que o sustenta","Fato separado de hipótese","Leitura do momento da conta: destravar, estruturar ou acelerar"]},
+    {n:"Planejar",k:"Estação 04",t:"Um plano de ação personalizado, sem você precisar montá-lo.",p:"Mais de 20 regras avaliam a conta. Só entram as ações que mexem no dinheiro, no máximo 5 por semana, ordenadas por impacto.",f:["Prioridade = impacto 40% + gravidade 20% + evidência 25% + facilidade 15%","Cenários conservador, base e otimista","O resto fica na fila, nada some"]},
+    {n:"Executar",k:"Estação 05",t:"Não apenas recomenda. Executa as melhorias que você autorizar.",p:"Ficha técnica, descrição, preço e, quando ativo, imagens. Você aprova campo a campo, o sistema simula, publica e confere se o Mercado Livre aplicou.",f:["Nada vai ao ar sem sua aprovação","Simulação antes de publicar","Conferência por leitura 30 minutos depois"]},
+    {n:"Medir e evoluir",k:"Estação 06",t:"O sistema acompanha os resultados e prepara a próxima evolução.",p:"Cada ação é medida com antes e depois, comparada a anúncios que não mudaram. O que funciona sobe de prioridade. O que não funciona sai do plano.",f:["Antes e depois com grupo de comparação","Aprendizado específico da sua conta","O ciclo volta para a análise com mais precisão"]}
+  ];
+  var rail=$(".rail"), fill=$("#rail-fill"), text=$("#stage-text"), title=$("#screen-title");
+  st.forEach(function(s,i){
+    var b=h('<button class="st" role="tab" aria-selected="false" aria-controls="screen" data-i="'+i+'"><span class="dot">0'+(i+1)+'</span><span class="nm">'+s.n+'</span></button>');
+    rail.appendChild(b);
+  });
+  /* painéis */
+  $("#pane-0").innerHTML=
+    '<div class="connect-card"><div class="node ml">mercado<br>livre</div><div class="wire"></div><div class="lock"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div><div class="wire"></div><div class="node ps">PLACE<br>SPRINT</div></div>'+
+    '<div class="row"><span class="l"><span>Autorização OAuth 2.0</span></span><span class="pill ok">concedida</span></div>'+
+    '<div class="row"><span class="l"><span>Senha compartilhada</span></span><span class="pill p3">nenhuma</span></div>'+
+    '<div class="row"><span class="l"><span>Acesso guardado</span></span><span class="pill ok">cifrado</span></div>'+
+    '<div class="row"><span class="l"><span>Primeira leitura da conta</span></span><span class="bar"><i data-w="100"></i></span></div>'+
+    '<p class="note">Ilustração do fluxo de conexão.</p>';
+  var streams=[["Pedidos por anúncio","diário",100],["Visitas por anúncio","diário",100],["Ads por anúncio","diário",92],["Preço e histórico","diário",100],["Ficha técnica e atributos","por anúncio",86],["Estoque e Full","diário",78]];
+  $("#pane-1").innerHTML=streams.map(function(s){return '<div class="row"><span class="l"><span>'+s[0]+'</span></span><span class="bar"><i data-w="'+s[2]+'"></i></span><span class="pill p3">'+s[1]+'</span></div>';}).join("")+
+    '<div class="kv"><div><small>Janela</small><b>28 × 28</b></div><div><small>Anúncios lidos</small><b class="num">143</b></div><div><small>Curva A</small><b class="num">19</b></div></div>'+
+    '<p class="note">Dados ilustrativos.</p>';
+  $("#pane-2").innerHTML=
+    '<div class="tree"><div class="tree-top"><small class="mono" style="font-size:10.5px;color:var(--dim)">FATURAMENTO 28 DIAS</small><br><b style="font-family:var(--f-display)">R$ 61.420</b> <span class="pill p0">−18%</span></div>'+
+    '<div class="tree-row"><div class="tree-node"><small>Visitas</small><b class="num">48.900</b><em>+4% vs. anterior</em></div><div class="tree-node bad"><small>Conversão</small><b class="num">1,4%</b><em>−21% · elo quebrado</em></div><div class="tree-node"><small>Ticket</small><b class="num">R$ 89,70</b><em>estável</em></div></div></div>'+
+    '<div class="row"><span class="l"><span>Conversão abaixo da média da conta em 6 anúncios A</span></span><span class="pill p0">P0</span></div>'+
+    '<div class="row"><span class="l"><span>Full cobre 6 dias, reposição leva 12</span></span><span class="pill p0">P0</span></div>'+
+    '<div class="row"><span class="l"><span>Ficha técnica com atributos vazios em 31 anúncios</span></span><span class="pill p1">P1</span></div>'+
+    '<div class="row"><span class="l"><span>Ads rodando sobre anúncio não otimizado</span></span><span class="pill p2">P2</span></div>'+
+    '<div class="arche"><span class="pill p1">Momento: Destravar</span><span class="note">A venda caiu com visitas estáveis: o problema está no anúncio, não no tráfego.</span></div>';
+  var acts=[["P0","Repor Full do anúncio Garrafa 1L","Ruptura em 6 dias","R$ 3.900 em risco"],["P0","Otimizar galeria e ficha · Garrafa 500 ml","Conversão 0,9% · conta 2,1%","+R$ 1.100 a 2.800"],["P1","Preencher ficha técnica · 12 anúncios","31 atributos vazios","+R$ 600 a 1.500"],["P1","Revisar preço com a sua margem · Kit 3 Potes","Preço 14% acima da faixa da categoria","+R$ 400 a 1.200"],["P2","Pausar Ads em anúncio não otimizado","ROAS 1,8 abaixo da conta","R$ 520/mês economizados"]];
+  $("#pane-3").innerHTML='<div class="list">'+acts.map(function(a){return '<div class="act"><span class="pill '+(a[0]==="P0"?"p0":a[0]==="P1"?"p1":"p2")+'">'+a[0]+'</span><div><b>'+a[1]+'</b><span>'+a[2]+'</span></div><span class="ev">'+a[3]+'</span></div>';}).join("")+'</div>'+
+    '<div class="formula">P = <b>impacto</b> 40% + <b>gravidade</b> 20% + <b>evidência</b> 25% + <b>facilidade</b> 15%<br>5 de 14 ações possíveis nesta semana · 9 na fila</div>'+
+    '<p class="note">Valores ilustrativos. Cada estimativa real mostra suas premissas.</p>';
+  $("#pane-4").innerHTML=
+    '<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><span class="note">Anúncio fictício</span><div class="ba-toggle" role="group" aria-label="Antes ou depois"><button aria-pressed="true" data-ba="0">Antes</button><button aria-pressed="false" data-ba="1">Depois</button></div></div>'+
+    '<div class="listing"><div><div class="photo" id="ba-photo"><svg viewBox="0 0 120 120" aria-hidden="true"><path d="M24 64a36 36 0 0 1 72 0" fill="none" stroke="#2A2F38" stroke-width="9" stroke-linecap="round"/><rect x="14" y="58" width="22" height="36" rx="9" fill="#2A2F38"/><rect x="84" y="58" width="22" height="36" rx="9" fill="#2A2F38"/><rect x="18" y="64" width="12" height="24" rx="5" fill="#4B5563"/><rect x="90" y="64" width="12" height="24" rx="5" fill="#4B5563"/></svg><span class="stamp" id="ba-stamp">foto do vendedor</span></div><div class="thumbs" id="ba-thumbs" aria-hidden="true"><i class="f"></i><i class="f"></i><i></i><i></i><i></i><i></i><i></i></div></div>'+
+    '<div class="ld"><div class="t" id="ba-title">Fone Bluetooth Sem Fio</div><div class="meta">'+
+    '<div><span>Ficha técnica</span><span id="ba-ficha" class="bad-t">3 de 24</span></div>'+
+    '<div><span>Galeria</span><span id="ba-gal" class="bad-t">2 de 7</span></div>'+
+    '<div><span>Descrição</span><span id="ba-desc" class="bad-t">incompleta</span></div>'+
+    '<div><span>Status</span><span id="ba-st">rascunho</span></div></div></div></div>'+
+    '<div class="exec-steps" id="ex-steps"><div>Proposta</div><div class="you">Sua aprovação</div><div>Simulação</div><div>Publicação</div><div>Conferência 30 min</div></div>'+
+    '<p class="note">Depois da primeira venda o Mercado Livre trava o título; o sistema só propõe título onde ainda é permitido.</p>';
+  $("#pane-5").innerHTML=
+    '<div class="cmp">'+
+    '<div class="r"><span>Anúncios otimizados</span><span class="track"><i style="width:0;background:linear-gradient(90deg,var(--teal),var(--cyan))" data-w="74"></i></span><b class="mono num">+31%</b></div>'+
+    '<div class="r"><span>Anúncios sem mudança</span><span class="track"><i style="width:0;background:var(--line-2)" data-w="30"></i></span><b class="mono num">+4%</b></div>'+
+    '</div>'+
+    '<div class="kv"><div><small>Ações medidas</small><b class="num">23</b></div><div><small>Melhoraram</small><b class="num">15</b></div><div><small>Regras ajustadas</small><b class="num">2</b></div></div>'+
+    '<div class="row"><span class="l"><span>“Galeria nova em anúncio A” · taxa de sucesso na sua conta</span></span><span class="pill ok">sobe de prioridade</span></div>'+
+    '<div class="row"><span class="l"><span>“Frete grátis em ticket baixo” · sem efeito em 10 medições</span></span><span class="pill p3">sai do plano</span></div>'+
+    '<div class="loopback"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>O resultado volta para a Estação 02 e a próxima análise já começa mais precisa.</div>'+
+    '<p class="note">Valores ilustrativos. Medição de 14 dias, comparada com anúncios sem mudança. Associação, não garantia de causa.</p>';
+
+  /* antes e depois */
+  var baTimer=null;
+  function ba(on){
+    $$("[data-ba]").forEach(function(b){b.setAttribute("aria-pressed",String((b.getAttribute("data-ba")==="1")===on));});
+    $("#ba-photo").classList.toggle("pro",on);
+    $("#ba-stamp").textContent=on?"imagem gerada · fiel ao produto":"foto do vendedor";
+    $$("#ba-thumbs i").forEach(function(t,i){t.classList.toggle("f",on||i<2);});
+    $("#ba-title").textContent=on?"Fone de Ouvido Bluetooth 5.3 Sem Fio Over-ear 40h Bateria Microfone":"Fone Bluetooth Sem Fio";
+    var map=[["#ba-ficha","3 de 24","24 de 24"],["#ba-gal","2 de 7","7 de 7"],["#ba-desc","incompleta","estruturada"]];
+    map.forEach(function(m){var e=$(m[0]);e.textContent=on?m[2]:m[1];e.className=on?"good-t":"bad-t";});
+    $("#ba-st").textContent=on?"publicado e conferido":"rascunho";
+  }
+  $$("[data-ba]").forEach(function(b){b.addEventListener("click",function(){clearInterval(baTimer);ba(b.getAttribute("data-ba")==="1");});});
+  function runExec(){
+    clearInterval(baTimer); ba(false);
+    var steps=$$("#ex-steps div"); steps.forEach(function(s){s.classList.remove("on");});
+    if(reduce){steps.forEach(function(s){s.classList.add("on");});ba(true);return;}
+    var k=0; baTimer=setInterval(function(){ if(k<steps.length){steps[k].classList.add("on");k++; if(k===steps.length){ba(true);clearInterval(baTimer);} } },650);
+  }
+
+  var cur=-1;
+  function setActive(i){
+    if(i===cur) return; cur=i;
+    var s=st[i];
+    $$(".st",rail).forEach(function(b,j){b.classList.toggle("on",j===i);b.classList.toggle("done",j<i);b.setAttribute("aria-selected",String(j===i));});
+    fill.style.width=(92*i/5)+"%";
+    title.textContent=s.k+" · "+s.n;
+    text.innerHTML='<span class="k">'+s.k+'</span><h3>'+s.n+'</h3><p class="msg">'+s.t+'</p><p>'+s.p+'</p><ul class="facts">'+s.f.map(function(x){return "<li>"+x+"</li>";}).join("")+'</ul>'+
+      '<div class="stage-nav"><button class="btn btn-ghost btn-sm" data-go="-1"'+(i===0?" disabled":"")+'>Anterior</button><button class="btn btn-ghost btn-sm" data-go="1"'+(i===5?" disabled":"")+'>Próxima estação</button></div>';
+    for(var p=0;p<6;p++){$("#pane-"+p).hidden=(p!==i);}
+    var pane=$("#pane-"+i);
+    $$("[data-w]",pane).forEach(function(b){b.style.width="0";});
+    requestAnimationFrame(function(){requestAnimationFrame(function(){$$("[data-w]",pane).forEach(function(b){b.style.width=b.getAttribute("data-w")+"%";});});});
+    if(i===4){runExec();}
+  }
+  var trackEl=$("#linha-track");
+  var mq=window.matchMedia("(min-width: 901px)");
+  function scrollMode(){return mq.matches;}
+  function applyMode(){trackEl.classList.toggle("scrolly",scrollMode());}
+  applyMode(); if(mq.addEventListener){mq.addEventListener("change",applyMode);}
+  function goTo(i){
+    i=Math.max(0,Math.min(5,i));
+    if(scrollMode()){
+      var top=trackEl.getBoundingClientRect().top+window.scrollY;
+      var span=trackEl.offsetHeight-window.innerHeight;
+      window.scrollTo({top:top+span*(i+0.5)/6,behavior:reduce?"auto":"smooth"});
+    }
+    setActive(i);
+  }
+  rail.addEventListener("click",function(e){var b=e.target.closest(".st");if(b){goTo(+b.getAttribute("data-i"));}});
+  text.addEventListener("click",function(e){var b=e.target.closest("[data-go]");if(b){goTo(cur+(+b.getAttribute("data-go")));}});
+  rail.addEventListener("keydown",function(e){if(e.key==="ArrowRight"){goTo(cur+1);e.preventDefault();}if(e.key==="ArrowLeft"){goTo(cur-1);e.preventDefault();}});
+  var ticking=false;
+  window.addEventListener("scroll",function(){
+    if(!scrollMode()||ticking) return; ticking=true;
+    requestAnimationFrame(function(){
+      ticking=false;
+      var r=trackEl.getBoundingClientRect(); var span=trackEl.offsetHeight-window.innerHeight;
+      if(span<=0) return;
+      var prog=Math.min(1,Math.max(0,-r.top/span));
+      setActive(Math.min(5,Math.floor(prog*6)));
+    });
+  },{passive:true});
+  setActive(0);
+})();
+
+/* ---------- SIMULADOR ---------- */
+(function sim(){
+  var log=$("#log"), run=$("#sim-run"), reset=$("#sim-reset"), steps=$$("#sim-steps li"), approve=$("#approve"), histWrap=$("#hist-wrap"), hist=$("#hist");
+  var timers=[];
+  function now(){var d=new Date();return [d.getHours(),d.getMinutes(),d.getSeconds()].map(function(n){return String(n).padStart(2,"0");}).join(":");}
+  function line(txt,cls){var d=document.createElement("div");d.className="ln";d.innerHTML='<span class="ts">'+now()+'</span><span class="'+(cls||"")+'">'+txt+'</span>';log.appendChild(d);log.scrollTop=log.scrollHeight;}
+  function step(i){steps.forEach(function(s,j){s.classList.toggle("done",j<i);s.classList.toggle("on",j===i);});}
+  function later(fn,ms){timers.push(setTimeout(fn,reduce?0:ms));}
+  function seq(list,done){var t=0;list.forEach(function(it){t+=it[2]||550;later(function(){line(it[0],it[1]);if(it[3]!=null){step(it[3]);}},t);});later(done,t+300);}
+  function clear(){timers.forEach(clearTimeout);timers=[];}
+  function initial(){
+    clear(); log.innerHTML='<div class="ln idle"><span class="ts">--:--:--</span><span>Clique em “Simular uma otimização” para começar.</span></div>';
+    steps.forEach(function(s){s.classList.remove("on","done");});
+    approve.hidden=true; histWrap.hidden=true; hist.innerHTML=""; run.hidden=false; run.disabled=false; reset.hidden=true;
+    $("#sim-photo").classList.remove("pro"); $("#sim-stamp").textContent="foto atual";
+    $$("#sim-thumbs i").forEach(function(t,i){t.classList.toggle("f",i<2);});
+    $("#sim-title").textContent="Garrafa Termica Inox 500ml Agua";
+    [["#sim-ficha","4 de 22"],["#sim-gal","2 de 7 fotos"],["#sim-desc","1 linha"]].forEach(function(m){var e=$(m[0]);e.textContent=m[1];e.className="bad-t";});
+    $("#sim-status").textContent="Aguardando análise";
+  }
+  run.addEventListener("click",function(){
+    run.disabled=true; log.innerHTML=""; $("#sim-status").textContent="Em análise";
+    seq([
+      ["Simulação iniciada · conta fictícia","cy",100,0],
+      ["Lendo anúncio MLB-DEMO-500 e 56 dias de histórico",null,600],
+      ["Pedidos: 38 · visitas: 4.210 · conversão 0,9%",null,600,1],
+      ["Média de conversão da conta: 2,1%",null,500],
+      ["Cadeia de venda: visitas estáveis, conversão 57% abaixo da conta","warn-t",700,2],
+      ["Ficha técnica: 18 atributos vazios","err-t",500],
+      ["Galeria: 2 de 7 posições ocupadas","err-t",450],
+      ["Descrição com 1 linha e sem medidas","err-t",450],
+      ["Plano: ação P0 · otimizar galeria + ficha + descrição","cy",700,3],
+      ["Previsão: +6 a +19 vendas em 28 dias · probabilidade 0,55 (premissa)",null,600],
+      ["Preparando ficha técnica a partir dos dados do produto",null,700,4],
+      ["Gerando 5 imagens com referência da foto original",null,700],
+      ["Verificação de fidelidade: cor, capacidade e tampa conferem","ok-t",600],
+      ["Escrevendo descrição estruturada",null,500],
+      ["Proposta v1 pronta · aguardando sua aprovação","warn-t",600,5]
+    ],function(){approve.hidden=false;$("#sim-status").textContent="Aguardando sua aprovação";$("#ap-go").focus({preventScroll:true});});
+  });
+  $("#ap-go").addEventListener("click",function(){
+    var ok={ficha:$("#ap-ficha").checked,desc:$("#ap-desc").checked,gal:$("#ap-gal").checked,preco:$("#ap-preco").checked};
+    approve.hidden=true;
+    var n=Object.keys(ok).filter(function(k){return ok[k];}).length;
+    if(n===0){line("Nada aprovado. Nenhuma alteração será publicada.","warn-t");$("#sim-status").textContent="Sem alterações";reset.hidden=false;run.hidden=true;return;}
+    line("Você aprovou "+n+" campo"+(n>1?"s":"")+" da versão v1","ok-t");
+    if(!ok.preco){line("Preço não aprovado: permanece R$ 89,90",null);}
+    seq([
+      ["Simulação (dry-run): payload validado, sem bloqueios","cy",600,6],
+      ["Publicando no Mercado Livre (simulado)",null,700],
+      ["Publicado · conferência por leitura agendada para 30 min",null,600],
+      ["Conferência: todos os campos aprovados aplicados","ok-t",800],
+      ["Medição de antes e depois iniciada · janela de 14 dias","cy",500]
+    ],function(){
+      step(7);
+      if(ok.gal){$("#sim-photo").classList.add("pro");$("#sim-stamp").textContent="imagem gerada";$$("#sim-thumbs i").forEach(function(t){t.classList.add("f");});$("#sim-gal").textContent="7 de 7 fotos";$("#sim-gal").className="good-t";}
+      if(ok.ficha){$("#sim-ficha").textContent="22 de 22";$("#sim-ficha").className="good-t";}
+      if(ok.desc){$("#sim-desc").textContent="estruturada";$("#sim-desc").className="good-t";}
+      $("#sim-status").textContent="Otimizado · em medição";
+      var rows=[["Ficha técnica","4 de 22","22 de 22",ok.ficha],["Descrição","1 linha","estruturada",ok.desc],["Galeria","2 fotos","7 fotos",ok.gal],["Preço","R$ 89,90","R$ 84,90",ok.preco]];
+      hist.innerHTML=rows.map(function(r){return "<tr><td>"+r[0]+"</td><td>"+r[1]+"</td><td>"+(r[3]?r[2]:r[1])+"</td><td>"+(r[3]?'<span class="pill ok">publicado</span>':'<span class="pill p3">não aprovado</span>')+"</td></tr>";}).join("");
+      histWrap.hidden=false; run.hidden=true; reset.hidden=false; track("sim_done");
+    });
+  });
+  reset.addEventListener("click",initial);
+})();
+
+/* ---------- PAINEL ---------- */
+(function dash(){
+  var side=$("#side"), main=$("#dash-main");
+  var tabs=[["visao","Visão geral"],["plano","Plano da semana"],["aprov","Aprovações"],["result","Resultados"]];
+  var pend=[
+    {id:1,a:"Galeria nova · Garrafa Térmica 500 ml",d:"5 imagens · fidelidade conferida"},
+    {id:2,a:"Ficha técnica · Kit 3 Potes Herméticos",d:"14 atributos preenchidos"},
+    {id:3,a:"Preço · Garrafa Térmica 1 L",d:"R$ 119,90 → R$ 114,90 · margem 22%"}
+  ];
+  /* série ilustrativa de 28 dias */
+  var serie=[];for(var i=0;i<28;i++){var base=1800+i*18;var wk=[1.12,0.92,0.95,1.0,1.05,1.2,0.86][i%7];var lift=i>=14?1+(i-14)*0.022:1;serie.push(Math.round(base*wk*lift));}
+  function chart(){
+    var W=640,H=230,L=48,R=12,T=14,B=28;
+    var max=Math.ceil(Math.max.apply(null,serie)/1000)*1000;
+    var x=function(i){return L+i*(W-L-R)/27;}, y=function(v){return T+(H-T-B)*(1-v/max);};
+    var g="";
+    for(var t=0;t<=max;t+=1000){g+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y(t)+'" y2="'+y(t)+'" stroke="#173254"/><text x="'+(L-8)+'" y="'+(y(t)+4)+'" text-anchor="end" font-size="10.5" fill="#8EA6C0" font-family="JetBrains Mono, monospace">'+(t/1000)+' mil</text>';}
+    [0,7,14,21,27].forEach(function(d){g+='<text x="'+x(d)+'" y="'+(H-8)+'" text-anchor="middle" font-size="10.5" fill="#8EA6C0" font-family="JetBrains Mono, monospace">dia '+(d+1)+'</text>';});
+    var line=serie.map(function(v,i){return (i?"L":"M")+x(i).toFixed(1)+" "+y(v).toFixed(1);}).join(" ");
+    var area=line+" L"+x(27)+" "+y(0)+" L"+x(0)+" "+y(0)+" Z";
+    g+='<defs><linearGradient id="ar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2BD9FF" stop-opacity=".35"/><stop offset="1" stop-color="#2BD9FF" stop-opacity="0"/></linearGradient></defs>';
+    g+='<path d="'+area+'" fill="url(#ar)"/><path d="'+line+'" fill="none" stroke="#2BD9FF" stroke-width="2"/>';
+    g+='<line x1="'+x(14)+'" x2="'+x(14)+'" y1="'+T+'" y2="'+(H-B)+'" stroke="#FF6B1A" stroke-dasharray="4 4"/><text x="'+(x(14)+6)+'" y="'+(T+12)+'" font-size="10.5" fill="#FF6B1A" font-family="JetBrains Mono, monospace">plano aplicado</text>';
+    g+='<circle cx="'+x(27)+'" cy="'+y(serie[27])+'" r="4.5" fill="#2BD9FF" stroke="#050D1A" stroke-width="2"/>';
+    return '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Faturamento diário ilustrativo de 28 dias, com alta após a aplicação do plano no dia 15">'+g+'</svg>';
+  }
+  var total=serie.reduce(function(a,b){return a+b;},0);
+  var views={
+    visao:function(){return '<div class="main-head"><div><h3>Visão geral</h3><span class="sub">Loja Exemplo · Mercado Livre conectado</span></div><span class="tag-demo">Dados ilustrativos</span></div>'+
+      '<div class="kpis"><div class="kpi"><small>Faturamento 28 d</small><b>'+brl0.format(total)+'</b><em>+12% vs. 28 d anteriores</em></div><div class="kpi"><small>Diagnóstico</small><b>72/100</b><em>saúde da conta</em></div><div class="kpi"><small>Sprint atual</small><b>3 de 5</b><em>ações concluídas</em></div><div class="kpi"><small>Aprovações</small><b>'+pend.length+'</b><em>aguardando você</em></div></div>'+
+      '<div class="grid2"><div class="card chart"><h4>Faturamento diário <small>28 dias</small></h4>'+chart()+'</div>'+
+      '<div class="card"><h4>Próximas ações <small>do sistema</small></h4><div class="list">'+
+      '<div class="act"><span class="pill p0">P0</span><div><b>Repor Full · Garrafa 1 L</b><span>ruptura em 6 dias</span></div></div>'+
+      '<div class="act"><span class="pill p1">P1</span><div><b>Ficha · 12 anúncios</b><span>31 atributos vazios</span></div></div>'+
+      '<div class="act"><span class="pill p2">P2</span><div><b>Revisar Ads</b><span>2 campanhas abaixo da conta</span></div></div></div></div></div>';},
+    plano:function(){var a=[["P0","Repor Full · Garrafa 1 L","receita em risco R$ 3.900"],["P0","Otimizar galeria e ficha · Garrafa 500 ml","+R$ 1.100 a 2.800"],["P1","Ficha técnica · 12 anúncios","+R$ 600 a 1.500"],["P1","Preço com a sua margem · Kit 3 Potes","+R$ 400 a 1.200"],["P2","Pausar Ads em anúncio não otimizado","economia R$ 520/mês"]];
+      return '<div class="main-head"><div><h3>Plano da semana</h3><span class="sub">5 ações escolhidas entre 14 possíveis</span></div><span class="tag-demo">Dados ilustrativos</span></div><div class="list">'+a.map(function(r){return '<div class="act"><span class="pill '+(r[0]==="P0"?"p0":r[0]==="P1"?"p1":"p2")+'">'+r[0]+'</span><div><b>'+r[1]+'</b><span>cenário conservador a otimista</span></div><span class="ev">'+r[2]+'</span></div>';}).join("")+'</div><div class="formula">Prioridade = <b>impacto</b> 40% + <b>gravidade</b> 20% + <b>evidência</b> 25% + <b>facilidade</b> 15%</div>';},
+    aprov:function(){if(!pend.length){return '<div class="main-head"><h3>Aprovações</h3></div><div class="empty">Nenhuma aprovação pendente. O sistema avisa quando a próxima melhoria estiver pronta.</div>';}
+      return '<div class="main-head"><div><h3>Aprovações</h3><span class="sub">Nada vai ao ar sem a sua decisão</span></div></div><div class="list">'+pend.map(function(p){return '<div class="act"><span class="pill p1">nova</span><div><b>'+p.a+'</b><span>'+p.d+'</span></div><span style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btn-ghost btn-sm" data-rej="'+p.id+'">Recusar</button><button class="btn btn-primary btn-sm" data-ok="'+p.id+'">Aprovar</button></span></div>';}).join("")+'</div>';},
+    result:function(){return '<div class="main-head"><div><h3>Resultados</h3><span class="sub">Antes e depois, 14 dias, comparado com anúncios sem mudança</span></div><span class="tag-demo">Dados ilustrativos</span></div>'+
+      '<div class="card"><h4>Vendas por dia <small>antes → depois</small></h4><div class="cmp">'+
+      '<div class="r"><span>Galeria nova</span><span class="track"><i style="width:68%;background:linear-gradient(90deg,var(--teal),var(--cyan))"></i></span><b class="mono num">+28%</b></div>'+
+      '<div class="r"><span>Ficha completa</span><span class="track"><i style="width:44%;background:linear-gradient(90deg,var(--teal),var(--cyan))"></i></span><b class="mono num">+12%</b></div>'+
+      '<div class="r"><span>Sem mudança</span><span class="track"><i style="width:18%;background:var(--line-2)"></i></span><b class="mono num">+3%</b></div></div></div>'+
+      '<p class="note">Associação no tempo, nunca causa comprovada. Mudança de preço na mesma janela é sinalizada e sai do aprendizado.</p>';}
+  };
+  var curTab="visao";
+  tabs.forEach(function(t){
+    var b=h('<button role="tab" aria-selected="false" data-tab="'+t[0]+'">'+t[1]+(t[0]==="aprov"?'<span class="badge" id="badge">'+pend.length+'</span>':'')+'</button>');
+    side.appendChild(b);
+  });
+  function show(k){curTab=k;$$("[data-tab]",side).forEach(function(b){b.setAttribute("aria-selected",String(b.getAttribute("data-tab")===k));});main.innerHTML=views[k]();var bd=$("#badge");if(bd){bd.textContent=pend.length;bd.hidden=!pend.length;}}
+  side.addEventListener("click",function(e){var b=e.target.closest("[data-tab]");if(b){show(b.getAttribute("data-tab"));track("dash_"+b.getAttribute("data-tab"));}});
+  main.addEventListener("click",function(e){
+    var ok=e.target.closest("[data-ok]"), rj=e.target.closest("[data-rej]");
+    if(!ok&&!rj) return;
+    var id=+(ok||rj).getAttribute(ok?"data-ok":"data-rej");
+    var p=pend.filter(function(x){return x.id===id;})[0]; pend=pend.filter(function(x){return x.id!==id;});
+    show("aprov");
+  });
+  show("visao");
+})();
+
+/* ---------- CALCULADORA ---------- */
+(function calc(){
+  var inp=$("#fat"), rng=$("#fat-range");
+  function parse(s){var d=String(s).replace(/\D/g,"");return d?parseInt(d,10):0;}
+  function fmtInt(n){return n.toLocaleString("pt-BR");}
+  function upd(v){
+    var fixo=99700, cresc=45400+Math.round(v*100*0.10);
+    var diff=Math.abs(fixo-cresc);
+    $("#c-fixo").textContent=brl.format(fixo/100);
+    $("#c-cresc").textContent=brl.format(cresc/100);
+    $("#c-diff").textContent=brl.format(diff/100);
+    var vd=$("#c-verdict");
+    if(cresc<fixo){vd.innerHTML="Com esse faturamento, o <b>Plano Crescimento</b> custa "+brl.format(diff/100)+" a menos por mês.";}
+    else if(cresc>fixo){vd.innerHTML="Com esse faturamento, o <b>Plano Fixo</b> custa "+brl.format(diff/100)+" a menos por mês.";}
+    else{vd.innerHTML="Com esse faturamento, os <b>dois planos custam o mesmo</b>.";}
+  }
+  inp.addEventListener("input",function(){var v=Math.min(parse(inp.value),99999999);inp.value=v?fmtInt(v):"";rng.value=Math.min(v,100000);upd(v);});
+  rng.addEventListener("input",function(){var v=+rng.value;inp.value=fmtInt(v);upd(v);});
+  upd(parse(inp.value));
+})();
+
+/* ---------- ENTRADA (turma fundadora) ---------- */
+(function join(){
+  var form=$("#join-form"), steps=$$("[data-step]",form), next=$("#j-next"), back=$("#j-back"), cur=0;
+  $$("[data-plano]").forEach(function(a){a.addEventListener("click",function(){var v=a.getAttribute("data-plano");var r=form.querySelector('input[name=plano][value="'+v+'"]');if(r){r.checked=true;}go(0);});});
+  function err(id,msg){var i=$("#j-"+id),e=$("#e-"+id);i.setAttribute("aria-invalid",msg?"true":"false");e.textContent=msg||"";return !msg;}
+  function valid(){
+    var ok=true;
+    ok=err("nome",$("#j-nome").value.trim().length<2?"Informe seu nome.":"")&&ok;
+    ok=err("email",/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test($("#j-email").value.trim())?"":"Informe um e-mail válido, como voce@loja.com.br.")&&ok;
+    ok=err("zap",$("#j-zap").value.replace(/\D/g,"").length>=10?"":"Informe o WhatsApp com DDD.")&&ok;
+    ok=err("loja",$("#j-loja").value.trim().length<2?"Informe o nome da sua loja.":"")&&ok;
+    return ok;
+  }
+  function planoKey(){var r=form.querySelector("input[name=plano]:checked");return r&&r.value==="fixo"?"fixo":"crescimento";}
+  function plano(){return planoKey()==="fixo"?"Plano Fixo · R$ 997/mês":"Plano Crescimento · R$ 454/mês + 10% do faturamento bruto aprovado";}
+  function resumo(){return [["Plano",plano()],["Nome",$("#j-nome").value.trim()],["E-mail",$("#j-email").value.trim()],["WhatsApp",$("#j-zap").value.trim()],["Loja",$("#j-loja").value.trim()],["Faturamento",$("#j-fat").value]];}
+  function go(i){
+    cur=i; steps.forEach(function(s){s.hidden=(+s.getAttribute("data-step")!==i);});
+    for(var k=0;k<4;k++){var e=$("#js-"+k);e.className=k<i?"done":(k===i?"on":"");}
+    back.hidden=(i===0); next.hidden=(i===3);
+    next.textContent=i===2?"Ir para o pagamento":"Continuar";
+    if(i===2){$("#sum").innerHTML=resumo().map(function(r){return "<div><span>"+r[0]+"</span><span>"+r[1].replace(/</g,"&lt;")+"</span></div>";}).join("");}
+    if(i===3){
+      var key=planoKey(), fixo=key==="fixo";
+      $("#mp-sum").innerHTML=resumo().slice(0,2).concat([["Loja",$("#j-loja").value.trim()]]).map(function(r){return "<div><span>"+r[0]+"</span><span>"+r[1].replace(/</g,"&lt;")+"</span></div>";}).join("");
+      $("#mp-today").textContent=fixo?"R$ 997,00":"R$ 454,00";
+      $("#mp-after").textContent=fixo?"Depois: R$ 997,00 por mês, no cartão, no mesmo dia de cada mês.":"Depois: R$ 454,00 por mês, no cartão. A comissão de 10% do faturamento bruto aprovado de cada mês é lida da API do Mercado Livre 30 dias depois do fim do mês e cobrada à parte no painel, com extrato pedido a pedido.";
+      var mp=$("#mp-assinar"); mp.setAttribute("href", mp.getAttribute(fixo?"data-fixo":"data-crescimento"));
+      /* F3: aqui entra a chamada same-origin a /c/assinar com aceite + consentimento + honeypot e o redirecionamento ao init_point; até lá, o botão abre o plano no Mercado Pago. */
+      track("join_pagamento_"+key);
+    }
+  }
+  function aceites(){
+    var a=err("aceite",$("#j-aceite").checked?"":"Para continuar, aceite os Termos.");
+    var c=err("consentimento",$("#j-consentimento").checked?"":"Para continuar, confirme o Aviso de Privacidade.");
+    return a&&c;
+  }
+  form.addEventListener("submit",function(e){e.preventDefault();if((cur===1&&!valid())||(cur===2&&!aceites())){var f=form.querySelector('[aria-invalid="true"]');if(f){f.focus();}return;}go(Math.min(3,cur+1));});
+  back.addEventListener("click",function(){go(Math.max(0,cur-1));});
+})();
+})();
+</script>
+
+</body></html>

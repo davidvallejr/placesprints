@@ -1,0 +1,20 @@
+{
+  "name": "place-sprints",
+  "version": "1.0.0",
+  "description": "Relatórios visuais de evolução de sprints a partir do Notion — Place2u",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "sync": "node scripts/sync.mjs",
+    "demo": "node scripts/seed-demo.mjs",
+    "relatorio": "node scripts/exportar.mjs",
+    "semanal": "node scripts/semanal.mjs",
+    "publicar": "node scripts/publicar-notion.mjs",
+    "matriz": "node scripts/matriz-analista.mjs",
+    "teste:custos": "node scripts/teste-custos-nucleo.mjs && node scripts/teste-custos-webhook.mjs && node scripts/teste-custos-apps-script.mjs && node scripts/teste-erp-bling.mjs && node scripts/teste-erp-tiny.mjs && node scripts/teste-erp-credenciais.mjs && node scripts/teste-erp-sync.mjs && node scripts/teste-custos-rotas.mjs && node scripts/teste-custos-ui.mjs && node scripts/teste-custos-integracao.mjs"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.7.0",
+    "express": "^4.21.2"
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "_fonte_doc": "GET /empresas/me/dados-basicos (escopo 'Visualizar os dados básicos da empresa'): https://github.com/tempont/bling-erp-api-python/blob/HEAD/specs/bling-openapi-reference.json (SPEC-CÓPIA; conferir em https://developer.bling.com.br/referencia)",
+  "_aviso": "construída a partir da documentação; não é captura real. id é string (spec 7.2, item 7). NÃO CONFIRMADO: campo nome.",
+  "data": { "id": "d4475854366a36c86a37e792f9634a51", "nome": "Empresa Exemplo Ltda", "cnpj": "00.000.000/0001-00", "email": "contato@exemplo.invalid", "dataContrato": "2024-01-01" }
+}

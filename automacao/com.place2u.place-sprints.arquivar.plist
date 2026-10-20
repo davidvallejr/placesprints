@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Arquivamento contínuo dos anexos para o Google Drive em streaming (docs/autogestao-instalar.md §2): a cada 15 min, uma passada por vez
+  (trava data/arquivar.lock). Cada lote: copia → espera o Drive subir → evict → 'frio:' → remove do Mac. Para sozinho em «movíveis: 0».
+  Log: data/arquivar.log. Desligar: launchctl bootout gui/$(id -u)/com.place2u.place-sprints.arquivar
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.place2u.place-sprints.arquivar</string>
+  <key>ProgramArguments</key>
+  <array><string>/bin/zsh</string><string>/Users/davidvallejr/place-sprints/scripts/arquivar-loop.sh</string></array>
+  <key>WorkingDirectory</key><string>/Users/davidvallejr/place-sprints</string>
+  <key>StartInterval</key><integer>900</integer>
+  <key>RunAtLoad</key><false/>
+  <key>ProcessType</key><string>Background</string>
+  <key>LowPriorityIO</key><true/>
+  <key>StandardOutPath</key><string>/dev/null</string>
+  <key>StandardErrorPath</key><string>/dev/null</string>
+</dict>
+</plist>

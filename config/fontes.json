@@ -1,0 +1,22 @@
+{
+  "$comentario": "De onde vêm as tarefas. Descoberta automática: base central de clientes (página 'Ativos' — notion.com/p/Ativos-35089163df414d37be2b7124e9dcdedc) cruzada com a BUSCA por bases 'Tarefas - {Cliente}' (o título é o vínculo; o campo 'ID Database Tarefas' prevalece quando preenchido). Também aceita lista manual em 'bases'.",
+  "clientes_db": "f221b7fb-6a31-4b26-b858-91d7247ac1ad",
+  "clientes_props": {
+    "nome": "Cliente",
+    "ativo": "Ativo?",
+    "id_database_tarefas": "ID Database Tarefas",
+    "id_pagina_cliente": "Id da página do cliente"
+  },
+  "bases": [],
+  "apelidos": {
+    "$comentario": "Casos em que o nome da central diverge do título real da base 'Tarefas - X' além do que a heurística resolve sozinha (variação de marca/razão social, erro de digitação na base). Confirmados manualmente em 16/09/2026. Chave = nome exato do cliente na central; valor = como a base realmente se chama no Notion.",
+    "Trem Chique Ltda": "Trem Chiq",
+    "Sagi Modas Sagi Comercio de Roupas LTDA": "Sagi Modas Ltda",
+    "RP Confecções": "Rp confeções",
+    "RDCAL Confecção": "RDCAL Confecções",
+    "Caverna Heavy Sound": "Caverna Sound",
+    "Uniaodog Artigos Pet": "União Dog"
+  },
+  "sync_inicial_desde": "2026-06-01",
+  "$sync_inicial_desde": "Piso do PRIMEIRO sync de cada base (e do --completo): só cards editados a partir desta data entram. Evita varrer anos de histórico de 165 clientes (~horas no rate limit do Notion). Depois do primeiro sync, o incremental segue normal. Aumente o alcance se precisar de histórico mais antigo."
+}

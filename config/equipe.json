@@ -1,0 +1,35 @@
+{
+  "$comentario": "Equipe, squads e usuários do Notion. O token do Notion não lista usuários, então: (1) 'aliases' junta variações de nome (texto livre da central) ao nome canônico — o canônico deve ser o nome do usuário no Notion quando houver; (2) 'usuarios_notion' fixa nome→id quando a colheita automática não achar; (3) 'squads' sobrescreve a regra padrão (squad = líder do canal) quando os times reais forem outros. CONFIRME os aliases abaixo — foram inferidos dos dados (ex.: 'Adriano Lucas' = 'Adriano L.').",
+  "aliases": {
+    "@Adriano L.": "Adriano L.",
+    "Adriano": "Adriano L.",
+    "Adriano Lucas": "Adriano L.",
+    "Matheus": "Matheus Gomes",
+    "Matheus Gobo Gomes": "Matheus Gomes",
+    "Sophia Custódio": "Sophia Custodio",
+    "Sophia": "Sophia Custodio",
+    "Giovanna Picchi": "Giovanna Picchi Perini",
+    "David": "David do Valle"
+  },
+  "usuarios_notion": {},
+  "squads": {
+    "$comentario": "Vazio = squad é o líder do canal (ex.: 'Squad Bianca Melhado'). Para definir times reais: { \"Squad ML Alfa\": { \"lider\": \"Juliana Oliveira\", \"consultores\": [\"Giovanna Torres\", \"Manoel Ventura\"] } } — um cliente entra no squad se o consultor OU o líder do canal batem."
+  },
+  "status_cliente_excluidos": [
+    "Desligado",
+    "Congelado"
+  ],
+  "analistas_oficiais": {
+    "$comentario": "Fonte oficial do painel /analistas: base 'Cadastro de Prestadores de serviço' no Notion. Só aparecem responsáveis que casam com uma linha com Cargo em 'cargos' e Status='Ativo' (a data de desligamento tem lixo — o select Status manda). 'incluir'/'excluir' ajustam manualmente (ex.: incluir 'Michelle de Carvalho Machado' se analista de automação contar como marketplace).",
+    "db": "4ce760ba-f81c-4905-8e8b-833a53491da6",
+    "cargos": [
+      "Analista de E-commerce"
+    ],
+    "incluir": [],
+    "excluir": []
+  },
+  "donos": [
+    "David do Valle"
+  ],
+  "$donos": "Dono (15/10/2026): passa em TODA validação de quem pode (líder, consultor, CS, líder do cliente no Chaveiro). Restrição de produto — não há login."
+}

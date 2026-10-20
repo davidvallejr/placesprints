@@ -1,0 +1,321 @@
+{
+ "id": "integracoes",
+ "pergunta": "Quais clientes estão com a conta do Mercado Livre (e as fontes de custo por SKU) conectadas, quais caíram ou nunca conectaram, e o que eu faço agora para cada um?",
+ "usuarios": [
+  "Consultor / CS de conta: envia o link de conexão do ML, reconecta quem caiu (chega aqui pela notificação 'conexão caiu' do alerta.js)",
+  "Analista de operação / precificação: abre 'Custos' por cliente (webhook da planilha, Bling/Tiny, quarentena, reconciliação); chega também por /integracoes?custos=<cliente> vindo da aba Custos de /promocoes",
+  "Admin técnico (David): configuração do app no DevCenter do ML (.env, redirect URI, URL de notificações, PKCE) e app público do Bling",
+  "CEO / sócio: leitura de cobertura (quantos clientes estão conectados, quantos caíram), hoje sem um número de cobertura explícito"
+ ],
+ "acao_principal": "Enviar o link oficial de conexão (OAuth) do Mercado Livre para o cliente que opera ML e ainda não conectou, ou reconectar quem caiu (botão por linha [data-link] ou CSV em lote #btnLinksCsv).",
+ "acoes_secundarias": [
+  "Baixar CSV de links de quem não conectou (#btnLinksCsv → GET /api/integracoes/links.csv?status=desconectado[&tier=][&desligados=1])",
+  "Restaurar conexão guardada sem nova autorização ([data-rest] → POST /api/meli/restaurar; hoje 0 clientes restauráveis)",
+  "Desconectar a conta ML ([data-desc] → confirm() + POST /api/meli/desconectar)",
+  "Filtrar a lista: busca #fq, chips .f-chip[data-f] (todos/conectado/problema/desconectado), plano #fplano, mostrar desligados #fdesl",
+  "Abrir a ficha do cliente (/cliente?cliente=<nome>)",
+  "Abrir o painel Custos por SKU do cliente ([data-custos], só para quem tem ML conectado/erro/expirando)",
+  "Custos: gerar / rotacionar / desativar webhook da planilha (diálogo #dlgSegredo com URL, segredo único e Apps Script pronto)",
+  "Custos: salvar client_id/secret do Bling/Tiny (form[data-form]), Autorizar no ERP (abre link oficial em nova aba), Sincronizar agora (job com polling), Desconectar ERP",
+  "Custos: aprovar/recusar itens da quarentena (um a um ou em lote) e navegar pelas 8 listas de reconciliação (abas .cu-tab)",
+  "Custos: salvar app público da Place2u no Bling (config GLOBAL, dentro de um <details> no painel de um cliente)",
+  "Copiar redirect URI e URL de notificações do DevCenter ([data-copia])"
+ ],
+ "secoes": [
+  {
+   "titulo": "Header (marca + nav)",
+   "conteudo": "Marca 'Place2u · Integrações' (link para /cliente) e nav com só 3 links: Visão por cliente (/cliente), Distribuição (/planos), Painel (/). Sticky, 64px.",
+   "ids_container": [],
+   "importancia": "baixa"
+  },
+  {
+   "titulo": "Título e subtítulo",
+   "conteudo": "h1 'Central de Integrações' + parágrafo longo sobre OAuth e tokens cifrados (repetido no footer).",
+   "ids_container": [],
+   "importancia": "baixa"
+  },
+  {
+   "titulo": "Configuração do app no Mercado Livre",
+   "conteudo": "Card técnico gerado pelo JS: selo completa/em andamento, checklist do .env (5 itens com emojis), app_id, redirect URI e URL de notificações com botões Copiar ([data-copia]), PKCE, fluxos, notificações recebidas (hoje 0) e aviso 'Falta:' quando não configurado. Grid inline 1fr 1fr.",
+   "ids_container": [
+    "avisoConfig"
+   ],
+   "importancia": "baixa"
+  },
+  {
+   "titulo": "Cards por canal (KPIs)",
+   "conteudo": "4 cards: Mercado Livre (conectados 29 / requerem atenção 1 / sem conexão 147 + selo app configurado), Amazon (33 clientes no canal, selo aguardando app, lista de requisitos de dev), Shopee (95 no canal, idem), Custos ERP/Planilha (só texto explicativo, sem número).",
+   "ids_container": [
+    "cards"
+   ],
+   "importancia": "media"
+  },
+  {
+   "titulo": "Painel Custos por SKU (oculto até abrir por cliente)",
+   "conteudo": "section hidden que abre ENTRE os cards e os filtros: topo com 'Seu nome' (#custosQuem, obrigatório para agir, salvo em localStorage promo_quem), Atualizar, Fechar; aviso só leitura; mensagens status/erro; corpo gerado por hCorpo(): pendências, 4 números de custo efetivo (SKUs com custo, % receita coberta, anúncios sem custo, sem SKU), ordem de precedência das fontes, 3 cartões de fonte (Planilha com webhook; Bling e Tiny com form client_id/secret + Autorizar/Sincronizar/Desconectar + #cuJob-<fonte>), Quarentena (#cuQuarN/#cuQuar com tabela e aprovação em lote), Reconciliação (8 abas role=tab + #cuRec com colunas dinâmicas) e <details> do app público Bling.",
+   "ids_container": [
+    "custosPainel",
+    "custosTitulo",
+    "custosQuem",
+    "custosAtualizar",
+    "custosFechar",
+    "custosMsg",
+    "custosErro",
+    "custosCorpo",
+    "cuQuar",
+    "cuQuarN",
+    "cuRec",
+    "cuJob-bling",
+    "cuJob-tiny"
+   ],
+   "importancia": "media"
+  },
+  {
+   "titulo": "Filtros da lista",
+   "conteudo": "Busca por nome, 4 chips de status ML (Todos/Conectados/Com problema/Sem conexão), select de plano com contagem por tier (inline style), checkbox 'mostrar desligados' (inline style), link 'Baixar links de quem não conectou (CSV)' cujo href o JS reescreve com tier/desligados. Começa em ~950px no 1024x768 e ~1923px no celular.",
+   "ids_container": [
+    "fq",
+    "fplano",
+    "fdesl",
+    "btnLinksCsv"
+   ],
+   "importancia": "alta"
+  },
+  {
+   "titulo": "Tabela de clientes",
+   "conteudo": "6 colunas: Cliente (link /cliente?cliente=, plano · consultor · canais · situação), Mercado Livre (selo de status, nickname/seller, 'token até … (renova sozinho)', erro truncado 90 chars, aviso 'ML não consta nos canais'), Amazon, Shopee (selo 'Aguardando app oficial' ou 'não opera'), Custos (botão Custos ou 'exige conta ML'), Ações (Copiar link / Novo link, Restaurar, Desconectar). 175 linhas visíveis por padrão, 235 botões, documento com ~23.700px de altura. Vazio: 'Nenhum cliente nesse filtro.'",
+   "ids_container": [
+    "tb"
+   ],
+   "importancia": "alta"
+  },
+  {
+   "titulo": "Diálogo do webhook da planilha",
+   "conteudo": "dialog modal com aviso 'segredo aparece só agora', URL e segredo com Copiar ([data-copiar-de]), textarea com Apps Script pronto, passo a passo de 4 itens; ao fechar limpa URL/segredo/script.",
+   "ids_container": [
+    "dlgSegredo",
+    "dlgTitulo",
+    "dlgAviso",
+    "dlgUrl",
+    "dlgSeg",
+    "dlgScript",
+    "dlgCopiarScript"
+   ],
+   "importancia": "media"
+  },
+  {
+   "titulo": "Footer",
+   "conteudo": "'Place2u · tokens cifrados em repouso · nunca pedimos senha do marketplace' (repete o subtítulo).",
+   "ids_container": [],
+   "importancia": "baixa"
+  },
+  {
+   "titulo": "Sino de avisos (injetado por /alerta.js)",
+   "conteudo": "Botão flutuante fixed bottom-right com contador, painel de notificações, som e Notification API; polling /api/notificacoes a cada 8 s; injeta o próprio <style>.",
+   "ids_container": [
+    "psSino",
+    "psPainel"
+   ],
+   "importancia": "media"
+  }
+ ],
+ "kpis": [
+  "ML conectados (hoje 29 de 175 visíveis)",
+  "ML requerem atenção = erro + expirando (hoje 1: Bima Peças, erro de refresh token)",
+  "ML sem conexão (hoje 147 — mas só 59 desses operam ML; 88 não operam ML e inflam o número)",
+  "Amazon: clientes no canal aguardando app (33)",
+  "Shopee: clientes no canal aguardando app (95)",
+  "Notificações do ML recebidas (0)",
+  "Checklist de configuração do .env (5/5)",
+  "Custos por cliente: SKUs com custo efetivo, % da receita coberta, anúncios sem custo, anúncios sem SKU (de total), custo efetivo por fonte (manual/bling/tiny/sheets)",
+  "Custos por fonte: SKUs com custo, rejeitadas, em quarentena, não vistos, idade da última sincronização OK, selo 'custo velho'",
+  "Quarentena: quantidade pendente (#cuQuarN)",
+  "KPI ausente e mais estratégico: cobertura % de conexão ML entre quem opera ML (28 de 87 ativos que operam ML ≈ 32%)"
+ ],
+ "hooks_js": [
+  "#avisoConfig (innerHTML do card de configuração)",
+  "#cards (innerHTML dos 4 cards; também recebe a .aviso de erro de carga)",
+  "#tb (innerHTML das linhas; querySelectorAll de [data-custos], [data-link], [data-rest], [data-desc])",
+  "#fq (value; evento input)",
+  "#fplano (innerHTML das options, value; evento change)",
+  "#fdesl (checked; evento change)",
+  "#btnLinksCsv (href reescrito pelo JS)",
+  "#custosPainel (atributo hidden, scrollIntoView; alvo de aria-controls)",
+  "#custosTitulo (textContent, focus; alvo de aria-labelledby; tabindex=-1)",
+  "#custosQuem (value, focus, change → localStorage 'promo_quem'; alvo de label for)",
+  "#custosAtualizar (onclick)",
+  "#custosFechar (onclick)",
+  "#custosMsg (textContent, role=status)",
+  "#custosErro (textContent, role=alert)",
+  "#custosCorpo (innerHTML; delegação de click, change e submit; querySelectorAll '#custosCorpo [data-lista]')",
+  "#cuQuar (gerado por hCorpo; innerHTML; '#cuQuar .cu-qsel' e '#cuQuar .cu-qsel:checked')",
+  "#cuQuarN (gerado; textContent)",
+  "#cuRec (gerado; innerHTML; alvo de aria-controls das abas)",
+  "#cuJob-bling e #cuJob-tiny (gerados por hErp como 'cuJob-' + fonte; textContent do progresso do job)",
+  "#dlgSegredo (showModal, evento close; '#dlgSegredo [data-copiar-de]')",
+  "#dlgTitulo (alvo de aria-labelledby do dialog — o teste exige que exista)",
+  "#dlgAviso (textContent)",
+  "#dlgUrl (textContent; alvo de data-copiar-de)",
+  "#dlgSeg (textContent; alvo de data-copiar-de)",
+  "#dlgScript (value, hidden; alvo de data-copiar-de e de label for)",
+  "#dlgCopiarScript (hidden)",
+  ".f-chip + data-f (querySelectorAll('.f-chip'), dataset.f) e classe 'on' alternada por classList.toggle",
+  "[data-copia] (botões Copiar do DevCenter; dataset.copia; textContent troca para 'Copiado ✓')",
+  "[data-custos] (abre o painel; dataset.custos; querySelector(`[data-custos=\"${CSS.escape(cli)}\"]`) para devolver o foco ao fechar)",
+  "[data-link] (gera e copia link ML; dataset.link; disabled)",
+  "[data-rest] (restaurar conexão; dataset.rest)",
+  "[data-desc] (desconectar; dataset.desc)",
+  "[data-cu-copia] (dataset.cuCopia — copiar URL do webhook)",
+  "[data-lista] (abas de reconciliação; dataset.lista; setAttribute aria-selected)",
+  "[data-cacao] (dispatcher ACOES: wh-gerar, wh-rotacionar, wh-desativar, autorizar, sincronizar, desconectar, q-um, q-lote)",
+  "[data-fonte] (sheets/bling/tiny; também em .cu-qsel e nos botões q-um)",
+  "[data-decisao] (aprovar/recusar)",
+  "[data-sku] (botões q-um e checkboxes .cu-qsel)",
+  "[data-armar] e [data-armado] (padrão de 2º clique: texto do botão troca por 6 s)",
+  "[data-q-todos] (checkbox selecionar todos; ev.target.matches)",
+  "form[data-form] (valores 'bling', 'tiny', 'app-global'; closest + FormData com name=modo_app, client_id, client_secret; fm.reset())",
+  "[data-copiar-de] (botões do diálogo; dataset.copiarDe)",
+  ".cu-qsel (checkbox da quarentena; checked)",
+  ".cu-tab com [aria-selected] (o CSS destaca .cu-tab[aria-selected=\"true\"])",
+  "ev.target.closest('button') dentro de #custosCorpo (todo controle de ação do painel precisa ser <button>; b.disabled e b.textContent são alterados)",
+  "<form method=\"dialog\"> dentro do #dlgSegredo (fecha o diálogo e dispara o 'close' que apaga o segredo)",
+  "aria-controls=\"custosPainel\" (botão Custos) e aria-controls=\"cuRec\" (abas)",
+  "label for=\"custosQuem\" e for=\"dlgScript\"",
+  "URL ?custos=<cliente> (new URLSearchParams(location.search).get('custos') abre o painel ao carregar)",
+  "#secS90 (bloco \"Assinantes Sprint 90\", 08/10/2026 — sem 12ª tela no shell; docs/contrato-sprint90-f1.md)",
+  "#subS90 (textContent: contas, vagas da turma, termos)",
+  "#s90Corpo (innerHTML da tabela de assinantes; delegação de click em [data-s90-link] e [data-s90-estado])",
+  "#s90Quem (value; change → localStorage 'promo_quem')",
+  "#s90LinkBox / #s90Link / #s90Copiar (link de acesso de uso único, mostrado uma vez e limpo em 15 min)",
+  "#s90Msg (textContent, role=status)",
+  "#s90Nova (details da criação; hidden quando o Sprint 90 está desligado)",
+  "#s90Form (submit → prévia → PS.confirmar → confirmar:true)",
+  "#secSaudeSistema (seção Saúde do sistema, autogestão A2)",
+  "#saudeSistema (innerHTML das linhas de GET /api/saude, a cada 2 min)",
+  "#saudeSistemaNota (textContent: hora da leitura, incidentes abertos/resolvidos, chave do WhatsApp do crítico)"
+ ],
+ "classes_geradas_por_js": [
+  "card",
+  "nums",
+  "n",
+  "mini",
+  "selo",
+  "s-ok",
+  "s-pend",
+  "s-erro",
+  "s-neutro",
+  "s-azul",
+  "aviso",
+  "btn-mini",
+  "no",
+  "ok (usada no botão Restaurar, sem regra CSS hoje)",
+  "vazio",
+  "filtros (reusada como barra das abas de reconciliação)",
+  "tabela",
+  "cu-fontes",
+  "cu-fonte",
+  "cu-url",
+  "cu-acoes",
+  "cu-form",
+  "cu-h",
+  "cu-neg",
+  "cu-tab",
+  "cu-qsel",
+  "f-chip / on (estático no HTML, mas 'on' é alternada pelo JS)",
+  "elementos gerados sem classe que o CSS precisa cobrir: h3 dentro de .card (flex com selo à direita), ul/li dentro de .card, code (blocos de URL do DevCenter com estilo inline), table/thead/th/td dentro de .tabela, details/summary.mini, select/label/input dentro de .cu-form, td b a (link do cliente)",
+  "estilos inline gerados pelo JS que o redesenho deve migrar para classes: grid 1fr 1fr do card de configuração, blocos <code> com background/raio/overflow, color:var(--verm) no erro da célula ML, text-align:right na célula de ações, margin-top no <details>"
+ ],
+ "css_origem": "Todo o CSS da tela está num <style> inline em src/web/integracoes.html (linhas 7–78), com tokens próprios em :root (--laranja #ff6b1a, --laranja-escuro, --tinta #222, --cinza, --borda, --fundo-suave, --verde/--ambar/--verm/--azul + versões -suave, --sombra, --raio 16px); a página NÃO usa ui.css, ui-extra.css nem styles.css (padrão duplicado de cliente.html). Há estilos inline no HTML (select #fplano, label do #fdesl, .aviso e <ol> do diálogo, form do diálogo) e no JS (card de configuração inteiro, blocos <code>, erro ML em vermelho, célula de ações). O /alerta.js injeta o próprio <style> (#psSino, #psPainel) com cores fixas (#222, #ff6b1a). Breakpoints: 640px (header quebra) e 860px (cards em 1 coluna e .tabela com overflow-x) — entre 861px e ~1100px a tabela estoura a página (medido: 1089px de largura em viewport de 1024).",
+ "links_navegacao": [
+  "/cliente (marca 'Place2u · Integrações')",
+  "/cliente — 'Visão por cliente' (nav)",
+  "/planos — 'Distribuição' (nav)",
+  "/ — 'Painel' (nav; nas outras telas o mesmo link se chama 'Painel executivo')",
+  "/cliente?cliente=<nome> (nome do cliente em cada linha da tabela)",
+  "/api/integracoes/links.csv?status=desconectado[&tier=…][&desligados=1] (download do CSV)",
+  "Link de autorização do Bling/Tiny aberto em nova aba (window.open, só se casar com AUTORIZA_OFICIAL)",
+  "Entrada: /integracoes?custos=<cliente> vindo da aba Custos de /promocoes (promocoes.js)",
+  "Entrada: /integracoes (sem deep link de cliente) a partir das notificações conexao_caiu / conta_trocada / conexao_pendente / meli_credencial (server.js e lib/meli-contas.js) e dos avisos de /cliente, /gmv",
+  "Entradas pelo nav de /cliente, /promocoes, /resultados, /gmv e botão '🔌 Integrações' de /planos",
+  "Faltam no nav desta tela (existem em /cliente): Analistas, Comercial, GMV, Promoções, O que funciona, Processos"
+ ],
+ "dependencias_externas": [
+  "Nenhuma CDN nem biblioteca (sem Chart.js); fonte do sistema (-apple-system, Segoe UI, Roboto)",
+  "/logo (imagem da marca; some com onerror)",
+  "/alerta.js (defer): sino de avisos, polling de /api/notificacoes a cada 8 s, som, Notification API, BroadcastChannel, localStorage ps_alerta_som",
+  "APIs da tela: GET /api/integracoes; POST /api/integracoes/meli/link; POST /api/meli/restaurar; POST /api/meli/desconectar; GET /api/integracoes/links.csv",
+  "APIs do painel Custos: GET /api/custos/resumo, /api/custos/quarentena, /api/custos/reconciliacao, /api/custos/job/:id; POST /api/custos/quarentena/decidir, /api/custos/fontes/sheets/webhook, /api/custos/erp/credenciais, /api/custos/erp/app-global, /api/custos/erp/autorizar, /api/custos/erp/desconectar, /api/custos/fontes/sincronizar",
+  "APIs do navegador: navigator.clipboard, <dialog>.showModal, localStorage ('promo_quem'), CSS.escape, window.open, alert/confirm (fora do bloco de custos)"
+ ],
+ "testes_que_leem_esta_tela": [
+  "scripts/teste-sistemas.mjs — selos span.sis[data-sistema] desta tela: todo data-sistema existe em config/sistemas.json e bate com selos_sistema deste inventário",
+  "scripts/teste-custos-ui.mjs — marcadores literais em integracoes.js: '// <custos>' … '// </custos>' e '// <custos-puro>' … '// </custos-puro>' (o trecho puro roda isolado em vm só com esc e precisa expor hCorpo, hQuar, hRec, celCustos sem DOM)",
+  "scripts/teste-custos-ui.mjs — INT_JS.match(/^const esc = .*$/m): esc tem de continuar numa única linha começando com 'const esc = ' e escapando ' como &#39; (assert /&lt;img src=x onerror=alert\\(1\\)&gt;&quot;&#39;/)",
+  "scripts/teste-custos-ui.mjs — assert.match(INT_JS, /get\\('custos'\\)/) (abrir painel por ?custos=) e assert.match(server.js, /app\\.get\\('\\/integracoes'/)",
+  "scripts/teste-custos-ui.mjs — endpoints: regex /api\\((['`])(\\/api\\/custos\\/[^'`?]*)[^'`]*\\1\\s*(,|\\))/g; a UI tem de chamar exatamente via api('…') os 11: GET /api/custos/resumo, GET /api/custos/quarentena, GET /api/custos/reconciliacao, POST /api/custos/quarentena/decidir, POST /api/custos/fontes/sheets/webhook, POST /api/custos/erp/credenciais, POST /api/custos/erp/app-global, POST /api/custos/erp/autorizar, POST /api/custos/erp/desconectar, POST /api/custos/fontes/sincronizar, GET /api/custos/job/:p",
+  "scripts/teste-custos-ui.mjs — INT_HTML.includes(`id=\"${id}\"`) para: custosPainel, custosTitulo, custosQuem, custosMsg, custosErro, custosCorpo, custosFechar, custosAtualizar, dlgSegredo, dlgUrl, dlgSeg, dlgScript, dlgCopiarScript, dlgAviso (têm de estar no HTML estático, não gerados por JS)",
+  "scripts/teste-custos-ui.mjs — todo $('id') literal e todo aria-controls/aria-labelledby/for/data-copiar-de=\"…\" em integracoes.js/html precisa existir como id=\"…\" no HTML ou no JS (regex /\\$\\('([^']+)'\\)/g e /(?:aria-controls|aria-labelledby|\\bfor|data-copiar-de)=\"([^\"$]+)\"/g) — inclui dlgTitulo, cuQuar, cuQuarN, cuRec",
+  "scripts/teste-custos-ui.mjs — tabela: INT_HTML.match(/<thead><tr>.*<\\/tr><\\/thead>/) numa ÚNICA linha com exatamente 6 ocorrências literais de '<th>' (um <th scope=\"col\"> não conta e quebra o teste); assert.match(INT_JS, /colspan=\"6\"/) e assert.doesNotMatch(INT_JS, /colspan=\"5\"/)",
+  "scripts/teste-custos-ui.mjs — XSS estático: no trecho <custos-puro> e nas linhas do <custos> com innerHTML, todo ${…} precisa ser esc()/fmtN/fmtR/fmtPct/enc/encodeURIComponent/h[A-Z]\\w*()/literal/.length ou ternário desses",
+  "scripts/teste-custos-ui.mjs — sonda: hCorpo deve conter /Sincronizando…/, /data-cacao=\"wh-rotacionar\"/, /data-armar=/; celCustos com ml.status 'nao_opera' deve conter /exige conta ML/",
+  "scripts/teste-custos-ui.mjs — hCorpo(RESUMO) com exatamente 3x 'name=\"client_secret\" type=\"password\"' e 3x 'name=\"client_id\" type=\"password\"', nenhum /<input[^>]*\\bvalue=/; sem webhook: /sem webhook: gere um/ e /data-cacao=\"wh-gerar\">/ e nada de /wh-rotacionar|data-cu-copia/; webhook desativado: /data-cacao=\"wh-gerar\" data-armar=/ sem a URL",
+  "scripts/teste-custos-ui.mjs — no bloco <custos> (comentários ignorados): nada de /\\b(confirm|prompt|alert)\\(/; localStorage.setItem só com 'promo_quem'; nada de sessionStorage/indexedDB; 'r.segredo' exatamente 1 vez; e /addEventListener\\('close', \\(\\) => \\{ \\$\\('dlgUrl'\\)\\.textContent = ''; \\$\\('dlgSeg'\\)\\.textContent = ''/",
+  "scripts/teste-custos-ui.mjs — node --check src/web/integracoes.js; e em promocoes.js o deep link /href=\"\\/integracoes\\?custos=%3Cimg/ (a rota /integracoes?custos= precisa continuar abrindo o painel)",
+  "scripts/teste-meli-renovacao.mjs:100 — assert.equal(av[0].link, '/integracoes') (a notificação de conexão caída aponta para esta rota; não renomear a URL)",
+  "scripts/teste-promocoes-rotas-mc.mjs:162-163 — só caminhos '/integracoes.js' e '/webhook/meli/..%2f..%2fintegracoes.js' esperando 403 pelo túnel (guard de rota; não lê o conteúdo do arquivo)",
+  "scripts/teste-notificacoes.mjs:32 — lê src/web/alerta.js (carregado por esta página), não integracoes.*"
+ ],
+ "problemas_ux": [
+  "Hierarquia invertida: o card técnico 'Configuração do app no Mercado Livre' (checklist do .env, URIs do DevCenter, PKCE) ocupa a primeira dobra mesmo com a configuração completa; a lista de clientes (o trabalho real) só começa em ~1045px no 1024x768 e em ~1923px no celular",
+  "O número acionável não existe: 'sem conexão = 147' mistura 59 clientes que operam ML com 88 que não operam ML; não há KPI, filtro nem CSV para 'opera ML e não conectou' (o CSV 'quem não conectou' também baixa todos)",
+  "Falta o KPI estratégico que o sócio aprovaria: cobertura % de conexão ML entre quem opera ML (~32%) e tendência; os números aparecem soltos (29 / 1 / 147) sem denominador",
+  "Redundância: selo 'completa' na configuração + 'app configurado' no card ML; subtítulo e footer repetem a mesma mensagem de segurança OAuth",
+  "Cards Amazon e Shopee são roadmap de desenvolvimento (requisitos da Place2u), não operação — e as colunas Amazon/Shopee repetem o selo 'Aguardando app oficial' 127 vezes na tabela, sem nenhuma ação possível",
+  "Card 'Custos (ERP/Planilha)' no topo é só texto (sem número) ocupando posição de KPI",
+  "Painel Custos por SKU é uma sub-aplicação inteira (3 fontes, forms de client_id/secret, quarentena, 8 listas de reconciliação) que abre no meio da página, entre os cards e os filtros, empurrando a lista; mistura configuração GLOBAL (app público do Bling) dentro do painel de UM cliente",
+  "Exigir 'Seu nome' em campo de texto livre antes de qualquer ação de custos é atrito (e o erro só aparece depois do clique)",
+  "Tabela larga: 6 colunas e overflow horizontal da PÁGINA entre 861px e ~1100px (.tabela só ganha overflow-x abaixo de 860px; medido 1089px em viewport 1024)",
+  "Excesso de botões: 235 botões em 175 linhas; 'Copiar link de conexão' repetido em 147 linhas; 'Desconectar' (destrutivo) colado ao botão de link; sem ordenação por prioridade (conexão caída deveria vir primeiro)",
+  "Ações do ML usam alert()/confirm() nativos (o link aparece dentro de um alert) — inconsistente com o padrão de 2º clique e mensagens em linha do bloco de custos",
+  "Erro técnico em inglês truncado em 90 caracteres ('Mercado Livre OAuth 400: Error validating grant…') em vez de uma instrução ('cliente precisa autorizar de novo — enviar link')",
+  "Ruído: 'token até 07/10 (renova sozinho)' em toda conta conectada (token de 6 h); rótulo 'Token expirando' na verdade significa 'não renova há mais de 24 h'",
+  "Emojis no checklist (✅ ⬜️) e 'Copiado ✓'",
+  "Navegação inconsistente: só 3 links (contra 9 em /cliente), marca leva a /cliente, 'Painel' vs 'Painel executivo', 'Distribuição' vs 'Distribuição em massa'",
+  "Estilos inline no JS e no HTML (o grid 1fr 1fr do card de configuração não colapsa no celular; select/checkbox com style inline); CSS próprio duplicado em vez de ui.css; classe .ok usada sem regra CSS",
+  "Sem estado de carregando na tela principal (cards, configuração e tabela ficam em branco até o fetch); erro de carga aparece só em #cards e o resto fica vazio sem explicação",
+  "Chips de filtro sem contagem e sem aria-pressed; busca sem <label> (só placeholder); nenhum contador de resultados; situação 'Congelado' (2) não tem tratamento",
+  "Notificação 'conexão caiu' leva a /integracoes genérico: não existe deep link ?cliente= nem filtro por URL (só ?custos=), o consultor precisa buscar o cliente na mão",
+  "O sino flutuante do alerta.js (fixed bottom-right) pode cobrir os botões da coluna de ações, que fica alinhada à direita"
+ ],
+ "estados": [
+  "Carregando (tela principal): nenhum indicador — #avisoConfig, #cards e #tb ficam vazios até /api/integracoes responder",
+  "Carregando (painel Custos): '<div class=\"vazio\">Carregando…</div>' em #custosCorpo, #cuQuar e #cuRec; '…' em #cuQuarN",
+  "Erro de carga da tela: só #cards recebe '<div class=\"aviso\">mensagem</div>'; configuração e tabela ficam vazias",
+  "Erro no painel Custos: .aviso com a mensagem em #custosCorpo / #cuQuar / #cuRec; mensagens de ação em #custosErro (role=alert) e #custosMsg (role=status)",
+  "Tabela vazia: 'Nenhum cliente nesse filtro.' (td colspan=6 .vazio)",
+  "ML não configurado: selo 'em andamento' / 'configurar app', aviso 'Falta: …' e geração de link recusada pelo servidor (409)",
+  "Status ML por cliente: conectado, erro (Erro de autenticação), expirando (sem renovação há >24 h), desconectado, restaurável (botão Restaurar), 'ML não consta nos canais da central'",
+  "Amazon/Shopee por cliente: aguardando_app ou não opera",
+  "Desligados e 'Processo de Desligamento' ocultos por padrão (checkbox mostrar desligados)",
+  "Coluna Custos: botão 'Custos' (ML conectado/erro/expirando) ou 'exige conta ML'",
+  "Painel Custos — webhook da planilha: ausente ('sem webhook: gere um…'), ativo (URL + rotacionar/desativar), desativado (gerar novo com 2º clique)",
+  "Painel Custos — ERP: não autorizado, autorizado (empresa, validade do token, escopos), reautorizar (autorização expirada), app ainda não cadastrado, erro da fonte",
+  "Painel Custos — sincronização em andamento ('Sincronizando…', botão desabilitado, #cuJob-<fonte> com 'sincronizando desde …'), concluída ou falhou",
+  "Painel Custos — selo 'custo velho', pendências de custo, reconciliação indisponível ('rode a coleta de promoções do cliente'), quarentena vazia ('Nada em quarentena…'), lista vazia ('Nada nesta lista.'), lista truncada ('mostrando N')",
+  "Ação destrutiva armada: 1º clique troca o texto do botão pelo aviso data-armar por 6 s; só o 2º executa",
+  "'Seu nome' ausente: foco no campo + erro 'Informe \"Seu nome\"…'",
+  "Clipboard negado: 'O navegador não deixou copiar…'; link de autorização fora do Bling/Tiny: bloqueado com erro",
+  "Diálogo do segredo: exibido uma única vez; ao fechar, URL/segredo/script são apagados da tela"
+ ],
+ "recomendacao": "Reorganizar a tela em torno de uma pergunta só: \"quem precisa de ação agora?\". No topo, título curto \"Integrações\" com uma linha de status em prosa (\"Mercado Livre: 28 de 87 clientes que operam ML conectados · 1 conexão caída · Amazon e Shopee aguardando app oficial\") e uma faixa de 3 KPIs acionáveis, sem emojis: Cobertura ML (%, com o denominador de quem opera ML), Conexões caídas (erro + expirando), Operam ML e não conectaram (59). Depois, um bloco \"Precisa de ação\" curto e ordenado (caídas primeiro, com \"Reconectar\"; depois quem opera ML e não conectou, com \"Copiar link\" e \"Baixar CSV deste grupo\"). Em seguida, a lista completa com um controle segmentado (Precisa de ação | Conectados | Sem conexão | Todos, com contagem em cada um), busca com label, plano e desligados numa barra única, e a tabela enxuta: Cliente (plano · consultor), Mercado Livre (status em português e instrução em vez do erro técnico), Outros canais (chip discreto AMZ/SHO), Custos, Situação e Ações (1 ação primária + menu \"Mais\" com Restaurar/Desconectar). Manter exatamente 6 `<th>` literais na mesma linha e `colspan=\"6\"`, ou mudar o teste de propósito. O painel Custos por SKU vira um drawer lateral (ou página própria pelo mesmo `?custos=`) com abas Fontes | Quarentena | Reconciliação e \"Seu nome\" pedido uma vez só. A configuração técnica do ML (.env, DevCenter, PKCE), o roadmap Amazon/Shopee e o app público do Bling descem para um `<details>` \"Configuração técnica\" recolhido no rodapé, que abre sozinho só quando `configurado=false`. O nav global fica igual ao das outras telas, \"Painel executivo\" com o mesmo nome em todas. Trocar alert/confirm por mensagem em linha e 2º clique, levar o CSS inline para classes sobre tokens compartilhados e preservar todos os ids, data-attributes e marcadores `// <custos>` / `// <custos-puro>` listados nos hooks.",
+ "selos_sistema": {
+  "regra": "Selo discreto do sistema de origem (config/sistemas.json, 15/10/2026) ao lado do título da seção: span.sis[data-sistema], classe .sis em ui.css. Só tela interna; não muda id nem nº de colunas. Teste: scripts/teste-sistemas.mjs.",
+  "secoes": {
+   "#tituloLista": "trinity",
+   "#custosTitulo": "smith",
+   "#tituloS90": "trinity",
+   "#tituloSaudeSistema": "trinity",
+   "#secConfig": "trinity"
+  }
+ }
+}

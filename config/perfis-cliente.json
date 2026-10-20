@@ -1,0 +1,150 @@
+{
+  "$comentario": "Perfis de cliente do Relatório Semanal. Os 7 perfis e as regras abaixo são DEFINIÇÕES PROPOSTAS (nenhum documento os definia): ajuste aqui, nunca no código. Cada perfil lista só as regras que DEFINE; o resto vem de 'regras_base'. Cliente com 1+ perfis: para regras de texto e número vale o PRIMEIRO perfil da lista que a define (o primeiro vence conflitos); regras verdadeiro/falso fazem OU (qualquer perfil liga). max_*: 0 = sem limite (max_otimizacoes só vale com tabela_otimizacoes ligada). Cliente sem perfil salvo usa 'padrao'. lista_tarefas: o relatório lista as TAREFAS (volume de atividades, ações concluídas, otimizações) só para clientes que priorizam ver o trabalho; os demais recebem o relatório focado em RESULTADOS (faturamento, crescimento/queda, métricas da conta, Ads e Full, tarefas que geraram venda em detalhe, combinações que funcionam, tarefa de cuidado). Cada cliente pode forçar sim/não na tela do cliente.",
+  "status_definicoes": "propostas — editáveis em config/perfis-cliente.json",
+  "padrao": {
+    "perfis": [
+      "analitico"
+    ],
+    "objetivo": "faturamento"
+  },
+  "janela_resultados_dias": 45,
+  "regras_base": {
+    "densidade": "media",
+    "provas": "media",
+    "linguagem": "padrao",
+    "tom": "neutro",
+    "glossario": false,
+    "metodologia": false,
+    "graficos": false,
+    "tabela_otimizacoes": false,
+    "mostrar_equipe": false,
+    "links_abertos": false,
+    "situacao_da_conta": false,
+    "metricas_extras": false,
+    "max_acoes": 0,
+    "max_resultados": 0,
+    "max_otimizacoes": 0,
+    "lista_tarefas": false
+  },
+  "perfis": {
+    "analitico": {
+      "rotulo": "Analítico",
+      "descricao": "Exige provas (prints, dados, resultado).",
+      "regras": {
+        "densidade": "completa",
+        "provas": "completa",
+        "metodologia": true,
+        "graficos": true,
+        "tabela_otimizacoes": true,
+        "max_acoes": 0,
+        "max_resultados": 0
+      }
+    },
+    "direto": {
+      "rotulo": "Direto",
+      "descricao": "Quer para ontem: resultados e atenção primeiro, tudo em frases curtas.",
+      "regras": {
+        "densidade": "enxuta",
+        "provas": "minima",
+        "metodologia": false,
+        "graficos": false,
+        "tabela_otimizacoes": false,
+        "max_acoes": 5,
+        "max_resultados": 3,
+        "max_otimizacoes": 0
+      }
+    },
+    "relacionamento": {
+      "rotulo": "Relacionamento",
+      "descricao": "Valoriza proximidade e parceria: abertura acolhedora, equipe visível e destaques positivos em evidência.",
+      "regras": {
+        "densidade": "media",
+        "provas": "media",
+        "tom": "parceria",
+        "mostrar_equipe": true,
+        "max_acoes": 8,
+        "lista_tarefas": true
+      }
+    },
+    "proativo": {
+      "rotulo": "Proativo",
+      "descricao": "Participa e propõe: links abertos (card e anúncio), produtos mais vendidos e ofertas ativas; dependências dele em 'Depende de você'.",
+      "regras": {
+        "densidade": "completa",
+        "provas": "media",
+        "links_abertos": true,
+        "max_acoes": 0,
+        "lista_tarefas": true
+      }
+    },
+    "zero_conhecimento": {
+      "rotulo": "Zero conhecimento",
+      "descricao": "Precisa de linguagem simples: cada métrica explicada em uma linha e siglas explicadas na primeira vez.",
+      "regras": {
+        "densidade": "media",
+        "provas": "media",
+        "linguagem": "simples",
+        "glossario": true,
+        "max_acoes": 6
+      }
+    },
+    "tecnico": {
+      "rotulo": "Técnico",
+      "descricao": "Quer detalhe e números: ACOS, TACOS, CTR, CPC, impressões, cliques, conversão em pontos, fórmulas e metodologia.",
+      "regras": {
+        "densidade": "completa",
+        "provas": "completa",
+        "linguagem": "tecnica",
+        "metricas_extras": true,
+        "metodologia": true,
+        "graficos": true,
+        "tabela_otimizacoes": true,
+        "max_acoes": 0
+      }
+    },
+    "ansioso": {
+      "rotulo": "Ansioso",
+      "descricao": "Precisa de segurança e previsibilidade: tom tranquilizador e factual, com a situação da conta em um olhar (semáforo só de fatos).",
+      "regras": {
+        "densidade": "media",
+        "provas": "media",
+        "tom": "tranquilizador",
+        "situacao_da_conta": true,
+        "max_acoes": 6,
+        "lista_tarefas": true
+      }
+    }
+  },
+  "objetivos": {
+    "faturamento": {
+      "rotulo": "Crescer o faturamento",
+      "metrica": "receita",
+      "descricao": "Receita adicional associada às tarefas."
+    },
+    "visibilidade": {
+      "rotulo": "Ganhar visibilidade",
+      "metrica": "visitas",
+      "descricao": "Mais visitas nos anúncios."
+    },
+    "conversao": {
+      "rotulo": "Converter mais visitas em vendas",
+      "metrica": "conversao",
+      "descricao": "Conversão (vendas por visita) dos anúncios."
+    },
+    "ads": {
+      "rotulo": "Melhorar o retorno dos anúncios (Ads)",
+      "metrica": "ads",
+      "descricao": "Tarefas de Ads e o efeito delas nas vendas; o ROAS fica no bloco ADS."
+    },
+    "margem": {
+      "rotulo": "Proteger a margem",
+      "metrica": "margem",
+      "descricao": "Margem adicional estimada. Só com custos informados; sem eles o relatório mostra faturamento e avisa."
+    },
+    "lancamentos": {
+      "rotulo": "Lançar novos anúncios que vendam",
+      "metrica": "lancamentos",
+      "descricao": "Anúncios novos (ou reativados) que passaram a vender."
+    }
+  }
+}

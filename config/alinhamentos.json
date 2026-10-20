@@ -1,0 +1,76 @@
+{
+  "$comentario": "Registro de alinhamentos com o cliente (exceções intencionais — pontos do Adriano, 10/10/2026). Lista FECHADA de tipos (validada na carga por src/lib/alinhamentos.js). rotulo = interno; rotulo_cliente + texto_cliente = o que o cliente/relatório lê (template fixo, {data} = dd/mm do registro; o motivo livre NUNCA vai ao cliente). suprime = regras do plano que o alinhamento cobre quando o registro não diz quais (regras_json vazio): lista de ids de config/algoritmo.json (sem o prefixo anuncio_; 'queda_*' cobre as quedas), \"todas\" = todas do escopo (só anúncio/campanha/sku/regra — na conta inteira a lista é obrigatória) ou [] = nenhuma regra some. so_avisos:true (ja_informado) = silencia só o que fala com o cliente (gatilhos, relatório, pendências; as regras listadas ou, sem lista, todas da entidade) e nunca tira a regra do plano, exceto no descarte. tipos_s90 = lista fechada (tipo → rótulo na voz do cliente) que o próprio cliente escolhe no painel do Sprint 90 (botão É intencional). anotar = regra que continua nascendo com a nota fixa (descontinuado: a promoção vira queima de estoque). acos_alvo só em campanha_visibilidade: as regras de Ads por ACOS usam o alvo no lugar da meta da conta. relatorio = rotular (\"conforme alinhado\") ou omitir. Revisão padrão 30 dias; permanente só para descontinuado.",
+  "revisao_dias_padrao": 30,
+  "revisao_dias_max": 365,
+  "motivo_max": 200,
+  "permanente_permitido": ["descontinuado_queima_estoque"],
+  "regras_acos": ["ads_reduzir", "ads_abaixo_meta"],
+  "tipos_s90": {
+    "intencional": "É uma decisão minha",
+    "pausa_producao": "Pausei de propósito (produção ou fornecedor)",
+    "boi_de_piranha": "Anúncio de atração, sem estoque de propósito",
+    "descontinuado_queima_estoque": "Produto descontinuado: vendendo o que sobrou",
+    "campanha_visibilidade": "Campanha para ganhar visibilidade (custo alto aceito)",
+    "teste": "Estou testando"
+  },
+  "tipos": {
+    "intencional": {
+      "rotulo": "Decisão intencional do cliente",
+      "rotulo_cliente": "Decisão sua",
+      "texto_cliente": "Mantido assim por decisão sua, conforme alinhado em {data}.",
+      "suprime": "todas",
+      "relatorio": "rotular"
+    },
+    "ja_informado": {
+      "rotulo": "Consultor já informou o seller",
+      "rotulo_cliente": "Já conversado com você",
+      "texto_cliente": "Ponto já conversado com você, conforme alinhado em {data}.",
+      "suprime": [],
+      "so_avisos": true,
+      "relatorio": "rotular"
+    },
+    "campanha_visibilidade": {
+      "rotulo": "Campanha de visibilidade (ACOS alto aceito)",
+      "rotulo_cliente": "Campanha de visibilidade",
+      "texto_cliente": "Campanha de visibilidade, conforme alinhado em {data}.",
+      "suprime": ["ads_reduzir", "ads_abaixo_meta", "queda_ctr_ads"],
+      "relatorio": "rotular"
+    },
+    "descontinuado_queima_estoque": {
+      "rotulo": "Descontinuado: queimando o estoque restante",
+      "rotulo_cliente": "Produto em encerramento",
+      "texto_cliente": "Produto em encerramento, sem reposição, conforme alinhado em {data}.",
+      "suprime": ["estoque_ruptura", "full_estoque_antigo", "full_envio", "estoque_sincronizar"],
+      "anotar": { "promocao_giro": "Produto descontinuado: a promoção serve para queimar o estoque restante, sem reposição." },
+      "relatorio": "rotular"
+    },
+    "teste": {
+      "rotulo": "Teste em andamento",
+      "rotulo_cliente": "Teste em andamento",
+      "texto_cliente": "Teste em andamento, conforme alinhado em {data}.",
+      "suprime": "todas",
+      "relatorio": "omitir"
+    },
+    "pausa_producao": {
+      "rotulo": "Pausado de propósito (produção)",
+      "rotulo_cliente": "Pausa combinada",
+      "texto_cliente": "Pausa combinada com você, conforme alinhado em {data}.",
+      "suprime": ["anuncio_restrito", "queda_*", "estoque_ruptura", "estoque_sincronizar"],
+      "relatorio": "rotular"
+    },
+    "boi_de_piranha": {
+      "rotulo": "Boi de piranha (atração, indisponível de propósito)",
+      "rotulo_cliente": "Anúncio de atração",
+      "texto_cliente": "Anúncio de atração, conforme alinhado em {data}.",
+      "suprime": ["anuncio_restrito", "queda_*", "estoque_ruptura", "estoque_sincronizar"],
+      "relatorio": "rotular"
+    },
+    "outro": {
+      "rotulo": "Outro (ver motivo)",
+      "rotulo_cliente": "Combinado com você",
+      "texto_cliente": "Combinado com você, conforme alinhado em {data}.",
+      "suprime": [],
+      "relatorio": "rotular"
+    }
+  }
+}

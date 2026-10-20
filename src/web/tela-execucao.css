@@ -1,0 +1,16 @@
+/* Painel executivo (index): só o que o ui.css não cobre. Tokens vêm do ui.css. */
+#filtros select{max-width:260px}
+#qTarefas{flex:1 1 220px;min-width:0}
+#tabelaTarefas{min-width:960px}
+#tabelaTarefas td:not(:nth-child(2)):not([colspan]){white-space:nowrap}   /* 1ª coluna é a seleção; o título (2ª) é a única que quebra; a linha vazia (colspan) fica fora */
+#tabelaTarefas th:first-child,#tabelaTarefas td:first-child:not([colspan]){width:28px;padding-right:0}
+#dlgDependencia textarea{font:400 var(--t-14)/1.4 var(--fonte)}   /* o detalhe é prosa que o cliente lê, não código (dialog textarea do ui.css é mono) */
+
+/* Filtros avançados (PSFiltros) dentro da barra: o botão fica na linha dos selects; chips e painel quebram para a linha de baixo */
+#filtrosAvancados{display:contents}
+#filtrosAvancados .flt-chips,#filtrosAvancados .flt-painel{flex:1 1 100%;margin-top:0}
+#filtrosAvancados .flt-chips:empty{display:none}
+/* o painel abre como gaveta sob a barra sticky, igual ao "Mais filtros", para a barra não crescer até a dobra */
+.barra-filtros #filtrosAvancados .flt-painel{position:absolute;left:0;right:0;top:calc(100% + 8px);z-index:var(--z-menu);max-height:min(70vh,640px);overflow:auto;box-shadow:var(--sombra-alta)}
+.barra-filtros #filtrosAvancados .flt-painel[hidden]{display:none}
+@media (max-width:899px){.barra-filtros #filtrosAvancados .flt-painel{position:static;max-height:none;overflow:visible;box-shadow:none;margin-top:var(--e-2)}}

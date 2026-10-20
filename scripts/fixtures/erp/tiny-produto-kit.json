@@ -1,0 +1,8 @@
+{
+  "_fonte_doc": "https://api-docs.erp.olist.com/api-reference/produtos/obter-produto-kit.md",
+  "_aviso": "construída a partir da documentação; não é captura real. A doc devolve a lista [{produto{id,sku,…}, quantidade}] sem custo dos componentes.",
+  "_requisicao": "GET /public-api/v3/produtos/{id}/kit  (chave = id do kit)",
+  "kits": {
+    "3000": [ { "produto": { "id": 1001, "sku": "CAN-001", "descricao": "Caneca branca 325 ml" }, "quantidade": 2 } ]
+  }
+}

@@ -1,0 +1,40 @@
+/* O que funciona (/resultados) · só o que o ui.css não cobre. Tokens vêm do ui.css. */
+
+/* #tipos aqui é o contêiner da tabela (hooks_js), não o segmentado da Execução que o ui.css estiliza por id */
+#tipos{display:block;gap:0;padding:0;margin:0;background:transparent;border-radius:0}
+
+/* veredito: 3 cartões número + frase; estado como ponto de 6px antes do título */
+.ver-num{font:600 var(--t-28)/1.1 var(--fonte);letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--tinta);margin:var(--e-1) 0 var(--e-2)}
+.ver-num.sem{color:var(--cinza-claro)}
+.ver:is(.bom,.ruim,.neutro) h3::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;flex:none}
+.ver.bom h3::before{background:var(--verde)}
+.ver.ruim h3::before{background:var(--verm)}
+.ver.neutro h3::before{background:var(--borda-campo)}
+
+/* filtros (PSFiltros) entre o subtítulo e a tabela por tipo */
+#filtros{margin:0 0 var(--e-3)}
+
+/* cobertura da medição: a métrica-âncora é a régua do veredito; aqui ficam as fatias da barra e os pontos da legenda */
+.cob-melhorou{background:var(--verde)}
+.cob-sem_efeito{background:var(--borda-campo)}
+.cob-piorou{background:var(--verm)}
+.cob-lancamento{background:var(--azul)}
+.cob-variacao_conta{background:var(--borda-forte)}
+.cob-maturando{background:var(--borda)}
+
+/* tabelas de 8 colunas (exceção declarada ao máximo de 6): abaixo de 900px somem Sem efeito e Efeito mediano; o drill mostra tudo */
+@media (max-width:899px){.opc{display:none}}
+
+/* 1ª célula = botão que abre o drill (parece texto sublinhado, não botão) */
+.lnk{display:inline;height:auto;padding:0;border:0;background:none;color:var(--tinta);font:inherit;font-weight:500;text-align:left;cursor:pointer;text-decoration:underline;text-decoration-color:var(--borda-campo);text-underline-offset:3px}
+.lnk:hover,.lnk[aria-expanded="true"]{text-decoration-color:currentColor}
+
+/* drill: miniatura de 40px + anúncio e tarefa; resumo de estados em selos */
+.drill .linha{margin:0 0 var(--e-2)}
+.drill>.mini{margin:var(--e-2) 0 0}
+.dr-an{display:flex;gap:var(--e-2);align-items:flex-start;min-width:260px}
+.dr-img{display:block;width:40px;height:40px;flex:none;object-fit:cover;border-radius:var(--raio-p);background:var(--fundo-suave)}
+.dr-an .mini{margin-top:2px}
+
+/* lançamentos: só 2 números lado a lado */
+#lanc .kpis{grid-template-columns:repeat(2,minmax(0,1fr));max-width:640px}

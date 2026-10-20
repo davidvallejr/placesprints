@@ -1,0 +1,26 @@
+{
+  "$comentario": "F8 — Nota fiscal (docs/desenho-v3-erp.md § B; decisões do David 15/10/2026). O Place Sprints NÃO decide tributo: NCM, CFOP, CST/CSOSN, alíquotas e ST vêm das regras declaradas pelo CONTADOR do cliente (regra_fiscal_produto), com termo aceito. Sem regra, sem nota. As duas chaves NASCEM DESLIGADAS. Logs/avisos: Chaveiro (emissão) e Smith (fiscal/financeiro).",
+  "nf": {
+    "ligado": false,
+    "envio_ml_ligado": false,
+    "producao_ligada": false,
+    "automatica_apos_notas_sem_correcao": 20,
+    "pendente_apos_horas": 24,
+    "max_xml_bytes": 1048576,
+    "natureza_operacao": "Venda de mercadoria",
+    "serie_padrao": 1
+  },
+  "termo": { "versao": "nf-v1", "arquivo": "config/termo-fiscal.md" },
+  "intermediador": {
+    "$comentario": "NT 2020.006 (indIntermed=1 em venda por marketplace): CNPJ do intermediador e id do vendedor nele. O CNPJ fica VAZIO até o contador confirmar (NOT_VERIFIED) — vazio = bloqueio «intermediador» em toda nota.",
+    "cnpj": "",
+    "nome": "Mercado Livre"
+  },
+  "pagamento": {
+    "$comentario": "NT 2025.001 (grupo de pagamento): payments[].payment_type do ML → tPag. Mapeamento NOT_VERIFIED contra a tabela da NT; tipo fora da lista = bloqueio «pagamento». Cartão exige cAut (authorization_code — NOT_VERIFIED no payload do ML), bandeira e CNPJ da credenciadora (vazio até o contador confirmar).",
+    "forma_por_tipo": { "credit_card": "03", "debit_card": "04", "ticket": "15", "bank_transfer": "17" },
+    "bandeira_por_metodo": { "visa": "01", "master": "02", "amex": "03", "elo": "06", "hipercard": "07" },
+    "cnpj_credenciadora": ""
+  },
+  "csv_colunas": ["sku", "operacao", "ncm", "cest", "origem", "cfop", "cst_csosn", "icms_aliquota", "icms_reducao_bc", "icms_aliquota_credito", "st", "pis_cst", "pis_aliquota", "cofins_cst", "cofins_aliquota", "pis_cofins_exclui_icms", "unidade", "descricao", "vigente_de"]
+}

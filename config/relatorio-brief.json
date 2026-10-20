@@ -1,0 +1,52 @@
+{
+  "$comentario": "Relatório curto do cliente (Notion): conteúdo do 'brief' de src/lib/relatorio-brief.js, uma PROJEÇÃO de montarSemanal (nunca um segundo motor). Ajuste aqui, nunca no código. janela: dias fechados que o relatório cobre; termina_em 'ontem' (padrão: o dia de hoje é parcial e fica fora da comparação) ou 'hoje'. titulo_prefixo: texto fixo do título da página; PRECISA começar por 'Relatório de Sprints Place2u' (a categoria fixa, que é a opção da propriedade Secção das Informações e mora em relatorio-seguro.js; o carregamento falha se não começar). Categoria, ícone, Status 'Concluído' e capa NÃO são configuráveis aqui (viviam aqui sem ser lidos por ninguém: uma única fonte, o código de relatorio-notion.js). limites.informado_caracteres: tamanho máximo do texto livre do card (resultado alcançado / impacto) que pode aparecer como 'informado pela equipe'. regras_acao_cliente: LISTA BRANCA das regras de acoes_plano que podem aparecer em 'Próximos passos' (só status aprovada/distribuida); sufixo '*' = prefixo. Ficam de fora, de propósito: regras internas (sem_responsavel, sem_plano_mes, backlog_parado, bloqueio_*, alavanca_*, anuncio_cadastrar_custos, anuncio_preco_mudou_vendas_cairam, ml_*), hipóteses (anuncio_urgencia_oculta) e anuncio_estoque_ruptura (vai só em 'Depende de você'). listar_tarefas_sempre: o relatório curto lista as tarefas concluídas por nome mesmo para clientes cujo perfil do PDF semanal é 'só resultados' (pedido do David em 09/10/2026: este relatório é principalmente das tarefas executadas).",
+  "janela": {
+    "dias": 7,
+    "termina_em": "ontem"
+  },
+  "titulo_prefixo": "Relatório de Sprints Place2u",
+  "horizonte_dias": 14,
+  "radar_dias": 45,
+  "preco_min_pct": 3,
+  "hoje_timeout_ms": 20000,
+  "limites": {
+    "titulo_caracteres": 70,
+    "informado_caracteres": 80,
+    "atividades_concluidas": 15,
+    "atividades_andamento": 5,
+    "promocoes_no_ar": 5,
+    "resultados_desenvolvimento": 3,
+    "mudancas": 5,
+    "proximos": 8,
+    "radar": 2,
+    "depende": 5
+  },
+  "regras_acao_cliente": [
+    "anuncio_catalogo_buybox",
+    "anuncio_ima_conversao",
+    "anuncio_conteudo_fotos",
+    "anuncio_frete_gratis",
+    "anuncio_ads_*",
+    "anuncio_oferta_*",
+    "anuncio_promocao_giro",
+    "anuncio_sazonal",
+    "anuncio_duplicacao_estrategica",
+    "anuncio_full_envio",
+    "calendario"
+  ],
+  "campos_mudanca": {
+    "sempre": [
+      "preco",
+      "titulo",
+      "fotos",
+      "thumb",
+      "frete_gratis"
+    ],
+    "so_fronteira": [
+      "promocao",
+      "ads",
+      "logistica"
+    ]
+  },
+  "listar_tarefas_sempre": true
+}

@@ -1,0 +1,54 @@
+{
+  "$doc": "Estratégias do Chaveiro F4+ = combinações NOMEADAS de operações da lista fechada (src/lib/chaveiro-executor.js → OPERACOES). Cada passo vira UMA ordem (preparada → aprovada → enviada → conferida); a execução é 1 por vez, na ordem dos passos, e PARA no 1º passo que não confere (o resto fica aprovado, nada mais sai). Parâmetros: '$nome' nos passos é trocado pelo valor do parâmetro da estratégia (validado com min/max e depois pela validação da própria operação). Pré-condições = dados do diagnóstico do Arquiteto (campos e operadores fechados em chaveiro-executor.js → CAMPOS_PRECONDICAO); dado ausente = pré-condição NÃO atendida (nunca presumida). KPI e janela dizem o que o Merovíngio mede depois (antes × depois com controle; associação, nunca causa). Estratégia nova do David vai para a tabela exec_estrategia pela tela (mesma validação).",
+  "estrategias": [
+    {
+      "id": "ima_conversao", "nome": "Ímã de conversão",
+      "objetivo": "Anúncio com visita e conversão abaixo da conta: preço um pouco menor, frete grátis e capa mais forte, juntos (efeito conjunto: o Merovíngio não separa o que coube a cada um).",
+      "parametros": { "desconto_pct": { "tipo": "numero", "min": -10, "max": -1, "padrao": -5, "rotulo": "Variação de preço (%)" }, "decisao_cliente": { "tipo": "bool", "padrao": false, "rotulo": "Sem custo informado: o preço é decisão do cliente" }, "capa": { "tipo": "foto", "rotulo": "Nova capa (foto que já está no anúncio)" } },
+      "passos": [ { "operacao": "preco", "params": { "variacao_pct": "$desconto_pct", "decisao_cliente": "$decisao_cliente" } }, { "operacao": "frete_gratis", "params": { "ativar": true } }, { "operacao": "fotos", "params": { "capa": "$capa" } } ],
+      "precondicoes": [ { "campo": "visitas_28d", "op": ">=", "valor": 100 }, { "campo": "conv_vs_conta", "op": "<", "valor": 1 } ],
+      "kpi": "conversão (unidades ÷ visitas)", "janela_dias": 14
+    },
+    {
+      "id": "recuperar_caido", "nome": "Recuperar anúncio caído",
+      "objetivo": "Anúncio que vendia e caiu depois de uma mudança: volta ao «como era» (só os campos que mudaram) e reativa se estiver pausado.",
+      "parametros": { "snapshot": { "tipo": "snapshot", "rotulo": "Fotografia «como era» escolhida" }, "decisao_cliente": { "tipo": "bool", "padrao": false, "rotulo": "Sem custo informado: voltar o preço é decisão do cliente" } },
+      "passos": [ { "operacao": "restaurar", "params": { "snapshot": "$snapshot", "decisao_cliente": "$decisao_cliente" } }, { "operacao": "status", "params": { "acao": "ativar" }, "opcional_se": "ativo" } ],
+      "precondicoes": [ { "campo": "queda_unidades_pct", "op": "<=", "valor": -30 } ],
+      "kpi": "unidades vendidas", "janela_dias": 14
+    },
+    {
+      "id": "giro_estoque", "nome": "Giro de estoque parado",
+      "objetivo": "Estoque em excesso: entra na promoção aprovada pelo módulo de Promoções e ajusta o preço dentro do piso de margem.",
+      "parametros": { "plano_id": { "tipo": "texto", "rotulo": "Plano de promoção aprovado (id do /promocoes)" }, "desconto_pct": { "tipo": "numero", "min": -10, "max": -1, "padrao": -3, "rotulo": "Variação de preço (%)" }, "decisao_cliente": { "tipo": "bool", "padrao": false, "rotulo": "Sem custo informado: o preço é decisão do cliente" } },
+      "passos": [ { "operacao": "promocao", "params": { "plano_id": "$plano_id" } }, { "operacao": "preco", "params": { "variacao_pct": "$desconto_pct", "decisao_cliente": "$decisao_cliente" } } ],
+      "precondicoes": [ { "campo": "cobertura_dias", "op": ">=", "valor": 90 }, { "campo": "custos_informados", "op": "==", "valor": true } ],
+      "kpi": "cobertura de estoque (dias) e unidades", "janela_dias": 28
+    },
+    {
+      "id": "escalar_campeao", "nome": "Escalar campeão",
+      "objetivo": "Curva A com estoque: mais tráfego (Ads — assistido: o sistema gera o passo a passo) e uma duplicata com estoque ciente do físico (F5).",
+      "parametros": { "quantidade": { "tipo": "inteiro", "min": 1, "max": 100000, "rotulo": "Estoque da duplicata (≤ físico − outros anúncios)" }, "titulo_novo": { "tipo": "texto", "rotulo": "Título da duplicata (opcional)" } },
+      "passos": [ { "operacao": "ads", "params": { "acao": "ativar" } }, { "operacao": "duplicar", "params": { "quantidade": "$quantidade", "titulo_novo": "$titulo_novo" } } ],
+      "precondicoes": [ { "campo": "curva", "op": "==", "valor": "A" }, { "campo": "cobertura_dias", "op": ">=", "valor": 30 } ],
+      "kpi": "receita da família (original + duplicata)", "janela_dias": 28
+    },
+    {
+      "id": "proteger_margem", "nome": "Proteger margem",
+      "objetivo": "Preço abaixo do piso de margem: sobe até o piso (no máximo o teto de variação por ordem; o resto fica para a próxima).",
+      "parametros": {},
+      "passos": [ { "operacao": "preco", "params": { "ao_piso": true } } ],
+      "precondicoes": [ { "campo": "custos_informados", "op": "==", "valor": true }, { "campo": "abaixo_do_piso", "op": "==", "valor": true } ],
+      "kpi": "margem estimada e unidades", "janela_dias": 14
+    },
+    {
+      "id": "teste_ab", "nome": "Teste A/B",
+      "objetivo": "Duplica com título e capa novos; o original fica intocado como grupo de comparação (holdout) na janela.",
+      "parametros": { "quantidade": { "tipo": "inteiro", "min": 1, "max": 100000, "rotulo": "Estoque da duplicata (≤ físico − outros anúncios)" }, "titulo_novo": { "tipo": "texto", "rotulo": "Título da versão B" }, "capa": { "tipo": "foto", "rotulo": "Capa da versão B (foto que já está no anúncio)" } },
+      "passos": [ { "operacao": "duplicar", "params": { "quantidade": "$quantidade", "titulo_novo": "$titulo_novo", "capa": "$capa" } } ],
+      "holdout": "original",
+      "precondicoes": [ { "campo": "visitas_28d", "op": ">=", "valor": 200 } ],
+      "kpi": "conversão da versão B × original (holdout)", "janela_dias": 14
+    }
+  ]
+}

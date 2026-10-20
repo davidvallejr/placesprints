@@ -1,0 +1,22 @@
+{
+  "$comentario": "Transcrição SEMANAL dos painéis (o print continua sendo a evidência; aqui entram os números que viram tabela, crescimento e gráfico de faturamento). Uma chave por cliente, com o NOME EXATO usado nas tarefas. 'semana_de' = primeiro dia do período transcrito (yyyy-mm-dd) e 'semana_ate' opcional (padrão: semana_de + 6 dias); o relatório só usa os números se esse período cobrir ao menos 4 dos 7 dias do relatório, e mostra o período declarado; senão são IGNORADOS (anti-mistura de períodos). Cada semana validada entra no histórico — é dele que saem os deltas ▲▼ e o gráfico de evolução. Apague os exemplos demo quando for usar de verdade.",
+  "Cliente Demo — Moda Casa": {
+    "semana_de": "2026-09-08",
+    "periodo": "08/09/2026 a 14/09/2026",
+    "faturamento": 48350.9,
+    "vendas": 312,
+    "unidades": 405,
+    "visitas": 15800,
+    "conversao": 1.97,
+    "ticket_medio": 154.97,
+    "comparativo": "+12% de faturamento vs semana anterior",
+    "ads": {
+      "investimento": 1850,
+      "receita": 9420,
+      "roas": 5.09,
+      "acos": 19.6,
+      "impressoes": 240000,
+      "cliques": 5100
+    }
+  }
+}

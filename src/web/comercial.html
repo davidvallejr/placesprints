@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Comercial · Place Sprints</title>
+<link rel="stylesheet" href="/ui.css">
+<link rel="stylesheet" href="/tela-comercial.css">
+</head>
+<body data-pagina="comercial">
+<header class="ps-shell" id="psShell"></header>
+<script src="/shell.js"></script>
+<main class="pg">
+  <div class="pg-cab">
+    <div class="pg-titulo">
+      <h1>Comercial</h1>
+      <p class="pg-meta"><span>Prospects em diagnóstico de conta</span><span>o diagnóstico só lê a conta, nada é alterado</span></p>
+    </div>
+    <div class="pg-acoes">
+      <button class="btn" type="button" id="btLinkPublico">Link do formulário público</button>
+      <button class="btn" type="button" id="btApagarTestes">Apagar cadastros de teste</button>
+      <details class="menu novo">
+        <summary class="btn btn-primario">Novo prospect</summary>
+        <div class="menu-lista">
+          <form id="fNovo" class="form-grade" autocomplete="off">
+            <div class="campo"><label for="pNome">Nome do contato <span class="mudo">(obrigatório)</span></label><input id="pNome" required></div>
+            <div class="campo"><label for="pEmpresa">Empresa <span class="mudo">(obrigatório)</span></label><input id="pEmpresa" required></div>
+            <div class="campo"><label for="pEmail">E-mail</label><input id="pEmail" type="email"></div>
+            <div class="campo"><label for="pFone">Telefone</label><input id="pFone" type="tel"><span class="ajuda-campo">Com DDD, para abrir o WhatsApp</span></div>
+            <p class="col2 mudo peq">O prospect recebe um link para autorizar a leitura da conta no Mercado Livre.</p>
+            <div class="col2 direita"><button class="bt btn-primario" type="submit">Cadastrar e gerar link</button></div>
+          </form>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <section class="veredito" aria-label="Resumo">
+    <p class="veredito-frase" id="veredito"><span class="mudo">Lendo os prospects…</span></p>
+    <div class="regua" id="regua" hidden></div>
+    <div class="kpis" id="kpis" aria-busy="true"><div class="sk-kpi"></div><div class="sk-kpi"></div><div class="sk-kpi"></div><div class="sk-kpi"></div></div>
+  </section>
+
+  <div id="infra"></div>
+
+  <section class="bloco" id="secLista">
+    <div class="bloco-cab"><h2>Prospects</h2></div>
+    <div id="filtros" class="filtros-lista"></div>
+    <p class="sub" id="listaSub"></p>
+    <div id="lista" aria-busy="true"><div class="sk-tabela"></div></div>
+  </section>
+</main>
+<footer class="pg-rodape">Place2u · dados lidos só com autorização do titular da conta no Mercado Livre</footer>
+<script src="/filtros.js"></script>
+<script src="comercial.js"></script>
+<script src="/alerta.js" defer></script>
+</body>
+</html>

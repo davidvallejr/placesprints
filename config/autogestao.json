@@ -1,0 +1,29 @@
+{
+  "$doc": "Autogestão (docs/plano-autogestao.md, ações 1–3; instalação em docs/autogestao-instalar.md). Limiares da Saúde do sistema por sinal (atencao/critico; 'menor' = quanto menor pior), dono e SLA dos incidentes. Os números são de partida (premissa) — revisar em 30 dias. O vigia externo (scripts/vigia.sh) NÃO lê este arquivo (fora do Node): os padrões dele estão no cabeçalho do script e batem com os críticos daqui.",
+  "whatsapp_critico_ligado": false,
+  "whatsapp_critico_ligado_doc": "D-A3 (15/10): só incidente CRÍTICO toca o WhatsApp do Head de canais, a qualquer hora (madrugada inclusive); o resto fica no painel/sino e espera 07h. NASCE DESLIGADA: com false a função monta a mensagem e devolve 'desligado' sem chamar o n8n. Destino em .env HEAD_CANAIS_WHATSAPP.",
+  "dono": "Head de canais",
+  "sla_horas": { "critico": 4, "atencao": 48 },
+  "aviso_intervalo_min": 60,
+  "fechar_apos_oks": 2,
+  "avisar_sempre": ["trinity.tokens"],
+  "limiares": {
+    "trinity.coleta_ml": { "rotulo": "Coleta diária do Mercado Livre (horas desde a última)", "atencao": 26, "critico": 30 },
+    "trinity.notion_sync": { "rotulo": "Leitura do Notion (horas desde o último sync completo)", "atencao": 3, "critico": 26 },
+    "trinity.tokens": { "rotulo": "Contas com «sem token» em 3 ciclos seguidos", "contagem": true, "atencao": 1, "critico": 5 },
+    "trinity.disco": { "rotulo": "Disco livre (GB)", "menor": true, "atencao": 15, "critico": 5 },
+    "morpheus.n8n": { "rotulo": "Entregas do n8n com erro (502/timeout/rede) nas últimas 6 h", "contagem": true, "atencao": 1, "critico": 3 },
+    "merovingio.medicao": { "rotulo": "Medição de resultados (horas desde a última)", "atencao": 26, "critico": 72 }
+  },
+  "ticks": {
+    "$doc": "Batimento de cada tick do servidor: período em minutos e sistema. Parado = sem bater há mais de 3× o período (atenção) ou 6× (crítico).",
+    "coleta": { "periodo_min": 10, "sistema": "trinity" },
+    "renovacao_ml": { "periodo_min": 30, "sistema": "trinity" },
+    "sync_notion": { "periodo_min": 120, "sistema": "trinity" },
+    "medicao": { "periodo_min": 60, "sistema": "merovingio" },
+    "gatilhos": { "periodo_min": 10, "sistema": "morpheus" },
+    "consultor": { "periodo_min": 10, "sistema": "morpheus" },
+    "relatorios": { "periodo_min": 10, "sistema": "morpheus" }
+  },
+  "sync_notion": { "intervalo_min": 120, "teto_min": 20 }
+}

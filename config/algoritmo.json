@@ -1,0 +1,1306 @@
+{
+  "$comentario": "Metodologia viva do algoritmo de plano de ação. TODA regra precisa declarar: dados necessários, KPI de resultado mensurável e tipo de tarefa no Notion (para o sistema medir e aprender). Regra sem KPI mensurável não entra. Limiares e priors são calibráveis aqui; a calibração automática (src/lib/calibracao.js) substitui o prior pelo histórico medido quando há amostra.",
+  "versao": "1.6.0",
+  "relatorios_ciclo": { "$comentario": "V3 F9 (15/10/2026): os 8 relatórios (src/lib/relatorios-ciclo.js) são PROJEÇÃO — não criam regra nem ação. blocos_terca_ligado NASCE DESLIGADA: com false nem a base é calculada para o relatório de terça e ao cliente nada muda; ligar só por decisão registrada (relatorios-ciclo-real.blocosTercaDoCliente).", "blocos_terca_ligado": false },
+  "foco": {
+    "max_acoes_por_cliente_semana": 5,
+    "regras_exigem_consultor": ["duplicacao_estrategica", "urgencia_oculta", "concentracao_receita"],
+    "pareto_gmv_pct": 80,
+    "min_impacto_pct_gmv": 0.5,
+    "min_unidades_item": 3,
+    "min_visitas_item": 150,
+    "teto_plausibilidade_uplift_pct": 35,
+    "desconto_por_sobreposicao": 0.25,
+    "max_por_regra": {
+      "frete_gratis": 3,
+      "conteudo_fotos": 4,
+      "sazonal": 6,
+      "urgencia_oculta": 3,
+      "catalogo_buybox": 5,
+      "ads_entrar": 4,
+      "full_envio": 3,
+      "estoque_dividido": 2,
+      "sku_ausente": 1,
+      "estoque_sincronizar": 3,
+      "estoque_divergente": 2,
+      "duplicacao_estrategica": 3,
+      "oferta_galeria": 4,
+      "oferta_titulo_descricao": 4,
+      "oferta_completa": 3,
+      "oferta_ficha": 4,
+      "oferta_preco": 3,
+      "oferta_cadastro": 5,
+      "preco_mudou_vendas_cairam": 3,
+      "queda_conversao_anuncio": 3,
+      "queda_exposicao_anuncio": 3,
+      "queda_ctr_ads": 3,
+      "margem_negativa": 5,
+      "ads_abaixo_meta": 4,
+      "concentracao_receita": 1,
+      "anuncio_restrito": 5,
+      "reputacao_em_risco": 1,
+      "envio_atrasado": 1,
+      "reclamacao_sem_resposta": 5,
+      "pergunta_sem_resposta": 1,
+      "full_estoque_antigo": 4,
+      "nf_pendente": 5,
+      "nf_regra_faltando": 5
+    }
+  },
+  "limiares": {
+    "ima_gap_conversao_pct": 25,
+    "benchmark_min_visitas": 100,
+    "cobertura_critica_dias": 10,
+    "cobertura_atencao_dias": 21,
+    "cobertura_excesso_dias": 90,
+    "lead_time_reposicao_dias": 21,
+    "estoque_seguranca_dias": 7,
+    "full_cobertura_planejada_dias": 30,
+    "crescimento_max_pct": 40,
+    "ads_min_custo_avaliar": 30,
+    "ads_min_cliques_sem_venda": 30,
+    "ads_roas_vs_conta_escalar": 1.3,
+    "ads_roas_vs_conta_reduzir": 0.5,
+    "ads_ctr_vs_conta_baixo": 0.6,
+    "fotos_minimas": 5,
+    "nota_minima_avaliacao": 4.3,
+    "preco_queda_unidades_pct": 15,
+    "preco_controle_max_queda_pct": 5,
+    "preco_min_dias_apos_alta": 7,
+    "queda_conversao_rel_pct": 25,
+    "queda_visitas_pct": 30,
+    "queda_ctr_pct": 25,
+    "controle_max_queda_pct": 5,
+    "ads_min_impressoes_ctr": 1000,
+    "pareto_top1_alerta_pct": 40,
+    "reputacao_claims_max_pct": 2,
+    "reputacao_atraso_max_pct": 15,
+    "reputacao_cancel_max_pct": 2,
+    "reputacao_fracao_alerta": 0.8,
+    "reputacao_min_vendas": 10,
+    "claim_prazo_horas": 24,
+    "perguntas_min_24h": 1,
+    "full_estoque_antigo_dias": 60,
+    "sku_ausente_min_pct_gmv": 20
+  },
+  "premissas": {
+    "$comentario": "Limiares que são PREMISSA (não medidos na conta nem informados pelo cliente): toda ação que os usa rotula o número como premissa. Chave irmã de `limiares` (e não um `$premissa` dentro de cada valor) para o parser e a tela /metodologia, que leem limiares como pares nome → número, seguirem funcionando. pareto_top1_alerta_pct é fallback local: a retroalimentação lê config/retroalimentacao.json → pareto.top1_alerta_pct quando existir.",
+    "limiares": [
+      "lead_time_reposicao_dias",
+      "estoque_seguranca_dias",
+      "cobertura_critica_dias",
+      "cobertura_excesso_dias",
+      "queda_conversao_rel_pct",
+      "queda_visitas_pct",
+      "queda_ctr_pct",
+      "controle_max_queda_pct",
+      "ads_min_impressoes_ctr",
+      "pareto_top1_alerta_pct",
+      "reputacao_claims_max_pct",
+      "reputacao_atraso_max_pct",
+      "reputacao_cancel_max_pct",
+      "reputacao_fracao_alerta",
+      "reputacao_min_vendas",
+      "claim_prazo_horas",
+      "full_estoque_antigo_dias",
+      "sku_ausente_min_pct_gmv"
+    ],
+    "$premissa_compras": "v1.6.0 (13/10/2026, falha apontada pela Agrinorte: o Pistão 170 vendia ~0,43/dia, tinha 10 un e não entrou no próximo pedido porque o ponto de reposição era só vendas/dia × 21 d = 9): ponto de reposição = vendas/dia × (lead time + estoque_seguranca_dias). estoque_seguranca_dias (7) é premissa da casa (folga para atraso do fornecedor e variação da venda). lead_time_reposicao_dias (21) só vale quando o cliente/equipe não cadastrou o prazo (lead_time_cliente: conta toda ou por anúncio/SKU) — o número informado vence a premissa e o texto diz de onde veio.",
+    "$premissa_saude": "v1.5.0: reputacao_*_max_pct são os limites PÚBLICOS do nível verde do Mercado Livre (reclamações 2 %, atrasos 15 %, cancelamentos 2 %) — não medidos na conta; conferir no painel de reputação. reputacao_fracao_alerta (80 % do limite) e reputacao_min_vendas (amostra mínima para olhar taxa) são premissas da casa. claim_prazo_horas (24 h) é o prazo que a casa considera curto para responder. full_estoque_antigo_dias (60) é premissa porque o endpoint de idade do estoque Full não foi verificado: a regra usa dias sem venda estimados pela série e declara a fonte."
+  },
+  "compras": {
+    "$comentario": "v1.6.0: previsão de compras e previsibilidade do ciclo de estoque (src/lib/compras-previsao.js, PURA sobre o diagnóstico; não cria ação nem prioridade — o momento de repor continua sendo a regra estoque_ruptura e o gatilho ciclo_estoque_previsto pelo ponto de reposição). Tudo aqui é PREMISSA declarada no texto: estimativa, nunca promessa. Previsão = vendas/dia dos últimos 28 dias × dias × fator de tendência (vendas/dia 14 d ÷ 28 d, limitado a tendencia_limites; aplicado UMA vez — 13/10: antes somava à velocidade ponderada, que já pesa os últimos 7 dias; sem estoque, sem tendência para baixo e o base usa o ritmo de antes da falta) + data comercial do calendário (sazonalidade) na janela: dias_efeito dias a fator × a venda base (sem 12 meses de histórico para medir). Conservador = sem alta de tendência e sem data comercial; base = com as duas. Quanto pedir = demanda prevista para (lead time + ciclo_compra_dias + segurança) − estoque.",
+    "curvas": [
+      "A",
+      "B"
+    ],
+    "horizontes_dias": [
+      30,
+      60,
+      90
+    ],
+    "ciclo_compra_dias": 30,
+    "tendencia_limites": [
+      0.7,
+      1.5
+    ],
+    "data_comercial": {
+      "fator": 1.5,
+      "dias_efeito": 7
+    },
+    "rotulo_pedido": "pedido ao fornecedor ou à produção"
+  },
+  "produto": {
+    "$comentario": "V3 F2 (14/10/2026, SOMBRA): produto por trás do anúncio — src/lib/produto-estoque.js (puro) junta anúncios em produtos (mesmo user_product_id e mesmo inventário Full sempre; SELLER_SKU oficial normalizado e catálogo com trava de contradição; vínculo manual vence, recusa separa; seller_custom_field, título e «Kit N» só sugerem) e conta o estoque UMA vez por estoque físico de referência (EF). Com diagnostico_ligado = false (F2) nada muda no diagnóstico, nas regras, nos avisos nem nos textos: só a aba Produtos mostra «por anúncio × por produto». F3 (15/10/2026) construída atrás da MESMA chave: com diagnostico_ligado = true, carregarBase roda aplicarProduto (i.cobertura e i.ponto_reposicao do estoque físico de referência), estoque_ruptura/full_envio viram 1 ação por estoque físico (entidade produto, id estável pela chave do EF, item representante = maior venda, irmãos em dados), nascem estoque_dividido (confirmar_fisico: pergunta ao cliente só curva A/B, teto 2; pool_zerando: um anúncio zera com outro acima do ponto) e sku_ausente (conta), gatilhos/plano semanal/relatório focado/alerta falam de PRODUTO («vende em N anúncios», R$ pela demanda do produto), compras 1 linha por produto, estoque informado pelo cliente (produto_estoque_declarado, POST /api/cliente/produtos/estoque-fisico) vira modo declarado. Ligar = mudar aqui + reiniciar o servidor (fluxo combinado). Com false, tudo (plano, avisos, textos) sai byte a byte igual (scripts/teste-produto-diagnostico.mjs). docs/desenho-v3-produto-estoque-financeiro.md § 3.",
+    "diagnostico_ligado": false,
+    "juntar_automatico": ["up", "inventory", "sku", "catalogo"],
+    "estoque_declarado_validade_dias": 7,
+    "leitura_stock_validade_dias": 2,
+    "stock_teto_por_coleta": 150,
+    "kit_bundle_teto_por_coleta": 20,
+    "$premissa_espelho": "2+ estoques próprios do mesmo produto com o mesmo número = o mesmo estoque físico espelhado (contado uma vez)",
+    "$premissa_dividido": "números diferentes = estoque físico dividido entre os anúncios (soma)"
+  },
+  "financeiro": {
+    "$comentario": "V3 F4 (14/10/2026): financeiro por pedido — src/lib/lucro.js (puro) + src/lib/lucro-real.js. Lucro da linha = receita − reembolso − tarifa (sale_fee) − frete do vendedor (/shipments/{id}/costs, rateado pela receita do envio) − custo informado; centavos; ausente = null; número só com custo informado e cobertura ≥ cobertura_minima (senão «parcial (x%)»). margem_medida_nas_regras NASCE DESLIGADA: com false nenhum número, regra, aviso ou texto ao cliente muda (o plano sai idêntico); com true, carregarBase anexa i.financeiro/i.economia_real e margem_negativa (margem MEDIDA, evidência fato), ads_reduzir (ROAS de equilíbrio real), promocao_giro e full_estoque_antigo (desconto máximo real), cadastrar_custos (Pareto dos produtos sem custo) e o motor de diagnóstico passam a lê-los. Ligar só por decisão registrada, depois do antes × depois do plano de 3 clientes (scripts/conferir-financeiro.mjs --plano). docs/desenho-v3-produto-estoque-financeiro.md § 5.",
+    "sale_fee_por_unidade": true,
+    "$premissa_sale_fee": "order_items[].sale_fee é POR UNIDADE (total da linha = sale_fee × quantidade): 3 de 3 observações reais (Uniaodog, 14/10/2026). conciliarTarifa decide por conta comparando vendas q ≥ 2 com q = 1 do mesmo anúncio e preço (zero chamada); a confirmação definitiva é o billing CV (F7).",
+    "conciliar_min_votos": 5,
+    "conciliar_acordo_min": 0.9,
+    "frete_teto_por_coleta": 300,
+    "backfill_dias": 28,
+    "backfill_dias_por_coleta": 10,
+    "cobertura_minima": 0.8,
+    "margem_medida_nas_regras": false,
+    "faixa_frete_gratis_brl": 79,
+    "$premissa_faixa": "R$ 79 = limite público do frete grátis do ML: abaixo dele tarifa fixa e frete mudam, então o desconto máximo medido para na faixa (conferir)."
+  },
+  "dependencias": {
+    "$comentario": "Ação do MESMO anúncio que depende de outra: ganha depende_de (ids) e prazo ≥ prazo da dependência + 2 dias. Nunca remove ação (Manual 5.2: saúde e disponibilidade antes de tráfego e promoção).",
+    "ads_entrar": [
+      "estoque_ruptura",
+      "margem_negativa",
+      "anuncio_restrito"
+    ],
+    "ads_escalar": [
+      "estoque_ruptura",
+      "margem_negativa",
+      "anuncio_restrito"
+    ],
+    "promocao_giro": [
+      "margem_negativa"
+    ],
+    "ima_conversao": [
+      "anuncio_restrito",
+      "estoque_ruptura"
+    ],
+    "sazonal": [
+      "estoque_ruptura"
+    ],
+    "full_estoque_antigo": [
+      "margem_negativa"
+    ],
+    "duplicacao_estrategica": [
+      "estoque_dividido"
+    ]
+  },
+  "catalogo": {
+    "$comentario": "Anúncio de CATÁLOGO (catalog_listing): foto, título, descrição e ficha vêm do catálogo do Mercado Livre; o vendedor altera preço, estoque, frete e a caixa de compra. Catálogo de TERCEIROS não tem como alterar o conteúdo; catálogo PRÓPRIO só muda por sugestão de correção, com revisão do ML (nunca por edição direta do item). 'Próprio' NÃO é determinável por API: só existe por marcação manual (cliente: perfil_cliente.catalogo_proprio; exceção por anúncio: catalogo_origem). Sem marcação = terceiros (padrão seguro). src/lib/catalogo.js é o predicado único (origemCatalogo/editavelConteudo); catalog_product_id NÃO é a flag. Regras abaixo: bloqueadas = não nascem; filtradas = nascem sem a parte de conteúdo; mantidas = valem em catálogo.",
+    "padrao_seguro": "terceiros",
+    "texto_terceiros": "Conteúdo controlado pelo catálogo: ajuste preço, estoque, frete e a caixa de compra.",
+    "texto_proprio": "Conteúdo do catálogo: só por sugestão de correção, com revisão do Mercado Livre.",
+    "mensagem_bloqueio_ofertas": "Anúncio de CATÁLOGO de terceiros: foto, título, descrição e ficha são controlados pelo catálogo do Mercado Livre e o vendedor não os altera; ajuste preço, estoque, frete e a caixa de compra.",
+    "mensagem_sugestao_ofertas": "Anúncio de CATÁLOGO próprio: o conteúdo muda só por sugestão de correção, com revisão do Mercado Livre (pelo painel do vendedor), nunca por edição direta do item.",
+    "regras": {
+      "bloqueadas_terceiros": [
+        "conteudo_fotos",
+        "duplicacao_estrategica",
+        "queda_ctr_ads"
+      ],
+      "bloqueadas_proprio": [
+        "duplicacao_estrategica"
+      ],
+      "filtradas": [
+        "ima_conversao",
+        "ads_otimizar_antes",
+        "sazonal",
+        "queda_conversao_anuncio"
+      ],
+      "sem_job_de_conteudo": [
+        "conteudo_fotos",
+        "ima_conversao",
+        "duplicacao_estrategica",
+        "catalogo_buybox"
+      ],
+      "mantidas": [
+        "catalogo_buybox",
+        "frete_gratis",
+        "ads_entrar",
+        "ads_escalar",
+        "ads_reduzir",
+        "estoque_ruptura",
+        "full_envio",
+        "promocao_giro",
+        "preco_mudou_vendas_cairam",
+        "urgencia_oculta",
+        "queda_exposicao_anuncio",
+        "margem_negativa",
+        "ads_abaixo_meta",
+        "concentracao_receita",
+        "anuncio_restrito",
+        "reputacao_em_risco",
+        "envio_atrasado",
+        "reclamacao_sem_resposta",
+        "pergunta_sem_resposta",
+        "full_estoque_antigo"
+      ]
+    },
+    "escopos_ofertas_conteudo": [
+      "titulo_descricao",
+      "ficha",
+      "galeria",
+      "imagem_avulsa",
+      "oferta_completa"
+    ]
+  },
+  "priors_efeito": {
+    "$comentario": "PREMISSAS INICIAIS (não são dados do cliente). fracao_gap = parcela do gap até o benchmark que a ação costuma fechar: [conservador, base, otimista]. Substituídos por histórico medido quando há ≥5 tarefas do tipo (src/lib/calibracao.js).",
+    "ima_conversao": {
+      "p_sucesso": 0.4,
+      "fracao_gap": [
+        0.15,
+        0.3,
+        0.55
+      ]
+    },
+    "catalogo_buybox": {
+      "p_sucesso": 0.45,
+      "fracao_gap": [
+        0.1,
+        0.25,
+        0.5
+      ]
+    },
+    "conteudo_fotos": {
+      "p_sucesso": 0.35,
+      "ganho_conv_pct": [
+        2,
+        6,
+        12
+      ]
+    },
+    "frete_gratis": {
+      "p_sucesso": 0.4,
+      "ganho_conv_pct": [
+        3,
+        8,
+        15
+      ]
+    },
+    "ads_entrar": {
+      "p_sucesso": 0.45,
+      "fator_roas_marginal": [
+        0.5,
+        0.7,
+        1.0
+      ]
+    },
+    "ads_escalar": {
+      "p_sucesso": 0.5,
+      "fator_roas_marginal": [
+        0.5,
+        0.7,
+        0.9
+      ]
+    },
+    "ads_reduzir": {
+      "p_sucesso": 0.7
+    },
+    "ads_otimizar_antes": {
+      "p_sucesso": 0.4,
+      "fracao_gap": [
+        0.15,
+        0.3,
+        0.55
+      ]
+    },
+    "sazonal": {
+      "p_sucesso": 0.45,
+      "fator_demanda": [
+        1.1,
+        1.3,
+        1.6
+      ]
+    },
+    "urgencia_oculta": {
+      "p_sucesso": 0.15,
+      "ganho_pct": [
+        0,
+        5,
+        15
+      ]
+    },
+    "promocao_giro": {
+      "p_sucesso": 0.5
+    },
+    "estoque_ruptura": {
+      "p_sucesso": 0.85
+    },
+    "full_envio": {
+      "p_sucesso": 0.6
+    },
+    "estoque_dividido": {
+      "p_sucesso": 0.5,
+      "premissa": true,
+      "fonte": "premissa inicial (V3 F3, 15/10/2026): igualar o estoque entre anúncios do mesmo produto, ou a resposta do cliente sobre o físico, evita a parada do anúncio que zera; prova = dias sem estoque do estoque fraco em 14 dias"
+    },
+    "estoque_sincronizar": {
+      "p_sucesso": 0.6,
+      "premissa": true,
+      "fonte": "premissa inicial (V3 F6, 15/10/2026 — docs/desenho-v3-erp.md § E.1): dividir o estoque físico informado entre os anúncios do produto evita vender sem estoque e o anúncio parado com estoque no outro; prova = dias sem estoque e cancelamentos por falta de estoque em 28 dias (marco sync_estoque)"
+    },
+    "estoque_divergente": {
+      "p_sucesso": 0.5,
+      "premissa": true,
+      "fonte": "premissa inicial (V3 F6, 15/10/2026): o cliente recontar o estoque quando o físico informado (menos as vendas desde então) diverge do que o Mercado Livre mostra; prova = divergência zerada em 14 dias"
+    },
+    "sku_ausente": {
+      "p_sucesso": 0.9,
+      "premissa": true,
+      "fonte": "ação administrativa (cadastro do SELLER_SKU): pré-requisito do produto por trás do anúncio, sem estimativa de receita"
+    },
+    "duplicacao_estrategica": {
+      "p_sucesso": 0.3,
+      "fracao_gap": [
+        0.05,
+        0.12,
+        0.25
+      ],
+      "recuperacao_pct": [
+        10,
+        25,
+        40
+      ],
+      "ganho_novo_pct": [
+        10,
+        20,
+        30
+      ]
+    },
+    "oferta_galeria": {
+      "p_sucesso": 0.35,
+      "premissa": true,
+      "fonte": "premissa inicial (mesma de conteudo_fotos, família Imagens) — substituída pelo resultado medido quando houver amostra suficiente",
+      "ganho_conv_pct": [
+        2,
+        6,
+        12
+      ]
+    },
+    "oferta_titulo_descricao": {
+      "p_sucesso": 0.3,
+      "premissa": true,
+      "fonte": "premissa inicial (família Otimizar anúncios) — substituída pelo medido com amostra",
+      "ganho_pct": [
+        2,
+        5,
+        10
+      ]
+    },
+    "oferta_completa": {
+      "p_sucesso": 0.4,
+      "premissa": true,
+      "fonte": "premissa inicial (mesma do ímã, família Otimizar anúncios) — substituída pelo medido com amostra",
+      "fracao_gap": [
+        0.15,
+        0.3,
+        0.55
+      ],
+      "ganho_conv_pct": [
+        3,
+        8,
+        15
+      ]
+    },
+    "oferta_ficha": {
+      "p_sucesso": 0.3,
+      "premissa": true,
+      "fonte": "premissa inicial (família Ficha técnica) — substituída pelo medido com amostra",
+      "ganho_pct": [
+        1,
+        4,
+        8
+      ]
+    },
+    "oferta_preco": {
+      "p_sucesso": 0.5,
+      "premissa": true,
+      "fonte": "premissa inicial (família Preços); elasticidade do anúncio NÃO medida",
+      "fracao_mantida": [
+        0.5,
+        0.8,
+        1.0
+      ]
+    },
+    "oferta_cadastro": {
+      "p_sucesso": 0.3,
+      "premissa": true,
+      "fonte": "premissa inicial (família Cadastro de produtos): produto novo não tem histórico — nenhuma receita é estimada"
+    },
+    "preco_mudou_vendas_cairam": {
+      "p_sucesso": 0.5,
+      "premissa": true,
+      "fonte": "premissa inicial (família Preços): metade das revisões de um preço que subiu recupera parte das vendas — elasticidade do anúncio NÃO medida; substituída pelo resultado medido quando houver amostra suficiente",
+      "fracao_recuperada": [
+        0.2,
+        0.4,
+        0.6
+      ]
+    },
+    "queda_conversao_anuncio": {
+      "p_sucesso": 0.45,
+      "premissa": true,
+      "fonte": "premissa inicial (família Otimização): menos da metade das quedas de conversão contra o próprio histórico volta ao nível anterior depois de tratar a causa provável — substituída pelo resultado medido quando houver amostra suficiente",
+      "fracao_recuperada": [
+        0.2,
+        0.4,
+        0.6
+      ]
+    },
+    "queda_exposicao_anuncio": {
+      "p_sucesso": 0.4,
+      "premissa": true,
+      "fonte": "premissa inicial (família Otimização): exposição depende do ranking do ML, que não é controlado — 40% das quedas de visitas recuperam parte ao tratar Ads/preço/conteúdo",
+      "fracao_recuperada": [
+        0.2,
+        0.4,
+        0.6
+      ]
+    },
+    "queda_ctr_ads": {
+      "p_sucesso": 0.45,
+      "premissa": true,
+      "fonte": "premissa inicial (família Imagens): capa e título são o que o comprador vê no anúncio patrocinado; metade das revisões de capa recupera o CTR",
+      "fracao_recuperada": [
+        0.3,
+        0.5,
+        0.7
+      ]
+    },
+    "margem_negativa": {
+      "p_sucesso": 0.7,
+      "premissa": true,
+      "fonte": "premissa inicial (família Preços): corrigir preço ou pausar Ads de um anúncio com margem negativa quase sempre estanca a perda — o que é incerto é quanto de venda fica",
+      "fracao_estancada": [
+        0.5,
+        1,
+        1
+      ]
+    },
+    "ads_abaixo_meta": {
+      "p_sucesso": 0.55,
+      "premissa": true,
+      "fonte": "premissa inicial (família Ads): ajustar lance/verba de um anúncio fora da meta de ACOS/ROAS do mês traz o indicador para a meta em pouco mais da metade dos casos",
+      "fracao_excedente": [
+        0.5,
+        0.7,
+        1
+      ]
+    },
+    "concentracao_receita": {
+      "p_sucesso": 0.35,
+      "premissa": true,
+      "fonte": "premissa inicial (família Duplicação): diversificar a receita leva ciclos; a fração do campeão exposta a ruptura/caixa de compra/moderação em 28 d é premissa",
+      "fracao_exposta": [
+        0.1,
+        0.2,
+        0.3
+      ]
+    },
+    "anuncio_restrito": {
+      "p_sucesso": 0.6,
+      "premissa": true,
+      "fonte": "premissa inicial (família Correção): reativar um anúncio pausado/em revisão recupera a receita que ele fazia quando a pausa não foi decisão do cliente",
+      "fracao_recuperada": [
+        0.5,
+        1,
+        1
+      ]
+    },
+    "reputacao_em_risco": {
+      "p_sucesso": 0.5,
+      "premissa": true,
+      "fonte": "premissa inicial (família Saúde da conta, v1.5.0): tratar a taxa que ameaça o nível (atrasos, reclamações, cancelamentos) devolve a conta ao verde em metade dos casos; a fração do GMV exposta à perda de nível não é medida",
+      "fracao_exposta": [
+        0.05,
+        0.1,
+        0.2
+      ]
+    },
+    "envio_atrasado": {
+      "p_sucesso": 0.8,
+      "premissa": true,
+      "fonte": "premissa inicial (família Saúde da conta, v1.5.0): despachar hoje o que está atrasado é ação direta do cliente; a fração dos pedidos atrasados que viraria cancelamento ou reclamação não é medida",
+      "fracao_em_risco": [
+        0.1,
+        0.3,
+        0.5
+      ]
+    },
+    "reclamacao_sem_resposta": {
+      "p_sucesso": 0.6,
+      "premissa": true,
+      "fonte": "premissa inicial (família Saúde da conta, v1.5.0): responder dentro do prazo evita a mediação na maioria dos casos; a fração do valor do pedido em risco é premissa",
+      "fracao_em_risco": [
+        0.3,
+        0.6,
+        1
+      ]
+    },
+    "pergunta_sem_resposta": {
+      "p_sucesso": 0.6,
+      "premissa": true,
+      "fonte": "premissa inicial (família Saúde da conta, v1.5.0): a parcela de perguntas respondidas que vira venda (5/10/20 %) é premissa — o Mercado Livre não entrega a conversão por pergunta",
+      "conversao_pergunta_pct": [
+        5,
+        10,
+        20
+      ]
+    },
+    "full_estoque_antigo": {
+      "p_sucesso": 0.4,
+      "premissa": true,
+      "fonte": "premissa inicial (família Full, v1.5.0): promoção de giro ou retirada gira parte do estoque parado; a fração girada é premissa e a idade do estoque é ESTIMADA pela série de vendas (endpoint de idade não verificado)",
+      "fracao_girada": [
+        0.1,
+        0.25,
+        0.5
+      ]
+    },
+    "nf_pendente": {
+      "p_sucesso": 0.8,
+      "premissa": true,
+      "fonte": "premissa inicial (F8 nota fiscal, desenho-v3-erp § E.1): nota aprovada e emitida pelo provedor costuma sair na mesma janela; calibrada pelo SLA pedido→nota medido quando houver amostra"
+    },
+    "nf_regra_faltando": {
+      "p_sucesso": 0.5,
+      "premissa": true,
+      "fonte": "premissa inicial (F8): depende do contador do cliente declarar a regra fiscal do SKU; sem prior de receita (pendência, nunca R$)"
+    }
+  },
+  "sazonalidade": [
+    {
+      "evento": "Dia Mundial dos Animais",
+      "data": "2026-10-04",
+      "palavras": [
+        "pet",
+        "cachorro",
+        "cao",
+        "gato",
+        "coleira",
+        "guia",
+        "petisco",
+        "mordedor"
+      ],
+      "acao": "campanha temática com produtos pet"
+    },
+    {
+      "evento": "Dia das Crianças",
+      "data": "2026-10-12",
+      "palavras": [
+        "infantil",
+        "crianca",
+        "kids",
+        "brinquedo",
+        "bebe"
+      ],
+      "acao": "kit presente e conteúdo infantil"
+    },
+    {
+      "evento": "Black Friday",
+      "data": "2026-11-27",
+      "universal": true,
+      "palavras": [],
+      "acao": "estoque e campanha dos anúncios curva A"
+    },
+    {
+      "evento": "Natal",
+      "data": "2026-12-25",
+      "universal": true,
+      "palavras": [
+        "presente",
+        "natal",
+        "brinquedo",
+        "petisco",
+        "casco"
+      ],
+      "acao": "kits e combos de presente"
+    },
+    {
+      "evento": "Carnaval",
+      "data": "2027-02-09",
+      "palavras": [
+        "fantasia",
+        "folia",
+        "festa"
+      ],
+      "acao": "estoque e anúncio temático"
+    },
+    {
+      "evento": "Dia das Mães",
+      "data": "2027-05-09",
+      "palavras": [
+        "mae",
+        "presente"
+      ],
+      "acao": "kits de presente"
+    }
+  ],
+  "regras": [
+    {
+      "id": "ima_conversao",
+      "descricao": "Anúncio que vende e tem tráfego, mas converte abaixo do benchmark da própria conta",
+      "dados": [
+        "visitas por anúncio",
+        "unidades por anúncio"
+      ],
+      "kpi": "conversão do anúncio (unidades ÷ visitas)",
+      "tipo_demanda": "Otimizar Anúncios",
+      "ativa": true,
+      "adicionada_em": "2026-10-05",
+      "justificativa": "estratégia ímã do roteiro: gap de conversão é a alavanca com demanda já provada",
+      "prova": {
+        "metrica": "conversao",
+        "janela_dias": 14
+      }
+    },
+    {
+      "id": "catalogo_buybox",
+      "descricao": "Anúncio de catálogo que perdeu a caixa de compra ou tem preço acima do preço-para-ganhar",
+      "dados": [
+        "buy_box_winner",
+        "price_to_win"
+      ],
+      "kpi": "vendas e posse da caixa de compra",
+      "tipo_demanda": "Corrigir Anúncios",
+      "ativa": true,
+      "adicionada_em": "2026-10-05",
+      "justificativa": "perda de catálogo derruba a venda sem aparecer em visitas",
+      "prova": {
+        "metrica": "unidades",
+        "janela_dias": 14
+      }
+    },
+    {
+      "id": "estoque_ruptura",
+      "descricao": "Anúncio relevante com cobertura menor que o prazo de reposição",
+      "dados": [
+        "estoque disponível",
+        "vendas por dia"
+      ],
+      "kpi": "dias de cobertura e ausência de ruptura",
+      "tipo_demanda": "Planejamento full",
+      "ativa": true,
+      "adicionada_em": "2026-10-05",
+      "justificativa": "ruptura em campeão de vendas é perda direta e some do ranking"
+    },
+    {
+      "id": "full_envio",
+      "descricao": "Quantidade sugerida de envio ao Full por demanda projetada e cobertura planejada",
+      "dados": [
+        "vendas por dia",
+        "estoque",
+        "tipo logístico"
+      ],
+      "kpi": "cobertura em dias e vendas do anúncio",
+      "tipo_demanda": "Planejamento full",
+      "ativa": true,
+      "adicionada_em": "2026-10-05",
+      "justificativa": "evita enviar estoque só olhando venda passada"
+    },
+    {
+      "id": "estoque_dividido",
+      "descricao": "V3 F3 (só com produto.diagnostico_ligado): o mesmo produto (SELLER_SKU oficial ou catálogo) em 2+ estoques PRÓPRIOS separados no Mercado Livre (UPs diferentes). Causa confirmar_fisico: o mesmo número em todos (premissa: estoque espelhado, contado uma vez) sem estoque declarado válido — pergunta ao cliente quantas unidades existem e se um sistema sincroniza (caminho cliente · pendência; só curva A/B; teto 2 por plano). Causa pool_zerando: números diferentes (premissa: dividido) com um estoque em ruptura enquanto outro está acima do próprio ponto de pedido — igualar no painel ou unificar (assistido · card).",
+      "dados": [
+        "chaves do produto por anúncio (meli_anuncio_up: user_product_id, SELLER_SKU, catálogo)",
+        "estoque por local (meli_up_estoque) e estoque declarado (produto_estoque_declarado)",
+        "vendas por dia dos anúncios do produto"
+      ],
+      "kpi": "dias sem estoque do estoque fraco e estoque físico declarado",
+      "tipo_demanda": "Planejamento full",
+      "ativa": true,
+      "adicionada_em": "2026-10-15",
+      "justificativa": "anúncios do mesmo produto em estoques separados vendem mais do que existe (espelho) ou param um anúncio com estoque no outro (dividido); a V3 detecta e cobra, nunca escreve estoque",
+      "prova": {
+        "metrica": "unidades",
+        "janela_dias": 14
+      }
+    },
+    {
+      "id": "sku_ausente",
+      "descricao": "V3 F3 (só com produto.diagnostico_ligado; ação de CONTA): anúncios ativos curva A/B sem SELLER_SKU oficial somando ≥ sku_ausente_min_pct_gmv do GMV de 28 dias (premissa). Sem SKU o produto não junta anúncios de UPs diferentes, o custo por SKU e o estoque declarado não casam. Assistido (card no Notion); previsão pendência (sem R$); teto 1.",
+      "dados": [
+        "chaves do produto por anúncio (meli_anuncio_up: SELLER_SKU oficial)",
+        "receita 28 d por anúncio"
+      ],
+      "kpi": "anúncios curva A/B com SELLER_SKU",
+      "tipo_demanda": "Corrigir Anúncios",
+      "ativa": true,
+      "adicionada_em": "2026-10-15",
+      "justificativa": "o SKU é a chave do produto entre cadastros diferentes (hipótese H1 da pesquisa do UpSeller): pré-requisito do estoque contado uma vez e do custo por SKU",
+      "prova": {
+        "metrica": "unidades",
+        "janela_dias": 14
+      }
+    },
+    {
+      "id": "estoque_sincronizar",
+      "descricao": "V3 F6 (só com produto.diagnostico_ligado): produto com estoque físico informado VÁLIDO para escrever (≤ chaveiro.sync_estoque.validade_fisico_horas; fonte cliente/equipe/erp/planilha, nunca o available_quantity) cujos estoques próprios no ML somam diferente do alvo (físico − vendas pagas desde a informação − segurança de dias_protecao × venda prevista) além da tolerância, ou mostram MAIS que o físico (risco de vender sem estoque). Divisão entre os estoques próprios do produto pela venda (alocarEstoque, Σ = alvo; Full e Flex independente fora; catálogo + clássico no mesmo UP = 1 escrita). Caminho automático ml_estoque · alocar só com a chave sync_estoque_ligado E o cliente liberado; senão assistido (ajuste preparado, humano aplica no painel). Antes de escrever 0 o sistema avisa «vai zerar em N dias».",
+      "dados": [
+        "estoque físico informado (produto_estoque_declarado)",
+        "linhas de pedido pagas desde a informação (meli_pedido_item)",
+        "chaves do produto e estoque por anúncio/local (meli_anuncio_up, meli_up_estoque)",
+        "venda prevista do produto (ritmo de compras-previsao)"
+      ],
+      "kpi": "dias sem estoque e cancelamentos por falta de estoque em 28 dias",
+      "tipo_demanda": "Planejamento full",
+      "ativa": true,
+      "adicionada_em": "2026-10-15",
+      "justificativa": "decisão do David (15/10/2026, nº 5): sincronismo de estoque como o UpSeller, a partir do estoque único por produto, com segurança em dias, conferência depois da escrita e liberação por cliente",
+      "prova": {
+        "metrica": "unidades",
+        "janela_dias": 28
+      }
+    },
+    {
+      "id": "estoque_divergente",
+      "descricao": "V3 F6 (só com produto.diagnostico_ligado): o estoque físico informado já não vale para escrever (mais velho que a validade de escrita, dentro da validade do diagnóstico) e, descontadas as vendas pagas desde então, diverge do que o Mercado Livre mostra em mais de tolerancia_pct % e tolerancia_un un. Pede ao cliente a contagem do físico (pendência; sem R$); nunca corrige sozinho.",
+      "dados": [
+        "estoque físico informado (produto_estoque_declarado)",
+        "linhas de pedido pagas desde a informação (meli_pedido_item)",
+        "estoque por anúncio/local (meli_anuncio_up, meli_up_estoque)"
+      ],
+      "kpi": "divergência entre o físico informado (menos vendas) e o estoque no ML",
+      "tipo_demanda": "Planejamento full",
+      "ativa": true,
+      "adicionada_em": "2026-10-15",
+      "justificativa": "sem contagem recente o sincronismo não escreve; a divergência mostra venda fora do ML, entrada não informada ou ajuste no painel",
+      "prova": {
+        "metrica": "unidades",
+        "janela_dias": 14
+      }
+    },
+    {
+      "id": "ads_entrar",
+      "descricao": "Anúncio curva A/B com boa conversão e estoque que ainda não anuncia",
+      "dados": [
+        "conversão",
+        "estoque",
+        "custos para ROAS alvo"
+      ],
+      "kpi": "ROAS e vendas atribuídas",
+      "tipo_demanda": "Ajuste ADS",
+      "ativa": true,
+      "adicionada_em": "2026-10-05",
+      "justificativa": "Ads em produto que converte multiplica tráfego já qualificado"
+    },
+    {
+      "id": "ads_escalar",
+      "descricao": "Anúncio em Ads com ROAS acima da conta e estoque saudável",
+      "dados": [
+        "ROAS por anúncio",
+        "estoque"
+      ],
+      "kpi": "ROAS marginal e vendas atribuídas",
+      "tipo_demanda": "Ajuste ADS",
+      "ativa": true,
+      "adicionada_em": "2026-10-05",
+      "justificativa": "concentrar verba onde a conta já prova retorno"
+    },
+    {
+      "id": "ads_reduzir",
+      "descricao": "Anúncio gastando sem retorno (cliques sem venda ou ROAS muito abaixo da conta)",
+      "dados": [
+        "custo",
+        "cliques",
+        "vendas atribuídas"
+      ],
+      "kpi": "custo evitado e ACOS da conta",
+      "tipo_demanda": "Ajuste ADS",
+      "ativa": true,
+      "adicionada_em": "2026-10-05",
+      "justificativa": "verba sem retorno financia anúncio que converte"
+    },
+    {
+      "id": "ads_otimizar_antes",
+      "descricao": "Anúncio em Ads com conversão baixa: corrigir antes de gastar mais",
+      "dados": [
+        "conversão",
+        "custo"
+      ],
+      "kpi": "conversão do anúncio",
+      "tipo_demanda": "Otimizar Anúncios",
+      "ativa": true,
+      "adicionada_em": "2026-10-05",
+      "justificativa": "não aumentar tráfego para oferta com falha"
+    },
+    {
+      "id": "conteudo_fotos",
+      "descricao": "Anúncio relevante com poucas fotos",
+      "dados": [
+        "quantidade de fotos"
+      ],
+      "kpi": "conversão e CTR do anúncio",
+      "tipo_demanda": "Melhorar Imagens",
+      "ativa": true,
+      "adicionada_em": "2026-10-05",
+      "justificativa": "conteúdo é a correção de menor esforço para conversão",
+      "prova": {
+        "metrica": "conversao",
+        "janela_dias": 14
+      }
+    },
+    {
+      "id": "frete_gratis",
+      "descricao": "Anúncio relevante sem frete grátis",
+      "dados": [
+        "frete grátis",
+        "custo de frete"
+      ],
+      "kpi": "conversão do anúncio",
+      "tipo_demanda": "Corrigir Anúncios",
+      "ativa": true,
+      "adicionada_em": "2026-10-05",
+      "justificativa": "frete grátis é fator de exposição e conversão no ML",
+      "prova": {
+        "metrica": "conversao",
+        "janela_dias": 14
+      }
+    },
+    {
+      "id": "sazonal",
+      "descricao": "Janela comercial próxima com produtos relacionados",
+      "dados": [
+        "calendário comercial",
+        "título do anúncio"
+      ],
+      "kpi": "vendas na janela vs janela equivalente",
+      "tipo_demanda": "Campanhas de Desconto",
+      "ativa": true,
+      "adicionada_em": "2026-10-05",
+      "justificativa": "sazonalidade só vale quando preparada com a antecedência de conteúdo, reposição e campanha"
+    },
+    {
+      "id": "urgencia_oculta",
+      "descricao": "Hipótese de novo uso, público, kit ou palavra-chave para anúncio campeão",
+      "dados": [
+        "título e atributos do anúncio"
+      ],
+      "kpi": "visitas e vendas do anúncio ou kit novo",
+      "tipo_demanda": "Criar Kits",
+      "ativa": true,
+      "adicionada_em": "2026-10-05",
+      "justificativa": "demanda oculta é HIPÓTESE; entra com prioridade baixa e teste definido"
+    },
+    {
+      "id": "promocao_giro",
+      "descricao": "Anúncio com cobertura em excesso: promoção para girar, com desconto máximo pela margem",
+      "dados": [
+        "cobertura",
+        "custos"
+      ],
+      "kpi": "cobertura e margem",
+      "tipo_demanda": "Campanhas de Desconto",
+      "ativa": true,
+      "adicionada_em": "2026-10-05",
+      "justificativa": "só com margem conhecida; sem custos vira pendência"
+    },
+    {
+      "id": "cadastrar_custos",
+      "descricao": "Informar custos para liberar ROAS alvo e desconto máximo",
+      "dados": [
+        "custos do cliente"
+      ],
+      "kpi": "custos cadastrados",
+      "tipo_demanda": "Reunião de Alinhamento",
+      "ativa": true,
+      "adicionada_em": "2026-10-05",
+      "justificativa": "sem custo não há ROAS alvo nem desconto seguro"
+    },
+    {
+      "id": "duplicacao_estrategica",
+      "descricao": "Duplicação estratégica (treinamento Place2u): nova versão do anúncio com variações deliberadas e objetivo definido, sem tocar no original — gatilhos G1 (produto novo), G2 (potencial travado) e G4 (curva A com queda de relevância)",
+      "dados": [
+        "visitas, conversão e receita por anúncio",
+        "data de criação do anúncio",
+        "período anterior"
+      ],
+      "kpi": "receita da FAMÍLIA (original + duplicatas) contra o grupo de controle, com canibalização do original",
+      "tipo_demanda": "Duplicar anúncios",
+      "ativa": true,
+      "adicionada_em": "2026-10-06",
+      "justificativa": "treinamento interno 'Estratégia de Duplicação de Anúncios': a duplicata absorve o teste e o original mantém o histórico; G3 e G5 dependem da pesquisa do consultor (urgência oculta) e não nascem de dado",
+      "prova": {
+        "metrica": "receita_familia",
+        "janela_dias": 14
+      }
+    },
+    {
+      "id": "oferta_galeria",
+      "descricao": "Módulo Ofertas: galeria ou imagem avulsa de um anúncio existente (imagens por posição, referência confirmada no GATE 0)",
+      "dados": [
+        "visitas e unidades do anúncio",
+        "CTR de Ads quando houver",
+        "fotos atuais do anúncio"
+      ],
+      "kpi": "conversão do anúncio (unidades ÷ visitas) e CTR de Ads",
+      "tipo_demanda": "Melhorar Imagens",
+      "ativa": true,
+      "adicionada_em": "2026-10-07",
+      "justificativa": "o módulo de ofertas não decide sozinho: o job vira ação do plano com a mesma prioridade e previsão; o prior é premissa, substituído pelo resultado medido da família Imagens quando houver amostra suficiente",
+      "prova": {
+        "metrica": "conversao",
+        "janela_dias": 14
+      }
+    },
+    {
+      "id": "oferta_titulo_descricao",
+      "descricao": "Módulo Ofertas: título e descrição factuais de um anúncio existente",
+      "dados": [
+        "visitas por anúncio",
+        "ficha com fonte"
+      ],
+      "kpi": "visitas/dia e conversão do anúncio",
+      "tipo_demanda": "Otimizar Anúncios",
+      "ativa": true,
+      "adicionada_em": "2026-10-07",
+      "justificativa": "texto só com fato da ficha; o efeito é medido como qualquer otimização (família Otimizar anúncios)",
+      "prova": {
+        "metrica": "visitas_dia",
+        "janela_dias": 14
+      }
+    },
+    {
+      "id": "oferta_completa",
+      "descricao": "Módulo Ofertas: oferta completa de um anúncio existente pelo método (voz do cliente → ângulo → galeria → título depois das imagens → ficha → preço)",
+      "dados": [
+        "visitas, unidades e conversão do anúncio",
+        "benchmark de conversão da própria conta",
+        "custos e regra comercial para o preço"
+      ],
+      "kpi": "conversão do anúncio (unidades ÷ visitas)",
+      "tipo_demanda": "Otimizar Anúncios",
+      "ativa": true,
+      "adicionada_em": "2026-10-07",
+      "justificativa": "mesma alavanca do ímã (gap de conversão até a conta), executada pelo módulo com aprovação versionada",
+      "prova": {
+        "metrica": "conversao",
+        "janela_dias": 14
+      }
+    },
+    {
+      "id": "oferta_ficha",
+      "descricao": "Módulo Ofertas: ficha técnica factual (atributos com fonte e evidência; identidade sem termo promocional)",
+      "dados": [
+        "atributos da categoria",
+        "ficha com fonte",
+        "visitas por anúncio"
+      ],
+      "kpi": "visitas/dia e cobertura de atributos",
+      "tipo_demanda": "Preencher Ficha Técnica",
+      "ativa": true,
+      "adicionada_em": "2026-10-07",
+      "justificativa": "a ficha é a alavanca que sobra quando o título trava; medir visitas, nunca prometer indexação",
+      "prova": {
+        "metrica": "visitas_dia",
+        "janela_dias": 14
+      }
+    },
+    {
+      "id": "oferta_preco",
+      "descricao": "Módulo Ofertas: preço calculado em centavos com custo e regra comercial com fonte (preservar margem/piso)",
+      "dados": [
+        "custo vigente da variante",
+        "regra comercial com fonte e validade",
+        "unidades por anúncio"
+      ],
+      "kpi": "margem de contribuição estimada e unidades",
+      "tipo_demanda": "Atualizar Preços",
+      "ativa": true,
+      "adicionada_em": "2026-10-07",
+      "justificativa": "sem custo ou regra o preço fica bloqueado; com eles o ganho é margem preservada (elasticidade não medida)",
+      "prova": {
+        "metrica": "margem_pct",
+        "janela_dias": 14
+      }
+    },
+    {
+      "id": "oferta_cadastro",
+      "descricao": "Módulo Ofertas: anúncio NOVO (produto/variante sem anúncio) criado pelo adaptador depois de GATE 0, categoria e atributos obrigatórios com evidência, preço sem bloqueio e galeria aprovada",
+      "dados": [
+        "ficha com fonte",
+        "atributos obrigatórios da categoria",
+        "custo e regra comercial",
+        "galeria aprovada"
+      ],
+      "kpi": "primeira venda e visitas/dia em 28 dias (lançamento)",
+      "tipo_demanda": "Cadastro de Produtos",
+      "ativa": true,
+      "adicionada_em": "2026-10-07",
+      "justificativa": "produto novo recebe estratégia inicial sem alegar histórico; a medida é de lançamento (vendeu ou não, em quantos dias)",
+      "prova": {
+        "metrica": "primeira_venda",
+        "janela_dias": 28
+      }
+    },
+    {
+      "id": "preco_mudou_vendas_cairam",
+      "descricao": "Anúncio cujo preço de lista subiu (alta líquida ≥ limiar de config/atribuicao.json → preco, e o preço de hoje ainda acima do de antes) nos últimos 28 dias e as vendas/dia caíram 15% ou mais desde a alta (mínimo de preco_min_dias_apos_alta dias depois), enquanto os anúncios sem mudança de preço não caíram nas mesmas datas",
+      "dados": [
+        "histórico de preço do anúncio (meli_item_mudanca)",
+        "vendas por dia do anúncio: 28 dias antes da alta × desde a alta",
+        "vendas por dia dos anúncios sem mudança de preço nas mesmas datas (controle)"
+      ],
+      "kpi": "unidades do anúncio contra os anúncios sem mudança de preço",
+      "tipo_demanda": "Atualizar Preços",
+      "ativa": true,
+      "adicionada_em": "2026-10-07",
+      "justificativa": "mudar o preço faz o ML reentregar o anúncio e mexe na conversão; a coincidência alta de preço × queda de vendas é FATO, a causa é HIPÓTESE testada com UMA mudança medida contra o controle",
+      "prova": {
+        "metrica": "unidades",
+        "janela_dias": 14
+      }
+    },
+    {
+      "id": "queda_conversao_anuncio",
+      "descricao": "Anúncio coberto por visitas cuja conversão (unidades ÷ visitas) caiu queda_conversao_rel_pct ou mais contra os próprios 28 dias anteriores, com visitas suficientes nas duas janelas, enquanto os anúncios SEM mudança registrada (preço, título, fotos, capa) não caíram mais que controle_max_queda_pct. A queda é FATO; a causa (preço, conteúdo, disponibilidade, catálogo) é HIPÓTESE por sinal. Em catálogo de terceiros perde a causa de conteúdo.",
+      "dados": [
+        "unidades e visitas do anúncio: 28 dias × 28 anteriores (meli_serie_item, só com visOk)",
+        "conversão agregada dos anúncios sem mudança registrada nas mesmas janelas (controle; meli_item_mudanca)",
+        "change-log do anúncio no período (preço, título, fotos, capa), cobertura de estoque e caixa de compra"
+      ],
+      "kpi": "conversão do anúncio contra os anúncios sem mudança",
+      "tipo_demanda": "Otimizar Anúncios",
+      "ativa": true,
+      "adicionada_em": "2026-10-08",
+      "justificativa": "conversão que cai contra o próprio histórico, com a conta estável, aponta uma mudança no anúncio ou na oferta — e cada causa tem um teste barato; sem controle a queda seria mercado",
+      "prova": {
+        "metrica": "conversao",
+        "janela_dias": 14
+      }
+    },
+    {
+      "id": "queda_exposicao_anuncio",
+      "descricao": "Anúncio ativo, com estoque e coberto por visitas cujas visitas caíram queda_visitas_pct ou mais contra os próprios 28 dias anteriores, enquanto as visitas dos anúncios sem mudança registrada não caíram mais que controle_max_queda_pct. Causas por sinal: Ads desligado, preço subiu, conteúdo mudou; sem sinal, sazonal/mercado.",
+      "dados": [
+        "visitas do anúncio: 28 dias × 28 anteriores (meli_serie_item, só com visOk)",
+        "visitas agregadas dos anúncios sem mudança registrada (controle)",
+        "Ads do anúncio nas duas janelas (ligado/desligado), change-log de preço/título/fotos/capa, status e estoque"
+      ],
+      "kpi": "visitas por dia do anúncio contra os anúncios sem mudança",
+      "tipo_demanda": "Otimizar Anúncios",
+      "ativa": true,
+      "adicionada_em": "2026-10-08",
+      "justificativa": "visitas que somem com a conta estável é perda de exposição do anúncio (ranking/Ads/preço), não de demanda — e Ads desligado ou preço que subiu são verificáveis no dia",
+      "prova": {
+        "metrica": "visitas_dia",
+        "janela_dias": 14
+      }
+    },
+    {
+      "id": "queda_ctr_ads",
+      "descricao": "Anúncio com Ads nas duas janelas (≥ ads_min_impressoes_ctr impressões em cada) cujo CTR caiu queda_ctr_pct ou mais contra a janela anterior, enquanto o CTR de Ads da conta não caiu mais que controle_max_queda_pct. Não nasce em catálogo de terceiros (a capa não é do vendedor).",
+      "dados": [
+        "impressões e cliques de Ads do anúncio: janela atual × anterior (meli_ads_item)",
+        "CTR de Ads da conta nas duas janelas (controle)",
+        "origem do catálogo do anúncio"
+      ],
+      "kpi": "CTR de Ads do anúncio contra o CTR de Ads da conta",
+      "tipo_demanda": "Melhorar Imagens",
+      "ativa": true,
+      "adicionada_em": "2026-10-08",
+      "justificativa": "o CTR do patrocinado é a única leitura de atração que a API entrega (o orgânico é NOT_AVAILABLE); queda contra o próprio histórico com a conta estável aponta capa/título/preço do anúncio",
+      "prova": {
+        "metrica": "conversao",
+        "janela_dias": 14
+      }
+    },
+    {
+      "id": "margem_negativa",
+      "descricao": "Só com custos informados: anúncio relevante cuja margem de contribuição estimada (margemPct: custo vinculado ou CMV% da conta + percentuais da conta) é ≤ 0 antes de Ads, ou cuja margem antes de Ads − TACOS do anúncio (custo de Ads ÷ receita total do anúncio) é ≤ 0 (com Ads; janela atual com dia sem coleta ou truncado não afirma). ACOS acima da margem é outro sinal (vendas atribuídas a Ads sem margem), nunca margem negativa. Sem custos NÃO nasce — nunca se afirma prejuízo sem custo.",
+      "dados": [
+        "custos do cliente (percentuais) e custo vinculado do anúncio (custo-vinculo)",
+        "preço de lista, unidades e receita total 28 d e custo de Ads do anúncio (TACOS do anúncio = custo de Ads ÷ receita total do anúncio)"
+      ],
+      "kpi": "margem de contribuição estimada do anúncio (antes e depois de Ads)",
+      "tipo_demanda": "Atualizar Preços",
+      "ativa": true,
+      "adicionada_em": "2026-10-08",
+      "justificativa": "vender com margem negativa destrói caixa a cada unidade; corrigir preço ou pausar Ads vem antes de qualquer alavanca de crescimento (P.L.A.C.E: Pesquisa e preço)",
+      "prova": {
+        "metrica": "margem_pct",
+        "janela_dias": 14
+      }
+    },
+    {
+      "id": "ads_abaixo_meta",
+      "descricao": "Só com meta do mês cadastrada (metas_cliente: acos_max e/ou roas): anúncio com gasto ≥ ads_min_custo_avaliar cujo ACOS está acima do máximo ou cujo ROAS está abaixo da meta. Não nasce no anúncio que já recebeu ads_reduzir (equilíbrio econômico). Sem meta, nada.",
+      "dados": [
+        "metas do mês (metas_cliente: acos_max, roas)",
+        "custo, receita atribuída, ACOS e ROAS de Ads do anúncio (meli_ads_item)"
+      ],
+      "kpi": "ACOS/ROAS de Ads do anúncio contra a meta do mês",
+      "tipo_demanda": "Ajuste ADS",
+      "ativa": true,
+      "adicionada_em": "2026-10-08",
+      "justificativa": "a meta cadastrada pelo time é o limite que o cliente aceitou; anúncio fora dela consome a verba que outro anúncio dentro da meta aproveitaria",
+      "prova": {
+        "metrica": "unidades",
+        "janela_dias": 14
+      }
+    },
+    {
+      "id": "concentracao_receita",
+      "descricao": "Ação de CONTA (item: null): o anúncio nº 1 responde por pareto_top1_alerta_pct ou mais do GMV de 28 dias. É problema (dependência: ruptura, perda da caixa de compra ou moderação dele derruba a conta) e oportunidade (diversificar: duplicação, kit, segundo público).",
+      "dados": [
+        "receita de 28 dias por anúncio (curva ABC) e participação do nº 1"
+      ],
+      "kpi": "participação do anúncio nº 1 no GMV de 28 dias",
+      "tipo_demanda": "Duplicar anúncios",
+      "ativa": true,
+      "adicionada_em": "2026-10-08",
+      "justificativa": "concentração é fato medido; o risco é hipótese de um evento no campeão — proteger o campeão e abrir uma segunda fonte de receita é a jogada de conta, não de anúncio",
+      "prova": {
+        "metrica": "receita_familia",
+        "janela_dias": 28
+      }
+    },
+    {
+      "id": "anuncio_restrito",
+      "descricao": "Anúncio com status paused, under_review ou inactive que vendia no período anterior (receita > 0 e relevante). Fato; o motivo (sub_status/moderação) é NOT_COLLECTED e entra em confirmar_com.",
+      "dados": [
+        "status do anúncio (meli_item) e receita dos 28 dias anteriores (meli_serie_item)"
+      ],
+      "kpi": "unidades do anúncio depois de reativado",
+      "tipo_demanda": "Corrigir Anúncios",
+      "ativa": true,
+      "adicionada_em": "2026-10-08",
+      "justificativa": "anúncio que vendia e parou de aparecer é receita que some sem decisão registrada; confirmar se a pausa foi do cliente ou do ML é o primeiro passo",
+      "prova": {
+        "metrica": "unidades",
+        "janela_dias": 14
+      }
+    },
+    {
+      "id": "reputacao_em_risco",
+      "descricao": "Ação de CONTA (item: null), só com a leitura de saúde do dia (meli_conta_saude, hoje ou ontem) e sem bloco pendente: nível de reputação fora do verde (level_id ≠ 5_green) OU, com vendas_periodo ≥ reputacao_min_vendas, alguma taxa (reclamações, atrasos, cancelamentos) ≥ reputacao_fracao_alerta × limite do nível (reputacao_*_max_pct, premissa). Sem linha do dia ou com pendente em reputação NÃO nasce.",
+      "dados": [
+        "reputação gravada do dia (meli_conta_saude: level_id, taxa_claims, taxa_atraso, taxa_cancel, vendas_periodo)",
+        "GMV de 28 dias (meli_serie_item) para a receita exposta"
+      ],
+      "kpi": "nível de reputação e taxas (reclamações, atrasos, cancelamentos) na leitura seguinte",
+      "tipo_demanda": "Reunião de Alinhamento",
+      "ativa": true,
+      "adicionada_em": "2026-10-09",
+      "justificativa": "a reputação decide a exposição de TODOS os anúncios da conta (Manual: saúde antes de tráfego e promoção); a leitura é fato gravado, a fração do GMV exposta é premissa",
+      "prova": {
+        "metrica": "saude_sinal",
+        "janela_dias": 7
+      }
+    },
+    {
+      "id": "envio_atrasado",
+      "descricao": "Ação de CONTA, urgência 5: leitura de saúde do dia com atrasos ≥ 1 (pedidos pagos dos últimos pedidos_dias dias com prazo de despacho vencido e ainda não despachados — saude-coleta). Com pendente em atrasos (campo do prazo não verificado, API indisponível) NÃO nasce. A pendência despacho_prazo do catálogo passa a ser medida pelo mesmo dado.",
+      "dados": [
+        "atrasos do dia (meli_conta_saude.atrasos) e a lista de pedidos (meli_envio_atraso: order_id, item_id, prazo, dias de atraso)",
+        "ticket médio de 28 dias (resumo.ticket) para a receita em risco; sem ticket, sem valor"
+      ],
+      "kpi": "pedidos com despacho atrasado na leitura seguinte",
+      "tipo_demanda": "Reunião de Alinhamento",
+      "ativa": true,
+      "adicionada_em": "2026-10-09",
+      "justificativa": "pedido atrasado é cancelamento, reclamação e queda de reputação em potencial; despachar hoje é a ação mais barata da conta e só o cliente executa",
+      "prova": {
+        "metrica": "saude_sinal",
+        "janela_dias": 3
+      }
+    },
+    {
+      "id": "reclamacao_sem_resposta",
+      "descricao": "Leitura de saúde do dia sem pendente em reclamações: reclamação aberta em mediação (stage=dispute) ou com prazo de resposta a menos de claim_prazo_horas. Uma ação por ANÚNCIO quando a reclamação traz item_id (anúncio lido ou não no período); as sem anúncio viram uma ação de conta. Mediação = urgência 5 e pendência crítica (alerta ao cliente).",
+      "dados": [
+        "reclamações abertas gravadas (meli_claim: item_id, estágio, prazo de resposta)",
+        "preço do anúncio (meli_item) ou ticket da conta para o valor em risco"
+      ],
+      "kpi": "reclamações abertas e em mediação na leitura seguinte",
+      "tipo_demanda": "Reunião de Alinhamento",
+      "ativa": true,
+      "adicionada_em": "2026-10-09",
+      "justificativa": "reclamação sem resposta vira mediação e conta na taxa de reclamações da reputação; o prazo é fato do Mercado Livre e só o cliente responde",
+      "prova": {
+        "metrica": "saude_sinal",
+        "janela_dias": 3
+      }
+    },
+    {
+      "id": "pergunta_sem_resposta",
+      "descricao": "Ação de CONTA: leitura de saúde do dia sem pendente em perguntas e perguntas sem resposta há mais de perguntas_limite_horas ≥ perguntas_min_24h. Com 403 (permissao_do_app) NÃO nasce: data_quality já declara NOT_AUTHORIZED e o que falta no app. O texto da pergunta nunca é gravado (só hash).",
+      "dados": [
+        "perguntas sem resposta gravadas (meli_conta_saude.perguntas_24h, meli_pergunta: item_id e data)",
+        "ticket médio de 28 dias para o cenário de venda"
+      ],
+      "kpi": "perguntas sem resposta há mais de 24 h na leitura seguinte",
+      "tipo_demanda": "Reunião de Alinhamento",
+      "ativa": true,
+      "adicionada_em": "2026-10-09",
+      "justificativa": "pergunta é intenção de compra declarada; sem resposta em 24 h o comprador compra de outro — a conversão por pergunta é premissa, a contagem é fato",
+      "prova": {
+        "metrica": "saude_sinal",
+        "janela_dias": 3
+      }
+    },
+    {
+      "id": "full_estoque_antigo",
+      "descricao": "Anúncio em Full (meli_full_estoque, leitura do dia, sem pendente no bloco Full) com disponível > 0 e idade do estoque ≥ full_estoque_antigo_dias — idade_dias quando o endpoint existir; enquanto não verificado, dias_sem_venda ESTIMADO pela série de vendas (fonte declarada na evidência; evidência tipo hipótese). Causa por custos: com custos informados e desconto possível → promoção de giro (promocoes); sem custos → retirada do Full ou informar custos (cliente). Depende de margem_negativa no mesmo anúncio.",
+      "dados": [
+        "estoque Full por inventory_id (meli_full_estoque: disponivel, dias_sem_venda estimado, idade_dias, fonte, pendente)",
+        "anúncio (meli_item) e custos do cliente para o desconto máximo"
+      ],
+      "kpi": "unidades vendidas e disponível no Full do anúncio",
+      "tipo_demanda": "Planejamento full",
+      "ativa": true,
+      "adicionada_em": "2026-10-09",
+      "justificativa": "estoque parado no Full paga armazenagem e tarifa de estoque antigo sem vender; girar ou retirar é decisão com margem (promoção) ou do cliente (retirada)",
+      "prova": {
+        "metrica": "unidades",
+        "janela_dias": 14
+      }
+    },
+    {
+      "id": "nf_pendente",
+      "descricao": "V3 F8 (nota fiscal): pedido pago há mais de nf.pendente_apos_horas (24 h) sem nota autorizada, com o cliente configurado (cliente_fiscal) e a chave nf.ligado ligada. Sinal puro em src/lib/nota-fiscal.js (sinaisNota). INATIVA até a ligação no plano (desenho-v3-erp § B.7): o caminho no config/chaveiro.json fica para quando o arquivo estiver livre.",
+      "dados": ["nota_fiscal (estado, pago_em) do cliente", "cliente_fiscal e termo_fiscal"],
+      "kpi": "horas do pedido pago até a nota autorizada; despacho no prazo",
+      "tipo_demanda": "Nota fiscal",
+      "ativa": false,
+      "adicionada_em": "2026-10-15",
+      "justificativa": "o ML exige nota para liberar a etiqueta em várias logísticas: nota atrasada atrasa o despacho e pesa na reputação",
+      "prova": {
+        "metrica": "horas_ate_nota",
+        "janela_dias": 14
+      }
+    },
+    {
+      "id": "nf_regra_faltando",
+      "descricao": "V3 F8 (nota fiscal): SKU vendido sem regra fiscal declarada pelo contador do cliente (regra_fiscal_produto) — a nota fica em rascunho com o bloqueio «regra fiscal faltando» naquele item; nada é inferido. Pendência ao cliente/contador, sem R$. INATIVA até a ligação no plano.",
+      "dados": ["nota_fiscal.bloqueios_json (regra_fiscal_faltando por SKU)", "regra_fiscal_produto do cliente"],
+      "kpi": "SKUs vendidos com regra fiscal declarada",
+      "tipo_demanda": "Nota fiscal",
+      "ativa": false,
+      "adicionada_em": "2026-10-15",
+      "justificativa": "sem regra declarada não há nota: o pedido não fatura e a etiqueta pode não sair",
+      "prova": {
+        "metrica": "skus_com_regra",
+        "janela_dias": 14
+      }
+    }
+  ],
+  "metricas_prova": {
+    "$comentario": "P.R.O.V.A.: o número que prova cada ação (regras[].prova.metrica) — medido antes × depois com controle a partir da execução",
+    "conversao": "conversão (unidades ÷ visitas)",
+    "visitas_dia": "visitas por dia",
+    "margem_pct": "margem de contribuição estimada",
+    "unidades": "unidades vendidas",
+    "receita_familia": "receita da família (original + duplicatas) contra o controle",
+    "primeira_venda": "primeira venda e visitas/dia (lançamento)",
+    "saude_sinal": "sinal de saúde da conta (atrasos, reclamações, perguntas, reputação) na leitura seguinte",
+    "horas_ate_nota": "horas do pedido pago até a nota fiscal autorizada (F8)",
+    "skus_com_regra": "SKUs vendidos com regra fiscal declarada pelo contador (F8)"
+  },
+  "regra_de_entrada": "Uma regra nova só entra se declarar dados disponíveis, KPI mensurável, tipo de tarefa e justificativa; e é revista após 10 tarefas medidas (taxa de melhora com limite superior de Wilson abaixo de 25% = candidata a aposentadoria).",
+  "ritual": {
+    "semanal": "gerar plano, aprovar top 5 por cliente, distribuir",
+    "quinzenal": "medir tarefas maduras (14 dias) e registrar",
+    "mensal": "calibrar priors com histórico e rever regras com baixa taxa"
+  }
+}

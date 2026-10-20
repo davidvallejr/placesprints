@@ -1,0 +1,18 @@
+{
+  "_fonte_doc": "GET /produtos/{idProduto}: https://github.com/tempont/bling-erp-api-python/blob/HEAD/specs/bling-openapi-reference.json (SPEC-CÓPIA; conferir em https://developer.bling.com.br/referencia)",
+  "_aviso": "construída a partir da documentação; não é captura real. NÃO CONFIRMADO: precoCusto na RAIZ do detalhe (o conector lê raiz, depois fornecedor.precoCusto); fornecedor com id 0 quando não há fornecedor padrão; forma de estrutura.componentes[].produto.id/quantidade.",
+  "_requisicao": "GET /Api/v3/produtos/<id> (chave = id; id fora daqui = 404 no teste)",
+  "detalhes": {
+    "1002": { "data": { "id": 1002, "codigo": "CAM-002", "formato": "S", "situacao": "A", "precoCusto": 0,
+      "fornecedor": { "id": 777, "contato": { "id": 9001, "nome": "Fornecedor Exemplo" }, "codigo": "FORN-CX-02", "precoCusto": 12.5, "precoCompra": 11 } } },
+    "1003": { "data": { "id": 1003, "codigo": "SEM-FORN", "formato": "S", "situacao": "A", "precoCusto": 0,
+      "fornecedor": { "id": 0, "contato": { "id": 0, "nome": "" }, "codigo": "", "precoCusto": 0, "precoCompra": 0 } } },
+    "1005": { "data": { "id": 1005, "codigo": "VAR-AZUL", "formato": "S", "situacao": "A", "precoCusto": 20,
+      "variacao": { "nome": "Cor:Azul;Tamanho:M", "produtoPai": { "id": 2001 } } } },
+    "1006": { "data": { "id": 1006, "codigo": "KIT-01", "formato": "E", "situacao": "A", "precoCusto": 50,
+      "estrutura": { "tipoEstoque": "V", "lancamentoEstoque": "A", "componentes": [ { "produto": { "id": 1001 }, "quantidade": 2 }, { "produto": { "id": 1002 }, "quantidade": 1 } ] } } },
+    "1007": { "data": { "id": 1007, "codigo": "KIT-SEM", "formato": "E", "situacao": "A", "precoCusto": null } },
+    "1011": { "data": { "id": 1011, "codigo": "CUSTO-NULL", "formato": "S", "situacao": "A", "precoCusto": null,
+      "fornecedor": { "id": 778, "contato": { "id": 9002, "nome": "Outro Fornecedor" }, "codigo": "F-11", "precoCusto": null, "precoCompra": 8 } } }
+  }
+}

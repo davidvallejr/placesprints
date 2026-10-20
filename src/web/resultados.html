@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>O que funciona · Place Sprints</title>
+<link rel="stylesheet" href="/ui.css">
+<link rel="stylesheet" href="/tela-o-que-funciona.css">
+</head>
+<body data-pagina="o-que-funciona">
+<header class="ps-shell" id="psShell"></header>
+<script src="/shell.js"></script>
+<main class="pg">
+  <div class="pg-cab">
+    <div class="pg-titulo">
+      <h1>O que funciona</h1>
+      <p class="pg-meta"><span id="metaPeriodo">Período em cálculo</span><span id="metaContas">Contas conectadas em cálculo</span><span>associação, não causalidade comprovada</span></p>
+    </div>
+  </div>
+
+  <section class="veredito" aria-label="Resumo">
+    <p class="veredito-frase" id="vereditoFrase">Lendo as medições…</p>
+    <div class="regua" id="regua" hidden></div>
+    <div class="grade" id="veredito" aria-busy="true"><div class="sk-kpi"></div><div class="sk-kpi"></div><div class="sk-kpi"></div></div>
+    <div id="mensura" class="mt-4" aria-busy="true"><div class="sk-linha"></div><div class="sk-linha"></div></div>
+  </section>
+
+  <div class="proxima" id="proxima">
+    <span class="proxima-rotulo">Próxima ação</span>
+    <span class="proxima-texto" id="proximaTexto">Para medir mais: cite o MLB no card e preencha Concluído em</span>
+    <a class="btn btn-primario" id="proximaBtn" href="/processos">Ver processo</a>
+  </div>
+
+  <section class="bloco">
+    <div class="bloco-cab"><h2>Por tipo de tarefa</h2><span class="sis" data-sistema="merovingio" title="Sistema de origem: Merovíngio">Merovíngio</span></div>
+    <p class="sub">Ordenado pela taxa de melhora mínima (limite inferior de Wilson, 95%). Com menos de 5 tarefas medidas a linha leva o selo "amostra pequena" e ainda não vira padrão. Clique no grupo para ver as tarefas, piorou primeiro.</p>
+    <div id="filtros" aria-label="Filtros da tela"></div>
+    <div id="tipos" aria-busy="true"><div class="sk-tabela"></div></div>
+  </section>
+
+  <section class="bloco">
+    <div class="bloco-cab"><h2>Por nicho</h2><span class="sis" data-sistema="merovingio" title="Sistema de origem: Merovíngio">Merovíngio</span></div>
+    <p class="sub">Nicho da conta na central, com as grafias unificadas. Só nichos com 5 ou mais tarefas medidas têm linha própria; o resto soma na linha Outros.</p>
+    <div id="nichos" aria-busy="true"><div class="sk-tabela"></div></div>
+  </section>
+
+  <section class="bloco">
+    <div class="bloco-cab"><h2>Por região</h2><span class="sis" data-sistema="merovingio" title="Sistema de origem: Merovíngio">Merovíngio</span></div>
+    <p class="sub">Região da UF do endereço da conta no Mercado Livre. Conta sem UF fica em "Sem UF registrada": a UF nunca é deduzida do CNPJ. Só regiões com 5 ou mais tarefas medidas têm linha própria; o resto soma na linha Outros.</p>
+    <div id="regioes" aria-busy="true"><div class="sk-tabela"></div></div>
+  </section>
+
+  <section class="bloco">
+    <div class="bloco-cab"><h2>Lançamentos e reativações</h2><span class="sis" data-sistema="merovingio" title="Sistema de origem: Merovíngio">Merovíngio</span></div>
+    <p class="sub">Anúncio criado, duplicado ou que estava parado: vendeu em 14 dias?</p>
+    <div id="lanc" aria-busy="true"><div class="sk-kpi"></div></div>
+  </section>
+
+  <details class="recolhido" id="secNichoTipo">
+    <summary>Nicho × tipo de tarefa <span class="n" id="nNichoTipo"></span> <span class="sis" data-sistema="merovingio" title="Sistema de origem: Merovíngio">Merovíngio</span></summary>
+    <p class="sub">O tipo de tarefa dentro de cada nicho. Só cruzamentos com 5 ou mais tarefas medidas; os menores não somam numa linha.</p>
+    <div id="nichoTipo" aria-busy="true"><div class="sk-tabela"></div></div>
+  </details>
+
+  <details class="recolhido">
+    <summary>Histórico por analista <span class="n" id="nAnalistas"></span><span class="n">· uso interno</span> <span class="sis" data-sistema="merovingio" title="Sistema de origem: Merovíngio">Merovíngio</span></summary>
+    <p class="sub">Mostra o histórico, não uma nota: carteira, tipo de tarefa e volume de cada conta mudam o resultado. Leia sempre junto com o número de tarefas.</p>
+    <div id="analistas" aria-busy="true"><div class="sk-tabela"></div></div>
+  </details>
+
+  <details class="recolhido" id="secPalavras">
+    <summary>Palavras nas tarefas que funcionam <span class="n" id="nPalavras"></span> <span class="sis" data-sistema="merovingio" title="Sistema de origem: Merovíngio">Merovíngio</span></summary>
+    <p class="sub">Palavras do título das tarefas, com pelo menos 5 ocorrências.</p>
+    <div id="palavras" aria-busy="true"><div class="sk-tabela"></div></div>
+  </details>
+
+  <details class="recolhido">
+    <summary>Como medimos <span class="sis" data-sistema="merovingio" title="Sistema de origem: Merovíngio">Merovíngio</span></summary>
+    <div class="explica">
+      <h4>Como cada tarefa é medida</h4>
+      <ul>
+        <li><b>Antes e depois:</b> compara as vendas (ou as visitas, quando o anúncio vende pouco) nos 14 dias antes da conclusão com os 14 dias depois, deixando uma defasagem de alguns dias para o Mercado Livre reindexar.</li>
+        <li><b>Grupo de controle:</b> o mesmo cálculo nos anúncios da conta que ninguém tocou. O que o mercado e a sazonalidade fizeram com todos sai da conta; sobra o que é específico do anúncio trabalhado.</li>
+        <li><b>Teste de ruído:</b> repete o cálculo em datas falsas do histórico do próprio anúncio (em escala logarítmica, para que alta e queda tenham o mesmo peso). Só conta como melhora ou piora quando o p do placebo é de no máximo 10%, com pelo menos 9 janelas de comparação. Sem janelas suficientes, vale o z do próprio efeito ajustado (|z| ≥ 1,96).</li>
+        <li><b>Reversão à média:</b> otimização costuma ser feita em anúncio que acabou de cair ou subir. Quando a janela anterior estava 30% ou mais distante do nível habitual do anúncio, o resultado vem marcado como possível reversão e perde confiança.</li>
+        <li><b>Confiança de 0 a 100</b> combina: o efeito veio depois da tarefa e não já estava em curso, as visitas confirmam a venda, o efeito supera o ruído, o mesmo tipo de tarefa costuma funcionar, e não há outra tarefa ou data comercial explicando. O que falta de dado é declarado e sai da conta.</li>
+        <li><b>Lançamentos</b> (anúncio novo ou que dormia) não têm "antes". Medem se vendeu em 14 dias, quantas visitas teve e quanta receita gerou.</li>
+        <li><b>Preço:</b> toda mudança de preço do anúncio na janela tira confiança da medida. Mudança de 3% ou mais (limiar configurável), em tarefa que não é de preço, tira a medida das taxas por grupo: ela aparece no detalhe do grupo com o aviso de preço.</li>
+        <li><b>Taxa de acerto</b> de cada tipo e de cada pessoa usa o limite inferior de Wilson (95%): com poucas tarefas, o número é baixo de propósito. Menos de 5 tarefas é amostra pequena e não vira padrão.</li>
+      </ul>
+      <p class="mt-2"><b>Nada aqui é causalidade comprovada.</b> É associação temporal ajustada por controle e ruído. <a href="/metodologia">Ver o algoritmo do plano</a>.</p>
+    </div>
+  </details>
+</main>
+<footer class="pg-rodape">Fonte: Notion e contas do Mercado Livre conectadas · indicadores calculados por código</footer>
+<script src="/filtros.js"></script>
+<script src="resultados.js"></script>
+<script src="/alerta.js" defer></script>
+</body>
+</html>

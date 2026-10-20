@@ -1,0 +1,4609 @@
+{
+ "fonte": "Manual do Analista Place2u",
+ "extraido_em": "2026-10-06",
+ "capitulos": [
+  {
+   "n": "0",
+   "nome": "Como usar este manual"
+  },
+  {
+   "n": "1",
+   "nome": "O cargo do Analista"
+  },
+  {
+   "n": "2",
+   "nome": "Como o Analista deve pensar"
+  },
+  {
+   "n": "3",
+   "nome": "Jornada do cliente dentro da operação"
+  },
+  {
+   "n": "4",
+   "nome": "Diagnóstico inicial"
+  },
+  {
+   "n": "5",
+   "nome": "Priorização e Plano de Ação"
+  },
+  {
+   "n": "6",
+   "nome": "Gestão de catálogo"
+  },
+  {
+   "n": "7",
+   "nome": "Gestão de anúncios"
+  },
+  {
+   "n": "8",
+   "nome": "Conteúdo e conversão"
+  },
+  {
+   "n": "9",
+   "nome": "Preço e promoção"
+  },
+  {
+   "n": "11",
+   "nome": "Estoque e logística"
+  },
+  {
+   "n": "12",
+   "nome": "ERP e integrações"
+  },
+  {
+   "n": "13",
+   "nome": "Gestão da loja e da conta"
+  },
+  {
+   "n": "14",
+   "nome": "Mercado Livre"
+  },
+  {
+   "n": "15",
+   "nome": "Amazon"
+  },
+  {
+   "n": "16",
+   "nome": "Shopee"
+  },
+  {
+   "n": "17",
+   "nome": "Indicadores que o Analista precisa dominar"
+  },
+  {
+   "n": "18",
+   "nome": "Diagnóstico por sintomas"
+  },
+  {
+   "n": "19",
+   "nome": "Árvores de decisão"
+  },
+  {
+   "n": "20",
+   "nome": "Padrão obrigatório de SOP"
+  },
+  {
+   "n": "21",
+   "nome": "Controle de qualidade"
+  },
+  {
+   "n": "22",
+   "nome": "Comunicação"
+  },
+  {
+   "n": "23",
+   "nome": "Escalonamento"
+  },
+  {
+   "n": "24",
+   "nome": "Casos reais"
+  },
+  {
+   "n": "25",
+   "nome": "Base de erros e aprendizados"
+  },
+  {
+   "n": "26",
+   "nome": "Glossário"
+  },
+  {
+   "n": "27",
+   "nome": "Formação do Analista"
+  },
+  {
+   "n": "28",
+   "nome": "Provas de conhecimento"
+  },
+  {
+   "n": "29",
+   "nome": "Base para IA"
+  }
+ ],
+ "processos": [
+  {
+   "id": "1.1",
+   "capitulo": {
+    "n": "1",
+    "nome": "O cargo do Analista"
+   },
+   "nome": "O que é um Analista de Marketplace",
+   "descricao": "O Analista de Marketplace é o profissional responsável por executar, no dia a dia, as estratégias definidas para as contas dos clientes, transformando planos de ação em melhorias concretas de performance nos marketplaces (Mercado Livre, Shopee e Amazon). Ele se reporta ao Consultor de Marketplace, contando com apoio e direcionamento técnico do Treinador.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": "A frase-guia que resume é: \"Não executamos tarefas. Transformamos estratégia em resultado.\""
+  },
+  {
+   "id": "1.2",
+   "capitulo": {
+    "n": "1",
+    "nome": "O cargo do Analista"
+   },
+   "nome": "Qual é a missão do analista",
+   "descricao": "Executar com excelência as estratégias definidas para os clientes, transformando planos de ação em melhorias concretas de performance nos marketplaces, garantindo qualidade operacional, organização e evolução contínua das contas.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "1.3",
+   "capitulo": {
+    "n": "1",
+    "nome": "O cargo do Analista"
+   },
+   "nome": "Pelo que o Analista é responsável",
+   "descricao": "Gestão Operacional das Contas",
+   "blocos": [],
+   "atencoes": [],
+   "texto": "●    Cadastrar e otimizar anúncios nos marketplaces\n●    Realizar ajustes de títulos, atributos, categorias e SEO\n●    Criar e atualizar kits, variações e catálogos\n●    Configurar e acompanhar promoções e campanhas comerciais\nExecução Estratégica\n●    Colocar em prática os planos de ação definidos pelo consultor\n●    Garantir que as atividades planejadas sejam executadas dentro do prazo\n●    Identificar problemas e oportunidades nas contas\n●    Apoiar na implementação de novas estratégias de crescimento\nOrganização e Comunicação\n●    Atualizar sistemas internos e ferramentas de gestão\n●    Documentar atividades realizadas\n●    Comunicar riscos, bloqueios e oportunidades de forma clara\n●    Trabalhar em parceria com consultores e demais áreas da operação\nIndicadores de Performance (KPIs) associados a essas responsabilidades\nOperacionais:\n●    % de atividades executadas dentro do prazo\n●    Tempo médio de execução de demandas\n●    Taxa de retrabalho\n●    Qualidade das entregas realizadas\nPerformance das contas:\n●    Evolução dos anúncios otimizados\n●    Crescimento dos indicadores acompanhados pelo consultor\n●    Implementação dos planos de ação no prazo acordado\nComportamentais:\n●    Proatividade na identificação de problemas\n●    Organização e disciplina operacional\n●    Participação em treinamentos e desenvolvimento técnico\n●    Colaboração com o time"
+  },
+  {
+   "id": "1.4",
+   "capitulo": {
+    "n": "1",
+    "nome": "O cargo do Analista"
+   },
+   "nome": "Pelo que o Analista não é responsável",
+   "descricao": "O descritivo de cargo não define de forma explícita uma lista de \"não responsabilidades\", mas ela pode ser inferida da relação hierárquica descrita: o Analista se reporta ao Consultor de Marketplace, e sua atribuição é colocar em prática os planos de ação definidos por ele — não criá-los. Ou seja:",
+   "blocos": [],
+   "atencoes": [],
+   "texto": "●    Definir a estratégia da conta — essa é uma atribuição do Consultor de Marketplace\n●    Aprovar mudanças estruturais nos planos de ação sem validação do consultor\n●    Contato direto com o cliente por reunião ou grupos de WhatsApp\n●    Resolução de problemas críticos com o cliente\nEste tópico deve ser revisado e complementado quando houver material específico sobre limites de atuação do cargo."
+  },
+  {
+   "id": "1.5",
+   "capitulo": {
+    "n": "1",
+    "nome": "O cargo do Analista"
+   },
+   "nome": "O que caracteriza um bom Analista",
+   "descricao": "Competências Técnicas",
+   "blocos": [],
+   "atencoes": [],
+   "texto": "●    Conhecimento básico ou intermediário em marketplaces\n●    Capacidade analítica para leitura de dados\n●    Familiaridade com Mercado Livre, Shopee ou Amazon\n●    Noções de publicidade digital (ADS)\n●    Conhecimento em SEO para anúncios\n●    Organização e atenção aos detalhes\nCompetências Comportamentais\n●    Proatividade\n●    Curiosidade e vontade de aprender\n●    Senso de urgência\n●    Responsabilidade\n●    Comunicação clara\n●    Capacidade de receber e aplicar feedbacks\n●    Mentalidade de crescimento\nO que se espera de um Analista de alta performance\n●    Não espera ser cobrado para agir\n●    Identifica problemas antes que se tornem grandes\n●    Busca entender o \"porquê\" das estratégias\n●    Aprende continuamente sobre marketplaces e publicidade\n●    Trata a conta do cliente como se fosse sua"
+  },
+  {
+   "id": "1.6",
+   "capitulo": {
+    "n": "1",
+    "nome": "O cargo do Analista"
+   },
+   "nome": "O que caracteriza uma execução ruim",
+   "descricao": "●    Erros operacionais.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": "●    Notion não preenchido.\n●    Entregas fora do prazo.\n●    Anúncios fora do padrão entregue."
+  },
+  {
+   "id": "1.8",
+   "capitulo": {
+    "n": "1",
+    "nome": "O cargo do Analista"
+   },
+   "nome": "Responsabilidades diárias",
+   "descricao": "●    Realizar as tarefas propostas para o dia.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": "●    Reportar qualquer problema ou dúvida para o consultor.\n●    Finalizar pelo menos 1 tarefa de cada cliente por dia.\n●    Usar o Notion da forma correta, registrando todas as tarefas no MAPA, mostrando o antes e depois de cada ação."
+  },
+  {
+   "id": "1.9",
+   "capitulo": {
+    "n": "1",
+    "nome": "O cargo do Analista"
+   },
+   "nome": "Responsabilidades semanais",
+   "descricao": "●    Check-in e check-out com o consultor da carteira para alinhar pendências e entregas.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": "●    Relatório semanal das tarefas feitas na semana + resultado dos últimos 7 dias dentro da plataforma.\n●    Tarefas semanais entregues dentro do prazo."
+  },
+  {
+   "id": "1.10",
+   "capitulo": {
+    "n": "1",
+    "nome": "O cargo do Analista"
+   },
+   "nome": "Responsabilidades mensais",
+   "descricao": "●    Distribuição das tarefas do plano de ação no quadro de cada cliente.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": "●    Além de todas as tarefas diárias e semanais."
+  },
+  {
+   "id": "2.1",
+   "capitulo": {
+    "n": "2",
+    "nome": "Como o Analista deve pensar"
+   },
+   "nome": "Mentalidade de dono",
+   "descricao": "Significa tratar a conta do cliente como se fosse um negócio próprio: não esperar ser cobrado para agir, buscar entender o contexto completo da operação e se preocupar genuinamente com o resultado do cliente, não apenas com a execução da tarefa em si.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "2.2",
+   "capitulo": {
+    "n": "2",
+    "nome": "Como o Analista deve pensar"
+   },
+   "nome": "Pensar em causa antes de executar tarefa",
+   "descricao": "Antes de executar qualquer tarefa, o Analista deve entender por que ela existe — qual problema ou objetivo ela pretende resolver. Executar sem entender a causa aumenta o risco de realizar uma ação que não resolve o problema real do cliente.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "2.3",
+   "capitulo": {
+    "n": "2",
+    "nome": "Como o Analista deve pensar"
+   },
+   "nome": "Diagnóstico antes da ação",
+   "descricao": "Antes de agir, é preciso reunir dados e contexto suficientes para confirmar qual é o problema real. Agir sem diagnóstico aumenta a chance de aplicar a solução errada para o sintoma certo.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "2.4",
+   "capitulo": {
+    "n": "2",
+    "nome": "Como o Analista deve pensar"
+   },
+   "nome": "Receita não é igual a lucro",
+   "descricao": "Uma conta pode faturar muito e ainda assim não ser saudável: taxas de marketplace, custos de anúncios, logística e descontos podem consumir a margem. O Analista precisa olhar além do faturamento bruto e considerar a lucratividade real da operação.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "2.5",
+   "capitulo": {
+    "n": "2",
+    "nome": "Como o Analista deve pensar"
+   },
+   "nome": "Venda não é igual a performance",
+   "descricao": "Vender mais unidades não significa necessariamente que a conta está performando bem. É preciso olhar também para conversão, ticket médio, recompra, saúde do anúncio e ranking — uma alta em vendas pode esconder problemas em outras frentes.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "2.8",
+   "capitulo": {
+    "n": "2",
+    "nome": "Como o Analista deve pensar"
+   },
+   "nome": "Como priorizar problemas",
+   "descricao": "Uma forma prática de priorizar é usar uma matriz de prioridades, cruzando o impacto que a ação teria com o esforço necessário para executá-la. Problemas de alto impacto e baixo esforço (quick wins) devem ser tratados primeiro; problemas de alto esforço e baixo impacto podem ficar no backlog.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "2.9",
+   "capitulo": {
+    "n": "2",
+    "nome": "Como o Analista deve pensar"
+   },
+   "nome": "Impacto × urgência × esforço",
+   "descricao": "Além do impacto e do esforço, a urgência também entra na equação: um problema pode ter impacto médio, mas se não for resolvido rapidamente pode gerar prejuízo maior (por exemplo, ruptura de estoque ou queda de Buy Box). Priorizar bem significa equilibrar essas três variáveis, não olhar para apenas uma delas.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "2.14",
+   "capitulo": {
+    "n": "2",
+    "nome": "Como o Analista deve pensar"
+   },
+   "nome": "Como identificar causa raiz",
+   "descricao": "Identificar a causa raiz significa ir além do sintoma visível e perguntar \"por quê\" sucessivas vezes até chegar à origem real do problema, sempre validando as hipóteses com dados antes de agir.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "2.15",
+   "capitulo": {
+    "n": "2",
+    "nome": "Como o Analista deve pensar"
+   },
+   "nome": "Como transformar problema em plano de ação",
+   "descricao": "Depois de diagnosticado, o problema precisa virar ações concretas: o que fazer, quem é o responsável, qual o prazo e qual o critério que vai indicar que o problema foi resolvido.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "3.2",
+   "capitulo": {
+    "n": "3",
+    "nome": "Jornada do cliente dentro da operação"
+   },
+   "nome": "Coleta de acessos",
+   "descricao": "●    Dentro do Discord, no grupo de cada cliente, ficam fixados a pasta do Drive, o quadro do Notion e o quadro do Canva.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": "●    Usamos o LastPass para centralizar os acessos das contas dos clientes.\n●    Para acesso ao Mercado Livre, é preciso solicitar ao atendimento o Authy para liberação do código de acesso à conta.\n●    Para acesso à Shopee, é preciso solicitar ao atendimento que entre em contato com o cliente pelo grupo para liberar o acesso via e-mail ou telefone."
+  },
+  {
+   "id": "3.7",
+   "capitulo": {
+    "n": "3",
+    "nome": "Jornada do cliente dentro da operação"
+   },
+   "nome": "Definição de prioridades",
+   "descricao": "Toda prioridade é definida pelo consultor e passada para o Analista no check-in e check-out semanal.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "3.9",
+   "capitulo": {
+    "n": "3",
+    "nome": "Jornada do cliente dentro da operação"
+   },
+   "nome": "Aprovação",
+   "descricao": "Toda vez que um novo cliente inicia na carteira, é preciso criar um padrão de imagens com a identidade visual da marca e enviar para aprovação do seller em até 48h após o início da gestão na carteira.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "3.13",
+   "capitulo": {
+    "n": "3",
+    "nome": "Jornada do cliente dentro da operação"
+   },
+   "nome": "Reporte",
+   "descricao": "Qualquer dúvida, problema ou erro na hora da execução precisa ser registrado como comentário no card do Notion, e reportado ao consultor responsável para solução.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "3.15",
+   "capitulo": {
+    "n": "3",
+    "nome": "Jornada do cliente dentro da operação"
+   },
+   "nome": "Encerramento ou transição",
+   "descricao": "●    Cliente encerrou: todas as tarefas do plano de ação precisam ser encerradas dentro do prazo e entregues ao cliente.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": "●    Cliente encerrou fora do prazo com tarefa ainda no quadro: a tarefa precisa ser finalizada e o ocorrido comunicado via comentário antes de finalizar.\n●    Mudança de analista: o analista que estava executando precisa fazer uma reunião de transição para explicar como aquele cliente trabalha e onde estão os documentos, fotos etc."
+  },
+  {
+   "id": "5.1",
+   "capitulo": {
+    "n": "5",
+    "nome": "Priorização e Plano de Ação"
+   },
+   "nome": "Como construir um plano de ação",
+   "descricao": "O plano de ação é a ponte entre o diagnóstico e a execução. Ele só existe depois que a conta foi analisada: nenhuma ação deve entrar no plano sem estar ligada a um problema ou oportunidade identificada, com o dado que a justifica.",
+   "blocos": [],
+   "atencoes": [
+    "Cadastros e duplicações de anúncios vêm antes das otimizações, com prioridade e datas anteriores, porque não se otimiza o que ainda não está no ar. A execução também deve ser distribuída de forma que todos os sellers tenham a conta movimentada pelo menos uma vez por dia: não se dedica um dia inteiro a um único cliente, nem se acumulam as tarefas de um cliente em poucos dias."
+   ],
+   "texto": "O modelo padrão da Place2u: 5W2H\nCada linha do plano deve responder:\n•\tO quê (What): a ação concreta, escrita com verbo no infinitivo. Exemplo: \"Reescrever título e primeiras imagens do anúncio X\". Não serve \"melhorar anúncio\".\n•\tPor quê (Why): o problema ou dado que motivou a ação. Exemplo: \"CTR de 0,8% contra média de 2,1% da categoria\".\n•\tOnde (Where): canal, conta e anúncio/SKU afetados.\n•\tQuem (Who): o responsável pela execução (ver 5.11).\n•\tQuando (When): o prazo (ver 5.12).\n•\tComo (How): o passo a passo resumido da execução.\n•\tQuanto (How much): o custo ou investimento envolvido, como verba de Ads, cupom, frete ou horas de produção de conteúdo. Quando não houver custo, escrever \"sem custo\".\nPasso a passo para montar\n1.\tListar os achados do diagnóstico\nReúna todos os problemas, gargalos e oportunidades identificados na análise.\n2.\tTransformar cada achado em ação\nUma ação é executável quando alguém consegue fazê-la sem precisar perguntar o que significa.\n3.\tClassificar cada ação\nDefina a prioridade (5.2) e o tipo: imediata (5.7), segundo plano (5.8), dependente do cliente (5.9) ou dependente da plataforma (5.10).\n4.\tOrdenar e numerar\nOrdene as ações e numere com o ID do plano. A ordem definida no ID é a ordem de execução e deve ser respeitada por quem executa.\n5.\tAtribuir responsável, prazo e critério\nCada linha precisa de responsável, prazo e critério de conclusão.\n6.\tRevisar o plano\nPergunte: \"se eu entregar isto para outro analista, ele executa sem me chamar?\". Se a resposta for não, a ação ainda está vaga."
+  },
+  {
+   "id": "5.2",
+   "capitulo": {
+    "n": "5",
+    "nome": "Priorização e Plano de Ação"
+   },
+   "nome": "Como definir prioridade",
+   "descricao": "Prioridade é o cruzamento de dois fatores: impacto no faturamento e urgência (risco de piorar se nada for feito). Esforço entra como critério de desempate.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": "Critérios de avaliação\n•\tImpacto: quanto aquela ação mexe no faturamento, na conversão ou na saúde da conta. Uma ação em um produto que representa 30% do faturamento tem mais impacto que a mesma ação em um produto de cauda longa.\n•\tUrgência: existe risco ativo? Estoque zerando, penalidade acumulando, anúncio caindo de posição ou campanha queimando verba sem retorno são casos urgentes.\n•\tEsforço: quanto tempo e recurso a ação exige.\nMatriz prática\nImpacto\nUrgência\nPrioridade\nAlto\nAlta\nP1: executar primeiro\nAlto\nBaixa\nP2: planejar na sequência\nBaixo\nAlta\nP2: resolver rápido, sem consumir muito tempo\nBaixo\nBaixa\nP3: segundo plano\nOrdem de desempate: quando duas ações têm a mesma prioridade, faça primeiro a de menor esforço (ganho rápido) e, depois, a que destrava outras ações. Por exemplo, corrigir o cadastro de um produto antes de subir Ads para ele.\nSequência lógica padrão na conta\nSaúde da conta e riscos (penalidades, bloqueios) → disponibilidade (estoque, anúncios ativos) → cadastros e duplicações → otimização de anúncios (título, imagem, preço, descrição) → tráfego pago e ações promocionais → expansão de catálogo."
+  },
+  {
+   "id": "5.3",
+   "capitulo": {
+    "n": "5",
+    "nome": "Priorização e Plano de Ação"
+   },
+   "nome": "Problemas críticos",
+   "descricao": "Problema crítico é tudo que para a venda, ameaça a conta ou gera prejuízo direto enquanto não for resolvido. Ele passa na frente de qualquer outra ação do plano.",
+   "blocos": [],
+   "atencoes": [
+    "Problema crítico nunca fica apenas no relatório. Se foi identificado, precisa ter ação, responsável e prazo no mesmo dia."
+   ],
+   "texto": "Exemplos típicos em marketplace\n•\tConta com pontos de penalidade próximos do limite, restrição ou suspensão.\n•\tAnúncios dos produtos principais pausados, banidos ou reprovados.\n•\tEstoque zerado ou prestes a zerar nos produtos que concentram o faturamento.\n•\tTaxa de atraso de envio ou de cancelamento acima do limite da plataforma.\n•\tPreço errado (abaixo do custo ou muito acima do mercado) em produto de alto giro.\n•\tCampanha de Ads gastando sem gerar vendas, com ROAS abaixo do ponto de equilíbrio.\n•\tReputação em queda por avaliações negativas recorrentes com causa comum, como defeito, embalagem ou atraso.\n•\tQueda brusca de visitas ou vendas sem explicação aparente.\nComo tratar\n1.\tRegistrar com evidência\nIdentifique o problema e registre print, dado e data.\n2.\tEstimar o impacto\nCalcule quanto se perde por dia ou qual o risco para a conta.\n3.\tComunicar o cliente\nAvise no mesmo dia se ele tiver qualquer participação na causa ou na solução.\n4.\tColocar como P1\nInclua no plano com prazo curto (horas ou até 48h).\n5.\tAcompanhar até resolver\nAcompanhe diariamente e registre o antes e o depois."
+  },
+  {
+   "id": "5.7",
+   "capitulo": {
+    "n": "5",
+    "nome": "Priorização e Plano de Ação"
+   },
+   "nome": "Ação imediata",
+   "descricao": "Ação imediata é aquela que o analista consegue executar sozinho, rápido e sem depender de ninguém, com efeito direto em venda ou em risco. São os \"ganhos rápidos\" do plano.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": "Como identificar\nA ação é imediata quando atende aos três critérios: pode ser feita pelo próprio analista com os acessos que já tem, leva no máximo algumas horas e resolve um problema crítico ou gera ganho visível no curto prazo.\nExemplos\n•\tCorrigir título ou categoria errada.\n•\tAjustar preço fora da estratégia.\n•\tReativar anúncio pausado.\n•\tPausar campanha de Ads com prejuízo.\n•\tResponder perguntas e avaliações pendentes.\n•\tInscrever produtos em campanhas da plataforma já abertas.\n•\tCorrigir variações mal configuradas.\nComo executar\nAs ações imediatas entram no topo do plano e devem ser feitas nos primeiros dias após o diagnóstico. Isso mostra resultado ao cliente logo no início e libera o caminho para as ações maiores. Ainda assim, precisam ser registradas com evidência (5.14), mesmo sendo rápidas."
+  },
+  {
+   "id": "5.8",
+   "capitulo": {
+    "n": "5",
+    "nome": "Priorização e Plano de Ação"
+   },
+   "nome": "Segundo plano",
+   "descricao": "Segundo plano são ações importantes, mas não urgentes, que entram na agenda depois que os críticos e imediatos estão resolvidos. Elas não podem ser esquecidas, porque normalmente é nelas que está o crescimento de médio prazo.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": "Exemplos\n•\tExpansão de catálogo e criação de kits.\n•\tMelhoria de fotos e vídeos de produtos secundários.\n•\tReestruturação de descrições e testes A/B de título.\n•\tEstratégia de campanhas sazonais futuras.\n•\tAnálise de novos nichos.\nComo gerenciar\n•\tMantenha essas ações no plano com prazo definido, mesmo que mais longo. Uma ação sem prazo não é segundo plano, é esquecimento.\n•\tRevise o segundo plano a cada ciclo de acompanhamento (semanal ou quinzenal) e promova para prioridade o que ganhou urgência. Por exemplo, uma data sazonal se aproximando.\n•\tDistribua essas ações ao longo das semanas, sem acumular tudo para o fim do mês."
+  },
+  {
+   "id": "5.9",
+   "capitulo": {
+    "n": "5",
+    "nome": "Priorização e Plano de Ação"
+   },
+   "nome": "Dependência do cliente",
+   "descricao": "São ações que só avançam se o cliente fizer algo: enviar informação, aprovar, produzir, comprar ou liberar acesso.",
+   "blocos": [],
+   "atencoes": [
+    "Enquanto aguarda o cliente, o analista não para. Ele avança nas ações que não dependem daquela entrega."
+   ],
+   "texto": "Exemplos\n•\tEnvio de fotos ou vídeos novos.\n•\tAprovação de preço ou margem mínima.\n•\tReposição de estoque e dados de custo.\n•\tEnvio de notas fiscais e liberação de verba de Ads.\n•\tCadastro de produto no ERP e correção de problemas de expedição.\nComo tratar\n1.\tMarcar a dependência no plano\nClassifique a ação como \"dependente do cliente\" e descreva exatamente o que se precisa dele. Escreva \"enviar 5 fotos em fundo branco dos SKUs A, B e C\", não \"enviar material\".\n2.\tPedir por escrito\nComunique o pedido no canal oficial com o cliente, explicando o porquê e o impacto de não fazer.\n3.\tDefinir prazo para o cliente\nO prazo é para a entrega dele, e não apenas para a ação.\n4.\tFazer follow-up\nCobre na data combinada. Se não houver retorno, reforce e registre a cobrança.\n5.\tRegistrar o travamento\nAnote no histórico quando a ação estiver parada por falta de retorno do cliente. Isso protege o analista e dá transparência em reuniões de resultado."
+  },
+  {
+   "id": "5.10",
+   "capitulo": {
+    "n": "5",
+    "nome": "Priorização e Plano de Ação"
+   },
+   "nome": "Dependência da plataforma",
+   "descricao": "São ações cujo andamento depende de resposta, análise ou liberação do marketplace. Exemplos: suporte, moderação, reabertura de anúncio, recurso de penalidade, aprovação de categoria restrita, correção de bug, inscrição em programa ou campanha com período de análise.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": "Como tratar\n1.\tAbrir o chamado\nUse o canal oficial da plataforma e guarde o número do protocolo (ver 23.6).\n2.\tRegistrar no plano\nAnote a data de abertura, o protocolo e o prazo informado pela plataforma, quando houver.\n3.\tAcompanhar\nAcompanhe o chamado e reabra ou escale se o prazo passar sem resposta.\n4.\tPreparar o plano B\nEnquanto a plataforma não responde, veja o que reduz o impacto: criar um anúncio alternativo, respeitando as regras da plataforma, ou reforçar outros produtos.\n5.\tInformar o cliente\nAvise que a ação está em análise pelo marketplace, para que ele entenda que a demora não é da assessoria."
+  },
+  {
+   "id": "5.11",
+   "capitulo": {
+    "n": "5",
+    "nome": "Priorização e Plano de Ação"
+   },
+   "nome": "Definição de responsável",
+   "descricao": "Toda ação precisa ter um único responsável nominal. Pode haver apoio de outras pessoas, mas quem responde pela conclusão é uma pessoa só. \"Equipe\" ou \"todos\" não são responsáveis.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": "Possíveis responsáveis\n•\tAnalista da conta.\n•\tDesigner ou produção de conteúdo.\n•\tGestor de tráfego.\n•\tConsultor.\n•\tO próprio cliente (ou alguém do time dele).\nComo definir\n•\tPergunte quem tem acesso e competência para executar a ação.\n•\tConfirme que a pessoa sabe que é responsável. Responsável que não foi avisado não é responsável.\n•\tQuando a ação depende do cliente, o responsável é o cliente, e o analista fica como responsável pelo acompanhamento e pela cobrança.\n•\tEm ações com várias etapas feitas por pessoas diferentes, quebre a ação em linhas separadas, cada uma com seu responsável."
+  },
+  {
+   "id": "5.12",
+   "capitulo": {
+    "n": "5",
+    "nome": "Priorização e Plano de Ação"
+   },
+   "nome": "Definição de prazo",
+   "descricao": "Prazo é uma data específica. \"Esta semana\", \"em breve\" e \"assim que possível\" não são prazos.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": "Referências de prazo por tipo de ação\n•\tProblema crítico: mesmo dia, até 48h.\n•\tAção imediata: até 3 dias úteis.\n•\tCadastros e duplicações: antes de qualquer otimização daquele produto.\n•\tOtimizações de anúncio: de 1 a 2 semanas, conforme o volume.\n•\tSegundo plano: de 2 a 4 semanas ou alinhado à data sazonal relacionada.\n•\tDependências (cliente ou plataforma): data combinada ou informada, mais a data de follow-up.\nComo definir bem\n•\tConsidere a carga de trabalho real do responsável e o restante da carteira.\n•\tRespeite a sequência: uma ação que depende de outra deve ter prazo posterior ao da ação da qual depende.\n•\tLembre dos prazos de efeito. Algumas ações, como mudança de título ou preço, precisam de dias para mostrar resultado. O prazo de execução é diferente do prazo de avaliação.\n•\tSe o prazo não for cumprido, reprograme com nova data e registre o motivo. Não apague a data original."
+  },
+  {
+   "id": "5.13",
+   "capitulo": {
+    "n": "5",
+    "nome": "Priorização e Plano de Ação"
+   },
+   "nome": "Critério de conclusão",
+   "descricao": "O critério de conclusão define o que precisa ser verdade para a ação ser considerada concluída. Sem ele, cada pessoa entende \"feito\" de um jeito.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": "Os dois níveis\n•\tConclusão de execução: a ação foi feita. Exemplo: \"Título dos 10 anúncios principais alterado conforme a pesquisa de palavras-chave\".\n•\tConclusão de resultado: a ação gerou o efeito esperado. Exemplo: \"CTR dos 10 anúncios acima de 1,5% após 14 dias\".\nComo escrever\n•\tUse critérios verificáveis, que outra pessoa consiga conferir olhando a conta ou a evidência.\n•\tSempre que possível, inclua um número, uma quantidade ou um estado, como \"anúncio ativo\", \"estoque acima de 30 unidades\" ou \"ROAS acima de 8\".\n•\tPara ações de otimização, defina a métrica que será acompanhada e em quanto tempo ela será reavaliada.\nExemplo. Ação: \"Corrigir variações do produto X\". Critério: \"Todas as cores e tamanhos em um único anúncio, com estoque e foto por variação, e o anúncio antigo desativado\"."
+  },
+  {
+   "id": "5.14",
+   "capitulo": {
+    "n": "5",
+    "nome": "Priorização e Plano de Ação"
+   },
+   "nome": "Como documentar evidências",
+   "descricao": "A evidência comprova o que foi feito, quando foi feito e qual era a situação antes e depois. Ela serve para mostrar resultado ao cliente, para a gestão acompanhar o trabalho e para a análise de qualquer questionamento futuro.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": "O que registrar\n•\tAntes: print da situação original, com a métrica, o anúncio, o preço ou a penalidade.\n•\tExecução: print da alteração feita ou do chamado aberto, com o protocolo.\n•\tDepois: print do resultado após o prazo de avaliação.\n•\tComunicação: registro dos pedidos e retornos do cliente nas ações dependentes.\nBoas práticas\n•\tTodo print deve mostrar a data e, quando possível, a conta ou a loja. Print sem contexto não serve como evidência.\n•\tNomeie os arquivos de forma padronizada, por exemplo: cliente_ID-ação_antes_AAAA-MM-DD.\n•\tGuarde as evidências no local oficial da conta (card da tarefa ou pasta do cliente), e não no celular ou computador pessoal.\n•\tRegistre a evidência no momento da execução. Voltar depois para \"tirar print do antes\" geralmente não é mais possível.\n•\tAo concluir a ação, anexe a evidência no card e marque o critério de conclusão como atendido."
+  },
+  {
+   "id": "6.1",
+   "capitulo": {
+    "n": "6",
+    "nome": "Gestão de catálogo"
+   },
+   "nome": "Cadastro de Produtos",
+   "descricao": "Cadastrar um produto é criar o anúncio do zero dentro da plataforma: título, categoria, fotos, ficha técnica, variações, preço, estoque e dados de envio. Antes de começar, separe tudo o que será usado: título definido, fotos no padrão aprovado pelo cliente, SKU, EAN (se houver), peso e medidas da embalagem, preço e estoque informados pelo consultor.",
+   "blocos": [
+    {
+     "titulo": "Cadastro de Produtos – Mercado Livre",
+     "canal": "ML",
+     "plataforma": "Mercado Livre",
+     "caminho": "Central de vendedores > Anunciar",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Acessar a área de anúncio",
+       "texto": "Acesse a Central de vendedores e clique em Anunciar."
+      },
+      {
+       "n": 2,
+       "titulo": "Buscar o produto",
+       "texto": "No campo de busca, digite o nome do produto (ex.: \"Camiseta Masculina Modal Premium\") e clique em Buscar."
+      },
+      {
+       "n": 3,
+       "titulo": "Selecionar a categoria",
+       "texto": "Selecione a categoria que corresponde ao produto e clique em Confirmar."
+      },
+      {
+       "n": 4,
+       "titulo": "Preencher marca e modelo",
+       "texto": "Preencha Marca e Modelo (obrigatórios) e confirme."
+      },
+      {
+       "n": 5,
+       "titulo": "Definir cor e enviar fotos",
+       "texto": "Em variações, informe a Cor e o padrão (ex.: Lisa) e envie as fotos em \"ou arrastar os arquivos aqui\"."
+      },
+      {
+       "n": 6,
+       "titulo": "Preencher tamanho, estoque e SKU",
+       "texto": "Selecione o primeiro tamanho (ex.: P), informe o Estoque, marque Meu produto não o tem caso não exista código universal (EAN) e preencha o Código de identificação (SKU)."
+      },
+      {
+       "n": 7,
+       "titulo": "Adicionar os demais tamanhos",
+       "texto": "Clique em Adicionar Tamanho e repita o preenchimento para cada tamanho (M, G…). Confirme."
+      },
+      {
+       "n": 8,
+       "titulo": "Preencher ficha técnica e descrição",
+       "texto": "Preencha a ficha técnica (ex.: Composição). Em Abrir seção, escreva a descrição no campo \"Digite mais informações para os compradores\" e confirme."
+      },
+      {
+       "n": 9,
+       "titulo": "Definir forma de venda e preço",
+       "texto": "Clique em Ir para a próxima etapa, selecione a forma de venda (ex.: Unidade), informe o preço e confirme as etapas seguintes (tipo de anúncio, envio e condições)."
+      },
+      {
+       "n": 10,
+       "titulo": "Publicar e conferir",
+       "texto": "Clique em Anunciar e depois em Ir para página de produto para conferir o anúncio publicado."
+      }
+     ],
+     "atencoes": []
+    },
+    {
+     "titulo": "Cadastro de Produtos – Shopee",
+     "canal": "SHO",
+     "plataforma": "Shopee",
+     "caminho": "Central do Vendedor > Produtos > + Novo Produto",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Criar novo produto",
+       "texto": "Clique em + Novo Produto e depois em Criar."
+      },
+      {
+       "n": 2,
+       "titulo": "Enviar as imagens",
+       "texto": "Envie as imagens em Adicionar Imagem (0/9) — a Shopee aceita até 9."
+      },
+      {
+       "n": 3,
+       "titulo": "Escrever o nome do produto",
+       "texto": "Digite o nome seguindo o padrão: Nome da marca + Tipo de produto + Principais características (material, cor, tamanho, modelo)."
+      },
+      {
+       "n": 4,
+       "titulo": "Selecionar a categoria",
+       "texto": "Selecione a categoria e clique em Next Step."
+      },
+      {
+       "n": 5,
+       "titulo": "Preencher a especificação",
+       "texto": "Preencha a especificação (ficha técnica). Se o produto não tiver marca, selecione Sem marca."
+      },
+      {
+       "n": 6,
+       "titulo": "Informar preço e estoque",
+       "texto": "Preencha o Preço e a quantidade disponível em estoque."
+      },
+      {
+       "n": 7,
+       "titulo": "Informar peso e dimensões",
+       "texto": "Informe Peso, Largura, Comprimento e Altura do pacote — esses dados são usados no cálculo do frete."
+      },
+      {
+       "n": 8,
+       "titulo": "Conferir modalidades de envio",
+       "texto": "Confira as modalidades de envio que ficaram ativas e desative as que não serão usadas nessa operação."
+      },
+      {
+       "n": 9,
+       "titulo": "Definir a condição",
+       "texto": "Em Condição, selecione Novo."
+      },
+      {
+       "n": 10,
+       "titulo": "Salvar e publicar",
+       "texto": "Clique em Salvar e Publicar."
+      }
+     ],
+     "atencoes": []
+    },
+    {
+     "titulo": "Cadastro de Produtos – Amazon",
+     "canal": "AMZ",
+     "plataforma": "Amazon",
+     "caminho": "Seller Central > menu lateral > Produtos > Adicionar produtos > Formulário em branco",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Abrir o formulário de cadastro",
+       "texto": "No Seller Central, abra o menu lateral e clique em Produtos > Adicionar produtos. Existem 6 formas de cadastro; para um produto novo, use Formulário em branco."
+      },
+      {
+       "n": 2,
+       "titulo": "Preencher título e categoria",
+       "texto": "Preencha o Nome do produto (título do anúncio). A Amazon sugere a categoria correspondente — confira e selecione."
+      },
+      {
+       "n": 3,
+       "titulo": "Informar marca e EAN",
+       "texto": "Se o produto não tiver marca, marque a opção de produto sem marca; se não tiver EAN, marque a opção de produto sem ID. Quando aparecer o aviso de permissão da categoria, clique em Confirmar."
+      },
+      {
+       "n": 4,
+       "titulo": "Inserir descrição e tópicos",
+       "texto": "Clique em Continuar para Descrição. Cole a descrição (de preferência em HTML) e os tópicos (bullet points). O recomendado é manter 5 tópicos — use \"Adicionar mais\" para incluir novos."
+      },
+      {
+       "n": 5,
+       "titulo": "Enviar as imagens",
+       "texto": "Clique em Fazer upload de imagens e arraste as imagens para organizar a ordem de exibição."
+      },
+      {
+       "n": 6,
+       "titulo": "Preencher a ficha técnica",
+       "texto": "Clique em Continuar para Detalhes do produto e preencha a ficha técnica. Os campos obrigatórios mudam conforme a categoria; em produtos genéricos, preencha o fabricante como \"Genérico\" ou \"Não aplicável\"."
+      },
+      {
+       "n": 7,
+       "titulo": "Escolher a logística",
+       "texto": "Clique em Continuar para Oferta e selecione a logística indicada na tarefa: Quero usar o FBA (anúncio no FBA) ou Quero enviar este produto (FBM)."
+      },
+      {
+       "n": 8,
+       "titulo": "Informar estoque, preço e SKU",
+       "texto": "Informe o estoque (na dúvida, coloque 0), o preço de venda, o preço sugerido com imposto (normalmente igual ao preço de venda) e o SKU."
+      },
+      {
+       "n": 9,
+       "titulo": "Preencher segurança e conformidade",
+       "texto": "Clique em Continuar para Segurança e Conformidade. Preencha país de origem como Brasil (quando o país real não for informado) e selecione Não aplicável nos campos de GHS, agência reguladora e certificações quando for o caso."
+      },
+      {
+       "n": 10,
+       "titulo": "Enviar o cadastro",
+       "texto": "Clique em Pronto para enviar e conclua o cadastro."
+      }
+     ],
+     "atencoes": [
+      "Nunca invente informação que não está no material do cliente (medidas, composição, certificações). Se faltar dado obrigatório, registre no card do Notion e reporte ao consultor."
+     ]
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "6.2",
+   "capitulo": {
+    "n": "6",
+    "nome": "Gestão de catálogo"
+   },
+   "nome": "Criar Novo Anúncio",
+   "descricao": "Quando o cliente opera pela UpSeller, o anúncio da Shopee pode ser criado dentro do próprio ERP, aproveitando o produto já cadastrado em Produtos do Armazém (ver 6.3). Dessa forma o anúncio já nasce ligado ao estoque e à emissão de nota fiscal.",
+   "blocos": [
+    {
+     "titulo": "Criar Anúncio – UpSeller → Shopee",
+     "canal": "SHO",
+     "plataforma": "UpSeller → Shopee",
+     "caminho": "UpSeller > Produtos > Criar Anúncio",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Selecionar a loja",
+       "texto": "Clique em Produtos > Criar Anúncio e, em Selecionar uma Loja, escolha a loja Shopee do cliente."
+      },
+      {
+       "n": 2,
+       "titulo": "Informar o nome do anúncio",
+       "texto": "Digite o Nome do anúncio."
+      },
+      {
+       "n": 3,
+       "titulo": "Definir a categoria",
+       "texto": "Em Selecionar uma Categoria, clique em Recomendação > Obter Categoria para o sistema sugerir a categoria e selecione a mais adequada (ex.: Casa e Decoração > Artigos de Cozinha > Facas e Tesouras de Cozinha)."
+      },
+      {
+       "n": 4,
+       "titulo": "Inserir a descrição",
+       "texto": "Cole a Descrição do produto."
+      },
+      {
+       "n": 5,
+       "titulo": "Copiar o SKU do armazém",
+       "texto": "Em outra aba, abra Produtos do Armazém, clique em Copiar no SKU do produto e cole no campo SKU Principal do anúncio."
+      },
+      {
+       "n": 6,
+       "titulo": "Preencher marca e atributos",
+       "texto": "Preencha a marca (ou \"Sem marca\") e os demais atributos solicitados."
+      },
+      {
+       "n": 7,
+       "titulo": "Preencher informações de venda",
+       "texto": "Em Informações de Venda, defina o tipo (Simples ou Variantes), o Preço e a Quantidade. Em Promoção de Desconto, selecione a promoção indicada (ex.: Promoção Geral) e mantenha o limite de compra em 0 (Sem limite), salvo orientação diferente."
+      },
+      {
+       "n": 8,
+       "titulo": "Adicionar as imagens",
+       "texto": "Em Mídia, adicione as imagens pela opção A Partir do Meu Computador."
+      },
+      {
+       "n": 9,
+       "titulo": "Informar peso, medidas e logística",
+       "texto": "Informe Peso, Largura, Comprimento e Altura e selecione a logística (ex.: Correios)."
+      },
+      {
+       "n": 10,
+       "titulo": "Publicar e conferir o vínculo",
+       "texto": "Clique em Publicar e depois em Fechar. Volte em Produtos do Armazém e confira se o anúncio ficou vinculado ao produto. Para criar anúncios diretamente em cada marketplace, siga o passo a passo do tópico 6.1."
+      }
+     ],
+     "atencoes": []
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "6.3",
+   "capitulo": {
+    "n": "6",
+    "nome": "Gestão de catálogo"
+   },
+   "nome": "Criar Produto Pai",
+   "descricao": "O produto pai é o cadastro \"mestre\" dentro do ERP, responsável por concentrar o estoque. Os produtos vendidos nos canais (inclusive kits e variações) são ligados a ele por composição (ver 12.7), para que o estoque seja baixado de um único lugar.",
+   "blocos": [
+    {
+     "titulo": "Criação de Produto Pai – Bling",
+     "canal": null,
+     "plataforma": "Bling",
+     "caminho": "Cadastros > Produtos > Incluir cadastro",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Acessar Produtos",
+       "texto": "No menu superior do Bling, clique em Cadastros > Produtos."
+      },
+      {
+       "n": 2,
+       "titulo": "Incluir cadastro",
+       "texto": "No canto superior direito, clique em Incluir cadastro."
+      },
+      {
+       "n": 3,
+       "titulo": "Nomear o produto pai",
+       "texto": "No campo Nome, informe o nome do produto e acrescente -PAI no final. Isso diferencia o cadastro principal dos demais."
+      },
+      {
+       "n": 4,
+       "titulo": "Definir o formato",
+       "texto": "Em Formato, selecione Simples (item único e sem variação)."
+      },
+      {
+       "n": 5,
+       "titulo": "Informar o SKU pai",
+       "texto": "Em Código (SKU), informe o SKU do produto com o sufixo -PAI."
+      },
+      {
+       "n": 6,
+       "titulo": "Salvar o produto",
+       "texto": "Confira as informações comerciais e clique em Salvar produto."
+      },
+      {
+       "n": 7,
+       "titulo": "Lançar o estoque inicial",
+       "texto": "Faça o lançamento do estoque inicial do produto pai (ver 11.1)."
+      }
+     ],
+     "atencoes": []
+    },
+    {
+     "titulo": "Cadastro de Produto Pai – UpSeller",
+     "canal": null,
+     "plataforma": "UpSeller",
+     "caminho": "Produtos > Produtos do Armazém > Criar único produto",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Acessar Produtos do Armazém",
+       "texto": "No menu Produtos, clique em Produtos do Armazém."
+      },
+      {
+       "n": 2,
+       "titulo": "Criar único produto",
+       "texto": "Clique em Criar único produto."
+      },
+      {
+       "n": 3,
+       "titulo": "Informar o SKU",
+       "texto": "No campo SKU, informe o código interno seguindo o padrão da conta — ele será usado no controle e na integração do item."
+      },
+      {
+       "n": 4,
+       "titulo": "Informar o nome",
+       "texto": "Preencha o Nome do Produto."
+      },
+      {
+       "n": 5,
+       "titulo": "Informar o apelido",
+       "texto": "Preencha o Apelido do Produto com uma identificação curta e objetiva. Ele facilita a busca interna e aparece na etiqueta e na nota fiscal."
+      },
+      {
+       "n": 6,
+       "titulo": "Informar preço e custo",
+       "texto": "Informe o Preço de varejo (o mesmo praticado nos canais) e o Custo de Compra."
+      },
+      {
+       "n": 7,
+       "titulo": "Revisar os valores",
+       "texto": "Revise os valores preenchidos."
+      },
+      {
+       "n": 8,
+       "titulo": "Adicionar a imagem",
+       "texto": "Em Imagens de Produtos, escolha A Partir do Meu Computador e envie uma única imagem, usada só para identificação interna."
+      },
+      {
+       "n": 9,
+       "titulo": "Salvar",
+       "texto": "Clique em Salvar."
+      }
+     ],
+     "atencoes": []
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "6.4",
+   "capitulo": {
+    "n": "6",
+    "nome": "Gestão de catálogo"
+   },
+   "nome": "Adicionar Variações",
+   "descricao": "Variações permitem vender versões do mesmo produto (cor, tamanho, modelo) em um único anúncio, somando vendas e avaliações em uma só página.",
+   "blocos": [
+    {
+     "titulo": "Adicionar Variações – Mercado Livre",
+     "canal": "ML",
+     "plataforma": "Mercado Livre",
+     "caminho": "Central de vendedores > Anúncios > abrir o anúncio > Variações e fotos > Adicionar variações",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Abrir o anúncio",
+       "texto": "Em Anúncios, clique no anúncio que vai receber as variações."
+      },
+      {
+       "n": 2,
+       "titulo": "Acessar Adicionar variações",
+       "texto": "Na tela Alterar anúncio, clique em Variações e fotos e depois em Adicionar variações."
+      },
+      {
+       "n": 3,
+       "titulo": "Definir cor e fotos",
+       "texto": "Informe a Cor e o padrão (ex.: Lisa) e envie as fotos da nova variação."
+      },
+      {
+       "n": 4,
+       "titulo": "Preencher tamanho, estoque e SKU",
+       "texto": "Selecione o tamanho (ex.: P), preencha o Estoque no depósito, marque Meu produto não o tem se não houver EAN e informe o Código de identificação (SKU)."
+      },
+      {
+       "n": 5,
+       "titulo": "Adicionar os demais tamanhos",
+       "texto": "Clique em Adicionar Tamanho e repita para os demais tamanhos."
+      },
+      {
+       "n": 6,
+       "titulo": "Confirmar",
+       "texto": "Clique em Confirmar."
+      },
+      {
+       "n": 7,
+       "titulo": "Conferir no anúncio",
+       "texto": "Abra a página do anúncio e confira se a nova variação aparece para o comprador."
+      }
+     ],
+     "atencoes": []
+    },
+    {
+     "titulo": "Adicionar Variações – Shopee",
+     "canal": "SHO",
+     "plataforma": "Shopee",
+     "caminho": "Produtos > Editar > Habilitar Variações",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Habilitar variações",
+       "texto": "Abra o produto em Editar e clique em Habilitar Variações."
+      },
+      {
+       "n": 2,
+       "titulo": "Nomear o grupo de variação",
+       "texto": "Em \"Digite ou Selecione\", informe o nome do grupo de variação (ex.: Modelo, Cor, Tamanho)."
+      },
+      {
+       "n": 3,
+       "titulo": "Cadastrar as opções",
+       "texto": "Nos campos Inserir, digite cada opção do grupo (uma por campo). Se aparecer \"Este campo não pode ficar em branco\", preencha ou remova a opção vazia."
+      },
+      {
+       "n": 4,
+       "titulo": "Preencher preço, estoque e SKU",
+       "texto": "Na tabela de variações, preencha preço, estoque e SKU de cada opção."
+      },
+      {
+       "n": 5,
+       "titulo": "Atualizar",
+       "texto": "Clique em Atualizar."
+      }
+     ],
+     "atencoes": []
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "6.7",
+   "capitulo": {
+    "n": "6",
+    "nome": "Gestão de catálogo"
+   },
+   "nome": "Ajustar Produto (editar)",
+   "descricao": "Ajustar um produto é alterar uma informação de um anúncio que já existe (descrição, ficha técnica, fotos etc.) sem criar um novo.",
+   "blocos": [
+    {
+     "titulo": "Ajustar Produto (editar) – Mercado Livre",
+     "canal": "ML",
+     "plataforma": "Mercado Livre",
+     "caminho": "Central de vendedores > Anúncios > abrir o anúncio > Alterar anúncio",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Abrir o anúncio",
+       "texto": "Em Anúncios, clique no anúncio que será ajustado."
+      },
+      {
+       "n": 2,
+       "titulo": "Escolher a seção",
+       "texto": "Na tela Alterar anúncio, clique na seção que precisa de ajuste (ex.: Descrição)."
+      },
+      {
+       "n": 3,
+       "titulo": "Editar o conteúdo",
+       "texto": "Faça a alteração no campo (ex.: \"Digite mais informações para os compradores\")."
+      },
+      {
+       "n": 4,
+       "titulo": "Confirmar a alteração",
+       "texto": "Clique em Confirmar. Cada seção tem o seu próprio botão Confirmar — sem ele a alteração não é salva. Para editar anúncios na Amazon, veja o tópico 7.4."
+      }
+     ],
+     "atencoes": [
+      "Registre no card do Notion o antes e o depois da alteração (print ou texto)."
+     ]
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "6.8",
+   "capitulo": {
+    "n": "6",
+    "nome": "Gestão de catálogo"
+   },
+   "nome": "Ajustar Categoria",
+   "descricao": "A categoria define onde o anúncio aparece nas buscas e quais atributos da ficha técnica são exigidos. Categoria errada reduz a exposição e pode gerar bloqueios.",
+   "blocos": [
+    {
+     "titulo": "Ajustar Categoria – Shopee",
+     "canal": "SHO",
+     "plataforma": "Shopee",
+     "caminho": "Central do Vendedor > Produtos > Editar",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Abrir a edição",
+       "texto": "Em Produtos, clique em Editar no produto."
+      },
+      {
+       "n": 2,
+       "titulo": "Abrir a lista de categorias",
+       "texto": "Clique no campo da categoria atual para abrir a lista."
+      },
+      {
+       "n": 3,
+       "titulo": "Selecionar a nova categoria",
+       "texto": "Selecione a categoria correta (ex.: Bodys e Macacões) e clique em Confirm."
+      },
+      {
+       "n": 4,
+       "titulo": "Atualizar",
+       "texto": "Clique em Atualizar."
+      }
+     ],
+     "atencoes": [
+      "Ao trocar a categoria, a ficha técnica muda. Revise os atributos obrigatórios da nova categoria antes de atualizar."
+     ]
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "6.9",
+   "capitulo": {
+    "n": "6",
+    "nome": "Gestão de catálogo"
+   },
+   "nome": "Ajustar SKU",
+   "descricao": "O SKU é o código interno que liga o anúncio ao produto no ERP. Ele precisa ser exatamente igual nos dois lugares para o estoque e a nota fiscal funcionarem.",
+   "blocos": [
+    {
+     "titulo": "Ajustar SKU – Mercado Livre",
+     "canal": "ML",
+     "plataforma": "Mercado Livre",
+     "caminho": "Anúncios > abrir o anúncio > Variações e fotos > selecionar a variação",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Abrir o anúncio",
+       "texto": "Em Anúncios, abra o anúncio."
+      },
+      {
+       "n": 2,
+       "titulo": "Selecionar a variação",
+       "texto": "Clique em Variações e fotos e selecione a variação (ex.: Preto / Lisa)."
+      },
+      {
+       "n": 3,
+       "titulo": "Digitar o SKU",
+       "texto": "No campo Código de identificação (SKU), digite o SKU correto."
+      },
+      {
+       "n": 4,
+       "titulo": "Confirmar",
+       "texto": "Clique em Confirmar."
+      }
+     ],
+     "atencoes": []
+    },
+    {
+     "titulo": "Ajustar SKU – Shopee",
+     "canal": "SHO",
+     "plataforma": "Shopee",
+     "caminho": "Central do Vendedor > Produtos > Editar",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Abrir a edição",
+       "texto": "Em Produtos, clique em Editar."
+      },
+      {
+       "n": 2,
+       "titulo": "Ajustar o SKU da variação",
+       "texto": "Para produtos com variação, ajuste o SKU da variação na tabela de variações."
+      },
+      {
+       "n": 3,
+       "titulo": "Ajustar o SKU principal",
+       "texto": "Para o SKU principal, desça até o final da página e preencha o campo SKU principal."
+      },
+      {
+       "n": 4,
+       "titulo": "Atualizar e conferir",
+       "texto": "Clique em Atualizar e confira se o SKU foi salvo."
+      }
+     ],
+     "atencoes": [
+      "Alterar o SKU pode quebrar o vínculo com o ERP. Depois do ajuste, confira se o anúncio continua vinculado (ver 12.8 e 12.9)."
+     ]
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "6.11",
+   "capitulo": {
+    "n": "6",
+    "nome": "Gestão de catálogo"
+   },
+   "nome": "Alterar EAN",
+   "descricao": "O EAN (código de barras) identifica o produto de forma universal. Em anúncios com variações, cada variação tem o seu próprio EAN.",
+   "blocos": [
+    {
+     "titulo": "Alterar EAN – Mercado Livre",
+     "canal": "ML",
+     "plataforma": "Mercado Livre",
+     "caminho": "Anúncios > abrir o anúncio > bloco de variações > selecionar a variação",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Abrir o anúncio",
+       "texto": "Em Anúncios, abra o anúncio."
+      },
+      {
+       "n": 2,
+       "titulo": "Abrir as variações",
+       "texto": "Clique no bloco de variações (ex.: \"Você oferece 8 variações do produto\")."
+      },
+      {
+       "n": 3,
+       "titulo": "Selecionar a variação",
+       "texto": "Selecione a variação que será ajustada (ex.: Preto / Lisa)."
+      },
+      {
+       "n": 4,
+       "titulo": "Digitar o EAN",
+       "texto": "No campo Código universal de produto, digite o EAN correto."
+      },
+      {
+       "n": 5,
+       "titulo": "Confirmar",
+       "texto": "Clique em Confirmar. Repita para as demais variações, se necessário."
+      }
+     ],
+     "atencoes": []
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "6.12",
+   "capitulo": {
+    "n": "6",
+    "nome": "Gestão de catálogo"
+   },
+   "nome": "Ficha Técnica",
+   "descricao": "A ficha técnica reúne os atributos do produto (marca, modelo, material, voltagem etc.). Quanto mais completa, melhor o anúncio aparece nos filtros e buscas da plataforma.",
+   "blocos": [
+    {
+     "titulo": "Ficha Técnica – Mercado Livre",
+     "canal": "ML",
+     "plataforma": "Mercado Livre",
+     "caminho": "Anúncios > abrir o anúncio > seção Ficha técnica",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Abrir o anúncio",
+       "texto": "Em Anúncios, abra o anúncio."
+      },
+      {
+       "n": 2,
+       "titulo": "Acessar a ficha técnica",
+       "texto": "Clique na seção de ficha técnica."
+      },
+      {
+       "n": 3,
+       "titulo": "Preencher campos obrigatórios",
+       "texto": "Preencha os campos obrigatórios (ex.: Modelo) e clique em Confirmar."
+      },
+      {
+       "n": 4,
+       "titulo": "Preencher campos complementares",
+       "texto": "Preencha os campos complementares (ex.: Tipo de tecido) e clique em Confirmar."
+      }
+     ],
+     "atencoes": []
+    },
+    {
+     "titulo": "Ficha Técnica – Shopee",
+     "canal": "SHO",
+     "plataforma": "Shopee",
+     "caminho": "Produtos > pesquisar o produto > Editar > Especificação",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Localizar o produto",
+       "texto": "Pesquise o produto pelo nome, SKU ou ID e abra a edição."
+      },
+      {
+       "n": 2,
+       "titulo": "Acessar Especificação",
+       "texto": "Vá até Especificação."
+      },
+      {
+       "n": 3,
+       "titulo": "Definir a marca",
+       "texto": "Em Marca, substitua \"Sem marca\" quando houver marca: digite ao menos 2 caracteres e selecione a opção correta."
+      },
+      {
+       "n": 4,
+       "titulo": "Preencher os atributos",
+       "texto": "Preencha os atributos da categoria (ex.: área de uso, país de origem, capacidade da bateria, tipo de cabo). Campos de múltipla escolha permitem marcar mais de uma opção."
+      },
+      {
+       "n": 5,
+       "titulo": "Preencher atributos opcionais",
+       "texto": "Clique em Exibir mais e preencha também os atributos opcionais (ex.: modelo, peso)."
+      },
+      {
+       "n": 6,
+       "titulo": "Atualizar",
+       "texto": "Clique em Atualizar."
+      }
+     ],
+     "atencoes": []
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "6.13",
+   "capitulo": {
+    "n": "6",
+    "nome": "Gestão de catálogo"
+   },
+   "nome": "Tabela de Medidas (onde preencher no marketplace)",
+   "descricao": "A tabela de medidas ajuda o comprador a escolher o tamanho certo e reduz devoluções. É obrigatória em várias categorias de moda.",
+   "blocos": [
+    {
+     "titulo": "Tabela de Medidas – Mercado Livre",
+     "canal": "ML",
+     "plataforma": "Mercado Livre",
+     "caminho": "Anúncios > abrir o anúncio > Guia de Tamanhos > Criar guia",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Acessar Guia de Tamanhos",
+       "texto": "Em Anúncios, abra o anúncio e clique em Guia de Tamanhos."
+      },
+      {
+       "n": 2,
+       "titulo": "Criar o guia",
+       "texto": "Clique em Criar guia e preencha o Nome do guia."
+      },
+      {
+       "n": 3,
+       "titulo": "Criar tabela do zero",
+       "texto": "Em \"Escolha como adicionar os tamanhos\", selecione Criar tabela do zero."
+      },
+      {
+       "n": 4,
+       "titulo": "Escolher as medidas",
+       "texto": "Em \"Escolha as medidas que aparecerão para o comprador\", selecione as medidas (ex.: Medidas da peça)."
+      },
+      {
+       "n": 5,
+       "titulo": "Preencher os tamanhos",
+       "texto": "Preencha as medidas do primeiro tamanho, clique em Adicionar tamanho e repita para os demais. Clique em salvar."
+      },
+      {
+       "n": 6,
+       "titulo": "Aplicar o guia",
+       "texto": "Selecione o guia de tamanhos criado e clique em Confirmar."
+      }
+     ],
+     "atencoes": []
+    },
+    {
+     "titulo": "Tabela de Medidas – Shopee",
+     "canal": "SHO",
+     "plataforma": "Shopee",
+     "caminho": "Central do Vendedor > Produtos > Editar > Tabela de Medidas",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Abrir a edição",
+       "texto": "Em Produtos, clique em Editar e vá até a tabela de medidas."
+      },
+      {
+       "n": 2,
+       "titulo": "Escolher o modelo",
+       "texto": "Escolha o modelo: Template (criar a tabela na própria Shopee) ou Imagem (usar uma arte pronta)."
+      },
+      {
+       "n": 3,
+       "titulo": "Criar a tabela",
+       "texto": "Template: clique em Criar Tabela de Medidas e digite o título da tabela."
+      },
+      {
+       "n": 4,
+       "titulo": "Marcar as medidas",
+       "texto": "Marque as medidas que serão usadas de acordo com o produto (busto, cintura, comprimento, largura etc.)."
+      },
+      {
+       "n": 5,
+       "titulo": "Selecionar o tamanho",
+       "texto": "No campo Tamanho, selecione um tamanho por vez, conforme a grade cadastrada, e clique em Selecionar."
+      },
+      {
+       "n": 6,
+       "titulo": "Preencher as medidas",
+       "texto": "Preencha os valores Mín e Máx e as demais medidas do tamanho selecionado."
+      },
+      {
+       "n": 7,
+       "titulo": "Adicionar os demais tamanhos",
+       "texto": "Clique em Adicionar Linha para cada tamanho restante e preencha as medidas."
+      },
+      {
+       "n": 8,
+       "titulo": "Conferir e salvar",
+       "texto": "Confira todos os valores e clique em Salvar. Se encontrar erro, use Editar."
+      },
+      {
+       "n": 9,
+       "titulo": "Enviar tabela em imagem",
+       "texto": "Imagem: selecione Imagem e envie a arte (JPG ou PNG, até 2 MB e até 2048 × 2048 px). Confira se corresponde ao produto."
+      },
+      {
+       "n": 10,
+       "titulo": "Atualizar",
+       "texto": "Clique em Atualizar."
+      }
+     ],
+     "atencoes": []
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "6.14",
+   "capitulo": {
+    "n": "6",
+    "nome": "Gestão de catálogo"
+   },
+   "nome": "Exportar Produtos (Bling - Tiny - Upseller)",
+   "descricao": "Exportar é enviar um produto cadastrado no ERP para o marketplace, criando o anúncio a partir dele. Antes de exportar pelo Bling, a categoria do produto precisa estar vinculada à categoria da Shopee (ver 12.1).",
+   "blocos": [
+    {
+     "titulo": "Exportar Produto para Shopee – Bling",
+     "canal": "SHO",
+     "plataforma": "Bling",
+     "caminho": "Produto > Multiloja de produtos > Exportar produtos multiloja",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Abrir Multiloja de produtos",
+       "texto": "No cadastro do produto, abra Multiloja de produtos."
+      },
+      {
+       "n": 2,
+       "titulo": "Selecionar a loja",
+       "texto": "Em Outras lojas, selecione a loja da Shopee do cliente."
+      },
+      {
+       "n": 3,
+       "titulo": "Vincular a categoria",
+       "texto": "Em Categorias da loja, escolha a categoria da Shopee que corresponde ao produto."
+      },
+      {
+       "n": 4,
+       "titulo": "Informar o preço promocional",
+       "texto": "Preencha o Preço promocional que será usado na Shopee."
+      },
+      {
+       "n": 5,
+       "titulo": "Revisar e salvar",
+       "texto": "Revise os dados da seção Anúncio, principalmente Preço e Preço promocional, e clique em Salvar."
+      },
+      {
+       "n": 6,
+       "titulo": "Iniciar a exportação",
+       "texto": "Clique em Exportar produtos multiloja."
+      },
+      {
+       "n": 7,
+       "titulo": "Selecionar a plataforma",
+       "texto": "Em Selecionar a plataforma, escolha a loja que vai receber o produto (ex.: Hibiscus Shopee)."
+      },
+      {
+       "n": 8,
+       "titulo": "Selecionar o depósito",
+       "texto": "No campo de depósito, selecione Geral (depósito principal)."
+      },
+      {
+       "n": 9,
+       "titulo": "Exportar",
+       "texto": "Clique em Exportar produtos e depois em Exportar produtos para: Shopee."
+      },
+      {
+       "n": 10,
+       "titulo": "Conferir o resultado",
+       "texto": "Confira a mensagem de sucesso e verifique o anúncio na Central do Vendedor. Para a UpSeller, o caminho equivalente é criar o anúncio a partir do produto do armazém (ver 6.2). Para o Tiny, ainda não há roteiro registrado."
+      }
+     ],
+     "atencoes": []
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "6.17",
+   "capitulo": {
+    "n": "6",
+    "nome": "Gestão de catálogo"
+   },
+   "nome": "Duplicação de Produtos",
+   "descricao": "Duplicar é criar um novo anúncio aproveitando as informações de um já existente. É útil para testar outro título, outro tipo de anúncio ou ampliar a presença do produto.",
+   "blocos": [
+    {
+     "titulo": "Duplicação de Produtos – Mercado Livre",
+     "canal": "ML",
+     "plataforma": "Mercado Livre",
+     "caminho": "Central de vendedores > Anúncios > menu do anúncio > Anunciar semelhante",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Abrir o menu do anúncio",
+       "texto": "Em Anúncios, abra o menu (três pontos) do anúncio que servirá de base."
+      },
+      {
+       "n": 2,
+       "titulo": "Anunciar semelhante",
+       "texto": "Clique em Anunciar semelhante."
+      },
+      {
+       "n": 3,
+       "titulo": "Ajustar os dados",
+       "texto": "Revise e ajuste os dados do produto e clique em Ir para a próxima etapa."
+      },
+      {
+       "n": 4,
+       "titulo": "Definir o formato de venda",
+       "texto": "Selecione o formato de venda e confirme."
+      },
+      {
+       "n": 5,
+       "titulo": "Informar o preço",
+       "texto": "Preencha o preço e confirme."
+      },
+      {
+       "n": 6,
+       "titulo": "Definir o tipo de anúncio",
+       "texto": "Selecione o tipo de anúncio e confirme as demais etapas."
+      },
+      {
+       "n": 7,
+       "titulo": "Publicar",
+       "texto": "Clique em Anunciar."
+      }
+     ],
+     "atencoes": []
+    },
+    {
+     "titulo": "Duplicação de Produtos – Shopee",
+     "canal": "SHO",
+     "plataforma": "Shopee",
+     "caminho": "Produtos > pesquisar o produto > Mais > Copiar",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Localizar o produto",
+       "texto": "Pesquise o produto pelo nome, SKU ou ID."
+      },
+      {
+       "n": 2,
+       "titulo": "Copiar o produto",
+       "texto": "Clique em Mais > Copiar. Um novo cadastro abre já preenchido."
+      },
+      {
+       "n": 3,
+       "titulo": "Trocar imagens e nome",
+       "texto": "Substitua as imagens e o nome do produto."
+      },
+      {
+       "n": 4,
+       "titulo": "Revisar as variações",
+       "texto": "Revise preços, estoques e SKUs de cada variação."
+      },
+      {
+       "n": 5,
+       "titulo": "Salvar e publicar",
+       "texto": "Clique em Salvar e Publicar."
+      }
+     ],
+     "atencoes": [
+      "Nunca publique uma cópia idêntica: altere pelo menos título, imagens e SKU. Anúncios iguais podem ser tratados como duplicidade pela plataforma."
+     ]
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "6.18",
+   "capitulo": {
+    "n": "6",
+    "nome": "Gestão de catálogo"
+   },
+   "nome": "Duplicação de Anúncios - Amazon",
+   "descricao": "Na Amazon, é possível criar um novo anúncio copiando um ASIN que já existe no canal — seja da própria conta ou de um concorrente — e ajustando as informações.",
+   "blocos": [
+    {
+     "titulo": "Como Duplicar um Anúncio já Existente (Modo 1) – Amazon",
+     "canal": "AMZ",
+     "plataforma": "Amazon",
+     "caminho": "Seller Central > Adicionar um produto > Pesquisar",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Adicionar um produto",
+       "texto": "No inventário, clique em Adicionar um produto."
+      },
+      {
+       "n": 2,
+       "titulo": "Pesquisar o ASIN",
+       "texto": "Em Publicar seus produtos, use a opção Pesquisar e digite o ASIN ou o título do anúncio que será copiado."
+      },
+      {
+       "n": 3,
+       "titulo": "Conferir o produto",
+       "texto": "Clique no resultado para abrir Informações do produto e confira se é o produto certo."
+      },
+      {
+       "n": 4,
+       "titulo": "Copiar a oferta",
+       "texto": "Em Selecione uma condição, escolha Novo e clique em Copiar oferta."
+      },
+      {
+       "n": 5,
+       "titulo": "Ajustar a identidade do produto",
+       "texto": "O formulário abre preenchido. Em Identidade do produto, ajuste o Nome do produto e, se for o caso, marque que o produto não tem marca e/ou não tem ID (EAN). Clique em Continuar para Descrição."
+      },
+      {
+       "n": 6,
+       "titulo": "Revisar descrição e detalhes",
+       "texto": "Revise a descrição e os detalhes do produto."
+      },
+      {
+       "n": 7,
+       "titulo": "Preencher a oferta",
+       "texto": "Em Oferta, preencha SKU, quantidade, preço e condição (Novo)."
+      },
+      {
+       "n": 8,
+       "titulo": "Preencher segurança e conformidade",
+       "texto": "Em Segurança e Conformidade, preencha país de origem e marque Não aplicável onde couber."
+      },
+      {
+       "n": 9,
+       "titulo": "Enviar",
+       "texto": "Clique em Enviar."
+      }
+     ],
+     "atencoes": []
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "7.3",
+   "capitulo": {
+    "n": "7",
+    "nome": "Gestão de anúncios"
+   },
+   "nome": "Corrigir anúncio",
+   "descricao": "Anúncio bloqueado na Amazon sem justificativa válida pode ser recuperado recriando a oferta. Esses processos não devem ser a primeira tentativa: antes, corrija o motivo indicado pela Amazon ou abra chamado. Como envolvem remover a oferta original, alinhe com o consultor antes de executar.",
+   "blocos": [
+    {
+     "titulo": "Como Recuperar um Anúncio Bloqueado (Modo 1) – Amazon",
+     "canal": "AMZ",
+     "plataforma": "Amazon",
+     "caminho": "Manage Your Inventory > Filtro > Bloqueado",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Filtrar anúncios bloqueados",
+       "texto": "Em Gerenciar todo o inventário, clique em Filtro e selecione Bloqueado (X)."
+      },
+      {
+       "n": 2,
+       "titulo": "Abrir a oferta bloqueada",
+       "texto": "No menu de opções do anúncio bloqueado, clique em Editar oferta. Deixe essa aba aberta — ela é a fonte das informações."
+      },
+      {
+       "n": 3,
+       "titulo": "Copiar a oferta",
+       "texto": "Volte ao inventário, abra novamente o menu do mesmo anúncio e clique em Copiar oferta."
+      },
+      {
+       "n": 4,
+       "titulo": "Copiar a marca",
+       "texto": "No anúncio bloqueado, em Detalhes do produto, copie a marca e cole na cópia."
+      },
+      {
+       "n": 5,
+       "titulo": "Copiar o EAN",
+       "texto": "Copie o código EAN do anúncio bloqueado, cole na cópia e informe o tipo de código (EAN)."
+      },
+      {
+       "n": 6,
+       "titulo": "Tratar aviso de produto existente",
+       "texto": "Se aparecer o aviso de que o produto já existe, marque que não é o mesmo produto e clique para retornar ao formulário."
+      },
+      {
+       "n": 7,
+       "titulo": "Copiar preço e SKU",
+       "texto": "Em Oferta, informe o mesmo Preço padrão do bloqueado. Se o campo de SKU não aparecer, clique em Mostrar todos os atributos e cole exatamente o mesmo SKU da oferta bloqueada."
+      },
+      {
+       "n": 8,
+       "titulo": "Remover a oferta bloqueada",
+       "texto": "Em outra aba do inventário (sem fechar as anteriores), abra o menu do anúncio bloqueado, clique em Remover oferta e confirme."
+      },
+      {
+       "n": 9,
+       "titulo": "Confirmar a exclusão",
+       "texto": "Copie o ASIN e pesquise no inventário. Se ele não aparecer mais, foi excluído; se ainda aparecer, aguarde."
+      },
+      {
+       "n": 10,
+       "titulo": "Enviar a cópia",
+       "texto": "Volte à cópia, clique em Enviar e depois em Confirmar. Quando o anúncio aparecer ativo, o processo está concluído."
+      }
+     ],
+     "atencoes": []
+    },
+    {
+     "titulo": "Como Recuperar um Anúncio Bloqueado (Modo 2) – Amazon",
+     "canal": "AMZ",
+     "plataforma": "Amazon",
+     "caminho": "Manage Your Inventory > menu do anúncio > Adicionar outra condição",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Localizar o anúncio",
+       "texto": "Em Manage Your Inventory, pesquise o anúncio que será recuperado."
+      },
+      {
+       "n": 2,
+       "titulo": "Adicionar outra condição",
+       "texto": "No menu de opções, clique em Adicionar outra condição."
+      },
+      {
+       "n": 3,
+       "titulo": "Configurar a nova oferta",
+       "texto": "Selecione a mesma logística do anúncio original e configure tudo da mesma forma. Em Condição, selecione Novo."
+      },
+      {
+       "n": 4,
+       "titulo": "Copiar o SKU",
+       "texto": "Copie o SKU do anúncio original (ex.: XPTO-FBA) e cole na nova oferta."
+      },
+      {
+       "n": 5,
+       "titulo": "Copiar o preço",
+       "texto": "Copie o preço de venda padrão e cole na nova oferta."
+      },
+      {
+       "n": 6,
+       "titulo": "Remover a oferta original",
+       "texto": "Volte ao inventário, abra o menu do anúncio original, clique em Remover oferta e confirme. Isso exclui o anúncio original."
+      },
+      {
+       "n": 7,
+       "titulo": "Enviar a nova oferta",
+       "texto": "Retorne à aba Adicionar oferta e clique em Pronto para enviar."
+      },
+      {
+       "n": 8,
+       "titulo": "Publicar como FBA",
+       "texto": "Se o anúncio for FBA, clique em Publicar como FBA – Logística da Amazon."
+      }
+     ],
+     "atencoes": []
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "7.4",
+   "capitulo": {
+    "n": "7",
+    "nome": "Gestão de anúncios"
+   },
+   "nome": "Ajustar anúncio",
+   "descricao": "",
+   "blocos": [
+    {
+     "titulo": "Como Editar um Anúncio – Amazon",
+     "canal": "AMZ",
+     "plataforma": "Amazon",
+     "caminho": "Menu lateral > Produtos > Gerenciar produtos > menu do anúncio > Editar oferta",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Abrir a edição da oferta",
+       "texto": "Em Manage Your Inventory, abra o menu de opções do anúncio e clique em Editar oferta."
+      },
+      {
+       "n": 2,
+       "titulo": "Ajustar os dados da oferta",
+       "texto": "Na aba de oferta, ajuste o que a tarefa pedir: Quantidade (estoque), Tempo de processamento (prazo de crossdocking), Preço padrão, Modelo de envio (tabela de frete), Quantidade máxima de pedidos, Dimensões da embalagem e Peso do pacote."
+      },
+      {
+       "n": 3,
+       "titulo": "Ajustar as imagens",
+       "texto": "Em Imagens: use Fazer upload para incluir fotos, a lixeira para remover e as setas para mudar a ordem."
+      },
+      {
+       "n": 4,
+       "titulo": "Ajustar os detalhes do produto",
+       "texto": "Em Detalhes do produto: ajuste Nome do produto e ASIN (só enquanto o produto não teve venda), Descrição, tópicos (Adicionar tópico / Excluir último tópico) e Palavras-chave de pesquisa."
+      },
+      {
+       "n": 5,
+       "titulo": "Preencher a ficha técnica",
+       "texto": "Preencha os campos de ficha técnica disponíveis (ex.: Material) — eles variam conforme a categoria."
+      },
+      {
+       "n": 6,
+       "titulo": "Salvar",
+       "texto": "Clique em Salvar e Finalizar e depois em Concluído. Tempo de Disponibilidade (Tempo de Produção) – Mercado Livre"
+      }
+     ],
+     "atencoes": []
+    },
+    {
+     "titulo": "Produtos feitos sob encomenda ou personalizados precisam de prazo de disponibilidade, para",
+     "canal": null,
+     "plataforma": "",
+     "caminho": "Anúncios > abrir o anúncio > Alterar anúncio",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Abrir o anúncio",
+       "texto": "Busque o produto e abra o anúncio."
+      },
+      {
+       "n": 2,
+       "titulo": "Localizar o tempo de disponibilidade",
+       "texto": "Na tela Alterar anúncio, vá até o tempo de disponibilidade (\"Levará X dias para que o produto esteja pronto para entrega\")."
+      },
+      {
+       "n": 3,
+       "titulo": "Informar o prazo",
+       "texto": "No campo de dias, digite o prazo combinado com o cliente (ex.: pijamas personalizados – 5 dias)."
+      },
+      {
+       "n": 4,
+       "titulo": "Confirmar",
+       "texto": "Clique em Confirmar."
+      }
+     ],
+     "atencoes": []
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "7.6",
+   "capitulo": {
+    "n": "7",
+    "nome": "Gestão de anúncios"
+   },
+   "nome": "Otimizar anúncio",
+   "descricao": "Otimizar é revisar o anúncio como um todo para melhorar exposição e conversão: imagens, título, marca, atributos e descrição. Para título e palavras-chave, veja também 8.2 e 8.3.",
+   "blocos": [
+    {
+     "titulo": "Otimizar Anúncio – Shopee",
+     "canal": "SHO",
+     "plataforma": "Shopee",
+     "caminho": "Produtos > Todos > pesquisar o produto > Editar",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Abrir a edição",
+       "texto": "Em Produtos > Todos, pesquise o produto pelo nome, SKU ou ID e clique em Editar."
+      },
+      {
+       "n": 2,
+       "titulo": "Ajustar as imagens",
+       "texto": "Substitua ou reorganize as imagens, começando pela capa, conforme o padrão aprovado."
+      },
+      {
+       "n": 3,
+       "titulo": "Reescrever o título",
+       "texto": "Reescreva o nome no padrão Nome da marca + Tipo de produto + Principais características."
+      },
+      {
+       "n": 4,
+       "titulo": "Definir a marca",
+       "texto": "Em Marca, troque \"Sem marca\" pela marca correta (digite ao menos 2 caracteres e selecione)."
+      },
+      {
+       "n": 5,
+       "titulo": "Preencher os atributos",
+       "texto": "Preencha os atributos da especificação."
+      },
+      {
+       "n": 6,
+       "titulo": "Atualizar a descrição",
+       "texto": "Em Descrição, cole a descrição completa já criada no padrão."
+      },
+      {
+       "n": 7,
+       "titulo": "Atualizar",
+       "texto": "Clique em Atualizar."
+      }
+     ],
+     "atencoes": []
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "7.9",
+   "capitulo": {
+    "n": "7",
+    "nome": "Gestão de anúncios"
+   },
+   "nome": "Ativar anúncio",
+   "descricao": "",
+   "blocos": [
+    {
+     "titulo": "Ativar Anúncio – Shopee",
+     "canal": "SHO",
+     "plataforma": "Shopee",
+     "caminho": "Meus produtos > Não publicado",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Acessar Não publicado",
+       "texto": "Em Meus produtos, clique na aba Não publicado."
+      },
+      {
+       "n": 2,
+       "titulo": "Selecionar o produto",
+       "texto": "Selecione o produto."
+      },
+      {
+       "n": 3,
+       "titulo": "Publicar",
+       "texto": "Clique em Mais > Publicar."
+      },
+      {
+       "n": 4,
+       "titulo": "Conferir em Ativo",
+       "texto": "Confira se o produto passou para a aba Ativo."
+      }
+     ],
+     "atencoes": []
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "7.10",
+   "capitulo": {
+    "n": "7",
+    "nome": "Gestão de anúncios"
+   },
+   "nome": "Inativar anúncio",
+   "descricao": "Inativar tira o anúncio do ar sem apagá-lo. Ele pode ser reativado depois (ver 7.9).",
+   "blocos": [
+    {
+     "titulo": "Inativar Anúncio – Shopee",
+     "canal": "SHO",
+     "plataforma": "Shopee",
+     "caminho": "Central do Vendedor > Produtos",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Selecionar o produto",
+       "texto": "Em Produtos, selecione o produto."
+      },
+      {
+       "n": 2,
+       "titulo": "Desativar",
+       "texto": "Clique em Mais > Desativar e depois em Confirmar."
+      },
+      {
+       "n": 3,
+       "titulo": "Conferir em Não publicado",
+       "texto": "Confira se o produto aparece na aba Não publicado."
+      }
+     ],
+     "atencoes": []
+    },
+    {
+     "titulo": "Como Inativar um Anúncio – Amazon",
+     "canal": "AMZ",
+     "plataforma": "Amazon",
+     "caminho": "Menu lateral > Produtos > Gerenciar produtos",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Selecionar o anúncio",
+       "texto": "Em Manage Your Inventory, marque a caixa de seleção do anúncio."
+      },
+      {
+       "n": 2,
+       "titulo": "Encerrar a oferta",
+       "texto": "Clique em Selecionar ação de grupo e escolha Encerrar oferta."
+      },
+      {
+       "n": 3,
+       "titulo": "Confirmar",
+       "texto": "Na janela de confirmação, clique em Encerrar oferta."
+      }
+     ],
+     "atencoes": [
+      "Encerrar a oferta não retira as unidades que estão no FBA. Se for necessário tirar o estoque do armazém, veja 11.11."
+     ]
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "7.11",
+   "capitulo": {
+    "n": "7",
+    "nome": "Gestão de anúncios"
+   },
+   "nome": "Excluir anúncio",
+   "descricao": "Excluir apaga o anúncio definitivamente, junto com o histórico. Só execute com orientação do consultor.",
+   "blocos": [
+    {
+     "titulo": "Excluir Anúncio – Shopee",
+     "canal": "SHO",
+     "plataforma": "Shopee",
+     "caminho": "Central do Vendedor > Produtos",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Desativar o produto",
+       "texto": "Em Produtos, selecione o produto e clique em Mais > Desativar > Confirmar (a Shopee só exclui produtos desativados)."
+      },
+      {
+       "n": 2,
+       "titulo": "Selecionar em Não publicado",
+       "texto": "Na aba Não publicado, selecione o produto novamente."
+      },
+      {
+       "n": 3,
+       "titulo": "Excluir",
+       "texto": "Clique em Mais > Excluir e confirme em Excluir."
+      },
+      {
+       "n": 4,
+       "titulo": "Conferir a exclusão",
+       "texto": "A mensagem \"Nenhum produto encontrado\" indica que a exclusão foi concluída."
+      }
+     ],
+     "atencoes": []
+    },
+    {
+     "titulo": "Como Excluir um Anúncio – Amazon",
+     "canal": "AMZ",
+     "plataforma": "Amazon",
+     "caminho": "Menu lateral > Produtos > Gerenciar produtos",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Selecionar o anúncio",
+       "texto": "Em Manage Your Inventory, marque a caixa de seleção de um ou mais anúncios."
+      },
+      {
+       "n": 2,
+       "titulo": "Remover a oferta",
+       "texto": "Clique em Selecionar ação de grupo e escolha Remover oferta."
+      },
+      {
+       "n": 3,
+       "titulo": "Confirmar",
+       "texto": "Na janela de confirmação, clique em Remover oferta."
+      }
+     ],
+     "atencoes": [
+      "Na Amazon, se o anúncio for pai de variações, as variações associadas também são removidas. Em ofertas FBA, trate o estoque do armazém antes (ver 11.11)."
+     ]
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "7.13",
+   "capitulo": {
+    "n": "7",
+    "nome": "Gestão de anúncios"
+   },
+   "nome": "Impulsionar anúncio (Shopee apenas)",
+   "descricao": "O impulsionamento é gratuito e dá destaque temporário ao produto nas buscas da Shopee. A plataforma limita quantos produtos podem ser impulsionados ao mesmo tempo e por quanto tempo — confira o limite exibido na tela e repita quando o período terminar.",
+   "blocos": [
+    {
+     "titulo": "Impulsionar Anúncio – Shopee",
+     "canal": "SHO",
+     "plataforma": "Shopee",
+     "caminho": "Central do Vendedor > Produtos",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Localizar o produto",
+       "texto": "Em Produtos, localize o produto definido pelo consultor."
+      },
+      {
+       "n": 2,
+       "titulo": "Impulsionar",
+       "texto": "Clique em Mais > Impulsionar Agora."
+      },
+      {
+       "n": 3,
+       "titulo": "Repetir até o limite",
+       "texto": "Repita para os demais produtos até atingir o limite disponível."
+      }
+     ],
+     "atencoes": []
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "7.14",
+   "capitulo": {
+    "n": "7",
+    "nome": "Gestão de anúncios"
+   },
+   "nome": "Anunciar no catálogo (3 canais)",
+   "descricao": "Entrar no catálogo é associar o seu anúncio a uma página de produto já existente na base do marketplace. O anúncio passa a disputar a Buy Box dessa página, em vez de competir sozinho nas buscas.",
+   "blocos": [
+    {
+     "titulo": "Entrar no Catálogo – Mercado Livre",
+     "canal": "ML",
+     "plataforma": "Mercado Livre",
+     "caminho": "Central de vendedores > Anúncios > Gestão de anúncios",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Abrir o anúncio",
+       "texto": "Em Anúncios > Gestão de anúncios, clique no anúncio que vai entrar no catálogo."
+      },
+      {
+       "n": 2,
+       "titulo": "Acessar a associação de produto",
+       "texto": "Na tela Alterar anúncio, abra a opção de associar o anúncio a um produto da base do Mercado Livre."
+      },
+      {
+       "n": 3,
+       "titulo": "Buscar o produto",
+       "texto": "Clique em Buscar produto, digite o nome ou as características do item e clique em Buscar. Se o resultado não corresponder, refine o termo e busque de novo."
+      },
+      {
+       "n": 4,
+       "titulo": "Selecionar o produto correto",
+       "texto": "Confira título, marca, modelo, cor e tamanho antes de selecionar — associar ao produto errado gera reclamação e pode bloquear o anúncio."
+      },
+      {
+       "n": 5,
+       "titulo": "Confirmar a associação",
+       "texto": "Clique em Continuar e depois em Confirmar. Para Amazon e Shopee, o processo equivalente ainda não tem roteiro registrado no Mapa."
+      }
+     ],
+     "atencoes": [
+      "Só associe quando o produto for exatamente o mesmo. Na dúvida, registre no card e consulte o consultor."
+     ]
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "7.15",
+   "capitulo": {
+    "n": "7",
+    "nome": "Gestão de anúncios"
+   },
+   "nome": "Aplicar padrão Amazon",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "7.16",
+   "capitulo": {
+    "n": "7",
+    "nome": "Gestão de anúncios"
+   },
+   "nome": "Aplicar padrões específicos da plataforma",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "8.2",
+   "capitulo": {
+    "n": "8",
+    "nome": "Conteúdo e conversão"
+   },
+   "nome": "Construção de títulos",
+   "descricao": "O título é o principal fator de busca do anúncio. O processo abaixo combina pesquisa de palavras-chave (ferramenta Iris – Radar de Busca) com o ChatGPT para gerar um título otimizado sem inventar informações sobre o produto.",
+   "blocos": [
+    {
+     "titulo": "Melhorar Título – Amazon",
+     "canal": "AMZ",
+     "plataforma": "Amazon",
+     "caminho": "Manage Your Inventory > editar o anúncio > Detalhes do produto",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Abrir detalhes do produto",
+       "texto": "Em Produtos > Gerenciar produtos, abra a edição do anúncio e clique em Detalhes do produto."
+      },
+      {
+       "n": 2,
+       "titulo": "Copiar o nome do produto",
+       "texto": "Copie do título o nome do produto (ex.: \"Kit Churrasco Inox\")."
+      },
+      {
+       "n": 3,
+       "titulo": "Acessar a Iris",
+       "texto": "Acesse a Iris – Radar de Busca, clique em Acessar a ferramenta e faça login."
+      },
+      {
+       "n": 4,
+       "titulo": "Mapear as buscas",
+       "texto": "Cole o nome como termo-semente e clique em Mapear buscas."
+      },
+      {
+       "n": 5,
+       "titulo": "Copiar o TSV",
+       "texto": "Clique em Copiar TSV."
+      },
+      {
+       "n": 6,
+       "titulo": "Colar no ChatGPT",
+       "texto": "No ChatGPT, cole o TSV e, em seguida, o prompt abaixo."
+      },
+      {
+       "n": 7,
+       "titulo": "Inserir título e descrição",
+       "texto": "Volte à Amazon, copie o título atual e cole no campo \"título\" do prompt. Faça o mesmo com a descrição do anúncio no campo \"Descrição\"."
+      },
+      {
+       "n": 8,
+       "titulo": "Gerar o título",
+       "texto": "Clique em Enviar prompt e copie o título gerado."
+      },
+      {
+       "n": 9,
+       "titulo": "Substituir o título",
+       "texto": "Na edição do anúncio, substitua o conteúdo do campo Nome do produto pelo novo título."
+      },
+      {
+       "n": 10,
+       "titulo": "Salvar",
+       "texto": "Revise a página e clique em Salvar e Finalizar. ●    Prompt: \"gere um título otimizado para amazon com as palavras chaves anexadas; utilize os dados do anúncio para não adicionar informações irreais sobre o produto; título: [colar] Descrição: [colar]\""
+      }
+     ],
+     "atencoes": [
+      "Na Amazon, o nome do produto só pode ser alterado enquanto o anúncio não teve venda. Sempre revise o título gerado antes de salvar."
+     ]
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "8.3",
+   "capitulo": {
+    "n": "8",
+    "nome": "Conteúdo e conversão"
+   },
+   "nome": "Palavras-chave",
+   "descricao": "Na Amazon, o campo Palavras-chave de pesquisa recebe termos que não aparecem para o comprador, mas ajudam o posicionamento orgânico. O processo usa a Iris – Radar de Busca para levantar termos e o ChatGPT para organizá-los.",
+   "blocos": [
+    {
+     "titulo": "Preencher Palavras-chave – Amazon",
+     "canal": "AMZ",
+     "plataforma": "Amazon",
+     "caminho": "Manage Your Inventory > editar o anúncio > Detalhes do produto > Palavras-chave de pesquisa",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Abrir detalhes do produto",
+       "texto": "Em Produtos > Gerenciar produtos, abra a edição do anúncio e clique em Detalhes do produto."
+      },
+      {
+       "n": 2,
+       "titulo": "Copiar o nome do produto",
+       "texto": "Copie o nome do produto do título."
+      },
+      {
+       "n": 3,
+       "titulo": "Mapear buscas na Iris",
+       "texto": "Na Iris – Radar de Busca, faça login, digite o termo-semente e clique em Mapear buscas."
+      },
+      {
+       "n": 4,
+       "titulo": "Copiar o TSV",
+       "texto": "Clique em Copiar TSV."
+      },
+      {
+       "n": 5,
+       "titulo": "Gerar as listas no ChatGPT",
+       "texto": "No ChatGPT, cole o TSV e depois o prompt abaixo. Clique em Enviar prompt."
+      },
+      {
+       "n": 6,
+       "titulo": "Preencher o primeiro campo",
+       "texto": "Copie a Lista 1 e cole no primeiro campo de Palavras-chave de pesquisa do anúncio."
+      },
+      {
+       "n": 7,
+       "titulo": "Preencher os demais campos",
+       "texto": "Repita para as Listas 2 a 5, uma em cada campo."
+      },
+      {
+       "n": 8,
+       "titulo": "Salvar",
+       "texto": "Clique em Salvar e Finalizar. ●    Prompt: \"liste 5 vezes os termos de busca mais relevantes separando-os por ponto e vírgula, respeitando um limite de até 500 caracteres, como no exemplo abaixo: Lista 1: Cabo de som; Cabo p10; […]; Cabo […] Lista 5: Cabo para guitarra; Cabo p10 mono; […]; Cabo de áudio\""
+      }
+     ],
+     "atencoes": []
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "8.14",
+   "capitulo": {
+    "n": "8",
+    "nome": "Conteúdo e conversão"
+   },
+   "nome": "Adicionar Vídeos",
+   "descricao": "O vídeo aumenta a conversão ao mostrar detalhes, características e uso do produto.",
+   "blocos": [
+    {
+     "titulo": "Adicionar Vídeos – Shopee",
+     "canal": "SHO",
+     "plataforma": "Shopee",
+     "caminho": "Produtos > Editar > Vídeo do Produto",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Abrir a edição",
+       "texto": "Em Produtos, clique em Editar."
+      },
+      {
+       "n": 2,
+       "titulo": "Adicionar o vídeo",
+       "texto": "Na seção de vídeo, clique em Adicionar Vídeo e selecione o arquivo."
+      },
+      {
+       "n": 3,
+       "titulo": "Confirmar o trecho",
+       "texto": "Confira se o trecho selecionado está correto e clique em Confirmar."
+      },
+      {
+       "n": 4,
+       "titulo": "Conferir o vídeo",
+       "texto": "Verifique se o vídeo aparece na seção Vídeo do Produto."
+      },
+      {
+       "n": 5,
+       "titulo": "Atualizar",
+       "texto": "Clique em Atualizar."
+      }
+     ],
+     "atencoes": []
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "8.15",
+   "capitulo": {
+    "n": "8",
+    "nome": "Conteúdo e conversão"
+   },
+   "nome": "Conteúdo A+",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "9.2",
+   "capitulo": {
+    "n": "9",
+    "nome": "Preço e promoção"
+   },
+   "nome": "Atualizar preços",
+   "descricao": "Só altere preço com valor definido pelo consultor ou pelo cliente, respeitando a margem mínima.",
+   "blocos": [
+    {
+     "titulo": "Como Atualizar o Preço dos Produtos – Amazon",
+     "canal": "AMZ",
+     "plataforma": "Amazon",
+     "caminho": "Inventário > coluna Preço",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Localizar o produto",
+       "texto": "Encontre o produto no inventário."
+      },
+      {
+       "n": 2,
+       "titulo": "Abrir o campo de preço",
+       "texto": "Clique no campo Preço do anúncio."
+      },
+      {
+       "n": 3,
+       "titulo": "Informar o novo preço",
+       "texto": "Informe o novo preço."
+      },
+      {
+       "n": 4,
+       "titulo": "Salvar",
+       "texto": "Clique em Salvar tudo. O preço também pode ser alterado pela tela de edição da oferta (ver 7.4)."
+      }
+     ],
+     "atencoes": []
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "9.6",
+   "capitulo": {
+    "n": "9",
+    "nome": "Preço e promoção"
+   },
+   "nome": "Campanhas de desconto",
+   "descricao": "As campanhas tradicionais são promoções criadas pelo próprio marketplace, em que o vendedor escolhe participar com seus anúncios. Antes de aderir, confira o desconto exigido e a margem de cada produto com o consultor.",
+   "blocos": [
+    {
+     "titulo": "Ativar Desconto – Campanha Tradicional – Mercado Livre",
+     "canal": "ML",
+     "plataforma": "Campanha Tradicional – Mercado Livre",
+     "caminho": "Central de vendedores > Anúncios > Gestão de anúncios > Central de promoções",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Acessar a gestão de anúncios",
+       "texto": "Na Central de vendedores, clique em Anúncios > Gestão de anúncios."
+      },
+      {
+       "n": 2,
+       "titulo": "Abrir a Central de promoções",
+       "texto": "Clique em Central de promoções."
+      },
+      {
+       "n": 3,
+       "titulo": "Escolher a campanha",
+       "texto": "Clique em Promoções e selecione a campanha desejada. Em Criadas por você ficam as promoções da própria loja; nas demais abas aparecem as campanhas do mês oferecidas pelo Mercado Livre."
+      },
+      {
+       "n": 4,
+       "titulo": "Participar",
+       "texto": "Clique em Participar no anúncio ou na campanha escolhida."
+      },
+      {
+       "n": 5,
+       "titulo": "Confirmar",
+       "texto": "Clique em Confirmar para aplicar o desconto."
+      }
+     ],
+     "atencoes": []
+    },
+    {
+     "titulo": "Ativar Promoção Oficial (Oferta Relâmpago) – Mercado Livre",
+     "canal": "ML",
+     "plataforma": "Mercado Livre",
+     "caminho": "Central de vendedores > Anúncios > Gestão de anúncios > Central de promoções",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Acessar a gestão de anúncios",
+       "texto": "Na Central de vendedores, clique em Anúncios > Gestão de anúncios."
+      },
+      {
+       "n": 2,
+       "titulo": "Abrir a Central de promoções",
+       "texto": "Clique em Central de promoções e localize a oferta relâmpago disponível para os anúncios da loja."
+      },
+      {
+       "n": 3,
+       "titulo": "Participar",
+       "texto": "Clique em Participar na oferta desejada."
+      },
+      {
+       "n": 4,
+       "titulo": "Confirmar",
+       "texto": "Clique em Confirmar. A promoção passa a valer no período informado pelo Mercado Livre. Para as campanhas da Shopee, veja 9.7 (Desconto) e 9.9 (Oferta Relâmpago)."
+      }
+     ],
+     "atencoes": [
+      "Nas campanhas oficiais quem define o preço mínimo é a plataforma. Confira se o valor exigido respeita a margem mínima do cliente antes de participar."
+     ]
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "9.7",
+   "capitulo": {
+    "n": "9",
+    "nome": "Preço e promoção"
+   },
+   "nome": "Ativar desconto",
+   "descricao": "",
+   "blocos": [
+    {
+     "titulo": "Ativar Desconto (Minha Promoção) – Shopee",
+     "canal": "SHO",
+     "plataforma": "Shopee",
+     "caminho": "Central do Vendedor > Desconto > Criar",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Criar o desconto",
+       "texto": "Na Central do Vendedor, clique em Desconto e depois em Criar."
+      },
+      {
+       "n": 2,
+       "titulo": "Nomear a campanha",
+       "texto": "Digite o nome da campanha (ex.: \"20%off setembro\")."
+      },
+      {
+       "n": 3,
+       "titulo": "Definir o período",
+       "texto": "Defina as datas de início e fim e clique em Confirm."
+      },
+      {
+       "n": 4,
+       "titulo": "Adicionar os produtos",
+       "texto": "Clique em Adicionar Produtos, marque os produtos e clique em Confirm."
+      },
+      {
+       "n": 5,
+       "titulo": "Definir a porcentagem",
+       "texto": "No campo de desconto, informe a porcentagem definida (ex.: 20) e preencha os demais campos solicitados."
+      },
+      {
+       "n": 6,
+       "titulo": "Confirmar",
+       "texto": "Clique em Confirmar."
+      }
+     ],
+     "atencoes": []
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "9.8",
+   "capitulo": {
+    "n": "9",
+    "nome": "Preço e promoção"
+   },
+   "nome": "Criar Cupom",
+   "descricao": "",
+   "blocos": [
+    {
+     "titulo": "Criar Cupom de Loja – Shopee",
+     "canal": "SHO",
+     "plataforma": "Shopee",
+     "caminho": "Central do Vendedor > Cupons > Criar",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Criar o cupom",
+       "texto": "Clique em Cupons e depois em Criar."
+      },
+      {
+       "n": 2,
+       "titulo": "Definir nome e código",
+       "texto": "Preencha o Nome do Cupom e o Código do cupom."
+      },
+      {
+       "n": 3,
+       "titulo": "Definir o período",
+       "texto": "Em Período de Uso do Cupom, selecione a data final e clique em Confirmar."
+      },
+      {
+       "n": 4,
+       "titulo": "Escolher o tipo de desconto",
+       "texto": "Em tipo de desconto, troque Quantia fixa por Por porcentagem."
+      },
+      {
+       "n": 5,
+       "titulo": "Definir a porcentagem",
+       "texto": "Aplique 5% ou o valor definido pelo consultor."
+      },
+      {
+       "n": 6,
+       "titulo": "Definir o desconto máximo",
+       "texto": "Em desconto máximo, marque Sem limite."
+      },
+      {
+       "n": 7,
+       "titulo": "Definir o valor mínimo",
+       "texto": "Em Valor Mínimo da Cesta, informe o valor definido pelo consultor (geralmente R$ 1,00)."
+      },
+      {
+       "n": 8,
+       "titulo": "Definir a quantidade",
+       "texto": "Em Quantidade de cupom, coloque uma quantidade alta (ex.: 1000)."
+      },
+      {
+       "n": 9,
+       "titulo": "Confirmar",
+       "texto": "Confira as informações e clique em Confirmar."
+      },
+      {
+       "n": 10,
+       "titulo": "Conferir o status",
+       "texto": "Na lista de cupons, confira se o cupom aparece como Agendado."
+      }
+     ],
+     "atencoes": []
+    },
+    {
+     "titulo": "Como Criar Campanha de Cupom – Amazon",
+     "canal": "AMZ",
+     "plataforma": "Amazon",
+     "caminho": "Menu > Publicidade > Cupons > Criar um novo cupom",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Criar novo cupom",
+       "texto": "No menu, clique em Publicidade > Cupons > Criar um novo cupom."
+      },
+      {
+       "n": 2,
+       "titulo": "Selecionar o público",
+       "texto": "Selecione o público-alvo."
+      },
+      {
+       "n": 3,
+       "titulo": "Selecionar o produto",
+       "texto": "Em \"Procurar produto por nome ou código ASIN\", insira o ASIN, confira o produto e selecione."
+      },
+      {
+       "n": 4,
+       "titulo": "Definir as datas",
+       "texto": "Informe as datas de início e de término."
+      },
+      {
+       "n": 5,
+       "titulo": "Definir desconto e orçamento",
+       "texto": "Informe a porcentagem de desconto e o orçamento da campanha."
+      },
+      {
+       "n": 6,
+       "titulo": "Nomear a campanha",
+       "texto": "Insira o título da campanha."
+      },
+      {
+       "n": 7,
+       "titulo": "Bloquear empilhamento",
+       "texto": "Selecione a opção Não permitir o empilhamento."
+      },
+      {
+       "n": 8,
+       "titulo": "Revisar e enviar",
+       "texto": "Clique em Continuar, confira a campanha e clique em Enviar."
+      }
+     ],
+     "atencoes": []
+    },
+    {
+     "titulo": "Criação de Cupom – Mercado Livre",
+     "canal": "ML",
+     "plataforma": "Mercado Livre",
+     "caminho": "Central de vendedores > Central de marketing > Desconto para quem você escolher",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Acessar a Central de marketing",
+       "texto": "Na Central de vendedores, clique em Central de marketing."
+      },
+      {
+       "n": 2,
+       "titulo": "Abrir a criação de cupom",
+       "texto": "Clique em Desconto para quem você escolher para abrir a tela Crie seu cupom."
+      },
+      {
+       "n": 3,
+       "titulo": "Nomear o cupom",
+       "texto": "No campo Nome, informe uma identificação clara (ex.: \"Cupom 5%off\"). Esse nome aparece na Central de promoções."
+      },
+      {
+       "n": 4,
+       "titulo": "Definir a visibilidade",
+       "texto": "Escolha entre Manter visível durante o processo de compra e na seção de cupons (todos os compradores podem usar) ou Compartilhar o cupom pelo canal de transmissão ou redes sociais (só quem receber o código)."
+      },
+      {
+       "n": 5,
+       "titulo": "Escolher os anúncios",
+       "texto": "Em Anúncios, selecione Todas ou Apenas os que você escolher para participar."
+      },
+      {
+       "n": 6,
+       "titulo": "Definir o desconto",
+       "texto": "Em Desconto, selecione Porcentagem (ou Valor fixo), informe o percentual e o desconto máximo em reais."
+      },
+      {
+       "n": 7,
+       "titulo": "Definir as condições",
+       "texto": "Preencha o Valor mínimo de compra e o Orçamento total da campanha, conforme o combinado com o consultor."
+      },
+      {
+       "n": 8,
+       "titulo": "Criar o cupom",
+       "texto": "Clique em Criar cupom e confira se ele aparece na Central de promoções."
+      }
+     ],
+     "atencoes": []
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "9.9",
+   "capitulo": {
+    "n": "9",
+    "nome": "Preço e promoção"
+   },
+   "nome": "Oferta Relâmpago",
+   "descricao": "A Oferta Relâmpago da Loja destaca produtos com preço especial em um horário definido. Regra da operação: o preço da oferta deve ficar 1 centavo abaixo do preço com desconto já aplicado no produto.",
+   "blocos": [
+    {
+     "titulo": "Oferta Relâmpago – Shopee",
+     "canal": "SHO",
+     "plataforma": "Shopee",
+     "caminho": "Central do Vendedor > Oferta Relâmpago da Loja > Criar",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Criar a oferta",
+       "texto": "Clique em Oferta Relâmpago da Loja e depois em Criar."
+      },
+      {
+       "n": 2,
+       "titulo": "Definir o período",
+       "texto": "Clique em Selecionar Período de Tempo, escolha a data e a faixa de horário e clique em Confirmar."
+      },
+      {
+       "n": 3,
+       "titulo": "Adicionar os produtos",
+       "texto": "Clique em Adicionar Produtos e selecione os produtos."
+      },
+      {
+       "n": 4,
+       "titulo": "Reservar o estoque",
+       "texto": "No campo estoque, informe a quantidade reservada para a oferta sem comprometer o estoque total (ex.: 10 unidades) e clique em Atualizar todos."
+      },
+      {
+       "n": 5,
+       "titulo": "Consultar o preço com desconto",
+       "texto": "Clique no título do produto para abrir o anúncio e anote o Preço com Desconto (ex.: R$ 73,07)."
+      },
+      {
+       "n": 6,
+       "titulo": "Definir o preço da oferta",
+       "texto": "Volte à aba da oferta relâmpago e preencha o valor com 1 centavo a menos (ex.: R$ 73,06)."
+      },
+      {
+       "n": 7,
+       "titulo": "Preencher as variações",
+       "texto": "Preencha todas as variações seguindo a mesma regra."
+      },
+      {
+       "n": 8,
+       "titulo": "Habilitar e confirmar",
+       "texto": "Clique em Confirmar, depois em Habilitar Tudo e em Confirmar novamente."
+      },
+      {
+       "n": 9,
+       "titulo": "Conferir a oferta",
+       "texto": "Clique em Voltar para Todas as Promoções e confira se a oferta aparece no período escolhido."
+      }
+     ],
+     "atencoes": []
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "9.11",
+   "capitulo": {
+    "n": "9",
+    "nome": "Preço e promoção"
+   },
+   "nome": "Buy Box",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "11.1",
+   "capitulo": {
+    "n": "11",
+    "nome": "Estoque e logística"
+   },
+   "nome": "Gestão de estoque",
+   "descricao": "Lançamento de Estoque do Produto Pai – Bling",
+   "blocos": [
+    {
+     "titulo": "Depois de criar o produto pai (ver 6.3), é preciso lançar o estoque inicial.",
+     "canal": null,
+     "plataforma": "",
+     "caminho": "Produtos > indicador de estoque do produto pai > Incluir lançamento",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Abrir o estoque do produto pai",
+       "texto": "Na lista de produtos, localize o produto pai. Quando o indicador de estoque estiver vermelho, clique nele para abrir a tela de estoque."
+      },
+      {
+       "n": 2,
+       "titulo": "Incluir lançamento",
+       "texto": "Clique em Incluir lançamento."
+      },
+      {
+       "n": 3,
+       "titulo": "Selecionar Balanço",
+       "texto": "No campo Tipo, abra o seletor e selecione Balanço (ajuste inicial do estoque)."
+      },
+      {
+       "n": 4,
+       "titulo": "Informar a quantidade",
+       "texto": "No campo Quantidade, informe a quantidade disponível."
+      },
+      {
+       "n": 5,
+       "titulo": "Incluir",
+       "texto": "Clique em Incluir."
+      },
+      {
+       "n": 6,
+       "titulo": "Conferir o indicador",
+       "texto": "Confira se o indicador de estoque ficou verde."
+      }
+     ],
+     "atencoes": []
+    }
+   ],
+   "atencoes": [],
+   "texto": "Depois de criar o produto pai (ver 6.3), é preciso lançar o estoque inicial. Os produtos vinculados a ele por composição passam a usar esse saldo."
+  },
+  {
+   "id": "11.7",
+   "capitulo": {
+    "n": "11",
+    "nome": "Estoque e logística"
+   },
+   "nome": "Planejamento FULL",
+   "descricao": "Enviar para o FULL significa mandar estoque para o centro de distribuição do Mercado Livre. O envio é feito por um plano de envio, com quantidade por anúncio e data de coleta combinada com o cliente.",
+   "blocos": [
+    {
+     "titulo": "Como Criar Full – Mercado Livre",
+     "canal": "ML",
+     "plataforma": "Mercado Livre",
+     "caminho": "Central de vendedores > Anúncios > Gestão de anúncios > Gestão de estoque Full",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Acessar a gestão do Full",
+       "texto": "Em Anúncios > Gestão de anúncios, clique em Gestão de estoque Full."
+      },
+      {
+       "n": 2,
+       "titulo": "Criar o planejamento",
+       "texto": "Clique em Planejamento de envios para abrir o controle de estoque do Full."
+      },
+      {
+       "n": 3,
+       "titulo": "Selecionar os anúncios",
+       "texto": "Marque os anúncios que farão parte do envio."
+      },
+      {
+       "n": 4,
+       "titulo": "Informar as quantidades",
+       "texto": "No campo Units, informe quantas unidades de cada anúncio serão enviadas."
+      },
+      {
+       "n": 5,
+       "titulo": "Continuar",
+       "texto": "Clique em Continuar para gerar o plano de envio."
+      },
+      {
+       "n": 6,
+       "titulo": "Conferir o conteúdo do envio",
+       "texto": "Revise os produtos e as quantidades na tela de conteúdo do envio."
+      },
+      {
+       "n": 7,
+       "titulo": "Escolher como e quando enviar",
+       "texto": "Avance para o agendamento e selecione a forma de envio (ex.: Coleta a domicílio)."
+      },
+      {
+       "n": 8,
+       "titulo": "Selecionar a data",
+       "texto": "Escolha a data da coleta. Confirme a data com o cliente antes, porque a mercadoria precisa estar embalada e disponível no dia."
+      },
+      {
+       "n": 9,
+       "titulo": "Confirmar o envio",
+       "texto": "Clique em Confirmar e conclua o agendamento."
+      }
+     ],
+     "atencoes": []
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "11.10",
+   "capitulo": {
+    "n": "11",
+    "nome": "Estoque e logística"
+   },
+   "nome": "Ativar Flex",
+   "descricao": "O Flex é a entrega feita pelo próprio vendedor no mesmo dia ou no dia seguinte, com valor pago por envio. Produtos no Flex ganham destaque nas buscas. A ativação é feita anúncio por anúncio.",
+   "blocos": [
+    {
+     "titulo": "Como Ativar o Flex dentro do Anúncio – Mercado Livre",
+     "canal": "ML",
+     "plataforma": "Mercado Livre",
+     "caminho": "Central de vendedores > Anúncios > Gestão de anúncios",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Abrir o anúncio",
+       "texto": "Em Anúncios > Gestão de anúncios, clique no anúncio que vai receber o Flex."
+      },
+      {
+       "n": 2,
+       "titulo": "Acessar as condições de envio",
+       "texto": "Na tela Alterar anúncio, abra a seção de envios do anúncio."
+      },
+      {
+       "n": 3,
+       "titulo": "Marcar Envios Flex",
+       "texto": "Em Envios com sua logística, marque a opção Envios Flex. A tela mostra o valor que o vendedor recebe por envio."
+      },
+      {
+       "n": 4,
+       "titulo": "Conferir medidas e peso",
+       "texto": "Confira o aviso de custo de envio: se a embalagem tiver medidas ou peso diferentes do cadastrado, corrija os dados para evitar penalizações."
+      },
+      {
+       "n": 5,
+       "titulo": "Confirmar",
+       "texto": "Clique em Confirmar."
+      }
+     ],
+     "atencoes": [
+      "Só ative o Flex com o cliente ciente: a entrega no prazo é responsabilidade dele e o atraso afeta a reputação da conta."
+     ]
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "11.11",
+   "capitulo": {
+    "n": "11",
+    "nome": "Estoque e logística"
+   },
+   "nome": "FBA",
+   "descricao": "FBA é a modalidade em que a Amazon armazena, embala e entrega os produtos. O cadastro de um anúncio no FBA está em 11.12 e o envio de unidades em 11.13. Abaixo, a retirada de estoque.",
+   "blocos": [
+    {
+     "titulo": "Como Remover Estoque do FBA – Amazon",
+     "canal": "AMZ",
+     "plataforma": "Amazon",
+     "caminho": "Menu > Inventário > Inventário do FBA – Logística da Amazon",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Acessar o inventário do FBA",
+       "texto": "No menu do Seller Central, clique em Inventário > Inventário do FBA – Logística da Amazon."
+      },
+      {
+       "n": 2,
+       "titulo": "Selecionar o anúncio",
+       "texto": "Localize e selecione o(s) anúncio(s) com unidades a remover (normalmente as não aptas para venda)."
+      },
+      {
+       "n": 3,
+       "titulo": "Criar pedido de remoção",
+       "texto": "Clique em Ações de grupo > Pedido de remoção."
+      },
+      {
+       "n": 4,
+       "titulo": "Informar a quantidade",
+       "texto": "Informe a quantidade a remover — abaixo do campo aparece a quantidade disponível para retirada."
+      },
+      {
+       "n": 5,
+       "titulo": "Revisar e confirmar",
+       "texto": "Clique em Revisar e confirme o envio de devolução."
+      },
+      {
+       "n": 6,
+       "titulo": "Acompanhar a remoção",
+       "texto": "Para acompanhar, clique em Detalhes do pedido de remoção > Ver online, selecione o período (último dia, 7 ou 30 dias) e clique em Gerar relatório."
+      },
+      {
+       "n": 7,
+       "titulo": "Conferir o pedido",
+       "texto": "Clique no ID do pedido para ver os detalhes. Se perceber erro, use Cancelar."
+      }
+     ],
+     "atencoes": [
+      "Também é possível retirar unidades aptas para venda. Confira bem o anúncio e a quantidade antes de confirmar."
+     ]
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "11.12",
+   "capitulo": {
+    "n": "11",
+    "nome": "Estoque e logística"
+   },
+   "nome": "Cadastro FBA",
+   "descricao": "Para um anúncio que já é vendido pelo próprio vendedor (FBM/DBA) passar a ser vendido também pelo FBA, cria-se uma nova condição com SKU próprio.",
+   "blocos": [
+    {
+     "titulo": "Como Adicionar um Anúncio ao FBA – Amazon",
+     "canal": "AMZ",
+     "plataforma": "Amazon",
+     "caminho": "Produtos > Gerenciar produtos > menu do anúncio > Adicionar outra condição",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Localizar o anúncio",
+       "texto": "Em Manage Your Inventory, pesquise o anúncio."
+      },
+      {
+       "n": 2,
+       "titulo": "Adicionar outra condição",
+       "texto": "No menu de opções, clique em Adicionar outra condição."
+      },
+      {
+       "n": 3,
+       "titulo": "Criar o SKU FBA",
+       "texto": "Informe um novo SKU. Padrão: o SKU original com o sufixo _FBA — confira se a conta tem outro padrão."
+      },
+      {
+       "n": 4,
+       "titulo": "Selecionar o FBA",
+       "texto": "Selecione Quero usar o FBA – Logística da Amazon…."
+      },
+      {
+       "n": 5,
+       "titulo": "Informar o preço",
+       "texto": "Digite o preço de venda."
+      },
+      {
+       "n": 6,
+       "titulo": "Definir a condição",
+       "texto": "Em condição, selecione Novo."
+      },
+      {
+       "n": 7,
+       "titulo": "Responder segurança",
+       "texto": "Informe que o produto não possui bateria e marque Não aplicável em GHS/Transporte/Armazenamento (essas perguntas aparecem em qualquer produto, por segurança)."
+      },
+      {
+       "n": 8,
+       "titulo": "Publicar como FBA",
+       "texto": "Clique em Pronto para enviar e depois em Publicar como FBA – Logística da Amazon."
+      }
+     ],
+     "atencoes": []
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "11.13",
+   "capitulo": {
+    "n": "11",
+    "nome": "Estoque e logística"
+   },
+   "nome": "Envio para FBA",
+   "descricao": "",
+   "blocos": [
+    {
+     "titulo": "Como Criar Remessa para o FBA – Amazon",
+     "canal": "AMZ",
+     "plataforma": "Amazon",
+     "caminho": "Menu > Inventário > Envios > Enviar para a Amazon",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Iniciar o envio",
+       "texto": "No menu, clique em Inventário > Envios e depois em Enviar para a Amazon."
+      },
+      {
+       "n": 2,
+       "titulo": "Pesquisar o SKU",
+       "texto": "Em \"Pesquisar por\", selecione SKU, informe o SKU e confirme o produto."
+      },
+      {
+       "n": 3,
+       "titulo": "Informar as quantidades",
+       "texto": "Informe a quantidade que será enviada. Repita para todos os produtos da remessa."
+      },
+      {
+       "n": 4,
+       "titulo": "Embalar",
+       "texto": "Clique em Pronto para embalar e depois em Embalar unidades individuais."
+      },
+      {
+       "n": 5,
+       "titulo": "Definir as caixas",
+       "texto": "Confira produtos e quantidades e selecione quantas caixas serão necessárias. Clique em Confirmar."
+      },
+      {
+       "n": 6,
+       "titulo": "Informar medidas e peso",
+       "texto": "Preencha as dimensões e o Peso da caixa (kg)."
+      },
+      {
+       "n": 7,
+       "titulo": "Confirmar a embalagem",
+       "texto": "Clique em Confirmar informações de embalagem e em Confirmar e continuar."
+      },
+      {
+       "n": 8,
+       "titulo": "Aceitar as cobranças",
+       "texto": "Clique em Aceitar cobranças e continuar."
+      },
+      {
+       "n": 9,
+       "titulo": "Gerar nota e etiquetas",
+       "texto": "Na Etapa 3, gere a nota fiscal e imprima as etiquetas."
+      }
+     ],
+     "atencoes": []
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "11.16",
+   "capitulo": {
+    "n": "11",
+    "nome": "Estoque e logística"
+   },
+   "nome": "Modo Férias",
+   "descricao": "O modo férias pausa as vendas da conta sem excluir os anúncios, para quando o cliente não puder despachar (viagem, recesso, falta de operação). Os anúncios saem do ar e voltam quando o modo é desativado.",
+   "blocos": [
+    {
+     "titulo": "Ativar Modo Férias – Mercado Livre",
+     "canal": "ML",
+     "plataforma": "Mercado Livre",
+     "caminho": "Central de vendedores > Anúncios > Gestão de anúncios",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Acessar a gestão de anúncios",
+       "texto": "Na Central de vendedores, clique em Anúncios > Gestão de anúncios."
+      },
+      {
+       "n": 2,
+       "titulo": "Abrir o modo férias",
+       "texto": "Clique em Modo férias."
+      },
+      {
+       "n": 3,
+       "titulo": "Confirmar",
+       "texto": "Clique em Confirmar. Para voltar a vender, repita o caminho e desative a opção."
+      }
+     ],
+     "atencoes": [
+      "Ativar só com autorização expressa do cliente e com data de retorno definida — a conta deixa de vender enquanto o modo estiver ligado."
+     ]
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "12.2",
+   "capitulo": {
+    "n": "12",
+    "nome": "ERP e integrações"
+   },
+   "nome": "Integração dos Canais",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "12.6",
+   "capitulo": {
+    "n": "12",
+    "nome": "ERP e integrações"
+   },
+   "nome": "Criação de Vínculo ERP",
+   "descricao": "No Bling, um produto com grade (tamanho, cor, sabor) é cadastrado como produto com variações, e cada variação recebe a composição que aponta para o produto pai. É assim que a venda de qualquer variação baixa o estoque do pai (ver 6.3 e 12.7).",
+   "blocos": [
+    {
+     "titulo": "Cadastro com Variação – Bling",
+     "canal": null,
+     "plataforma": "Bling",
+     "caminho": "Cadastros > Produtos > abrir o produto > Formato",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Definir o formato",
+       "texto": "No cadastro do produto, abra o seletor Formato e selecione Com variações (Grade de tamanhos, cores, etc)."
+      },
+      {
+       "n": 2,
+       "titulo": "Nomear a grade",
+       "texto": "No campo \"Cor, tamanho, largura, voltagem…\", informe o tipo da grade e o valor da primeira variação."
+      },
+      {
+       "n": 3,
+       "titulo": "Adicionar a variação",
+       "texto": "Clique em Adicionar variação."
+      },
+      {
+       "n": 4,
+       "titulo": "Informar o código",
+       "texto": "Abra a variação criada e preencha o campo Código com o SKU dela."
+      },
+      {
+       "n": 5,
+       "titulo": "Definir a composição",
+       "texto": "No formato da variação, selecione Com composição (Kit ou união de vários itens)."
+      },
+      {
+       "n": 6,
+       "titulo": "Vincular o produto pai",
+       "texto": "No campo Produto, digite o SKU ou o nome do produto pai (ex.: \"…-PAI\") e selecione o item na lista."
+      },
+      {
+       "n": 7,
+       "titulo": "Salvar a variação",
+       "texto": "Clique em Salvar."
+      },
+      {
+       "n": 8,
+       "titulo": "Repetir para as demais variações",
+       "texto": "Repita o preenchimento para cada variação. Quando a variação for um kit, use Adicionar outro item e inclua todos os produtos pai que a compõem."
+      },
+      {
+       "n": 9,
+       "titulo": "Salvar o produto",
+       "texto": "Clique em Salvar para gravar o cadastro completo."
+      }
+     ],
+     "atencoes": [
+      "Cada variação precisa de SKU próprio e de composição preenchida. Variação sem composição não baixa estoque e trava a emissão da nota."
+     ]
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "12.7",
+   "capitulo": {
+    "n": "12",
+    "nome": "ERP e integrações"
+   },
+   "nome": "Vínculo e Composição ERP",
+   "descricao": "Composição é o vínculo em que o produto vendido no canal usa o estoque do produto pai. Assim, uma venda em qualquer canal baixa o saldo do pai (ver 6.3 e 11.1).",
+   "blocos": [
+    {
+     "titulo": "Cadastro de Exportação – Bling",
+     "canal": null,
+     "plataforma": "Bling",
+     "caminho": "Produtos > três pontinhos do produto pai > Clonar produto",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Clonar o produto pai",
+       "texto": "Localize o produto pai, clique nos três pontinhos e em Clonar produto."
+      },
+      {
+       "n": 2,
+       "titulo": "Ajustar o nome",
+       "texto": "No campo Nome, remova o \"-PAI\" e complete as informações do produto, se necessário."
+      },
+      {
+       "n": 3,
+       "titulo": "Revisar o cadastro",
+       "texto": "Revise SKU, formato, tipo, preço e unidade."
+      },
+      {
+       "n": 4,
+       "titulo": "Ajustar o SKU",
+       "texto": "Em Código (SKU), remova apenas o sufixo \"-PAI\", mantendo o código principal."
+      },
+      {
+       "n": 5,
+       "titulo": "Inserir a descrição",
+       "texto": "Preencha a Descrição Curta (Descrição Principal) com o texto comercial."
+      },
+      {
+       "n": 6,
+       "titulo": "Adicionar as imagens",
+       "texto": "Na aba Imagens, clique em Adicionar imagens… e faça o upload das fotos."
+      },
+      {
+       "n": 7,
+       "titulo": "Vincular o produto pai",
+       "texto": "Na aba Estrutura, informe o SKU do produto pai no campo Componente e selecione o item na lista."
+      },
+      {
+       "n": 8,
+       "titulo": "Conferir a estrutura",
+       "texto": "Confira se o produto pai aparece na estrutura com SKU, quantidade e estoque."
+      },
+      {
+       "n": 9,
+       "titulo": "Salvar",
+       "texto": "Clique em Salvar produto."
+      }
+     ],
+     "atencoes": []
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "12.8",
+   "capitulo": {
+    "n": "12",
+    "nome": "ERP e integrações"
+   },
+   "nome": "Realizar Vínculos Existentes",
+   "descricao": "Vincular (ou mapear) é ligar um anúncio que já existe no marketplace ao produto cadastrado no ERP, para controlar estoque e emitir nota fiscal.",
+   "blocos": [
+    {
+     "titulo": "Mapear Anúncios da Amazon com UpSeller – UpSeller",
+     "canal": "AMZ",
+     "plataforma": "UpSeller",
+     "caminho": "UpSeller > Produtos > Gerenciar Mapeamento > Amazon",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Acessar Gerenciar Mapeamento",
+       "texto": "Na página inicial da UpSeller, clique em Produtos > Gerenciar Mapeamento."
+      },
+      {
+       "n": 2,
+       "titulo": "Selecionar Amazon",
+       "texto": "Clique em Ignorar (se aparecer o aviso) e selecione Amazon."
+      },
+      {
+       "n": 3,
+       "titulo": "Copiar o ASIN",
+       "texto": "No anúncio a ser mapeado, clique em Copiar para copiar o ASIN."
+      },
+      {
+       "n": 4,
+       "titulo": "Conferir no Seller Central",
+       "texto": "No Seller Central, abra Gerenciar Inventário, pesquise o ASIN e confira se é o anúncio correto."
+      },
+      {
+       "n": 5,
+       "titulo": "Iniciar o mapeamento",
+       "texto": "Volte à aba de mapeamento da UpSeller e clique em Mapear."
+      },
+      {
+       "n": 6,
+       "titulo": "Pesquisar o produto",
+       "texto": "No modo de pesquisa, escolha Nome do Produto ou SKU e pesquise o produto."
+      },
+      {
+       "n": 7,
+       "titulo": "Mapear",
+       "texto": "Marque a caixa à esquerda do produto correto e clique em Mapear."
+      }
+     ],
+     "atencoes": [
+      "O tipo de pesquisa precisa bater com o que foi digitado: buscar nome com \"SKU\" selecionado (ou o contrário) dá erro."
+     ]
+    },
+    {
+     "titulo": "Vincular Estoque – Tiny",
+     "canal": null,
+     "plataforma": "Tiny",
+     "caminho": "Canal desejado > Gerenciar > Anúncios",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Gerenciar o canal",
+       "texto": "No canal desejado, clique em Gerenciar."
+      },
+      {
+       "n": 2,
+       "titulo": "Relacionar anúncio",
+       "texto": "Na lista de anúncios, clique nos três pontos do produto e em Relacionar anúncio."
+      },
+      {
+       "n": 3,
+       "titulo": "Pesquisar o produto",
+       "texto": "Pesquise por nome, código (SKU) ou GTIN/EAN e clique na lupa."
+      },
+      {
+       "n": 4,
+       "titulo": "Relacionar",
+       "texto": "Se o produto correto aparecer, clique em Continuar e depois em Relacionar."
+      }
+     ],
+     "atencoes": []
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "13.3",
+   "capitulo": {
+    "n": "13",
+    "nome": "Gestão da loja e da conta"
+   },
+   "nome": "Reativar Loja",
+   "descricao": "Conta Inativa por Cartão de Crédito, como Atualizar – Amazon",
+   "blocos": [
+    {
+     "titulo": "Quando a conta é inativada porque o cartão de cobrança precisa ser atualizado, o próprio aviso leva à troca do método de pagamento.",
+     "canal": "AMZ",
+     "plataforma": "",
+     "caminho": "Seller Central > aviso de conta inativa > Continuar",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Acessar o aviso",
+       "texto": "Acesse o Seller Central e clique em Continuar no aviso de conta inativa."
+      },
+      {
+       "n": 2,
+       "titulo": "Substituir método de cobrança",
+       "texto": "Clique em Substituir método de cobrança."
+      },
+      {
+       "n": 3,
+       "titulo": "Usar cartão já cadastrado",
+       "texto": "Se houver outro cartão já cadastrado e válido, selecione-o e clique em Configurar método de cobrança para finalizar."
+      },
+      {
+       "n": 4,
+       "titulo": "Adicionar novo cartão",
+       "texto": "Se não houver, clique em Adicione um novo cartão de crédito ou débito."
+      },
+      {
+       "n": 5,
+       "titulo": "Preencher os dados do cartão",
+       "texto": "Preencha Número do cartão, Expiração (MM/AA), Código de segurança (CVV) e Nome no cartão."
+      },
+      {
+       "n": 6,
+       "titulo": "Adicionar e continuar",
+       "texto": "Clique em Adicionar e continuar."
+      }
+     ],
+     "atencoes": [
+      "Os dados do cartão são do cliente. Solicite pelo consultor/atendimento e nunca registre esses dados no Notion ou no Discord."
+     ]
+    }
+   ],
+   "atencoes": [],
+   "texto": "Quando a conta é inativada porque o cartão de cobrança precisa ser atualizado, o próprio aviso leva à troca do método de pagamento."
+  },
+  {
+   "id": "13.4",
+   "capitulo": {
+    "n": "13",
+    "nome": "Gestão da loja e da conta"
+   },
+   "nome": "Decorar Loja",
+   "descricao": "A decoração é a vitrine da loja: banners, destaques e seleção de produtos na página inicial. Use as artes aprovadas pelo cliente e confira o resultado no computador e no celular.",
+   "blocos": [
+    {
+     "titulo": "Decoração da Loja – Shopee",
+     "canal": "SHO",
+     "plataforma": "Shopee",
+     "caminho": "Central do Vendedor > Decoração da Loja",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Acessar a decoração",
+       "texto": "Na Central do Vendedor, clique em Decoração da Loja."
+      },
+      {
+       "n": 2,
+       "titulo": "Iniciar a decoração",
+       "texto": "Clique em Decore Agora."
+      },
+      {
+       "n": 3,
+       "titulo": "Aplicar um modelo",
+       "texto": "Clique em Aplicar modelo, escolha o layout e clique em Próximo. Siga os avisos clicando em Entendi."
+      },
+      {
+       "n": 4,
+       "titulo": "Ajustar os componentes",
+       "texto": "Substitua banners e seleções de produtos pelo material aprovado do cliente."
+      },
+      {
+       "n": 5,
+       "titulo": "Publicar",
+       "texto": "Clique em Publicar e confirme."
+      },
+      {
+       "n": 6,
+       "titulo": "Aplicar também na versão de computador",
+       "texto": "Clique em Aplicar Decoração à Página Inicial da Loja do PC e depois em Publique na Página Inicial da Loja no PC."
+      },
+      {
+       "n": 7,
+       "titulo": "Conferir o resultado",
+       "texto": "Abra a loja como comprador e confira a página no celular e no computador."
+      }
+     ],
+     "atencoes": []
+    },
+    {
+     "titulo": "Decoração de Loja – Mercado Livre",
+     "canal": "ML",
+     "plataforma": "Mercado Livre",
+     "caminho": "Central de vendedores > Central de marketing > Seu espaço no Mercado Livre",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Acessar a Central de marketing",
+       "texto": "Na Central de vendedores, clique em Central de marketing."
+      },
+      {
+       "n": 2,
+       "titulo": "Abrir a sua página",
+       "texto": "Clique em Seu espaço no Mercado Livre para abrir Minha página."
+      },
+      {
+       "n": 3,
+       "titulo": "Entrar no editor",
+       "texto": "Clique em Ir para o Editor."
+      },
+      {
+       "n": 4,
+       "titulo": "Adicionar componentes",
+       "texto": "Clique em Adicionar componente e monte a página com os blocos disponíveis: banner principal, banner secundário, lista de conteúdo, texto, vídeo, produtos, etiquetas de produto, galeria e carrossel de produtos, produto de destaque, categorias, carrossel e galeria de categorias."
+      },
+      {
+       "n": 5,
+       "titulo": "Publicar",
+       "texto": "Finalize a edição e publique a página."
+      }
+     ],
+     "atencoes": []
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "13.5",
+   "capitulo": {
+    "n": "13",
+    "nome": "Gestão da loja e da conta"
+   },
+   "nome": "Registrar Marca",
+   "descricao": "O registro da marca dentro do marketplace libera proteção contra cópias, denúncia de falsificações e recursos exclusivos de marca. Exige o registro ou o pedido no INPI, que é do cliente.",
+   "blocos": [
+    {
+     "titulo": "Registro de Marca – Mercado Livre",
+     "canal": "ML",
+     "plataforma": "Mercado Livre",
+     "caminho": "Central de vendedores > Configurações > Minhas marcas",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Acessar as configurações",
+       "texto": "Na Central de vendedores, clique em Configurações."
+      },
+      {
+       "n": 2,
+       "titulo": "Abrir o hub de marcas",
+       "texto": "Clique em Minhas marcas."
+      },
+      {
+       "n": 3,
+       "titulo": "Validar a marca",
+       "texto": "Clique em Validar marca e siga o formulário de registro."
+      },
+      {
+       "n": 4,
+       "titulo": "Enviar a documentação",
+       "texto": "Anexe os documentos do registro da marca solicitados e conclua o envio."
+      }
+     ],
+     "atencoes": []
+    },
+    {
+     "titulo": "Registro de Marca – Shopee",
+     "canal": "SHO",
+     "plataforma": "Shopee",
+     "caminho": "Central do Vendedor > Produtos > Ferramentas de Produto > Brand Management",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Acessar Meus produtos",
+       "texto": "Na Central do Vendedor, clique em Produtos."
+      },
+      {
+       "n": 2,
+       "titulo": "Abrir as ferramentas de produto",
+       "texto": "Clique em Ferramentas de Produto e depois em Brand Management."
+      },
+      {
+       "n": 3,
+       "titulo": "Registrar nova marca",
+       "texto": "Clique em Registrar nova marca."
+      },
+      {
+       "n": 4,
+       "titulo": "Enviar a documentação",
+       "texto": "Em Adicionar Imagem, envie o logotipo e o documento de registro da marca e conclua o envio."
+      }
+     ],
+     "atencoes": [
+      "Os documentos são do cliente. Solicite pelo canal oficial de atendimento e não guarde arquivos fora das pastas da conta."
+     ]
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "13.7",
+   "capitulo": {
+    "n": "13",
+    "nome": "Gestão da loja e da conta"
+   },
+   "nome": "Afiliados",
+   "descricao": "Na campanha de afiliados, criadores de conteúdo divulgam os produtos da loja e recebem uma comissão por venda. O vendedor define a porcentagem e quais produtos entram.",
+   "blocos": [
+    {
+     "titulo": "Ativar Afiliados – Mercado Livre",
+     "canal": "ML",
+     "plataforma": "Mercado Livre",
+     "caminho": "Central de vendedores > Central de marketing > Venda com afiliados",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Acessar a Central de marketing",
+       "texto": "Na Central de vendedores, clique em Central de marketing."
+      },
+      {
+       "n": 2,
+       "titulo": "Abrir a campanha com afiliados",
+       "texto": "Clique em Venda com afiliados."
+      },
+      {
+       "n": 3,
+       "titulo": "Iniciar a campanha",
+       "texto": "Clique em Iniciar campanha. A tela mostra os produtos recomendados e a comissão sugerida."
+      },
+      {
+       "n": 4,
+       "titulo": "Revisar produtos e comissão",
+       "texto": "Confira quais produtos vão participar e a porcentagem de comissão, validando a margem com o consultor."
+      },
+      {
+       "n": 5,
+       "titulo": "Criar a campanha",
+       "texto": "Clique em Criar campanha."
+      }
+     ],
+     "atencoes": []
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "13.9",
+   "capitulo": {
+    "n": "13",
+    "nome": "Gestão da loja e da conta"
+   },
+   "nome": "Transmissão por chat",
+   "descricao": "",
+   "blocos": [
+    {
+     "titulo": "Transmissão por Chat (Carrinho Abandonado) – Shopee",
+     "canal": "SHO",
+     "plataforma": "Shopee",
+     "caminho": "Central do Vendedor > Transmissão por Chat > Criar",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Criar a transmissão",
+       "texto": "Clique em Transmissão por Chat e depois em Criar."
+      },
+      {
+       "n": 2,
+       "titulo": "Selecionar o tipo",
+       "texto": "Selecione Lembrete de Carrinho de Compras — a mensagem vai para quem colocou produtos no carrinho e não finalizou a compra."
+      },
+      {
+       "n": 3,
+       "titulo": "Agendar o envio",
+       "texto": "Se o horário atual estiver fora da faixa permitida, clique em Agende para enviar mais tarde, escolha data e hora e clique em Confirmar."
+      },
+      {
+       "n": 4,
+       "titulo": "Escolher a mensagem",
+       "texto": "Clique em Selecione um Modelo e escolha uma mensagem pronta relacionada a carrinho abandonado. Clique em Confirmar."
+      },
+      {
+       "n": 5,
+       "titulo": "Enviar e agendar",
+       "texto": "Clique em Enviar, confira o horário e clique em Schedule para finalizar o agendamento."
+      }
+     ],
+     "atencoes": []
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "15.1",
+   "capitulo": {
+    "n": "15",
+    "nome": "Amazon"
+   },
+   "nome": "Estrutura Amazon",
+   "descricao": "Além dos anúncios, a conta Amazon tem rotinas fiscais que o Analista pode precisar executar: a configuração do Faturador (emissor de NF-e da Amazon) e a extração de relatórios e notas para a contabilidade do cliente.",
+   "blocos": [
+    {
+     "titulo": "Configurar o Faturador – Amazon",
+     "canal": "AMZ",
+     "plataforma": "Amazon",
+     "caminho": "Engrenagem (configurações) > Configurações do Faturador",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Acessar Configurações do Faturador",
+       "texto": "No Seller Central, clique na engrenagem e em Configurações do Faturador."
+      },
+      {
+       "n": 2,
+       "titulo": "Preencher configurações tributárias",
+       "texto": "Em Configurações gerais > Configurações tributárias, selecione o Código de Regime Tributário (CRT), o Código de Situação da Operação do Simples Nacional (CSOSN) e a Atividade principal da empresa."
+      },
+      {
+       "n": 3,
+       "titulo": "Conferir o certificado digital",
+       "texto": "Confira o Certificado Digital (a tela mostra os dias restantes de validade) e o Número de série e informações complementares."
+      },
+      {
+       "n": 4,
+       "titulo": "Atualizar",
+       "texto": "Clique em Atualizar."
+      }
+     ],
+     "atencoes": [
+      "Os dados tributários vêm do cliente ou da contabilidade dele. Nunca preencha por suposição."
+     ]
+    },
+    {
+     "titulo": "Baixar Relatórios e NF-e para Contabilidade – Amazon",
+     "canal": "AMZ",
+     "plataforma": "Amazon",
+     "caminho": "",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Relatório financeiro",
+       "texto": "Menu > Pagamentos > Repositório de relatórios. Selecione período Mês, o mês e o ano desejados, tipo Todos (relatório unificado) e clique em Gerar relatório. Aguarde (use \"atualizar\" para ver o status) e clique em Fazer download do CSV."
+      },
+      {
+       "n": 2,
+       "titulo": "Notas fiscais",
+       "texto": "Menu > Relatórios > Faturador. Escolha o mês ou um período personalizado (datas de início e término), selecione o formato XML/PDF, clique em Fazer download e em Concluído."
+      },
+      {
+       "n": 3,
+       "titulo": "Relatório de pedidos",
+       "texto": "Menu > Pedidos > Relatório de pedidos. Selecione Todos os pedidos, período em Datas exatas (limite de 30 a 31 dias por relatório) e clique em solicitar. Aguarde para fazer o download."
+      }
+     ],
+     "atencoes": []
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "15.5",
+   "capitulo": {
+    "n": "15",
+    "nome": "Amazon"
+   },
+   "nome": "FBA",
+   "descricao": "Os processos de FBA estão em 11.11 (remover estoque), 11.12 (cadastrar anúncio no FBA) e 11.13 (enviar remessa). Abaixo, como baixar as notas emitidas para pedidos do FBA.",
+   "blocos": [
+    {
+     "titulo": "Como Baixar NF-e do FBA – Amazon",
+     "canal": "AMZ",
+     "plataforma": "Amazon",
+     "caminho": "Menu lateral > Relatórios > Faturador",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Acessar o Faturador",
+       "texto": "No Seller Central, abra o menu lateral e clique em Relatórios > Faturador."
+      },
+      {
+       "n": 2,
+       "titulo": "Selecionar o período",
+       "texto": "No filtro pré-definido, selecione Mês passado (ou Personalizado para períodos anteriores). A página recarrega com as notas do período, que também podem ser baixadas uma a uma."
+      },
+      {
+       "n": 3,
+       "titulo": "Escolher o formato",
+       "texto": "No formato de arquivo, selecione XML/PDF — a contabilidade costuma precisar apenas do XML."
+      },
+      {
+       "n": 4,
+       "titulo": "Fazer o download",
+       "texto": "Clique em Fazer download e marque Concluído."
+      },
+      {
+       "n": 5,
+       "titulo": "Baixar as notas",
+       "texto": "Aguarde a geração: o aviso \"por favor, aguarde\" vira um botão para baixar as notas."
+      }
+     ],
+     "atencoes": []
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "15.6",
+   "capitulo": {
+    "n": "15",
+    "nome": "Amazon"
+   },
+   "nome": "Buy Box",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "15.7",
+   "capitulo": {
+    "n": "15",
+    "nome": "Amazon"
+   },
+   "nome": "Conteúdo A+",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "15.8",
+   "capitulo": {
+    "n": "15",
+    "nome": "Amazon"
+   },
+   "nome": "Brand Registry",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "15.12",
+   "capitulo": {
+    "n": "15",
+    "nome": "Amazon"
+   },
+   "nome": "Problemas frequentes",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "16.11",
+   "capitulo": {
+    "n": "16",
+    "nome": "Shopee"
+   },
+   "nome": "Logística",
+   "descricao": "Em contas integradas ao Bling, a Shopee só libera a etiqueta depois que a nota fiscal do pedido é enviada e aprovada. O processo abaixo é a emissão individual, pedido a pedido.",
+   "blocos": [
+    {
+     "titulo": "Enviar Nota para a Shopee (Individualmente) – Bling → Shopee",
+     "canal": "SHO",
+     "plataforma": "Bling → Shopee",
+     "caminho": "Bling > Vendas > Pedidos de venda",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Abrir os pedidos no Bling",
+       "texto": "No Bling, clique em Vendas > Pedidos de venda."
+      },
+      {
+       "n": 2,
+       "titulo": "Localizar o pedido na Shopee",
+       "texto": "Na Central do Vendedor da Shopee, clique em Meus Pedidos, selecione Todos os canais e a modalidade de envio do pedido."
+      },
+      {
+       "n": 3,
+       "titulo": "Copiar o nome do comprador",
+       "texto": "Clique no nome de usuário do comprador e copie o nome real que aparece no pedido."
+      },
+      {
+       "n": 4,
+       "titulo": "Pesquisar o pedido no Bling",
+       "texto": "Volte à aba do Bling e cole o nome no campo \"Pesquisar por nome, e-mail, CPF/CNPJ ou nº do pedido\". Clique em pesquisar."
+      },
+      {
+       "n": 5,
+       "titulo": "Gerar a NF-e",
+       "texto": "Selecione o pedido, clique em Gerar NF-e dos pedidos selecionados e confirme em Sim."
+      },
+      {
+       "n": 6,
+       "titulo": "Abrir as notas emitidas",
+       "texto": "Clique em Vendas > Notas fiscais de saída e selecione a nota do pedido."
+      },
+      {
+       "n": 7,
+       "titulo": "Baixar o XML",
+       "texto": "À direita, clique em Exportar XML e depois em Download."
+      },
+      {
+       "n": 8,
+       "titulo": "Baixar a DANFE",
+       "texto": "Clique em Gerar PDF DANFE e em Gerar para baixar o arquivo."
+      },
+      {
+       "n": 9,
+       "titulo": "Baixar a etiqueta",
+       "texto": "Clique em DANFE Simplificado + Etiqueta de transporte e depois em Clique para baixar os arquivos para obter a DANFE e a etiqueta de envio."
+      }
+     ],
+     "atencoes": [
+      "Confira se o nome e o CPF do pedido no Bling são os mesmos do pedido na Shopee antes de emitir. Nota emitida com dados errados precisa ser cancelada."
+     ]
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "17.1",
+   "capitulo": {
+    "n": "17",
+    "nome": "Indicadores que o Analista precisa dominar"
+   },
+   "nome": "GMV",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "17.2",
+   "capitulo": {
+    "n": "17",
+    "nome": "Indicadores que o Analista precisa dominar"
+   },
+   "nome": "Faturamento",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "17.3",
+   "capitulo": {
+    "n": "17",
+    "nome": "Indicadores que o Analista precisa dominar"
+   },
+   "nome": "Pedidos",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "17.4",
+   "capitulo": {
+    "n": "17",
+    "nome": "Indicadores que o Analista precisa dominar"
+   },
+   "nome": "Unidades",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "17.5",
+   "capitulo": {
+    "n": "17",
+    "nome": "Indicadores que o Analista precisa dominar"
+   },
+   "nome": "Ticket médio",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "17.6",
+   "capitulo": {
+    "n": "17",
+    "nome": "Indicadores que o Analista precisa dominar"
+   },
+   "nome": "Sessões",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "17.7",
+   "capitulo": {
+    "n": "17",
+    "nome": "Indicadores que o Analista precisa dominar"
+   },
+   "nome": "Impressões",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "17.8",
+   "capitulo": {
+    "n": "17",
+    "nome": "Indicadores que o Analista precisa dominar"
+   },
+   "nome": "CTR",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "17.9",
+   "capitulo": {
+    "n": "17",
+    "nome": "Indicadores que o Analista precisa dominar"
+   },
+   "nome": "Conversão",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "17.10",
+   "capitulo": {
+    "n": "17",
+    "nome": "Indicadores que o Analista precisa dominar"
+   },
+   "nome": "CPC",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "17.11",
+   "capitulo": {
+    "n": "17",
+    "nome": "Indicadores que o Analista precisa dominar"
+   },
+   "nome": "CPA",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "17.12",
+   "capitulo": {
+    "n": "17",
+    "nome": "Indicadores que o Analista precisa dominar"
+   },
+   "nome": "ROAS",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "17.13",
+   "capitulo": {
+    "n": "17",
+    "nome": "Indicadores que o Analista precisa dominar"
+   },
+   "nome": "ACOS",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "17.14",
+   "capitulo": {
+    "n": "17",
+    "nome": "Indicadores que o Analista precisa dominar"
+   },
+   "nome": "TACOS",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "17.15",
+   "capitulo": {
+    "n": "17",
+    "nome": "Indicadores que o Analista precisa dominar"
+   },
+   "nome": "Margem",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "17.16",
+   "capitulo": {
+    "n": "17",
+    "nome": "Indicadores que o Analista precisa dominar"
+   },
+   "nome": "Estoque",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "17.17",
+   "capitulo": {
+    "n": "17",
+    "nome": "Indicadores que o Analista precisa dominar"
+   },
+   "nome": "Ruptura",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "17.18",
+   "capitulo": {
+    "n": "17",
+    "nome": "Indicadores que o Analista precisa dominar"
+   },
+   "nome": "Buy Box",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "17.20",
+   "capitulo": {
+    "n": "17",
+    "nome": "Indicadores que o Analista precisa dominar"
+   },
+   "nome": "Reputação",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "21.1",
+   "capitulo": {
+    "n": "21",
+    "nome": "Controle de qualidade"
+   },
+   "nome": "Definição de pronto",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "21.2",
+   "capitulo": {
+    "n": "21",
+    "nome": "Controle de qualidade"
+   },
+   "nome": "Checklist antes de concluir",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "21.3",
+   "capitulo": {
+    "n": "21",
+    "nome": "Controle de qualidade"
+   },
+   "nome": "Evidência obrigatória",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "21.4",
+   "capitulo": {
+    "n": "21",
+    "nome": "Controle de qualidade"
+   },
+   "nome": "Revisão",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "21.5",
+   "capitulo": {
+    "n": "21",
+    "nome": "Controle de qualidade"
+   },
+   "nome": "Dupla checagem",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "21.6",
+   "capitulo": {
+    "n": "21",
+    "nome": "Controle de qualidade"
+   },
+   "nome": "Erros críticos",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "21.7",
+   "capitulo": {
+    "n": "21",
+    "nome": "Controle de qualidade"
+   },
+   "nome": "Erros aceitáveis",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "21.8",
+   "capitulo": {
+    "n": "21",
+    "nome": "Controle de qualidade"
+   },
+   "nome": "Retrabalho",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "21.9",
+   "capitulo": {
+    "n": "21",
+    "nome": "Controle de qualidade"
+   },
+   "nome": "Auditoria de tarefas",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "22.1",
+   "capitulo": {
+    "n": "22",
+    "nome": "Comunicação"
+   },
+   "nome": "Como escrever uma atualização",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "22.2",
+   "capitulo": {
+    "n": "22",
+    "nome": "Comunicação"
+   },
+   "nome": "Como informar problema",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "22.3",
+   "capitulo": {
+    "n": "22",
+    "nome": "Comunicação"
+   },
+   "nome": "Como comunicar resultado",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "22.4",
+   "capitulo": {
+    "n": "22",
+    "nome": "Comunicação"
+   },
+   "nome": "Como solicitar informação",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "22.5",
+   "capitulo": {
+    "n": "22",
+    "nome": "Comunicação"
+   },
+   "nome": "Como cobrar pendência",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "22.6",
+   "capitulo": {
+    "n": "22",
+    "nome": "Comunicação"
+   },
+   "nome": "Como explicar decisão",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "22.7",
+   "capitulo": {
+    "n": "22",
+    "nome": "Comunicação"
+   },
+   "nome": "Comunicação com cliente",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "22.8",
+   "capitulo": {
+    "n": "22",
+    "nome": "Comunicação"
+   },
+   "nome": "Comunicação com Head",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "22.9",
+   "capitulo": {
+    "n": "22",
+    "nome": "Comunicação"
+   },
+   "nome": "Comunicação com CS",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "22.10",
+   "capitulo": {
+    "n": "22",
+    "nome": "Comunicação"
+   },
+   "nome": "Registro no Notion",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "23.1",
+   "capitulo": {
+    "n": "23",
+    "nome": "Escalonamento"
+   },
+   "nome": "O que o Analista resolve sozinho",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "23.2",
+   "capitulo": {
+    "n": "23",
+    "nome": "Escalonamento"
+   },
+   "nome": "O que precisa de aprovação",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "23.3",
+   "capitulo": {
+    "n": "23",
+    "nome": "Escalonamento"
+   },
+   "nome": "Quando chamar o Head",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "23.4",
+   "capitulo": {
+    "n": "23",
+    "nome": "Escalonamento"
+   },
+   "nome": "Quando chamar o CS",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "23.5",
+   "capitulo": {
+    "n": "23",
+    "nome": "Escalonamento"
+   },
+   "nome": "Quando chamar o cliente",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "23.6",
+   "capitulo": {
+    "n": "23",
+    "nome": "Escalonamento"
+   },
+   "nome": "Quando abrir chamado no marketplace",
+   "descricao": "Abra chamado quando o problema depende da plataforma para ser resolvido — por exemplo, uma instabilidade do marketplace que prejudicou a reputação ou um problema na saúde da conta. Sempre registre o chamado (data, protocolo e resumo) no card do Notion e avise o consultor.",
+   "blocos": [
+    {
+     "titulo": "Tutorial Acionar Suporte – Mercado Livre",
+     "canal": "ML",
+     "plataforma": "Mercado Livre",
+     "caminho": "Contato > Fale conosco > Assistente virtual",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Acessar Fale conosco",
+       "texto": "No topo da página, clique em Contato. Desça a tela e clique em Fale conosco."
+      },
+      {
+       "n": 2,
+       "titulo": "Abrir o assistente virtual",
+       "texto": "Acesse o Assistente virtual."
+      },
+      {
+       "n": 3,
+       "titulo": "Descrever o problema",
+       "texto": "Digite o pedido de acionamento do suporte com os códigos das vendas afetadas e o motivo (ex.: vendas despachadas com atraso por instabilidade no sistema de emissão de NF-e do Mercado Livre). Anexe o print que comprova o problema."
+      },
+      {
+       "n": 4,
+       "titulo": "Falar com o suporte",
+       "texto": "Clique em Falar com o suporte e escolha WhatsApp."
+      },
+      {
+       "n": 5,
+       "titulo": "Pedir a retirada do impacto",
+       "texto": "Informe o telefone e, com o atendente, peça para retirar o impacto das vendas afetadas, explicando o motivo."
+      }
+     ],
+     "atencoes": []
+    },
+    {
+     "titulo": "Como se Comunicar com a Equipe de Saúde da Conta – Amazon",
+     "canal": "AMZ",
+     "plataforma": "Amazon",
+     "caminho": "Menu lateral > Desempenho > Estado da conta > Fale Conosco",
+     "passos": [
+      {
+       "n": 1,
+       "titulo": "Acessar Estado da conta",
+       "texto": "No menu lateral, clique em Desempenho > Estado da conta."
+      },
+      {
+       "n": 2,
+       "titulo": "Clicar em Fale Conosco",
+       "texto": "Clique em Fale Conosco."
+      },
+      {
+       "n": 3,
+       "titulo": "Descrever o problema",
+       "texto": "Descreva o problema enfrentado."
+      },
+      {
+       "n": 4,
+       "titulo": "Solicitar a ligação",
+       "texto": "Informe um número de telefone e clique em Ligue para mim agora."
+      }
+     ],
+     "atencoes": []
+    }
+   ],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "23.7",
+   "capitulo": {
+    "n": "23",
+    "nome": "Escalonamento"
+   },
+   "nome": "Problemas financeiros",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "23.8",
+   "capitulo": {
+    "n": "23",
+    "nome": "Escalonamento"
+   },
+   "nome": "Problemas jurídicos",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "23.9",
+   "capitulo": {
+    "n": "23",
+    "nome": "Escalonamento"
+   },
+   "nome": "Problemas de conta",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  },
+  {
+   "id": "23.10",
+   "capitulo": {
+    "n": "23",
+    "nome": "Escalonamento"
+   },
+   "nome": "Risco de suspensão",
+   "descricao": "Conteúdo pendente — aguardando material complementar.",
+   "blocos": [],
+   "atencoes": [],
+   "texto": ""
+  }
+ ]
+}

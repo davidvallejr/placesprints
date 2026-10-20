@@ -1,0 +1,217 @@
+{
+  "$comentario": "Playbook do estrategista Place2u — limiares e textos editáveis sem mexer em código. O motor (src/lib/plano-cliente.js) só gera ação quando há EVIDÊNCIA nos dados disponíveis (tarefas, plano mensal e equipe do Notion; API do Mercado Livre quando a conta está conectada). Nada de número inventado: o que depende de vendas por SKU, Ads, estoque ou margem vira PENDÊNCIA de dados, não ação. Calibrado pelo Playbook de Consultoria Marketplace P2U v1.0 (out/2026): consultoria de 3 meses / 6 reuniões quinzenais, método P.L.A.C.E, ritual de métricas (CTR/CVR contra a referência da própria conta — nenhum limiar universal), máx. 3-5 tarefas por vez (§12: mais de 5 sem priorização dispersa o cliente).",
+  "limiares": {
+    "dias_sem_entrega": 14,
+    "queda_cadencia_pct": 40,
+    "queda_cadencia_base_minima": 6,
+    "dias_parada": 30,
+    "dependencia_atencao_dias": 14,
+    "min_paradas": 3,
+    "janela_alavanca_dias": 60,
+    "min_tarefas_ativas_para_alavanca": 3,
+    "plano_mes_atrasado_dia": 15,
+    "plano_mes_atrasado_pct": 30,
+    "ml": {
+      "queda_faturamento_pct": 15,
+      "min_pedidos_base": 20,
+      "min_visitas_base": 200,
+      "alta_cancelamento_pct": 30,
+      "min_cancelamentos": 5,
+      "queda_conversao_rel_pct": 25,
+      "conversao_abaixo_benchmark_pct": 25,
+      "$premissa": "queda_conversao_rel_pct e conversao_abaixo_benchmark_pct são PREMISSAS (percentual relativo, nunca p.p. nem taxa universal): a referência de conversão é sempre a própria conta — benchmark A/B de diagnosticarConta (ml_conversao_baixa) ou o período anterior (ml_queda_conversao); sem benchmark a regra não dispara e vira pendência."
+    }
+  },
+  "horizontes": {
+    "72h": 3,
+    "7d": 7,
+    "30d": 30,
+    "90d": 90
+  },
+  "confianca": {
+    "fato": 5,
+    "hipotese": 3,
+    "projecao": 2,
+    "pendente": 2
+  },
+  "canal_notion": {
+    "ML": "Mercado Livre",
+    "SHO": "Shopee",
+    "AMZ": "Amazon",
+    "TTK": "Geral",
+    "Legacy": "Geral",
+    "": "Geral"
+  },
+  "tag_notion": "Plano de Ação",
+  "alavancas": {
+    "$comentario": "Alavanca sem nenhuma tarefa nos últimos N dias (e cliente ativo) vira oportunidade. 'padroes' = regex sem acento/caixa contra título + tipo de demanda.",
+    "ofertas": {
+      "rotulo": "Ofertas e campanhas (P.L.A.C.E: Aceleração)",
+      "dimensao": "Conversão e oferta",
+      "demanda": "Campanha de Oferta",
+      "padroes": [
+        "oferta",
+        "cupom",
+        "campanha",
+        "promo",
+        "desconto",
+        "relampago"
+      ],
+      "impacto": 4,
+      "esforco": 2,
+      "horizonte": "30d",
+      "acao": "Planejar 1 campanha com objetivo definido (atrair demanda, girar estoque, recuperar produto em queda ou aumentar ticket): produtos, oferta, período, estoque necessário e desconto máximo que preserva a margem. Antes de definir o desconto, confirmar elegibilidade da campanha e margem do produto — não presumir exposição adicional.",
+      "dependencia": "Margem e estoque dos produtos candidatos",
+      "indicador": "Campanhas ativas/planejadas no período",
+      "meta": "1 campanha planejada com margem validada",
+      "aceite": "Campanha registrada com produtos, desconto máximo, período e critério de encerramento"
+    },
+    "ads": {
+      "rotulo": "Anúncios patrocinados (P.L.A.C.E: Aceleração)",
+      "dimensao": "Demanda e visibilidade",
+      "demanda": "Ajuste ADS",
+      "padroes": [
+        "\\bads\\b",
+        "patrocinad",
+        "impulsion",
+        "product ads",
+        "mercado ads"
+      ],
+      "impacto": 4,
+      "esforco": 3,
+      "horizonte": "30d",
+      "acao": "Revisar a estratégia de Ads: classificar produtos por curva (receita e contribuição de margem, não só faturamento), definir objetivo por grupo (visibilidade, crescimento, escala ou recuperação), ROAS/ACOS alvo a partir da margem pré-Ads e janela de avaliação. Sem margem confiável, trabalhar em cenários e solicitar os custos.",
+      "dependencia": "Custo por SKU, tarifas e margem pré-Ads; acesso ao painel de Ads",
+      "indicador": "ACOS/ROAS observado × limite econômico",
+      "meta": "Grupos de Ads com objetivo, orçamento e critério de aumento/redução",
+      "aceite": "Plano de Ads por grupo registrado, com ROAS mínimo calculado da margem"
+    },
+    "otimizacao": {
+      "rotulo": "Otimização de anúncios (P.L.A.C.E: Layout)",
+      "dimensao": "Clique e atração / Conversão",
+      "demanda": "Otimizar Anúncios",
+      "padroes": [
+        "otimiz",
+        "titulo",
+        "imagem",
+        "imagens",
+        "ficha",
+        "descri",
+        "atributo",
+        "melhorar anuncio",
+        "corrigir anuncio"
+      ],
+      "impacto": 4,
+      "esforco": 3,
+      "horizonte": "30d",
+      "acao": "Rodada de otimização pela estratégia ímã: priorizar anúncios que já têm tráfego e demanda mas convertem abaixo do próprio histórico ou de produtos semelhantes; para cada um, definir a objeção provável (conteúdo, oferta, preço, entrega ou confiança) e a alteração concreta (capa, título, atributos, descrição, vídeo, kit ou variação) com a hipótese do teste.",
+      "dependencia": "Visitas e conversão por anúncio (painel do canal ou API)",
+      "indicador": "Conversão por anúncio antes × depois",
+      "meta": "Anúncios priorizados com alteração e hipótese registradas",
+      "aceite": "Lista de anúncios com objeção, alteração proposta e indicador inicial"
+    },
+    "precificacao": {
+      "rotulo": "Preço e margem (P.L.A.C.E: Pesquisa)",
+      "dimensao": "Rentabilidade",
+      "demanda": "Precificação estratégica",
+      "padroes": [
+        "preco",
+        "precific",
+        "margem",
+        "tabela de preco"
+      ],
+      "impacto": 4,
+      "esforco": 3,
+      "horizonte": "30d",
+      "acao": "Revisar preço e margem dos produtos principais: custo do produto, tarifas, tributos, frete suportado, embalagem e perdas esperadas, comparando com a competitividade observada nos anúncios concorrentes. Definir piso de preço por SKU.",
+      "dependencia": "Custos por SKU fornecidos pelo cliente",
+      "indicador": "Margem de contribuição pré-Ads por SKU",
+      "meta": "Piso de preço definido para os produtos principais",
+      "aceite": "Planilha de margem por SKU validada com o cliente"
+    },
+    "acompanhamento": {
+      "rotulo": "Ritual de métricas com o cliente (P.L.A.C.E: Coleta)",
+      "dimensao": "Qualidade operacional",
+      "demanda": "Reunião de Alinhamento",
+      "padroes": [
+        "reuniao",
+        "alinhamento",
+        "acompanhamento de vendas",
+        "analise de metricas",
+        "metrica",
+        "resultado"
+      ],
+      "impacto": 3,
+      "esforco": 2,
+      "horizonte": "30d",
+      "acao": "Retomar o ritual de métricas: reservar 5 a 10 minutos no início de cada reunião (a partir da R2) para revisar com o cliente faturamento, CTR, CVR, CAC, ROAS, reputação e tarefas concluídas — CTR ou CVR abaixo da referência da própria conta (benchmark dos anúncios A/B ou período anterior) indica problema a investigar. Registrar decisões, restrições e metas de faturamento/margem/investimento, celebrar as melhoras (evidência de progresso é o principal argumento de renovação) e combinar a próxima revisão.",
+      "dependencia": "Agenda do cliente",
+      "indicador": "Ritual de métricas feito nas reuniões do ciclo",
+      "meta": "Ritual de métricas em toda reunião, com decisões registradas",
+      "aceite": "Ata com métricas revisadas, decisões, metas e data da próxima revisão"
+    }
+  },
+  "calendario": [
+    {
+      "nome": "Dia das Crianças",
+      "data": "2026-10-12",
+      "universal": false
+    },
+    {
+      "nome": "Black Friday",
+      "data": "2026-11-27",
+      "universal": true
+    },
+    {
+      "nome": "Natal",
+      "data": "2026-12-25",
+      "universal": true
+    },
+    {
+      "nome": "Carnaval",
+      "data": "2027-02-09",
+      "universal": false
+    },
+    {
+      "nome": "Páscoa",
+      "data": "2027-03-28",
+      "universal": false
+    },
+    {
+      "nome": "Dia das Mães",
+      "data": "2027-05-09",
+      "universal": false
+    },
+    {
+      "nome": "Dia dos Namorados",
+      "data": "2027-06-12",
+      "universal": false
+    },
+    {
+      "nome": "Dia dos Pais",
+      "data": "2027-08-08",
+      "universal": false
+    },
+    {
+      "nome": "Black Friday",
+      "data": "2027-11-26",
+      "universal": true
+    },
+    {
+      "nome": "Natal",
+      "data": "2027-12-25",
+      "universal": true
+    }
+  ],
+  "lead_times": {
+    "$comentario": "PREMISSAS padrão (dias antes da data de consumo) — ajustar ao prazo real de fornecimento e entrega de cada cliente.",
+    "conteudo": 30,
+    "reposicao": 21,
+    "campanha_no_ar": 14
+  },
+  "acao_calendario_ate_dias": 90,
+  "acao_calendario_min_dias": 0,
+  "calendario_comentario": "universal=true gera AÇÃO para todos os clientes quando a data entra na janela; as demais datas aparecem só no calendário do plano (relevância depende do catálogo do cliente).",
+  "max_acoes_distribuir_por_cliente": 5,
+  "renovacao_janela_dias": 30
+}

@@ -1,0 +1,183 @@
+{
+ "id": "gmv",
+ "pergunta": "Quanto as contas conectadas do Mercado Livre faturaram no período, quanto disso (e da variação) está associado ao trabalho da equipe, e quem o move: consultor, analista ou cliente?",
+ "usuarios": [
+  "CEO/sócio: visão de portfólio e retorno do trabalho da operação",
+  "Head de squad / gestão de consultores: comparar carteiras",
+  "Consultor: ver a própria carteira e os clientes que caem",
+  "Analista: ver a contribuição das tarefas concluídas",
+  "CS/renovação: prova de valor por cliente antes da conversa de renovação"
+ ],
+ "acao_principal": "Escolher o período (14/28/56 dias) e ler o ranking de contribuição (por consultor, analista ou cliente) para identificar quem/qual cliente move o GMV e onde agir",
+ "acoes_secundarias": [
+  "Trocar período (chips #periodo, data-d=14|28|56)",
+  "Alternar abas Por consultor / Por analista / Por cliente (#abas, data-a)",
+  "Expandir carteira do consultor ou clientes do analista (details.lin > summary)",
+  "Abrir o cliente em /cliente?cliente=<nome> (aba Por cliente)",
+  "Ir conectar contas em /integracoes (link 'Conectar contas →' no aviso)",
+  "Ir à taxa de acerto por tipo de tarefa em /resultados (rodapé da aba analista)"
+ ],
+ "secoes": [
+  {
+   "titulo": "Header (marca + nav)",
+   "conteudo": "Logo /logo + 'Place2u · GMV' (link para /cliente) e nav: Cliente, O que funciona, Integrações, Painel. Sem estado ativo, sem link para Analistas/Planos/Promoções/Comercial.",
+   "ids_container": [],
+   "importancia": "baixa"
+  },
+  {
+   "titulo": "Título e subtítulo",
+   "conteudo": "h1 'GMV e resultado associado ao trabalho' (estilo inline) + p.sub explicativo (estilo inline).",
+   "ids_container": [],
+   "importancia": "media"
+  },
+  {
+   "titulo": "Como ler esta página (.explica)",
+   "conteudo": "Caixa cinza sempre aberta com 4 bullets densos: definição de GMV, 'associado ao trabalho' (ganho/perdas/lançamentos, grupo de controle), restante (mercado/sazonalidade...), só contas conectadas. Fica ACIMA de qualquer número.",
+   "ids_container": [],
+   "importancia": "baixa"
+  },
+  {
+   "titulo": "Filtro de período",
+   "conteudo": "Chips 'Últimos 14/28/56 dias' (f-chip, .on, aria-pressed) + texto com datas do período e do período anterior comparado.",
+   "ids_container": [
+    "periodo"
+   ],
+   "importancia": "alta"
+  },
+  {
+   "titulo": "Aviso de cobertura",
+   "conteudo": "Faixa âmbar (.aviso-faixa) sempre exibida: data da coleta, 'GMV medido em X de Y clientes', N sem conexão, histórico incompleto, conectados fora da central, link 'Conectar contas →'. Também recebe a mensagem de erro de carga.",
+   "ids_container": [
+    "aviso"
+   ],
+   "importancia": "media"
+  },
+  {
+   "titulo": "KPIs",
+   "conteudo": "4 cards: GMV no período (+delta % vs anterior); Otimizações: efeito líquido (ganho, perdas, % do GMV); Receita bruta de lançamentos; Variação associada.",
+   "ids_container": [
+    "kpis"
+   ],
+   "importancia": "alta"
+  },
+  {
+   "titulo": "De onde veio a variação (ponte)",
+   "conteudo": "Seção injetada pelo JS: texto da variação + 2 barras horizontais (anterior; associado + restante) + legenda com bolinhas coloridas (#c9c2b8, var(--laranja), #8ea3b8).",
+   "ids_container": [
+    "ponte"
+   ],
+   "importancia": "media"
+  },
+  {
+   "titulo": "Quem está associado ao resultado",
+   "conteudo": "Abas (Por consultor / Por analista / Por cliente) + tabela. Consultor: linha expansível com subtabela de clientes (GMV, vs anterior, associado, analistas). Analista: tarefas, ganho, lançamentos, perdas, líquido, detalhe por cliente. Cliente: link para /cliente, consultor, GMV, delta, associado, tarefas medidas.",
+   "ids_container": [
+    "abas",
+    "tabela"
+   ],
+   "importancia": "alta"
+  },
+  {
+   "titulo": "Footer",
+   "conteudo": "'Place2u · Performance Estratégica em Marketplaces · dados do Mercado Livre das contas conectadas'. alerta.js injeta sino/toasts no body.",
+   "ids_container": [],
+   "importancia": "baixa"
+  }
+ ],
+ "kpis": [
+  "GMV no período (t.gmv) com delta % vs período anterior (t.delta_pct, t.anterior)",
+  "Otimizações: efeito líquido (t.liquido = ganho + perda), com ganho, perdas e % do GMV (t.pct_associado)",
+  "Receita bruta de lançamentos (t.lancamentos)",
+  "Variação associada (t.variacao_associada)",
+  "Cobertura: conectados de clientes_ml, sem_conexao, historico_incompleto, fora_da_central (hoje 26 de 88)",
+  "Data da última coleta (atualizado_em)",
+  "Por linha: GMV, vs anterior, associado (ganho+perda) e % do GMV, lançamentos (bruto), carteira conectada X de Y, tarefas concluídas, tarefas medidas X de Y"
+ ],
+ "hooks_js": [
+  "#periodo (getElementById 'periodo')",
+  "#aviso (getElementById 'aviso')",
+  "#kpis (getElementById 'kpis')",
+  "#ponte (getElementById 'ponte')",
+  "#abas (getElementById 'abas')",
+  "#tabela (getElementById 'tabela')",
+  "querySelectorAll('#periodo [data-d]') + b.dataset.d (atributo data-d nos chips de período)",
+  "querySelectorAll('#abas [data-a]') + b.dataset.a (atributo data-a nas abas: consultor|analista|cliente)",
+  "atributo aria-pressed nos chips (gerado)",
+  "details.lin > summary (expansão nativa; CSS esconde o marcador)",
+  "Elementos estáticos que o CSS estiliza: header, main, footer, .marca (img + span b), nav.header-links, .explica (h4, ul, li), .filtros (em #periodo e #abas), .kpis (em #kpis), .secao/.sub/h3 (seção da tabela)",
+  "alerta.js (script defer) injeta no body #psPainel, button.sino, .cont, .psItem, .psToast com CSS próprio: não pode ser removido nem colidir",
+  "img src=/logo com onerror inline",
+  "API consumida: GET /api/gmv?dias=14|28|56 (campos periodo, cobertura, total, consultores[].lista, analistas[].clientes, clientes, atualizado_em)"
+ ],
+ "classes_geradas_por_js": [
+  "f-chip",
+  "on",
+  "mudo",
+  "aviso-faixa",
+  "kpi",
+  "rotulo",
+  "valor",
+  "detalhe",
+  "pos",
+  "neg",
+  "secao",
+  "sub",
+  "barra",
+  "legenda",
+  "bola",
+  "tabela-wrap",
+  "t (table.t)",
+  "n (td.n / th.n)",
+  "lin (details.lin)",
+  "det",
+  "estilos inline gerados: width:% e background nos <i> da .barra; padding-left:30px nas subtabelas; min-width:0;margin-top:8px na subtabela; font-size 11px/11.5px/12.5px; color:var(--laranja-escuro) e color:inherit nos links"
+ ],
+ "css_origem": "Dois arquivos linkados, sem bloco <style> no gmv.html: ui.css (tokens em :root — --laranja, --tinta, --cinza, --borda, --fundo-suave, --verde, --verm, --ambar, --raio, --sombra; header, .marca, .header-links, main max-width 1060px, .kpis grid 4 colunas com 2 colunas abaixo de 860px, .kpi .rotulo/.valor/.detalhe, .secao, .filtros, .f-chip/.on, .aviso-faixa, footer) e ui-extra.css (table.t, td.n, .pos/.neg/.mudo, .barra, .legenda, .bola, .explica, details.lin/.det, .tabela-wrap com foco visível, override do header para quebrar linha). Mais estilos inline: no HTML (h1, p.sub, link da marca) e muitos nas template strings do gmv.js (cores fixas #c9c2b8 e #8ea3b8, tamanhos de fonte, padding, cores de link). alerta.js injeta o próprio <style>. Não existe tema escuro.",
+ "links_navegacao": [
+  "/cliente (marca e nav 'Cliente')",
+  "/resultados (nav 'O que funciona' e link no rodapé da aba Por analista)",
+  "/integracoes (nav 'Integrações' e link 'Conectar contas →' no aviso)",
+  "/ (nav 'Painel')",
+  "/cliente?cliente=<nome> (nome do cliente na aba Por cliente)",
+  "Quem aponta para /gmv: cliente.html, promocoes.html, metodologia.html e resultados.html. O Painel (index.html) NÃO tem link para /gmv"
+ ],
+ "dependencias_externas": [
+  "Nenhuma CDN, Chart.js ou fonte web (usa a pilha de fontes do sistema)",
+  "/alerta.js (sino de notificações com som, BroadcastChannel 'ps_alerta', localStorage ps_alerta_som)",
+  "/logo (imagem servida pelo server.js)",
+  "GET /api/gmv?dias=N (rotas-planos.js:552 → gmvPortfolio em src/lib/gmv.js; aceita só 14/28/56, padrão 28)",
+  "Rota da página: server.js:169 app.get('/gmv')"
+ ],
+ "testes_que_leem_esta_tela": [
+  "NENHUM: grep em scripts/teste-*.mjs não achou readFileSync/fonte()/ler() de src/web/gmv.html ou src/web/gmv.js, nem import de gmvPortfolio ou chamada a /api/gmv. Os arquivos web lidos por testes são só integracoes.*, promocoes.*, cliente.js, alerta.js, ui.css e promocoes.css. As ocorrências de 'gmv' em teste-diagnostico-comercial.mjs:23, teste-plano-anuncios.mjs:11-13 e teste-retroalimentacao.mjs:160 são chaves de fixture (resumo.gmv) de outros módulos e não leem esta tela. Ou seja, o redesenho não quebra nenhum assert, mas também não tem rede de proteção: vale validar à mão ou adicionar um teste estático de ids/data-attrs."
+ ],
+ "problemas_ux": [
+  "BUG na ponte: a largura do segmento laranja usa Math.abs(t.associado) (= líquido do nível, hoje R$ 531), mas a legenda e o texto mostram t.variacao_associada (R$ 5.489). Barra e rótulo dizem coisas diferentes (gmv.js:32 vs 34). As barras também usam valor absoluto: um restante negativo aparece como se fosse positivo, e nenhuma barra mostra o GMV atual. Não é uma ponte (waterfall) de verdade.",
+  "Dois números de 'associado' disputam atenção (efeito líquido R$ 531 = 0,15% do GMV e variação associada R$ 5.489) sem hierarquia clara. Confunde o sócio e é a pior manchete possível se aparecer sem contexto.",
+  "O bloco 'Como ler esta página' com 4 bullets densos fica sempre aberto ANTES dos números: empurra KPIs e período para baixo da dobra.",
+  "A faixa de cobertura é sempre âmbar (cor de alerta), mesmo quando só informa. O dado estratégico (26 de 88 contas conectadas, 70% do portfólio fora) fica enterrado num parágrafo em vez de virar indicador.",
+  "A instrução 'Clique em uma linha para abrir o detalhe' é falsa: só o nome (summary dentro da 1ª célula) expande. Na aba cliente o nome é link e navega para outra página. Três comportamentos de clique diferentes.",
+  "Tabela aninhada: a subtabela de clientes fica dentro da 1ª célula da tabela de consultores. Quebra o alinhamento das colunas e fica ruim no celular (min-width 640px, rolagem horizontal).",
+  "Colunas inconsistentes entre abas: 5/6/5 colunas; o cabeçalho diz 'Otimizações (líquido)' e a subtabela diz 'Associado'; na aba analista há uma coluna 'Lançamentos' separada, nas outras os lançamentos vão como texto miúdo dentro da célula.",
+  "Ordenação: analistas ordenados por ganho + lançamentos, mas o número em negrito é o líquido (ganho + perda). Clientes saem sem ordenação útil (ordem da carteira, quase alfabética). Não há ordenação clicável.",
+  "Ruído: 7 consultores com '0 de 1' conectados viram linhas vazias com '—'. '(consultor a definir)' com 2 de 23 aparece como se fosse uma pessoa.",
+  "Higiene de dados exposta: a lista de analistas traz clientes ('DF Atacadao', 'beautybeautycosmeticos', 'Lalouí Cosméticos'), um e-mail pessoal ('douglas.rocatellii@...'), '(sem responsável)' e nome com emoji ('Isa 🧠'), tudo vindo do responsável no Notion.",
+  "Sem estado de carregamento: #kpis, #ponte e #tabela ficam vazios até o fetch responder. Ao trocar de período os dados antigos continuam na tela sem indicação.",
+  "Erro frágil: só trata !r.ok. Uma falha de rede (fetch rejeitado) vira promise não tratada e a página fica em branco. A mensagem de erro não tem 'tentar de novo'. Também não há AbortController: cliques rápidos de período podem deixar uma resposta antiga sobrescrever a nova.",
+  "Estado vazio inconsistente: a aba analista diz 'Sem dados.' e a aba cliente diz 'Nenhum cliente conectado ainda.'. A aba consultor não tem estado vazio para lista sem itens (sobra só o cabeçalho). Não há estado de 'nenhuma conta conectada' na página como um todo (KPIs mostram R$ 0).",
+  "Navegação global inconsistente com as outras telas: sem item ativo, sem 'GMV' no próprio menu, sem Analistas/Planos/Promoções, e o Painel executivo não leva ao GMV.",
+  "Muito estilo inline (h1, sub, cores fixas #c9c2b8/#8ea3b8 fora dos tokens, font-size 11 a 12.5px soltos): difícil manter consistência premium e impossível ter tema escuro.",
+  "Acessibilidade: abas são botões soltos (sem role=tablist/tab). As barras da ponte só têm title, sem texto alternativo com os valores. A legenda depende só de cor."
+ ],
+ "estados": [
+  "Carregando: inexistente (containers vazios até o fetch responder; na troca de período a tela antiga continua sem indicação)",
+  "Erro HTTP (!r.ok): #aviso recebe a faixa âmbar 'Não foi possível carregar o GMV.', sem retry, e o resto da página fica vazio",
+  "Erro de rede/JSON: não tratado (promise rejeitada, página em branco)",
+  "Cobertura parcial: faixa âmbar sempre visível com X de Y conectados, sem_conexao, historico_incompleto (com frase em negrito) e fora_da_central",
+  "Cliente com histórico parcial: texto ' · histórico parcial no período' sob o nome (aba cliente)",
+  "Consultor sem cliente conectado: linha com '—' e, ao expandir, 'Nenhum cliente desta carteira conectou a conta ainda.'",
+  "Vazio por aba: analista 'Sem dados.'; cliente 'Nenhum cliente conectado ainda.'; consultor sem mensagem própria",
+  "Delta nulo (sem período anterior): '—' em .mudo; atualizado_em ausente: 'nunca'"
+ ],
+ "recomendacao": "Organizar de cima para baixo como uma leitura executiva. (1) Header com a nav global padrão de todas as telas, com 'GMV' marcado como ativo e acessível a partir do Painel. (2) Título curto + uma linha de contexto e, na mesma faixa, uma barra de ferramentas: controle segmentado de período (14/28/56, mantendo #periodo e data-d) alinhado à direita, 'atualizado em' discreto e um chip neutro de cobertura '26 de 88 contas conectadas → Conectar' (âmbar só quando houver histórico incompleto, mantendo #aviso). (3) Uma linha de 3 KPIs com hierarquia: GMV do período com delta; 'Resultado associado ao trabalho' como número único com subtexto que separa nível líquido de variação (acaba a disputa entre os dois 'associados'); Lançamentos (bruto). Manter #kpis e as classes .kpi/.rotulo/.valor/.detalhe. (4) Uma ponte de verdade (waterfall de 4 passos: anterior → associado → restante → atual) em #ponte, com as larguras corrigidas para usar variacao_associada, sinal respeitado e valores escritos ao lado das barras, nas cores dos tokens. (5) Ranking 'Quem move o resultado' com abas segmentadas (#abas, data-a). Colunas iguais nas 3 visões (Nome, GMV, vs anterior, Associado líquido, % do GMV, Cobertura), ordenado por impacto. Linha inteira clicável, abrindo o detalhe em painel ou linha expandida sem tabela aninhada (mantendo details.lin/.det se possível). Ocultar por padrão consultores sem conta conectada, com um 'mostrar todos'. Sinalizar '(consultor a definir)' e responsáveis que não são da equipe como pendência de cadastro. (6) 'Como ler esta página' recolhido em details no fim, ou como ícone de ajuda nos KPIs. Por fim: skeleton de carregamento, erro com 'tentar de novo' e try/catch no fetch, estado vazio global e troca de todo o estilo inline e das cores fixas por tokens em ui.css/ui-extra.css, preservando os ids periodo/aviso/kpis/ponte/abas/tabela, os data-d/data-a e todas as classes geradas pelo JS."
+}

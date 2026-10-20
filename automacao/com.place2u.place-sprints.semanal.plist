@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Rotina semanal Place Sprints: toda SEXTA-FEIRA às 17h00
+  sincroniza o Notion, gera o Relatório Semanal premium de CADA cliente ativo
+  (sempre os últimos 7 dias — de sexta a sexta) e publica no Notion: atualiza
+  a barra de progresso na página do cliente e cria a linha "Relatório Semanal"
+  no quadro de tarefas (Canal = Relatório, Demandas = Relatório Semanal) com
+  o PDF completo anexado.
+
+  ATIVAR (depois de configurar o NOTION_TOKEN no .env):
+    cp ~/place-sprints/automacao/com.place2u.place-sprints.semanal.plist ~/Library/LaunchAgents/
+    launchctl load ~/Library/LaunchAgents/com.place2u.place-sprints.semanal.plist
+
+  DESATIVAR:
+    launchctl unload ~/Library/LaunchAgents/com.place2u.place-sprints.semanal.plist
+
+  MUDAR O HORÁRIO: edite Hour/Minute abaixo, recarregue (unload + load).
+
+  ATENÇÃO (08/10/2026): este plist publica o relatório COMPLETO (PDF anexado) no quadro de tarefas. O relatório curto
+  enviado à base Informações do cliente (categoria "Relatório de Sprints Place2u") tem agendador próprio dentro do
+  servidor (sexta 17h, liberado cliente a cliente). Não carregue os dois: o cliente receberia dois artefatos.
+  Ver CLAUDE.md e docs/desenho-relatorio-notion.md.
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.place2u.place-sprints.semanal</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/zsh</string>
+    <string>-lc</string>
+    <string>export PATH="$HOME/.local/node/bin:$PATH"; cd "$HOME/place-sprints" &amp;&amp; node scripts/publicar-notion.mjs --todos >> data/publicar.log 2>&amp;1</string>
+  </array>
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Weekday</key><integer>5</integer>
+    <key>Hour</key><integer>17</integer>
+    <key>Minute</key><integer>0</integer>
+  </dict>
+  <key>RunAtLoad</key><false/>
+</dict>
+</plist>

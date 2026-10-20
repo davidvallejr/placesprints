@@ -1,0 +1,252 @@
+{
+  "$comentario": "Playbook da DUPLICAÇÃO ESTRATÉGICA (treinamento interno Place2u — 'Como, quando e por que usar'). É a regra que o sistema usa para (a) propor duplicações com objetivo, (b) conferir se uma duplicação executada seguiu o método, e (c) APRENDER quais objetivos e volumes funcionam em cada conta. O deck foi escrito para a Shopee; os passos de execução de cada canal estão em processos 6.17 (ML e Shopee) e 6.18 (Amazon).",
+  "versao": "1.0",
+  "fonte": "Estratégia de Duplicação de Anúncios — treinamento interno Place2u",
+  "definicao": "Duplicação estratégica é criar uma nova versão de um anúncio existente com variações deliberadas — título, capa, categoria, preço, quantidade — para ampliar visibilidade, testar abordagens e conquistar novos públicos, sem comprometer o histórico do anúncio original. Não é cópia: é uma nova oportunidade de venda.",
+  "o_que_varia": [
+    "título e palavras-chave",
+    "imagem de capa",
+    "categoria",
+    "preço",
+    "quantidade / kit",
+    "descrição e comunicação"
+  ],
+  "copia_simples_vs_estrategica": [
+    {
+      "simples": "Igual ao original",
+      "estrategica": "Com variações intencionais"
+    },
+    {
+      "simples": "Sem objetivo claro",
+      "estrategica": "Com hipótese a testar"
+    },
+    {
+      "simples": "Polui a loja",
+      "estrategica": "Expande o alcance"
+    }
+  ],
+  "missoes": {
+    "principal": "O produto validado: sustenta o faturamento, tem histórico, está ranqueado, é a referência de performance — NUNCA é modificado diretamente nos testes.",
+    "secundaria": "A duplicação estratégica: expande o mapa (novos públicos), testa variações sem arriscar o original, ocupa a 1ª página, abre kits e combos. Exige briefing do consultor antes de executar."
+  },
+  "beneficios": [
+    "Mais visibilidade (mais anúncios, inclusive em categorias diferentes)",
+    "Testa sem arriscar: a duplicata absorve o teste e o original mantém o histórico",
+    "Alcança novos públicos (o mesmo produto é buscado de formas diferentes)",
+    "Ocupa a 1ª página com mais de um anúncio",
+    "Valida variações (título, capa, preço) com dados reais",
+    "Aumenta faturamento com kits e combos (ticket médio)"
+  ],
+  "gatilhos": [
+    {
+      "id": "G1",
+      "nome": "Produto novo sendo cadastrado",
+      "descricao": "Todo produto novo entra com ao menos 2 anúncios: um espelhando o concorrente e outro com abordagem própria.",
+      "tipo_sugerido": "teste_ab",
+      "verificavel_por_dados": true,
+      "sinal": "anúncio criado há menos de 30 dias e sem duplicata ativa"
+    },
+    {
+      "id": "G2",
+      "nome": "Anúncio com potencial travado",
+      "descricao": "Muita impressão, pouco clique, ou bom potencial mas sem vendas: hora de testar nova capa, título ou preço.",
+      "tipo_sugerido": "teste_ab",
+      "verificavel_por_dados": true,
+      "sinal": "visitas relevantes com conversão abaixo da média da conta (ímã de conversão)"
+    },
+    {
+      "id": "G3",
+      "nome": "Produto multi-nicho / multi-público",
+      "descricao": "O mesmo produto pode ser pesquisado de formas diferentes; cada variação de busca pode ser um novo anúncio.",
+      "tipo_sugerido": "novos_publicos",
+      "verificavel_por_dados": false,
+      "sinal": "exige a pesquisa de urgência oculta do consultor"
+    },
+    {
+      "id": "G4",
+      "nome": "Curva A com queda de relevância",
+      "descricao": "Produto que perdeu força por quebra de estoque, oscilação de preço ou problema com o seller: a duplicata retoma o posicionamento.",
+      "tipo_sugerido": "recuperacao",
+      "verificavel_por_dados": true,
+      "sinal": "anúncio curva A com receita e visitas em queda frente ao período anterior"
+    },
+    {
+      "id": "G5",
+      "nome": "Oportunidade de kit ou combo",
+      "descricao": "Identificada por pesquisa de mercado ou análise do carrinho (clientes compram junto): cria-se kit ou combo como novo anúncio.",
+      "tipo_sugerido": "kit_combo",
+      "verificavel_por_dados": false,
+      "sinal": "exige pesquisa de mercado / carrinho do cliente"
+    }
+  ],
+  "tipos": [
+    {
+      "id": "teste_ab",
+      "nome": "Teste A/B (produto novo)",
+      "volume": {
+        "min": 2,
+        "max": 2,
+        "total": true,
+        "texto": "2 anúncios no total: 1 espelhando o concorrente e 1 com abordagem própria"
+      },
+      "rx": [
+        "teste",
+        "a/b",
+        "ab test",
+        "espelh",
+        "concorrente",
+        "palavra chave",
+        "palavras chave"
+      ]
+    },
+    {
+      "id": "novos_publicos",
+      "nome": "Novos públicos ou posicionamentos",
+      "volume": {
+        "min": 5,
+        "max": 10,
+        "total": false,
+        "texto": "5 a 10 anúncios, cada um com um nicho ou uso diferente"
+      },
+      "rx": [
+        "nicho",
+        "publico",
+        "uso",
+        "funcionalidade",
+        "urgencia oculta",
+        "estrategia ima"
+      ]
+    },
+    {
+      "id": "primeira_pagina",
+      "nome": "Conquista da 1ª página",
+      "volume": {
+        "min": 2,
+        "max": 10,
+        "total": false,
+        "texto": "até 10 anúncios com títulos variados para maximizar as aparições na busca"
+      },
+      "rx": [
+        "primeira pagina",
+        "1 pagina",
+        "1a pagina",
+        "posicionamento",
+        "posicao",
+        "busca"
+      ]
+    },
+    {
+      "id": "kit_combo",
+      "nome": "Kit / Combo",
+      "volume": {
+        "min": 1,
+        "max": null,
+        "total": false,
+        "texto": "conforme o mercado (pesquisa ou carrinho do cliente)"
+      },
+      "rx": [
+        "\\bkit",
+        "combo"
+      ]
+    },
+    {
+      "id": "recuperacao",
+      "nome": "Recuperar posicionamento (curva A em queda)",
+      "volume": {
+        "min": 1,
+        "max": 3,
+        "total": false,
+        "texto": "1 a 3 duplicatas para retomar o posicionamento sem tocar no original"
+      },
+      "rx": [
+        "recuper",
+        "queda",
+        "retomar",
+        "curva a"
+      ]
+    }
+  ],
+  "regra_de_ouro": "Nunca duplique sem objetivo definido. A poluição visual da loja prejudica a conversão.",
+  "urgencia_oculta": {
+    "o_que_e": "Partindo de um produto específico, o CONSULTOR pesquisa outros usos e funcionalidades, outros públicos que poderiam comprá-lo, outras categorias onde se encaixa e outras formas de busca dos consumidores — para descobrir nichos de demanda real e criar anúncios direcionados a cada um, sem depender de um único anúncio herói.",
+    "regra": "A pesquisa de urgência oculta é SEMPRE responsabilidade do consultor. Se ele delegar ao analista sem a pesquisa feita, está usando a sorte: ninguém sabe se há demanda real.",
+    "exemplo": "Faixa de resistência → público fitness, fisioterapia, gestantes, idosos: cada público = um anúncio com título e capa específicos."
+  },
+  "primeira_pagina": {
+    "meta": "3 ou mais anúncios na 1ª página = domínio de nicho",
+    "logica": [
+      "3 anúncios da loja entre 8 resultados = 37% da página",
+      "O consumidor vê a marca mais de uma vez: familiaridade e chance de clique",
+      "Títulos diferentes capturam buscas diferentes",
+      "Se um anúncio perde posição, outro sustenta (resiliência)"
+    ]
+  },
+  "papeis": {
+    "consultor": [
+      "Faz a pesquisa de mercado e mapeia oportunidades",
+      "Identifica os públicos e usos (urgência oculta)",
+      "Define QUANTOS e QUAIS tipos de duplicação criar",
+      "Entrega o plano detalhado ao analista no plano de conta",
+      "Valida os resultados e decide escalar ou pausar"
+    ],
+    "analista": [
+      "Recebe o plano do consultor com as duplicações mapeadas",
+      "Executa as variações de título, capa, categoria e preço",
+      "Cadastra os anúncios e aplica as palavras-chave definidas",
+      "Monitora a performance e reporta ao consultor",
+      "NÃO decide sozinho sobre novos públicos ou volumes"
+    ]
+  },
+  "erros_comuns": [
+    {
+      "id": "sem_objetivo",
+      "nome": "Duplicar sem objetivo",
+      "texto": "Copiar um anúncio só para aumentar volume, sem saber qual variação está testando: poluição visual e canibalização de estoque."
+    },
+    {
+      "id": "analista_pesquisando",
+      "nome": "Analista pesquisando públicos sozinho",
+      "texto": "Sem a pesquisa do consultor, o analista não sabe se há demanda real: é apostar com os recursos do cliente."
+    },
+    {
+      "id": "sem_variacao",
+      "nome": "Não variar nada de verdade",
+      "texto": "Mudar só o segundo parágrafo da descrição não é duplicação estratégica: a variação precisa ser visível e ter hipótese."
+    },
+    {
+      "id": "anuncio_ruim_ativo",
+      "nome": "Manter anúncios ruins ativos",
+      "texto": "Duplicatas que não convertem precisam ser pausadas; muitos anúncios ruins ativos diluem a saúde da conta."
+    },
+    {
+      "id": "excesso_sem_analise",
+      "nome": "Excesso de duplicações sem análise",
+      "texto": "10 anúncios sem análise de performance é desperdício: escale o que funciona, pause o que não funciona."
+    }
+  ],
+  "checklist": {
+    "consultor": [
+      "Pesquisa de mercado feita para este produto",
+      "Públicos e usabilidades mapeados (urgência oculta)",
+      "Tipo de duplicação definido (A/B, nicho, kit, combo, 1ª página)",
+      "Volume correto definido (2, 5–7 ou até 10)",
+      "Plano enviado ao analista no plano de conta"
+    ],
+    "analista": [
+      "Plano do consultor recebido e compreendido",
+      "Variações reais aplicadas (título, capa, categoria, preço)",
+      "Palavras-chave alinhadas ao nicho de cada duplicata",
+      "Anúncios cadastrados e monitoramento ativo",
+      "Performance reportada ao consultor para decisão de escala"
+    ]
+  },
+  "aprendizado": {
+    "janela_episodio_dias": 14,
+    "janela_filhos_dias": 14,
+    "min_similaridade_filho": 0.65,
+    "variacao_minima_titulo": 0.2,
+    "dias_para_julgar_filho": 14,
+    "filho_morto_max_visitas": 20,
+    "$nota": "O sistema trata uma duplicação como FAMÍLIA (original + duplicatas) e mede o efeito LÍQUIDO da família (o original pode perder o que a duplicata ganha: canibalização). filho = anúncio criado até 14 dias depois da tarefa com título ≥ 65% parecido (sobreposição ponderada pelo IDF do catálogo, 3+ palavras em comum) com o original; no máximo 15 por duplicação. variacao_minima_titulo: se menos de 20% das palavras do título mudaram, a duplicata é 'sem variação real'."
+  }
+}

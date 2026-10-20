@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Painel executivo · Place Sprints</title>
+<link rel="stylesheet" href="/ui.css">
+<link rel="stylesheet" href="/tela-execucao.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+</head>
+<body data-pagina="execucao">
+<header class="ps-shell" id="psShell"></header>
+<script src="/shell.js"></script>
+<main class="pg">
+  <div class="pg-cab">
+    <div class="pg-titulo">
+      <h1>Painel executivo</h1>
+      <p class="pg-meta"><span id="estadoSprint">Carteira inteira</span><span id="estadoSync">—</span><span id="estadoMeli">—</span></p>
+    </div>
+    <div class="pg-acoes">
+      <details class="menu">
+        <summary class="btn">Relatórios</summary>
+        <div class="menu-lista">
+          <a id="lnkRelatorio" href="/relatorio" target="_blank" rel="noopener">Relatório do sprint</a>
+          <a id="lnkPdf" href="/relatorio.pdf" target="_blank" rel="noopener">PDF do sprint</a>
+          <a id="lnkSemanal" aria-disabled="true" target="_blank" rel="noopener">Semanal do cliente <small>escolha um cliente</small></a>
+          <hr>
+          <a id="lnkMatriz" aria-disabled="true" target="_blank" rel="noopener">Matriz Eisenhower · interno <small>escolha um responsável</small></a>
+        </div>
+      </details>
+      <button id="btnSync" class="btn" type="button" title="Buscar do Notion apenas o que mudou">Sincronizar</button>
+    </div>
+  </div>
+
+  <div class="filtros barra-filtros" id="filtros">
+    <label class="sr" for="fSprint">Sprint</label>
+    <select id="fSprint"><option value="">Todos os sprints</option></select>
+    <label class="sr" for="fCliente">Cliente</label>
+    <select id="fCliente"><option value="">Todos os clientes</option></select>
+    <label class="sr" for="fResponsavel">Responsável</label>
+    <select id="fResponsavel"><option value="">Todos os responsáveis</option></select>
+    <details class="mais-filtros">
+      <summary id="maisFiltros">Mais filtros</summary>
+      <div>
+        <div class="campo"><label for="fProjeto">Projeto</label><select id="fProjeto"><option value="">Todos os projetos</option></select></div>
+        <div class="campo"><label for="fProcesso">Processo</label><select id="fProcesso"><option value="">Todos os processos</option></select></div>
+        <div class="campo"><label for="fStatus">Status</label>
+          <select id="fStatus">
+            <option value="">Todos os status</option>
+            <option value="nao_iniciada">Não iniciada</option>
+            <option value="andamento">Em andamento</option>
+            <option value="validacao">Em validação</option>
+            <option value="concluida">Concluída</option>
+            <option value="bloqueada">Bloqueada</option>
+            <option value="dependencia_cliente">Dependência do cliente</option>
+            <option value="cancelada">Cancelada</option>
+          </select>
+        </div>
+        <div class="campo"><label for="fDe">Período: de</label><input type="date" id="fDe"></div>
+        <div class="campo"><label for="fAte">Período: até</label><input type="date" id="fAte"></div>
+      </div>
+    </details>
+    <button id="btnLimpar" class="btn-fantasma" type="button">Limpar</button>
+    <div id="filtrosAvancados"></div>
+  </div>
+
+  <section class="veredito" aria-label="Resumo">
+    <div class="veredito-frase" id="veredito"></div>
+    <div class="regua" id="regua" hidden></div>
+    <div class="kpis" id="kpis"></div>
+    <p class="kpis-sec" id="kpisSec"></p>
+  </section>
+
+  <div class="proxima" id="proxima" hidden>
+    <span class="proxima-rotulo">Próxima ação</span>
+    <span class="proxima-texto" id="proximaTexto"></span>
+    <span id="proximaAcao" class="proxima-acao"></span>
+  </div>
+
+  <section class="bloco" id="cartaoRiscos">
+    <div class="bloco-cab"><h2>O que pede ação</h2><button type="button" class="btn btn-fantasma btn-p" data-chip="todas">Ver todas</button></div>
+    <p class="sub">Bloqueadas, atrasadas, sem responsável e o que depende do cliente. Cada tarefa abre no Notion.</p>
+    <div class="riscos" id="riscos"></div>
+  </section>
+
+  <section class="bloco" id="secRitmo">
+    <div class="bloco-cab"><h2>Ritmo do sprint</h2></div>
+    <p class="sub">Concluído, planejado e ritmo ideal, dia a dia. O histórico nasce dos snapshots de cada sincronização.</p>
+    <div class="cartao">
+      <div id="estadoBurnup"></div>
+      <canvas id="gBurnup" height="90"></canvas>
+      <div class="vazio-box" id="vazioBurnup" hidden><b>Ainda não há histórico suficiente</b>Os pontos surgem a cada dia de sincronização.</div>
+    </div>
+  </section>
+
+  <section class="bloco grade" id="secGraficos">
+    <div class="cartao">
+      <h2>Avanço por processo</h2>
+      <p class="sub">% concluído nos 8 processos com mais tarefas.</p>
+      <div id="estadoProcessos"></div>
+      <canvas id="gProcessos" height="200"></canvas>
+    </div>
+    <div class="cartao">
+      <h2>Entregas por semana</h2>
+      <p class="sub">Conclusões nas últimas 12 semanas.</p>
+      <div id="estadoSemanas"></div>
+      <canvas id="gSemanas" height="200"></canvas>
+    </div>
+  </section>
+
+  <section class="bloco" id="secTarefas">
+    <div class="bloco-cab"><h2>Tarefas <span id="nTarefas" class="badge">0</span></h2></div>
+    <div class="linha mt-2" id="tarefasLocal">
+      <label class="sr" for="qTarefas">Buscar na tabela</label>
+      <input type="search" id="qTarefas" placeholder="Buscar tarefa, cliente ou responsável">
+      <button type="button" class="f-chip on" data-chip="todas" aria-pressed="true">Todas</button>
+      <button type="button" class="f-chip" data-chip="bloqueadas" aria-pressed="false">Bloqueadas <span class="n"></span></button>
+      <button type="button" class="f-chip" data-chip="atrasadas" aria-pressed="false">Atrasadas <span class="n"></span></button>
+      <button type="button" class="f-chip" data-chip="sem_responsavel" aria-pressed="false">Sem responsável <span class="n"></span></button>
+      <button type="button" class="f-chip" data-chip="dependencia_cliente" aria-pressed="false">Depende do cliente <span class="n"></span></button>
+    </div>
+    <div id="estadoTarefas" class="mt-4"></div>
+    <div class="tabela-wrap fixa mt-4" id="wrapTarefas" tabindex="-1">
+      <table class="t" id="tabelaTarefas">
+        <thead><tr><th><input type="checkbox" id="selTodas" aria-label="Marcar todas as tarefas visíveis"></th><th>Tarefa</th><th>Cliente</th><th>Sprint</th><th>Processo</th><th>Responsável</th><th>Status</th><th>Prazo</th><th class="n">Peso</th><th>Alerta</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="t-pag" id="pagTarefas"></div>
+    <div class="barra-massa">
+      <span><b id="nSel">0</b> marcada(s)</span>
+      <button type="button" class="btn btn-p" id="btnDependencia">Encerrar por dependência do cliente</button>
+      <button type="button" class="btn-fantasma btn-p" id="btnDesmarcar">Desmarcar</button>
+    </div>
+    <div id="depResultado" class="mt-2"></div>
+  </section>
+
+  <details class="recolhido" id="qualidade">
+    <summary>Qualidade do dado <span class="n" id="nQualidade"></span></summary>
+    <p class="sub">Higiene do Notion, não risco operacional: tarefas sem prazo e entregas sem evidência anexada.</p>
+    <div class="riscos" id="qualidadeLista"></div>
+  </details>
+
+  <details class="recolhido" id="distribuicao">
+    <summary>Distribuição de status e esforço</summary>
+    <div class="grade">
+      <div class="cartao">
+        <h2>Planejado × entregue</h2>
+        <p class="sub">Quantidade e esforço (peso).</p>
+        <canvas id="gPlanejado" height="180"></canvas>
+      </div>
+      <div class="cartao">
+        <h2>Distribuição por status</h2>
+        <p class="sub">Situação atual das tarefas do filtro.</p>
+        <canvas id="gStatus" height="180"></canvas>
+      </div>
+    </div>
+  </details>
+</main>
+<footer class="pg-rodape">Fonte: Notion · indicadores calculados por código</footer>
+<script src="/filtros.js"></script>
+<script src="app.js"></script>
+<script src="/alerta.js" defer></script>
+</body>
+</html>

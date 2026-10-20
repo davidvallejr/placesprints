@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Promoções · Place Sprints</title>
+<link rel="stylesheet" href="/ui.css">
+<link rel="stylesheet" href="/promocoes.css">
+</head>
+<body data-pagina="promocoes">
+<header class="ps-shell" id="psShell"></header>
+<script src="/shell.js"></script>
+<main class="pg" id="app">
+  <div id="telaEscolha" hidden>
+    <div class="pg-cab">
+      <div class="pg-titulo">
+        <h1>Promoções</h1>
+        <p class="pg-pergunta">Escolha um cliente com Mercado Livre conectado</p>
+      </div>
+    </div>
+    <section class="bloco">
+      <div class="bloco-cab"><h2>Carteira</h2></div>
+      <p class="sub">Primeiro quem nunca coletou, depois a coleta mais antiga.</p>
+      <div class="pr-carteira" id="chipsClientes" aria-busy="true"><div class="sk-tabela"></div></div>
+    </section>
+  </div>
+
+  <div id="telaCliente" hidden>
+    <div class="pg-cab">
+      <div class="pg-titulo">
+        <p class="pg-sobre">Promoções</p>
+        <h1 id="titulo"></h1>
+        <p class="pg-meta"><span class="pr-chips" id="chips"></span><span class="pr-status" id="status"></span></p>
+      </div>
+      <div class="pg-acoes">
+        <div class="pr-topo">
+          <div class="busca-wrap pr-busca">
+            <div class="busca">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+              <input id="q" type="text" placeholder="Trocar de cliente (nome ou CNPJ)" autocomplete="off" aria-label="Trocar de cliente">
+            </div>
+            <div class="resultados" id="resultados" hidden></div>
+          </div>
+          <label class="pr-quem">Seu nome (obrigatório) <input id="quem" type="text" maxlength="80" placeholder="quem aprova / marca" autocomplete="name"></label>
+        </div>
+      </div>
+    </div>
+
+    <div id="faixaColeta"></div>
+
+    <section class="veredito" aria-label="Resumo">
+      <p class="veredito-frase" id="veredito"></p>
+      <div class="kpis" id="kpis"></div>
+    </section>
+
+    <section class="proxima" id="proximo">
+      <span class="proxima-rotulo">Próxima ação</span>
+      <span class="proxima-texto" id="proximoTexto" aria-live="polite"></span>
+      <span class="proxima-acao" id="proximoAcao"></span>
+      <span class="pr-coleta"><button class="btn" id="btnColetar">Coletar agora</button><label class="pr-chk"><input type="checkbox" id="chkVendas"> atualizar vendas antes (lento)</label></span>
+    </section>
+
+    <div class="tabs" id="abas" role="group" aria-label="Seções do módulo"></div>
+    <div id="conteudo"></div>
+
+    <details class="recolhido" id="detRodada">
+      <summary>Detalhes da rodada <span class="n" id="detRodadaN"></span></summary>
+      <div id="invariante"></div>
+      <div id="pendencias"></div>
+    </details>
+  </div>
+</main>
+<footer class="pg-rodape">O módulo recomenda; quem decide e executa é você. Execução ao vivo desligada por padrão · só leitura nas APIs</footer>
+<div class="pr-toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+<div class="pr-toast erro" id="toastErro" role="alert" aria-atomic="true"></div>
+<script src="promocoes.js"></script>
+<script src="/alerta.js" defer></script>
+</body>
+</html>

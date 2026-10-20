@@ -1,0 +1,389 @@
+{
+ "name": "Place Sprints · Avisos ao cliente (entrega)",
+ "nodes": [
+  {
+   "parameters": {
+    "httpMethod": "POST",
+    "path": "place-gatilhos",
+    "authentication": "headerAuth",
+    "responseMode": "onReceived",
+    "options": {}
+   },
+   "id": "wh",
+   "name": "Webhook place-gatilhos",
+   "type": "n8n-nodes-base.webhook",
+   "typeVersion": 2,
+   "position": [
+    0,
+    0
+   ]
+  },
+  {
+   "parameters": {
+    "jsCode": "// Abre 1 item por canal ligado; no WhatsApp, 1 item por PARTE (whatsapp_partes: texto acima de ~4.000 caracteres dividido entre parágrafos pelo Place Sprints) e no\n// Discord (canal INTERNO da equipe) 1 item por parte de discord_partes (≤ 1.900 caracteres cada), sempre na ordem; o Discord leva as menções permitidas (mencionar/mencionar_cargos).\n// O texto já chega auditado do Place Sprints; aqui não se decide conteúdo. E-mail recebe o texto inteiro.\nconst lote = $input.first().json.body ?? $input.first().json;\nconst out = [];\nfor (const [canal, c] of Object.entries(lote.canais || {})) if (c && c.ligado && c.destino) {\n  const partes = canal === 'whatsapp' && Array.isArray(lote.whatsapp_partes) && lote.whatsapp_partes.length ? lote.whatsapp_partes\n    : canal === 'discord' && Array.isArray(lote.discord_partes) && lote.discord_partes.length ? lote.discord_partes : [lote.texto || ''];\n  partes.forEach((texto, k) => out.push({ json: { canal, lote_id: lote.lote_id, cliente_rotulo: lote.cliente_rotulo || '', tipo: lote.tipo || '', interno: !!lote.interno, assunto: lote.assunto || 'Place2u · aviso', texto, texto_html: lote.texto_html || '', destino: c.destino, link: lote.link || '', parte: k + 1, partes: partes.length,\n    mencionar: lote.discord_mencionar || [], mencionar_cargos: lote.discord_mencionar_cargos || [] } }));\n}\nreturn out;"
+   },
+   "id": "abrir",
+   "name": "Abrir por canal",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    240,
+    0
+   ]
+  },
+  {
+   "parameters": {
+    "rules": {
+     "values": [
+      {
+       "conditions": {
+        "options": {
+         "caseSensitive": true,
+         "leftValue": "",
+         "typeValidation": "strict"
+        },
+        "conditions": [
+         {
+          "id": "c1",
+          "leftValue": "={{ $json.canal }}",
+          "rightValue": "whatsapp",
+          "operator": {
+           "type": "string",
+           "operation": "equals"
+          }
+         }
+        ],
+        "combinator": "and"
+       },
+       "renameOutput": true,
+       "outputKey": "whatsapp"
+      },
+      {
+       "conditions": {
+        "options": {
+         "caseSensitive": true,
+         "leftValue": "",
+         "typeValidation": "strict"
+        },
+        "conditions": [
+         {
+          "id": "c2",
+          "leftValue": "={{ $json.canal }}",
+          "rightValue": "email",
+          "operator": {
+           "type": "string",
+           "operation": "equals"
+          }
+         }
+        ],
+        "combinator": "and"
+       },
+       "renameOutput": true,
+       "outputKey": "email"
+      },
+      {
+       "conditions": {
+        "options": {
+         "caseSensitive": true,
+         "leftValue": "",
+         "typeValidation": "strict"
+        },
+        "conditions": [
+         {
+          "id": "c3",
+          "leftValue": "={{ $json.canal }}",
+          "rightValue": "discord",
+          "operator": {
+           "type": "string",
+           "operation": "equals"
+          }
+         }
+        ],
+        "combinator": "and"
+       },
+       "renameOutput": true,
+       "outputKey": "discord"
+      }
+     ]
+    },
+    "options": {}
+   },
+   "id": "sw",
+   "name": "Canal",
+   "type": "n8n-nodes-base.switch",
+   "typeVersion": 3,
+   "position": [
+    480,
+    0
+   ]
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "https://evo.place2u.com.br/message/sendText/Atendimento",
+    "sendHeaders": true,
+    "headerParameters": {
+     "parameters": [
+      {
+       "name": "apiKey",
+       "value": "<apiKey da Evolution — copiado do fluxo existente na importação>"
+      }
+     ]
+    },
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={{ JSON.stringify({ number: $json.destino, text: $json.texto }) }}",
+    "options": {
+     "response": {
+      "response": {
+       "fullResponse": true,
+       "neverError": true
+      }
+     },
+     "timeout": 20000,
+     "batching": {
+      "batch": {
+       "batchSize": 1,
+       "batchInterval": 1500
+      }
+     }
+    }
+   },
+   "id": "wa",
+   "name": "WhatsApp (Evolution · Atendimento)",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    760,
+    -180
+   ]
+  },
+  {
+   "parameters": {
+    "jsCode": "// Sem credencial SMTP: devolve 503 para o recibo sair 'falhou' (nunca 'entregue'). Para ligar o e-mail: crie a credencial SMTP e troque este nó por um «Send Email»\n// (de: avisos@place2u.com.br, para: {{ $json.destino }}, assunto: {{ $json.assunto }}, HTML: {{ $json.texto_html }}), mantendo «On Error: Continue».\nreturn $input.all().map(() => ({ json: { statusCode: 503 } }));"
+   },
+   "id": "mail",
+   "name": "E-mail (não configurado — recibo falhou)",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    760,
+    0
+   ],
+   "onError": "continueRegularOutput"
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "={{ $json.destino }}",
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={{ JSON.stringify({ content: $json.texto, allowed_mentions: { parse: [], users: $json.mencionar || [], roles: $json.mencionar_cargos || [] } }) }}",
+    "options": {
+     "response": {
+      "response": {
+       "fullResponse": true,
+       "neverError": true
+      }
+     },
+     "timeout": 20000,
+     "batching": {
+      "batch": {
+       "batchSize": 1,
+       "batchInterval": 700
+      }
+     }
+    }
+   },
+   "id": "dc",
+   "name": "Discord (canal interno do cliente · time)",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    760,
+    180
+   ]
+  },
+  {
+   "parameters": {
+    "jsCode": "// Recibo por canal: só estado e carimbo; nunca o corpo da resposta do provedor.\n// Modo «Run Once for All Items»: o item de origem é lido por itemMatching(idx).\n// WhatsApp em partes: UM recibo por (lote, canal) — entregue só se TODAS as partes saíram (a 1ª entregue não esconde a 2ª que falhou).\n// Teste de canal (tipo 'teste') e incidente do vigia/saúde (tipo 'incidente', autogestão) não têm lote no Place Sprints: não geram recibo (senão o recibo volta 422 e a execução fica como erro).\nconst por = new Map();\n$input.all().forEach((i, idx) => { const o = $('Abrir por canal').itemMatching(idx).json; if (o.tipo === 'teste' || o.tipo === 'incidente') return; const sc = i.json.statusCode ?? (i.json.error ? 500 : 200); const k = o.lote_id + '|' + o.canal; const a = por.get(k) || { lote_id: o.lote_id, canal: o.canal, ok: true, status: sc }; if (sc >= 300) { a.ok = false; a.status = sc } por.set(k, a) });\nreturn [...por.values()].map(a => ({ json: { lote_id: a.lote_id, canal: a.canal, estado: a.ok ? 'entregue' : 'falhou', status: a.status, em: new Date().toISOString() } }));"
+   },
+   "id": "rec",
+   "name": "Montar recibo",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1000,
+    0
+   ],
+   "onError": "continueRegularOutput"
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "https://meli.place2u.com.br/webhook/gatilhos/recibo",
+    "authentication": "genericCredentialType",
+    "genericAuthType": "httpHeaderAuth",
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={{ JSON.stringify($json) }}",
+    "options": {
+     "timeout": 15000
+    }
+   },
+   "id": "cb",
+   "name": "Recibo → Place Sprints",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    1240,
+    0
+   ]
+  },
+  {
+   "parameters": {
+    "height": 360,
+    "width": 520,
+    "content": "## Avisos ao cliente (Place Sprints → n8n)\n1. Crie a credencial **Header Auth** `Place Sprints Gatilhos` (cabeçalho `x-place-key`; valor em Integrações › Avisos ao cliente no Place Sprints) e selecione-a no Webhook e em «Recibo → Place Sprints».\n2. E-mail: sem credencial SMTP o nó «E-mail (não configurado — recibo falhou)» devolve 503 (recibo `falhou`); para ligar, crie a credencial SMTP e troque-o por um «Send Email».\n3. WhatsApp (ao cliente): instância Evolution `Atendimento`; destino = SÓ o grupo do cliente no Mercado Livre («Id whatsapp meli» da base Clientes, …@g.us).\n4. Discord (INTERNO da equipe, o cliente não está lá): destino = «Webhook ML» da base Clientes; só lotes `interno_semanal`/`interno_imediato` (menção = «Discord ID Consultor ML»). Lote ao cliente nunca vai ao Discord.\nO conteúdo chega pronto e auditado; este fluxo só entrega e devolve o recibo.\n5. O fluxo «Teste de canal» entra por «Chamado por outro fluxo» (Execute Workflow Trigger) e cai no mesmo «Abrir por canal»; o teste responde 200 ao Place Sprints ANTES da entrega e não devolve recibo — confirme o recebimento com o cliente.\n6. WhatsApp: `destino` chega sem '+' (dígitos ou JID …@g.us), como a Evolution espera.\n6. WhatsApp em partes (13/10/2026): texto acima de ~4.000 caracteres chega em `whatsapp_partes` (cortado só entre parágrafos); o nó do WhatsApp envia 1 parte por vez (lote de 1 item, 1,5 s entre partes) e o recibo do canal só é `entregue` se todas saíram.\n7. NÃO reimporte este fluxo por cima do publicado: o apiKey da Evolution, a credencial do Webhook e do recibo e o nó de e-mail ao vivo voltariam ao modelo. Mudança = editar o nó no n8n (colar o jsCode deste modelo)."
+   },
+   "id": "nota",
+   "name": "Leia-me",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    0,
+    -360
+   ]
+  },
+  {
+   "parameters": {
+    "inputSource": "passthrough"
+   },
+   "id": "ewt",
+   "name": "Chamado por outro fluxo",
+   "type": "n8n-nodes-base.executeWorkflowTrigger",
+   "typeVersion": 1.1,
+   "position": [
+    0,
+    200
+   ]
+  }
+ ],
+ "connections": {
+  "Webhook place-gatilhos": {
+   "main": [
+    [
+     {
+      "node": "Abrir por canal",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Abrir por canal": {
+   "main": [
+    [
+     {
+      "node": "Canal",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Canal": {
+   "main": [
+    [
+     {
+      "node": "WhatsApp (Evolution · Atendimento)",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "E-mail (não configurado — recibo falhou)",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Discord (canal interno do cliente · time)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "WhatsApp (Evolution · Atendimento)": {
+   "main": [
+    [
+     {
+      "node": "Montar recibo",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Montar recibo": {
+   "main": [
+    [
+     {
+      "node": "Recibo → Place Sprints",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Chamado por outro fluxo": {
+   "main": [
+    [
+     {
+      "node": "Abrir por canal",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "E-mail (não configurado — recibo falhou)": {
+   "main": [
+    [
+     {
+      "node": "Montar recibo",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Discord (canal interno do cliente · time)": {
+   "main": [
+    [
+     {
+      "node": "Montar recibo",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "settings": {
+  "executionOrder": "v1",
+  "timezone": "America/Sao_Paulo"
+ },
+ "meta": {
+  "importado_em": "2026-10-09",
+  "n8n": "https://n8n.srv1649899.hstgr.cloud (Community: sem Variáveis/$env; auth por credencial Header Auth)",
+  "id_no_n8n": "2fTWSJTzfzyfWi0w",
+  "estado_no_n8n_12_10": "Publicado e ativo. Sem credencial SMTP, o nó de e-mail foi trocado no n8n por um Code «E-mail (não configurado — recibo falhou)» que devolve 503 (recibo 'falhou', nunca 'entregue'); para ligar e-mail, crie a credencial SMTP e volte ao nó «Send Email» deste modelo. Credencial Header Auth «Place Sprints Gatilhos» preenchida pelo David em 12/10; aperto de mão conferido nos dois sentidos (n8n 200/403, Place Sprints 422/401).",
+  "teste_canal_12_10": "Teste de canal no WhatsApp do David (12/10 12h34): Evolution 201 (entregue). Teste não gera recibo.",
+  "estado_no_n8n_12_10_noite": "No n8n: «Abrir por canal» abre 1 item por parte do Discord (discord_partes) com mencionar/mencionar_cargos; nó Discord renomeado «Discord (canal interno do cliente · time)» com allowed_mentions {parse:[], users, roles} (sem @everyone), batching 1 item a cada 700 ms; «Montar recibo» agrupa por lote+canal (entregue só se todas as partes < 300). Testado com webhook inválido: 3 partes tentadas em ordem (404), nada postado.",
+  "modelo_13_10": "Modelo alinhado ao que está ao vivo (12/10 noite): «Abrir por canal» abre partes do WhatsApp E do Discord (com mencionar/mencionar_cargos); Discord sem .slice, com allowed_mentions {parse:[], users, roles} e 1 item a cada 700 ms; e-mail = Code 503. Atualizar o n8n EDITANDO o nó «Abrir por canal» (colar o jsCode), nunca reimportando o fluxo (apiKey da Evolution e credenciais voltariam ao placeholder)."
+ }
+}

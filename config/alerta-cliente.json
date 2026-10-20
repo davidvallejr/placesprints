@@ -1,0 +1,27 @@
+{
+  "$comentario": "Alerta de pendência CRÍTICA do cliente (src/lib/alerta-cliente.js; validado na carga). Aviso interno com som sempre; página de alerta no Notion do cliente SÓ pelo interruptor «alerta_auto» (sync_estado), que NASCE DESLIGADO (automatico_ligado só vale enquanto a chave nunca foi gravada). Gatilho = pendência do avaliador (pendencias-cliente.js) com gravidade em gatilhos.gravidades, menos os itens de gatilhos.excluir_itens (retorno_pendente = tarefa SEM tipo registrado: nunca vira alerta ao cliente). Janela própria (dia e hora lidos em «fuso» via Intl, nunca no fuso do processo): fora dela o alerta fica pendente e sai na abertura. cooldown_dias vale por (cliente, item); teto_semanal_por_cliente e teto_diario_paginas contam páginas criadas. max_avisos_por_varredura: acima disso sai UM aviso agregado. status_aberto = opções de Status tentadas na criação (a primeira que já existir; nunca cria opção); status_final = o que a página recebe ao resolver. categoria é fixa (relatorio-seguro.CATEGORIA): a opção JÁ existente em Informações › Secção, nunca uma nova.",
+  "fuso": "America/Sao_Paulo",
+  "hora_inicio": "08:00",
+  "hora_fim": "20:00",
+  "dias_uteis_apenas": true,
+  "status_elegiveis": ["Ativo"],
+  "cooldown_dias": 7,
+  "teto_semanal_por_cliente": 3,
+  "teto_diario_paginas": 20,
+  "max_avisos_por_varredura": 5,
+  "aviso_dedupe_min": 1440,
+  "avisar_resolucao": true,
+  "automatico_ligado": false,
+  "backoff_base_min": 30,
+  "backoff_max_min": 360,
+  "previa_ttl_min": 15,
+  "categoria": "Relatório de Sprints Place2u",
+  "icone": "⚠️",
+  "status_aberto": ["pendente", "em andamento"],
+  "status_final": "Concluído",
+  "gatilhos": {
+    "$comentario": "v1.5.0 (saúde da conta gravada): despacho_prazo e atendimento_sac passam a ser MEDIDOS no ML (pendencias-cliente.js ← lerSaude). Crítico (= alerta ao cliente) só em reclamação em mediação e em atrasos ≥ limiares.saude_ml.atrasos_critico do catálogo; perguntas vencidas e atrasos abaixo disso nascem 'atencao' e nunca alertam. Nenhum item novo é excluído; a reconferência ao vivo não existe para esses dois (fonte_sem_reconferencia → o alerta fica pendente e tenta de novo).",
+    "gravidades": ["critico"],
+    "excluir_itens": ["retorno_pendente"]
+  }
+}

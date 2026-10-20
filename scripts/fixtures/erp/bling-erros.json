@@ -1,0 +1,9 @@
+{
+  "_fonte_doc": "429: https://developer.bling.com.br/limites · 401/403: https://developer.bling.com.br/erros-comuns",
+  "_aviso": "construída a partir da documentação; não é captura real. A doc mostra 429 com period 'second'; o valor 'day' e os corpos de 401/403/404 são NÃO CONFIRMADO (chave marcada).",
+  "429_segundo": { "error": { "type": "TOO_MANY_REQUESTS", "message": "Limite de requisições atingido.", "description": "Limite de requisições por segundo atingido, tente novamente mais tarde.", "limit": 3, "period": "second" } },
+  "429_dia_NAO_CONFIRMADO": { "error": { "type": "TOO_MANY_REQUESTS", "message": "Limite de requisições atingido.", "description": "Limite de requisições diárias atingido.", "limit": 120000, "period": "day" } },
+  "401_NAO_CONFIRMADO": { "error": { "type": "invalid_token", "message": "invalid_token", "description": "The access token provided is invalid" } },
+  "403_NAO_CONFIRMADO": { "error": { "type": "FORBIDDEN", "message": "Acesso negado", "description": "O escopo do aplicativo não permite este recurso." } },
+  "404_NAO_CONFIRMADO": { "error": { "type": "RESOURCE_NOT_FOUND", "message": "Recurso não encontrado", "description": "O produto não foi encontrado." } }
+}

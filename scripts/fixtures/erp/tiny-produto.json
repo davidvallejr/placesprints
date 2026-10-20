@@ -1,0 +1,20 @@
+{
+  "_fonte_doc": "https://api-docs.erp.olist.com/api-reference/produtos/obter-produto.md",
+  "_aviso": "construída a partir da documentação; não é captura real. NÃO CONFIRMADO: campos id/sku dentro de variacoes[] (a doc cita variacoes[].precos), formato de dataAlteracao.",
+  "_requisicao": "GET /public-api/v3/produtos/{id}  (chave = id)",
+  "produtos": {
+    "1001": { "id": 1001, "sku": "CAN-001", "descricao": "Caneca branca 325 ml", "tipo": "S", "situacao": "A", "dataAlteracao": "2026-10-01 14:30:00", "tipoVariacao": "N",
+      "precos": { "preco": 49.9, "precoPromocional": null, "precoCusto": 36.32, "precoCustoMedio": 35.1 },
+      "variacoes": [], "kit": [], "fornecedores": [] },
+    "2000": { "id": 2000, "sku": "CAMISA", "descricao": "Camiseta básica (pai)", "tipo": "V", "situacao": "A", "dataAlteracao": "2026-09-30 10:00:00", "tipoVariacao": "P",
+      "precos": { "preco": 59.9, "precoPromocional": null, "precoCusto": null, "precoCustoMedio": null },
+      "variacoes": [
+        { "id": 2001, "sku": "CAMISA-P", "precos": { "preco": 59.9, "precoPromocional": null, "precoCusto": 18, "precoCustoMedio": 17.5 } },
+        { "id": 2002, "sku": "CAMISA-M", "precos": { "preco": 59.9, "precoPromocional": null, "precoCusto": null, "precoCustoMedio": 17.9 } }
+      ],
+      "kit": [], "fornecedores": [] },
+    "3000": { "id": 3000, "sku": "KIT-2CAN", "descricao": "Kit 2 canecas", "tipo": "K", "situacao": "A", "dataAlteracao": "2026-09-29 11:00:00", "tipoVariacao": "N",
+      "precos": { "preco": 89.9, "precoPromocional": null, "precoCusto": 70, "precoCustoMedio": null },
+      "variacoes": [], "kit": [ { "produto": { "id": 1001, "sku": "CAN-001" }, "quantidade": 2 } ], "fornecedores": [] }
+  }
+}

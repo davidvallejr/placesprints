@@ -1,0 +1,253 @@
+{
+  "$comentario": "Gatilhos do Merovíngio ao cliente (docs/desenho-gatilhos-n8n.md; src/lib/gatilhos.js valida na carga). SÓ MERCADO LIVRE (decisões do David, 12/10/2026). Catálogo FECHADO dos 18 gatilhos: dono (cliente = depende do dono do negócio e pode ir ao cliente; assessoria = trabalho da Place2u, NUNCA vai ao cliente: aviso interno para a equipe, estado interno + notificação aviso_assessoria), classe (critico | atencao | info), ritmo (hora = URGENTE, sai na hora num lote imediato curto, com cooldown por classe; semanal = entra no PLANO SEMANAL de terça 09:00 no fuso do cliente (12/10/2026; antes segunda), que repete enquanto a condição continuar; interno = dono assessoria) e template (a linha de FATO; o cabeçalho com emoji e o texto do plano/urgente são fixos em src/lib/plano-semana-texto.js, no tom aprovado). Placeholders FIXOS ({k|singular|plural} escolhe a forma pelo número em {k}): {n} {d} {lista} {x} {y} {lead} {de} {para} {data} {anuncio} {nivel} {metrica} {prazo} {desde} {rotulo} {precisamos} {gasto} {ate} {ctrl} {link}. Tipos com sem_resolucao:true (janela: preço, promoção) saem uma vez. Limiares de decisão (cobertura crítica, lead time, reputação, Full antigo, impacto mínimo) vêm SÓ de config/algoritmo.json; urgente.ruptura_max_dias é o corte de MENSAGEM (o que sai na hora), não diagnóstico. O texto passa pelo auditor (relatorio-seguro) antes de qualquer gravação e a mensagem inteira de novo antes de sair. A chave global (sync_estado.gatilhos_ligado) NASCE DESLIGADA e nada sai sem liberado_por no cadastro.",
+  "$comentario_agenda": "Decisões finais do David (12/10/2026): 1x por semana, TODA TERÇA — Discord do time 08:30 (consultor) e WhatsApp do cliente 09:00 (semanal), no fuso do cliente, janela até 20:00, sem recuperar em outro dia. SÓ SEMANAL: o urgente ao cliente nasce desligado (notificacao_json.ritmo.critico_na_hora = false) e não sai fora da terça nem com a caixa marcada (urgente.na_hora_ligado = false; os urgentes entram no plano de terça) e o urgente interno ao consultor também (consultor.urgente_ligado = false; os pontos da assessoria vão no resumo de terça). inicio_envios: nenhum envio (cliente ou time; automático, manual confirmado ou teste de canal) antes desta data no fuso do cliente — lido pelos dois ticks e, por eles, pelo cron de reserva; a prévia continua funcionando. Só cliente com integração ML de fato (conexão ativa, coleta nos últimos 3 dias, vendas nos últimos 28 dias) recebe.",
+  "inicio_envios": "2026-10-20",
+  "fuso_padrao": "America/Sao_Paulo",
+  "janela": {
+    "inicio": "07:00",
+    "fim": "21:00"
+  },
+  "semanal": {
+    "dia_semana": 2,
+    "hora": "09:00",
+    "ate": "20:00"
+  },
+  "silencio_padrao": {
+    "de": "21:00",
+    "ate": "07:00"
+  },
+  "status_elegiveis": [
+    "Ativo"
+  ],
+  "canais": [
+    "whatsapp",
+    "email",
+    "notion"
+  ],
+  "cooldown_por_classe": {
+    "critico": 1,
+    "atencao": 7,
+    "info": 14
+  },
+  "teto": {
+    "lotes_imediatos_dia": 1,
+    "itens_urgente": 5,
+    "lista_nomes": 3
+  },
+  "retry_min": 5,
+  "urgente": {
+    "$comentario": "URGENTE NA HORA de ESTOQUE e PREÇO com impacto em R$ (pedido do David, 14/10/2026, com autorização para os grupos do ML): só os tipos de `tipos` saem fora do plano de terça, 1 mensagem por cliente por dia (teto.lotes_imediatos_dia) com até teto.itens_urgente pontos (o resto: «e mais N pontos»), fora do silêncio (item detectado no silêncio sai às 07:00+), a partir de inicio_envios (o plano semanal segue com o inicio_envios da raiz). O mesmo produto não volta antes de repeticao_dias, salvo piora (estoque abaixo da metade da cobertura avisada ou zerado; preço subiu de novo). liberacao_automatica (regra registrada): todo cliente Ativo com integração ML de fato, primeira coleta completa e grupo do ML (…@g.us) recebe SEM liberado_por manual; canal WhatsApp desligado de propósito continua fora; prospect nunca. Impacto em R$ = previsão da regra do plano do item (ou a MESMA fórmula sobre o diagnóstico). na_hora_ligado = false: nada sai na hora até o David conferir a prévia (scripts/alerta-impacto.mjs) e ligar aqui (reiniciar o servidor). Sem ruptura_max_dias = sem corte de mensagem: a ruptura é o predicado do Algoritmo (lead-time.emRuptura).",
+    "na_hora_ligado": true,
+    "tipos": [
+      "ruptura_curva_a",
+      "estoque_zerado",
+      "queda_por_preco",
+      "preco_alterado_drastico",
+      "ciclo_estoque_previsto"
+    ],
+    "inicio_envios": "2026-10-14",
+    "repeticao_dias": 7,
+    "liberacao_automatica": "regra do David de 14/10/2026: alerta de estoque e preço ao grupo do ML",
+    "impacto_min_reais": 100,
+    "$impacto_min_reais": "piso (premissa da casa, 14/10/2026): o aviso urgente só sai se o total em jogo no cenário base for ≥ este valor em R$; abaixo disso o produto espera o plano de terça"
+  },
+  "consultor": {
+    "$comentario": "Aviso INTERNO ao consultor no canal do cliente no Discord («Webhook ML» da central; o cliente não está lá), src/lib/consultor-discord.js. Resumo semanal: dia_semana/hora/ate no fuso do cliente (TERÇA 08:30, antes do plano ao cliente das 09:00; idempotente por semana ISO). janela_dias = o que conta como recente nas seções ✅/🔁; repeticao_dias = janela das tarefas repetidas no mesmo anúncio; max_itens = linhas por lista. Urgente interno (só com urgente_ligado = true; desligado por decisão do David em 12/10/2026 — o que seria urgente fica no 🔔 do resumo de terça): queda forte da conta, fim de promoção em anúncio curva A e Ads sem retorno com gasto em 28 dias ≥ urgente_ads_gasto_min (R$) — 1 por assunto a cada urgente_cooldown_dias. Corte de MENSAGEM, não diagnóstico. discord_max_chars: o Discord recusa > 2000 por mensagem; cada parte sai com no máximo isto (a menção ao consultor já incluída). Chave própria sync_estado.consultor_discord_ligado (nasce desligada). Destinatários (12/10/2026): TODO cliente Ativo com integração ML de fato e «Webhook ML» válido na central — independe do WhatsApp/liberação do cliente; exclusão opcional pela lista JSON sync_estado.consultor_excluidos. Menções: os 3 cargos de config/discord-time.json + o consultor quando o «Discord ID Consultor ML» é válido.",
+    "dia_semana": 2,
+    "hora": "08:30",
+    "ate": "20:00",
+    "janela_dias": 45,
+    "repeticao_dias": 120,
+    "max_itens": 5,
+    "urgente_ligado": false,
+    "urgente_cooldown_dias": 7,
+    "urgente_ads_gasto_min": 300,
+    "discord_max_chars": 1900
+  },
+  "preco_drastico_pct": 15,
+  "preco_janela_dias": 7,
+  "preco_origem": {
+    "fim_promocao_dias": 14,
+    "fim_promocao_tolerancia_pct": 1
+  },
+  "dependencia_dias": 14,
+  "oferta_fim_dias": 3,
+  "reputacao_nivel_verde": "5_green",
+  "reputacao_niveis_cliente": [
+    "3_yellow",
+    "2_orange",
+    "1_red"
+  ],
+  "webhook": {
+    "caminho": "/webhook/place-gatilhos",
+    "caminho_teste": "/webhook/place-gatilhos-teste",
+    "janela_s": 300,
+    "timeout_ms": 15000
+  },
+  "notion": {
+    "icone": "📣",
+    "status_aberto": [
+      "pendente",
+      "em andamento"
+    ]
+  },
+  "gatilhos": {
+    "ruptura_curva_a": {
+      "rotulo": "Estoque dos produtos que mais vendem",
+      "dono": "cliente",
+      "classe": "critico",
+      "ritmo": "hora",
+      "fonte": "diagnostico",
+      "template": "{lista}\nQuando o estoque zera, o anúncio pausa e sai da busca até a reposição chegar, e as vendas desses dias não voltam.\n{fecho}"
+    },
+    "estoque_zerado": {
+      "rotulo": "Produto que vendia sem estoque",
+      "dono": "cliente",
+      "classe": "critico",
+      "ritmo": "hora",
+      "fonte": "diagnostico",
+      "template": "{lista}\n{n|Parado, o anúncio fica fora da busca e perde|Parados, os anúncios ficam fora da busca e perdem} posição, e as vendas desses dias não voltam: repor o estoque {n|traz ele|traz eles} de volta."
+    },
+    "ciclo_estoque_previsto": {
+      "rotulo": "Hora de repor",
+      "dono": "cliente",
+      "classe": "atencao",
+      "ritmo": "semanal",
+      "fonte": "diagnostico",
+      "template": "{lista}\n{fecho}\nQuanto antes o pedido sair, menos dias o anúncio fica sem estoque e fora da busca."
+    },
+    "envio_full_sugerido": {
+      "rotulo": "Sugestão de envio ao Full",
+      "dono": "cliente",
+      "classe": "atencao",
+      "ritmo": "semanal",
+      "fonte": "diagnostico",
+      "template": "{n|Este anúncio vende|Estes anúncios vendem} bem e ainda {n|está|estão} fora do Full: {lista}. É sugestão: nada é movimentado por aqui."
+    },
+    "full_estoque_antigo": {
+      "rotulo": "Produtos parados no Full",
+      "dono": "cliente",
+      "classe": "atencao",
+      "ritmo": "semanal",
+      "fonte": "saude",
+      "template": "{n} {n|produto parado|produtos parados} no Full há {d} dias ou mais sem venda: {lista}."
+    },
+    "envio_atrasado": {
+      "rotulo": "Despacho vencido",
+      "dono": "cliente",
+      "classe": "critico",
+      "ritmo": "hora",
+      "fonte": "saude",
+      "template": "{n} {n|pedido|pedidos} com prazo de despacho vencido. Despachar ainda hoje protege a reputação da sua conta."
+    },
+    "reclamacao_mediacao": {
+      "rotulo": "Reclamação aguardando resposta",
+      "dono": "cliente",
+      "classe": "critico",
+      "ritmo": "hora",
+      "fonte": "saude",
+      "template": "{n} {n|reclamação|reclamações} aguardando a sua resposta{prazo}. Responder dentro do prazo evita que {n|ela pese|elas pesem} na reputação."
+    },
+    "perguntas_sem_resposta": {
+      "rotulo": "Perguntas sem resposta",
+      "dono": "cliente",
+      "classe": "atencao",
+      "ritmo": "semanal",
+      "fonte": "saude",
+      "template": "{n} {n|pergunta|perguntas} de compradores sem resposta há mais de 24 horas. Responder rápido ajuda quem está decidindo a compra."
+    },
+    "reputacao_em_risco": {
+      "rotulo": "Reputação em risco",
+      "dono": "cliente",
+      "classe": "critico",
+      "ritmo": "hora",
+      "fonte": "saude",
+      "template": "Nível {nivel}{metrica}. Vale olhar com a gente os pedidos dos últimos dias."
+    },
+    "queda_forte_conta": {
+      "rotulo": "Queda forte do faturamento",
+      "dono": "assessoria",
+      "classe": "critico",
+      "ritmo": "interno",
+      "fonte": "estado",
+      "template": "Faturamento caiu {x}% nos últimos {n} dias contra os {n} anteriores (leitura de {de} a {ate}). O que mudou junto no período está no plano, como hipótese."
+    },
+    "queda_conta": {
+      "rotulo": "Faturamento em queda",
+      "dono": "assessoria",
+      "classe": "atencao",
+      "ritmo": "interno",
+      "fonte": "estado",
+      "template": "Faturamento {x}% abaixo dos {n} dias anteriores (leitura de {de} a {ate}). Vale olhar junto estoque, preço e anúncios pausados."
+    },
+    "preco_alterado_drastico": {
+      "rotulo": "Mudança grande de preço",
+      "dono": "cliente",
+      "classe": "atencao",
+      "ritmo": "semanal",
+      "fonte": "preco",
+      "template": "O preço de {anuncio} mudou de R$ {de} para R$ {para} ({x}%) {data}, fora das ações da Place2u. Se foi intencional, é só avisar para considerarmos no acompanhamento; se não foi, vale revisar.",
+      "sem_resolucao": true
+    },
+    "queda_por_preco": {
+      "rotulo": "Vendas caíram depois de mudança de preço",
+      "dono": "cliente",
+      "classe": "critico",
+      "ritmo": "hora",
+      "fonte": "acoes",
+      "template": "• {anuncio}: preço de R$ {de} para R$ {para} {data}; desde então, as vendas desse anúncio caíram {y}% enquanto os anúncios sem mudança {ctrl}.{link}\nÉ uma associação medida, não prova de causa: vale revisar o preço com a gente.",
+      "sem_resolucao": true
+    },
+    "anuncio_restrito": {
+      "rotulo": "Anúncio pausado ou em revisão",
+      "dono": "cliente",
+      "classe": "critico",
+      "ritmo": "hora",
+      "fonte": "diagnostico",
+      "template": "{n} {n|anúncio que vendia está pausado|anúncios que vendiam estão pausados} ou em revisão:\n{lista}\n{fecho}"
+    },
+    "oferta_terminando": {
+      "rotulo": "Promoção terminando",
+      "dono": "assessoria",
+      "classe": "info",
+      "ritmo": "interno",
+      "fonte": "promocoes",
+      "template": "{n} {n|promoção termina|promoções terminam} até {data}: {lista}.",
+      "sem_resolucao": true
+    },
+    "ads_sem_retorno": {
+      "rotulo": "Anúncios pagos sem retorno",
+      "dono": "assessoria",
+      "classe": "atencao",
+      "ritmo": "interno",
+      "fonte": "acoes",
+      "template": "Anúncios pagos: {n} {n|anúncio gastando|anúncios gastando} sem retorno{gasto}. Rever lances e campanhas; mudança de verba se combina com o cliente."
+    },
+    "custos_nao_informados": {
+      "rotulo": "Custos não informados",
+      "dono": "cliente",
+      "classe": "info",
+      "ritmo": "semanal",
+      "fonte": "acoes",
+      "template": "Sem os custos informados não calculamos margem, retorno alvo dos anúncios pagos nem desconto máximo. Envie a planilha de custos quando puder."
+    },
+    "dependencia_vencida": {
+      "rotulo": "Retorno pendente",
+      "dono": "cliente",
+      "classe": "atencao",
+      "ritmo": "semanal",
+      "fonte": "pendencias",
+      "template": "{rotulo}: com o seu retorno, a gente segue com esse ponto na sua conta. {precisamos} Se já está encaminhado, é só responder com a data prevista."
+    },
+    "promocao_encerrada": {
+      "rotulo": "Promoção terminou e o preço voltou ao cheio",
+      "dono": "assessoria",
+      "classe": "info",
+      "ritmo": "interno",
+      "fonte": "preco",
+      "template": "Promoção terminou e o preço voltou ao cheio em {n} {n|anúncio|anúncios} — avaliar renovar: {lista}.",
+      "sem_resolucao": true
+    }
+  },
+  "$comentario_premissas": "ruptura/lead time/reputação/Full antigo: lidos de config/algoritmo.json → limiares (cobertura_critica_dias, lead_time_reposicao_dias, reputacao_*_max_pct, reputacao_fracao_alerta, reputacao_min_vendas, full_estoque_antigo_dias) e foco.min_impacto_pct_gmv. reputacao_nivel_verde é o id do nível verde do Mercado Livre, não limiar."
+}

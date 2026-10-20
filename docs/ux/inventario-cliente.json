@@ -1,0 +1,845 @@
+{
+  "id": "cliente",
+  "pergunta": "Como está este cliente (resultado de vendas e execução da equipe), por que está assim e quais ações a equipe deve aprovar e executar agora?",
+  "usuarios": [
+    "Consultor / analista de performance: uso diário para aprovar e descartar ações, vincular anúncios, coletar dados do ML, preencher ficha e perfil",
+    "Head de squad / gestor de operação: prioriza P0, distribui tarefas no Notion e confere a equipe da conta",
+    "CEO e sócio: querem ver a saúde do cliente e decidir; hoje precisam rolar cerca de 18 mil px para isso",
+    "Comercial / CS, de forma indireta: renovação de contrato, PDFs e relatório semanal enviados ao cliente"
+  ],
+  "acao_principal": "Aprovar ou descartar as ações priorizadas do plano (P0/P1) e mandá-las ao Notion. Hoje isso fica na ÚLTIMA seção (#listaAcoes), depois de uns 15 mil px de conteúdo.",
+  "acoes_secundarias": [
+    "Buscar outro cliente (#q, #btnBuscar, lista #resultados com setas, Enter e Esc)",
+    "Gerar ou atualizar o plano da conta por anúncio (#btnGerarPlano) e distribuir as tarefas por anúncio no Notion (#btnDistrib, depois #btnConfirmaDistrib, com pré-visualização antes)",
+    "Criar o PlacePlan no Notion (#btnPlacePlan: dry-run, depois confirm() nativo)",
+    "Registrar o resultado de uma ação distribuída ([data-res], 3 prompt() nativos)",
+    "Salvar as metas de entregas e GMV (#formMetas, #mEntregas, #mGmv)",
+    "Informar custos em % (#formCustos)",
+    "Coletar ou atualizar os dados do Mercado Livre ([data-coletar], #btnColeta, com polling de job)",
+    "Recalcular o acompanhamento ([#btnAcompAtualizar])",
+    "Alternar entre 'só o que gerou resultado' e 'todas' ([data-modo])",
+    "Confirmar, recusar ou vincular o anúncio de uma tarefa ([data-conf], [data-rec], [data-vinc] + [data-mlb])",
+    "Salvar a ficha (links das contas + equipe por canal e papel) e sincronizar os prestadores do Notion (#fchSalvar, #fchSync)",
+    "Salvar o perfil do relatório semanal (#btnSalvarPerfil) e abrir o semanal do cliente ou o interno",
+    "Rodar o diagnóstico de anúncio, uma ferramenta avulsa (#fAnuncio, que escreve em #resAnuncio)",
+    "Exportar: Documento completo (/plano), Baixar PDF (/plano.pdf), PDF, documento e CSV do plano-conta",
+    "Ir para Promoções do cliente",
+    "Filtrar as ações do plano (chips #filtros, que se combinam)"
+  ],
+  "secoes": [
+    {
+      "titulo": "Busca de cliente (tela 1)",
+      "conteudo": "Hero 'Qual cliente vamos acelerar hoje?' com input de nome ou CNPJ, botão lupa, dropdown de até 12 resultados (nome, CNPJ, consultor, canais e pill de tier ou 'sem base de tarefas') e um hint longo. Some quando o cliente abre (deep link ?cliente=).",
+      "ids_container": [
+        "telaBusca",
+        "q",
+        "btnBuscar",
+        "resultados"
+      ],
+      "importancia": "alta"
+    },
+    {
+      "titulo": "Cabeçalho do cliente",
+      "conteudo": "Botão '← Buscar outro cliente' (onclick=voltar()), nome em h2 e chips (tier, canais, consultor ou 'consultor a definir', squad, CNPJ). São 4 botões do mesmo peso: Documento completo, Promoções do cliente, Baixar PDF (cheio) e um com emoji, '🗺️ PlacePlan no Notion'. Quando o cliente é inelegível aparece a faixa .aviso-faixa.",
+      "ids_container": [
+        "telaCliente",
+        "btnPlacePlan"
+      ],
+      "importancia": "alta"
+    },
+    {
+      "titulo": "KPIs do topo (4 cards)",
+      "conteudo": "Tendência de execução 7d (seta + ×índice + selo da classe + m7 vs m7ant + reconciliação 7d/28d); Entregas no mês (realizado → projeção, com a fórmula da velocidade à mostra); Plano de ação (nº de ações abertas + selo de P0 + data de geração); Renovação de contrato (dias ou vencido, ou '—').",
+      "ids_container": [],
+      "importancia": "alta"
+    },
+    {
+      "titulo": "Ficha do cliente: equipe e contas",
+      "conteudo": "Formulário montado por ficha.js (PSFicha), que injeta CSS próprio: links das contas (inputs url), tabela de papéis × canais com selects de prestadores, avisos de quem está sem usuário no Notion ou inativo, observação, nome de quem grava e os botões Salvar ficha e Atualizar prestadores do Notion. Ocupa cerca de 760px.",
+      "ids_container": [
+        "secFicha",
+        "ficha"
+      ],
+      "importancia": "baixa"
+    },
+    {
+      "titulo": "Perfil do cliente (Relatório Semanal)",
+      "conteudo": "Cartão com selects de perfil primário, objetivo, chips de perfis adicionais, lista de tarefas no relatório e seu nome. Botões: Salvar perfil, Relatório semanal (cliente) e (interno). No rodapé, as regras em vigor. Ocupa cerca de 570px.",
+      "ids_container": [
+        "secPerfil",
+        "perfil"
+      ],
+      "importancia": "baixa"
+    },
+    {
+      "titulo": "Motor de decisão (Previsibilidade → Probabilidade → Causalidade)",
+      "conteudo": "3 cartões numerados. 1) projeção do mês. 2) score de probabilidade 0–100 + classe + cobertura de pesos + formulário de metas (entregas e GMV); vira .inativo quando não há meta. 3) leitura causal da operação + causalidade de vendas (score de evidência e itens a investigar) ou link para Integrações.",
+      "ids_container": [
+        "formMetas",
+        "mEntregas",
+        "mGmv"
+      ],
+      "importancia": "media"
+    },
+    {
+      "titulo": "Leitura estratégica (o Merovíngio)",
+      "conteudo": "Cartão com emoji e arquétipo, pill de '% da leitura em fatos', tese, faixa de renovação (⏳), cadeia causal de elos rotulados (fato, hipótese, projeção), sinais mistos (⚠️) e o details 'O que derrubaria esta leitura'. Depois, 3 cartões de jogadas com ações (badge P + prazo), 'Depois: …' e a regra de ouro (🧭).",
+      "ids_container": [],
+      "importancia": "media"
+    },
+    {
+      "titulo": "Mais vendidos, como o comprador vê",
+      "conteudo": "Aba Anúncios. Data de cobertura + botão 'Atualizar dados do Mercado Livre'. Lista .item-card dos 12 anúncios que mais faturaram em 28 dias (MOSTRA = 12): miniatura (imgAnuncio, com substituta 'sem imagem'), título com link público ↗, unidades, receita e variação, visitas e conversão, preço e estoque, ★ nota · N avaliações e flags (.flag.ruim/.atencao; sem alerta = .flag.bom 'sem alertas nos dados disponíveis').",
+      "ids_container": [
+        "secVendas",
+        "vendas",
+        "btnColeta"
+      ],
+      "importancia": "media"
+    },
+    {
+      "titulo": "Plano da conta por anúncio",
+      "conteudo": "Botões Gerar/Atualizar o plano, Baixar PDF (o segundo da tela, com outro significado), Ver documento, Baixar planilha (CSV) e Distribuir no Notion. Depois vêm #msgPlano (pré-visualização e confirmação), 4 KPIs de previsão (sem mudar nada 28d, com o plano, faixa, receita em risco evitada), faixa de hipótese, faixa 'custos não informados' com o formulário dentro de um details, 'Foco da semana' e até 12 cartões .acao. Cerca de 2.500px.",
+      "ids_container": [
+        "secPlanoConta",
+        "planoConta",
+        "btnGerarPlano",
+        "btnDistrib",
+        "msgPlano",
+        "formCustos",
+        "btnConfirmaDistrib"
+      ],
+      "importancia": "alta"
+    },
+    {
+      "titulo": "Retroalimentação (o Merovíngio)",
+      "conteudo": "Estado da conta (badge Queda, Estagnação ou Crescimento + % de faturamento + receitas), leitura, ciclo anterior, bloco 'Por que caiu' ou jogadas. Depois uma grade .ac-grade com 80/20, O que funciona (tabela), Combinações (tabelas), A tarefa que pede mais cuidado e Duplicação estratégica (tabelas), e o details 'Limites'. É a maior seção da tela: cerca de 3.600px.",
+      "ids_container": [
+        "secRetro",
+        "retro"
+      ],
+      "importancia": "media"
+    },
+    {
+      "titulo": "Resultado das tarefas (aba Resumo, logo depois de Próximas ações)",
+      "conteudo": "4 KPIs (Tarefas com anúncio · Pioraram com R$ associado · Melhoraram com R$ e lançamentos · Sem anúncio identificado; o tom fica no ponto do rótulo, o valor nunca é colorido), chips [data-modo] com contagem (Com resultado medido · Piorou · Melhorou · Lançou · Em andamento · Sem base · Todas; o padrão nunca abre vazio e o chip com 0 fica desabilitado com '(0)') + Recalcular, faixa de aviso e cartões .ac-card na ordem piorou → melhorou → lançou → sem efeito → maturando → andamento → sem base (desempate |R$| e data), 8 por página com 'Mostrar mais' (.t-pag). Cada cartão: imagem do anúncio e links ↗, div.ac-veredito (selo .e-* da família + título + linha de c.veredito), tabela antes, 24h, 48h, 72h, 1 semana e hoje, micro SVG com ponto = mudança no anúncio, ganho, preço na janela da tarefa (data, dia relativo, 'a própria tarefa'/'pode ter interferido'), 'O que mudou no anúncio' com a data e a ressalva (fraseMarco). Por último, o details de vínculos pendentes.",
+      "ids_container": [
+        "secAcomp",
+        "acomp",
+        "btnAcompAtualizar",
+        "nPiorou",
+        "nAnuncios"
+      ],
+      "importancia": "alta"
+    },
+    {
+      "titulo": "Folha do anúncio (aba Resumo, entre Resultado das tarefas e Depende do cliente)",
+      "conteudo": "Fieldset com 4 caixas de seleção nativas (Anúncios — ofertas e promoções · Ads · Full · Métricas), cada uma com o contador do tópico ('148 em promoção', '32 anunciando', '61 no Full', '236 anúncios'; 'promoções não coletadas' quando falta coleta), rótulo discreto 'Marque os tópicos que quer ver na folha' e o botão 'Marcar tudo e ver a leitura' (.btn.btn-p, só com menos de 4). Filtros do painel 'folha' (PSFiltros, ?ff=), select 'Ordenar por' (faturamento, piores variações, conversão, desconto, gasto em Ads, ROAS, dias de estoque: cada ordem só vale com o bloco dela) e o link 'Baixar a folha (com filtros e tópicos marcados)' → /api/cliente/folha.csv. Abaixo: linha do período, até 4 KPIs (um por tópico, valor nunca colorido), ul.an-comp com a ressalva honesta de cada tópico (data da coleta, o que não cobre; 'não coletado' com selo e o caminho para ligar a coleta), e a tabela table.t.empilha.folha de no máximo 6 colunas: Anúncio (foto, título ↗, MLB, status, preço, estoque, curva, SKU, botão 'Ver tudo') + 1 coluna por tópico marcado (2–3 linhas com os números-chave; '—' quando não coletado) + Leitura (só com os 4: selos fato e hipótese e as ações do plano). 'Ver tudo' abre tr.det com os detalhes de cada tópico, a leitura completa, as ações do plano (botão 'Ver no plano') e 'O que mudou em 30 dias'. 50 por página com 'Mostrar mais'; abaixo de 640px a linha vira cartão. Vazio honesto por estado: sem tópico marcado, nenhum anúncio com os filtros, não conectado.",
+      "ids_container": [
+        "secFolha",
+        "folha",
+        "folhaCaixas",
+        "fltFolha",
+        "folhaOrdem",
+        "btnFolhaCsv",
+        "btnFolhaTudo",
+        "folhaCorpo"
+      ],
+      "importancia": "alta"
+    },
+    {
+      "titulo": "Cronologia de preços (aba Anúncios, logo depois de Anúncios no período)",
+      "conteudo": "Tabela de até 6 colunas (Anúncio · Dia · De → Para · Variação · Origem · Vendas/dia 7d antes → depois), table.empilha no celular. A tarefa coincidente aparece como etiqueta ('a própria tarefa' em azul, 'pode ter interferido' em âmbar) com link ↗. Ordenada pela maior queda de vendas/dia (servidor), 50 por página com 'Mostrar mais'. Ressalva do servidor acima da tabela: desde quando há histórico e '7 dias antes → depois é variação observada, sem grupo de controle; não é efeito.'. Vazio honesto: sem registro não quer dizer preço parado.",
+      "ids_container": [
+        "secPrecos",
+        "precos"
+      ],
+      "importancia": "media"
+    },
+    {
+      "titulo": "Medição técnica por tarefa (details recolhido)",
+      "conteudo": "4 KPIs (melhoraram, pioraram, lançamentos, sem atribuição), faixa de não medidas e uma lista de .acao com estado, efeito, confiança e o details 'Como foi medido'. Repete conceitos da seção anterior. O HTML tem uma <div id=\"impacto\"> sem fechamento antes de </details>.",
+      "ids_container": [
+        "secImpacto",
+        "impacto"
+      ],
+      "importancia": "baixa"
+    },
+    {
+      "titulo": "Diagnóstico de anúncio (ferramenta)",
+      "conteudo": "Details 'Abrir a ferramenta' com 13 inputs (impressões, cliques e pedidos antes e depois, preços de/por próprios e do concorrente, frete, carrossel) e o botão Diagnosticar. Os achados aparecem com a borda colorida pela gravidade. É uma ferramenta genérica que não depende do cliente.",
+      "ids_container": [
+        "fAnuncio",
+        "resAnuncio"
+      ],
+      "importancia": "baixa"
+    },
+    {
+      "titulo": "Plano de ação (ações do plano do cliente)",
+      "conteudo": "6 chips de filtro com emoji (Todas, ⚡ Alto impacto, ⏱ Curto prazo, 🌱 Longevo, 🔥 P0 + P1, ✓ Só fatos), contador e lista de 39 cartões .acao: badge P, título, 📅 prazo, 👤 responsável, canal, status, tags, o details de evidência, meta e aceite, e os botões Aprovar, Descartar, Reabrir e Registrar resultado. Cerca de 6.500px, no fim da página.",
+      "ids_container": [
+        "filtros",
+        "nAcoes",
+        "listaAcoes"
+      ],
+      "importancia": "alta"
+    },
+    {
+      "titulo": "Rodapé + sino de avisos",
+      "conteudo": "Footer com a fonte oficial (Notion). O alerta.js injeta um botão flutuante 'Avisos' com contador, painel, toasts, som e notificação do navegador, que consulta /api/notificacoes a cada 8s.",
+      "ids_container": [
+        "psSino",
+        "psPainel",
+        "psToasts"
+      ],
+      "importancia": "baixa"
+    },
+    {
+      "titulo": "Cadastro do cliente (aba Configurar)",
+      "conteudo": "Identificação da central só leitura (status, tier, nicho, canais do Notion, consultores, líderes, CNPJ/CPF, contato, vencimentos, programação do relatório se existir) e os campos do CS editáveis: CS responsável, health score + classificação (selo existente, número nunca colorido), canais informados pelo CS, observações. Selo de fonte e data (planilha AAAA-MM-DD | manual AAAA-MM-DD). Substitui o antigo bloco 'Identificação'. Contrato em docs/cadastro-clientes.md.",
+      "ids_container": [
+        "cad-sec",
+        "cad-corpo"
+      ],
+      "importancia": "média"
+    },
+    {
+      "titulo": "Notion do cliente (aba Resumo, recolhido, no fim)",
+      "conteudo": "details.recolhido #secNotion: link da página do cliente no Notion, lista dos filhos de 1º nível (bases/páginas com link) e a tabela Informações (Seção · Item · Status · Link · Editado · abrir, 6 colunas) com filtro por seção (#ntSecao) e busca (#ntBusca). Botão .btn 'Atualizar do Notion' (#btnNotionAtualizar: POST /api/cliente/notion/atualizar com por = ps_perfil_por, prompt se vazio) mostra 'lido em'. Dados de GET /api/cliente/notion (só leitura local; o sync alimenta). Contrato em docs/notion-cliente.md.",
+      "ids_container": [
+        "secNotion",
+        "notion",
+        "nNotion",
+        "ntCorpo"
+      ],
+      "importancia": "media"
+    },
+    {
+      "titulo": "Alinhado com o cliente (aba Resumo)",
+      "conteudo": "Exceções intencionais combinadas com o cliente (PLANO ATIVO 4, docs/alinhamentos.md): lista viva, vencidos em atenção (voltam ao plano como 'observar'), renovar/encerrar e registrar novo (escopo, anúncio, regra, motivo da lista, detalhe interno, revisar em, ACOS alvo na campanha de visibilidade). O descarte de uma ação do plano também grava aqui, com o motivo.",
+      "ids_container": [
+        "secAlinhamentos",
+        "alinhamentos"
+      ],
+      "importancia": "média"
+    },
+    {
+      "titulo": "Prestação de contas e dossiê (aba Configurar)",
+      "conteudo": "Período (#dsDe/#dsAte), dois botões SECUNDÁRIOS «Gerar prestação de contas» (#btnDsCliente) e «Gerar dossiê de defesa» (#btnDsDefesa) que pedem o nome e chamam POST /api/cliente/dossie; histórico (#dsTabela: Gerado · Documento com selo ao cliente/completo/incompleto e provas pendentes · Período · Arquivos PDF/Word com sha256 · Ao cliente) com download por GET /api/dossie/:id/{pdf|doc} e [data-ds-notion] (prévia → PS.confirmar → POST /api/dossie/:id/notion confirmar:true; só a versão cliente). docs/dossie-prestacao-contas.md.",
+      "ids_container": [
+        "secDossie",
+        "dossie",
+        "dsVeredito",
+        "dsDe",
+        "dsAte",
+        "btnDsCliente",
+        "btnDsDefesa",
+        "dsMsg",
+        "dsTabela"
+      ],
+      "importancia": "alta"
+    },
+    {
+      "titulo": "Cliente em risco (aba Configurar)",
+      "conteudo": "Marcação por líder/consultor/CS com motivo (reclamação, reembolso, jurídico, insatisfação, outro), descrição interna sem telefone e data; sinais do sistema só como sugestão (.aviso.amb); encerrar com nota. Diálogo com prévia → primário dentro do diálogo. GET /api/cliente/risco, GET /api/risco, POST /api/cliente/risco e /risco/encerrar.",
+      "ids_container": [
+        "secRisco",
+        "risco",
+        "rkVeredito",
+        "rkTabela",
+        "btnRkMarcar"
+      ],
+      "importancia": "média"
+    },
+    {
+      "titulo": "Contrato e pagamentos (aba Configurar)",
+      "conteudo": "Contrato vigente (vigência, valor mensal, obrigação de meio, entregáveis, cláusula de reembolso, sha256 do arquivo) e pagamentos com comprovante; diálogos com upload PDF/PNG/JPG ≤ 5 MB em base64 (prévia → salvar). GET/POST /api/cliente/contrato, POST /api/cliente/pagamento.",
+      "ids_container": [
+        "secContrato",
+        "contrato",
+        "ctVeredito",
+        "ctResumo",
+        "pgTabela",
+        "btnCtContrato",
+        "btnCtPagamento"
+      ],
+      "importancia": "média"
+    },
+    {
+      "titulo": "Produtos (aba Produtos, V3 F2 em sombra)",
+      "conteudo": "Frase-veredito (anúncios ativos → produtos · estoque dividido · kits sem composição), faixa de sombra «somando por anúncio × contado uma vez» com ruptura e linhas de compra por anúncio × por produto, 4 KPIs (Produtos · Estoque contado uma vez · Capital em estoque · Produtos em ruptura), 2 secundárias (Gerenciar mapeamento, Atualizar estoque), tabela de 6 colunas com a folha do produto (anúncios e estoque por local com fonte, modo e premissa) e as premissas. Nada muda plano, aviso ou texto ao cliente (produto.diagnostico_ligado = false). docs/desenho-v3-produto-estoque-financeiro.md § 8.",
+      "ids_container": [
+        "secProdutos",
+        "produtos",
+        "prSombra",
+        "tabProdutos",
+        "prMais",
+        "btnMapeamento",
+        "gavMapeamento",
+        "btnAtualizarEstoque"
+      ],
+      "importancia": "media"
+    },
+    {
+      "titulo": "Relatórios (aba Relatórios, V3 F9)",
+      "conteudo": "Seletor dos 8 relatórios (ciclo financeiro, ciclo de compras, ciclo de estoque, previsibilidade logística, escalabilidade mediante as vendas, lucro, geração de caixa, reinvestimento); seções empilhadas (Conta, Por produto e, no Lucro, Por anúncio e Por pedido) com a MESMA tabela de 6 colunas Item · Métrica · Previsão · Chance · Medido · Observação; «—» sempre com o motivo; links secundários Exportar CSV · Versão de 1 página · PDF; «Falta para ficar completo» e premissas. Nada grava; ao cliente nada muda.",
+      "ids_container": [
+        "secRelatoriosCiclo",
+        "relatoriosCiclo",
+        "rcSeletor",
+        "rcExportar",
+        "rcCorpo",
+        "rcFaltando"
+      ],
+      "importancia": "media"
+    }
+  ],
+  "kpis": [
+    "Tendência de execução 7d: ×índice m7/m7ant + classe (CRESCIMENTO FORTE … QUEDA CRÍTICA). Ex. Uniaodog: ×0,43 QUEDA CRÍTICA",
+    "Entregas no mês: realizado → projeção + velocidade ponderada + dias restantes. Ex.: 9 → 70 projetadas",
+    "Plano de ação: nº de ações abertas (proposta, aprovada, distribuída) + nº de P0. Ex.: 39 ações, 8 × P0",
+    "Renovação de contrato: dias até vencer, 'vencido' ou '—'",
+    "Previsibilidade: entregas projetadas no mês",
+    "Score de probabilidade operacional 0–100 + classe + cobertura % dos pesos. Ex.: 68 INCERTO, cobertura 50%",
+    "Causalidade de vendas: score de evidência causal /100 + classe",
+    "Retroalimentação: estado da conta + variação % de faturamento na janela + receita atual vs anterior. Ex.: Crescimento forte +69,2%",
+    "Plano-conta: faturamento sem mudar nada (28d), com o plano (base, uplift %), faixa conservador–otimista, receita em risco evitada",
+    "Resultado das tarefas: tarefas com anúncio, pioraram (R$ associado, ajustado pelo controle), melhoraram (R$ + lançamentos vendendo, bruto à parte), sem anúncio identificado",
+    "Medição técnica: melhoraram (R$), pioraram (R$), lançamentos (venderam, R$), sem atribuição",
+    "Por anúncio (mais vendidos): unidades, receita, variação, visitas, conversão, preço, estoque, nota e nº de avaliações",
+    "Ficha: nada numérico; Perfil: regras em vigor (densidade, provas, tom, linguagem)"
+  ],
+  "hooks_js": [
+    "aba Do cliente (15/10/2026; entre Resumo e Plano; [data-aba-cli=\"do-cliente\"], contador #nDoCliente = pontos abertos do cliente) → #secDoCliente / #doCliente (contêiner vivo) — do-cliente.js (window.PSDoCliente.montar(alvo, cliente, { aoCarregar }) / .movidos(alvo, r); carrega depois de guardiao.js e antes de cliente.js) → GET /api/cliente/do-cliente?cliente= (pendências do avaliador único + ações do plano com caminho cliente + compras do dia + tarefas em dependência + último aviso/resposta, juntados por assunto e produto); cartões [data-dc] com tabela de 5 colunas (MLB · Título · Preço · Estoque · cobertura · Perda se não repor), [data-mais-prod], botões secundários [data-dc-acao=resposta|resolvido|movido] (prévia POST /api/cliente/do-cliente/marcar → Confirmar no diálogo do PSRelatorio.ui → confirmar:true) e [data-dc-lembrete] (POST /api/cliente/do-cliente/lembrete: só prepara o texto, nada é enviado); aba Plano: #segQuem ([data-quem] Equipe | Cliente | Tudo, padrão Equipe, lista do cliente = acoes_cliente do servidor) e #movidosEquipe; links [data-ir-aba=\"do-cliente\"] (faixa de alerta, selo «do cliente» em Próximas ações, Depende do cliente)",
+    "#telaBusca (hidden ligado e desligado)",
+    "relatorios-ciclo.js (window.PSRelatoriosCiclo.montar(alvo, cliente); carrega depois de produtos.js) → aba Relatórios (V3 F9; carregarRelatoriosCiclo em mostrarAba, guarda data-cliente) #secRelatoriosCiclo / #relatoriosCiclo (contêiner vivo) → GET /api/cliente/relatorios e /api/cliente/relatorios/<nome>; #rcSeletor ([data-rc] com aria-pressed), #rcExportar (links .csv/.html/.pdf), #rcCorpo (tabelas #rcTab-N de 6 colunas, [data-rc-mais] 50 por vez), #rcFaltando",
+    "executar.js (window.PSExecutar.montar(alvo, cliente, preset); carrega depois de produtos.js) → aba Executar (Chaveiro F4+; carregarExecutar em mostrarAba, guarda data-cliente; preset do botão [data-exec-acao] «Executar pelo Chaveiro» do #chvTabela) #secExecutar / #executar (contêiner vivo) → GET /api/chaveiro/exec/painel|anuncios|preset|marco, POST /api/chaveiro/exec/previa|preparar|aprovar|executar|reverter|conferir|feito|cancelar|liberar|revogar|vetar|parar|retomar|estrategia; #exVeredito, #exKpis, #exBusca, #exAnuncios (#exTabAnuncios, 6 colunas, [data-sel]), #exOque, #exParams ([data-param]), #exPrevia, #exPreparar, #exNova, #exPreviaRes (#exTabPrevia, 6 colunas), #exOrdensBox (#exOrdens, 6 colunas, [data-aprovar|data-executar|data-reverter|data-feito|data-cancelar|data-marco]), #exConferir, #exLiberacoes (#exLibBox, #exTabLib, 6 colunas, [data-liberar|data-revogar|data-vetar]), #exParar",
+    "#telaCliente (main; desenhar() reescreve o innerHTML inteiro)",
+    "#q (input + keydown setas, Enter, Esc + focus)",
+    "#btnBuscar",
+    "#resultados (hidden + innerHTML)",
+    ".busca-wrap (closest no clique de fora)",
+    ".res-item (querySelectorAll + click) + data-c",
+    ".ativo (classList.toggle no item do teclado)",
+    "window.voltar (inline onclick=\"voltar()\" em 2 botões .volta)",
+    "history.pushState /cliente?cliente= + popstate",
+    "#btnPlacePlan (textContent e disabled alterados)",
+    "#secFicha / #ficha (carregarFicha → PSFicha.montar)",
+    "#secPerfil / #perfil",
+    "#formMetas, #mEntregas, #mGmv",
+    "#secVendas / #vendas, #btnColeta",
+    "#secPlanoConta / #planoConta, #btnGerarPlano, #btnDistrib, #msgPlano, #formCustos (FormData com name=cmv_pct, imposto_pct, comissao_pct, frete_pct, embalagem_pct, outros_pct, margem_desejada_pct), #btnConfirmaDistrib",
+    "#secRetro / #retro",
+    "#secAcomp / #acomp (aba Resumo, depois de #secProximas; GET /api/cliente/tarefas-anuncio?dias=60&limite=120), #btnAcompAtualizar, [data-modo] (chips medido|piorou|melhorou|lancou|andamento|sem_base|todas), '#acomp [data-mais]' (8 cartões por página)",
+    "#nPiorou (aba Resumo, .estado.e-piorou, só aparece com piora; desenharContadores() a partir do evento ps:acomp, acomp.js → cliente.js, no padrão do ps:retro) e #nAnuncios (aba Anúncios = anúncios da conta no Mercado Livre, total_sem_filtro de GET /api/cliente/anuncios, gravado em buscarAnuncios → anN → desenharContadores(); coerente com Plano = ações abertas; até 14/10/2026 mostrava 'tarefas com anúncio' e dava 0 com 500 anúncios na tabela)",
+    "#secFolha / #folha (aba Resumo, entre #secAcomp e #secDependeCliente; carregarFolha → GET /api/cliente/folha?cliente=&blocos=&ff=&ordem=&pagina=; contêiner vivo; recarrega em atualizarDadosML), #nFolha (badge do h2 = total filtrado), #folhaCaixas + [data-topico] (4 caixas nativas anuncios|ads|full|metricas com contador [data-n]; lembradas em localStorage ps_folha:<cliente> com try/catch e espelhadas em ?folha=; 1ª abertura por cliente e navegador: as 4 marcadas → desmarca anuncios → ads → full a cada ~1,5 s até sobrar metricas, prefers-reduced-motion desmarca de uma vez, qualquer clique interrompe), #btnFolhaTudo (só com menos de 4 marcadas), #fltFolha (PSFiltros painel 'folha', parametro 'ff'), #folhaOrdem (select; a ordem exige o bloco dela, senão volta a faturamento), #btnFolhaCsv (href /api/cliente/folha.csv com os mesmos ff, blocos e ordem), #folhaResumo (aria-live), #folhaCorpo (único trecho redesenhado: o foco fica nas caixas), [data-det] + aria-controls=#fdet-<MLB> (tr.det 'Ver tudo' / 'Fechar', estado em F.abertos), '#folhaCorpo [data-mais]' (50 por página, acrescenta), [data-ver-plano-anuncio] (→ aba Plano, por anúncio), [data-ir-configurar] (→ aba Configurar, foco em #pfPromocoes). A resposta fica em cache: desmarcar só esconde a coluna; marcar bloco fora do cache, mudar ordem, filtro ou página busca de novo",
+    "[data-ir-folha] (link 'ver na Folha do anúncio' no .sub de #secAnuncios → mostrarAba('resumo') + foco em #secFolha; o href é o fallback sem JS; nunca hash nem pushState)",
+    "#secPrecos / #precos (aba Anúncios, depois de #secAnuncios; carregarPrecos → GET /api/cliente/precos?cliente=&dias=90&pagina=; contêiner vivo; recarrega em atualizarDadosML), '#precos [data-mais]' (próxima página do servidor, acrescentada)",
+    "#secImpacto / #impacto",
+    "#secChaveiro / #chaveiro (aba Resumo, logo depois de #secProximas; carregarChaveiro → GET /api/cliente/execucao?cliente=; contêiner vivo; só leitura), #chvVeredito (frase-veredito), #chvTabela (6 colunas: Ação · Caminho · Adaptador · Estado · Prazo · Motivo; caminho como .selo existente)",
+    "#secSaude / #saude (aba Resumo, logo depois de #secChaveiro; carregarSaude → GET /api/cliente/saude?cliente=; contêiner vivo), #sauVeredito (leitura do dia), #sauKpis (4 KPIs sem cor: Reputação · Envios atrasados · Reclamações abertas · Perguntas >24h; 'pendente' + motivo quando o sinal não foi lido), #sauTabela (6 colunas: Sinal · Hoje · Fonte · Coletado em · Situação · Motivo), #btnSaudeAtualizar (secundário; POST /api/cliente/saude/atualizar)",
+    "#secDependeCliente / #dependencias (carregarDependencias → GET /api/tarefas/dependencia-cliente?cliente=; contêiner vivo), #nDependencias (badge do h2)",
+    "#secGatilhos / #gatilhos (aba Resumo, depois de #secDependeCliente e antes de #secNotion; gatilhos.js montarResumo → GET /api/cliente/gatilhos?cliente=; contêiner vivo), #gtVeredito, #gtKpis (4 KPIs sem cor: Na fila · Críticos · Último lote · Chave geral), #gtTabela (6 colunas: Aviso · Classe · Situação · Detectado · Lote · Motivo; título «Vai para o cliente»: só dono cliente), #gtEquipeTitulo + #gtEquipe (lista «Só para a equipe»: dono assessoria e preço de origem não verificada, estado interno; nunca sai — 12/10/2026), #gtConsultorTitulo + #gtConsultor (lista «Para o consultor (Discord)», 12/10/2026: estado leve via GET /api/cliente/consultor-discord; #gtConsultorPrevia (details) monta a prévia do resumo semanal só ao abrir, ?previa=1, em #gtConsultorTexto, partes de até 1.900), #btnGtPrevia (secundário: prévia → POST /api/gatilhos/previa, envio → POST /api/gatilhos/enviar com confirmar:true + hash), #gtPor, #gtSaida, #gtResp (diálogo)",
+    "#secAvisos / #avisos (aba Configurar, depois de #cad-sec; gatilhos.js montarConfig → GET /api/cliente/gatilhos; contêiner vivo), #avCanais, #avLig-<canal> e #avDest-<canal> (whatsapp|email|notion — 12/10/2026: Discord saiu dos canais do cliente, é interno da equipe), [data-testar] (Testar canal → POST /api/gatilhos/teste), #avRotulo (nome do cliente na mensagem; o campo da hora do resumo diário saiu com o lote diário em 12/10/2026), #avSilDe, #avSilAte, #avFuso (a caixa «Urgente sai na hora», id avCritHora, saiu em 12/10/2026 com o JS que a lia: só semanal, config urgente.na_hora_ligado), #avPor, #btnAvisosSalvar (POST /api/cliente/notificacao), #btnAvisosLiberar (POST /api/gatilhos/liberar), #avMsg",
+    "gatilhos.js (window.PSGatilhos; carrega antes de relatorio.js — a ordem relatorio.js → pendencias.js → alertas.js → cliente.js fica intacta; PSRelatorio.ui é lido só no clique)",
+    "#fAnuncio, #a_impressoes_antes, #a_impressoes_depois, #a_cliques_antes, #a_cliques_depois, #a_pedidos_antes, #a_pedidos_depois, #a_meu_de, #a_meu_por, #a_conc_de, #a_conc_por, #a_frete, #a_carrossel, #resAnuncio",
+    "#filtros + '#filtros .f-chip' + data-k + classe .on (classList.toggle)",
+    "#nAcoes (textContent), #listaAcoes",
+    "'#listaAcoes [data-res]' (Registrar resultado), '#listaAcoes [data-st]' + data-id (Aprovar, Descartar, Reabrir)",
+    "[data-coletar] (botão Coletar dados agora, via ligarColetar)",
+    "#pfPrimario, #pfDescP, #pfObjetivo, #pfDescO, #pfChips (+ .f-chip, data-id, aria-pressed), #pfTarefas, #pfPromocoes (Coletar promoções do Mercado Livre: padrão da base | ligada | desligada → POST /api/cliente/perfil com coleta_promocoes true|false|null, no padrão do override de tarefas no relatório), #pfPor, #btnSalvarPerfil, #pfMsg",
+    "acomp.js: [data-conf], [data-rec] (valor 'tarefa|MLB'), [data-vinc], [data-mlb] (CSS.escape)",
+    "ficha.js (escopo do alvo): #fchMsg, #fchSalvar, #fchSync, #fchPor, #fchObs, [data-usar], [data-link], select[data-papel] + data-canal, ids fl_<id>; window.PSFicha.montar",
+    "alerta.js: #psSino, #psPainel, #psToasts, button.sino, .cont, document.title com prefixo '(n) '",
+    "Globais compartilhadas entre arquivos, com a ordem de script ficha.js → acomp.js → cliente.js (alerta.js defer): $, esc, api, brl, sg, brData, NAO_CONECTADO, ligarColetar, dados, atualizarDadosML (cliente.js → acomp.js); carregarRetro, carregarAcomp, imgAnuncio, urlOk, nPt (acomp.js → cliente.js); brl2, intPt, pctTxt (cliente.js → acomp.js, em tempo de chamada); eventos ps:retro e ps:acomp (acomp.js → cliente.js)",
+    "Regra implícita: todos os carregar* fazem getElementById(alvo) e, se não acharem, retornam em silêncio. Os containers #ficha #perfil #vendas #planoConta #retro #acomp #folha #impacto #precos #dependencias PRECISAM existir no DOM quando desenhar() roda (painéis ocultos ou abas servem, remoção não)",
+    "localStorage: ps_perfil_por, ps_alerta_som, ps_folha:<cliente> (caixas da Folha do anúncio); BroadcastChannel ps_alerta; URL: ?cliente=, ?aba=, ?f= (Anúncios no período), ?ff= (Folha do anúncio), ?folha= (caixas marcadas)",
+    "#btnRelatorioAgora (menu ⋯ do cabeçalho: PSRelatorio.enviarAgora → prévia + confirmação; depois refaz a seção de programação)",
+    "#secRelatorio, #relatorio (aba Configurar, contêiner vivo em VIVOS), #relFreq, #relProximo, #btnSalvarRelatorio, #btnLiberarRelatorio, #btnVerificarRelatorio, #relMsg, #relPor (relatorio.js montarConfig: frequência semanal/quinzenal/mensal/desligado, data do próximo envio, próximas datas, liberação do envio automático, verificação do destino e histórico)",
+    "relatorio.js (window.PSRelatorio; carrega antes de cliente.js; nenhuma interpolação de x.rotulo/x.descricao/x.id em cliente.js depois de desenharPerfil — teste-semanal-rotas.mjs lê o arquivo até o fim)",
+    "#faixaPendencias (08/10/2026: faixa de alerta no topo do Resumo quando há pendência crítica do cliente; contêiner vivo em VIVOS; escondida com [hidden] quando não há)",
+    "#pendencias (dentro de #secDependeCliente, acima de #dependencias; contêiner vivo em VIVOS; pendencias.js monta as pendências do avaliador: rótulo, canal, gravidade, desde/dias, evidência, impacto, por que importa/se atrasar/o que precisamos/o que fazemos), #btnRegistrarPendencia, [data-resolver], #pcCanal, #pcItem, #pcDetalhe, #pcDesde, #pcGrav, #pcEvid, #pcPor, #pcNota (diálogos de registrar e resolver)",
+    "pendencias.js (window.PSPendencias; carrega depois de relatorio.js, que exporta PSRelatorio.ui, e antes de cliente.js; GET /api/cliente/pendencias, GET /api/pendencias/catalogo, POST /api/pendencias/registrar|resolver)",
+    "#secCatalogo, #catalogo (08/10/2026: aba Configurar, contêiner vivo em VIVOS; cliente.js carregarCatalogo/desenharCatalogo: 'N anúncios de catálogo (M ativos)', interruptor #catProprio 'Os anúncios de catálogo desta conta são próprios (marca/dono do produto)', #catPor (nome do líder/consultor), #btnCatalogo (prévia + PS.confirmar + gravação), #catMsg, lista de exceções com [data-cat-tirar], e #catItem, #catOrigem, #btnCatItem para marcar um anúncio; GET/POST /api/cliente/catalogo e POST /api/anuncio/catalogo-origem)",
+    "seloCatalogo(origem) (acomp.js → cliente.js e ofertas.js, em tempo de chamada): <span class=\"selo azul\"> 'Catálogo' (terceiros) ou 'Catálogo próprio' com tooltip, constante, sem dado interpolado; usado em Mais vendidos, Anúncios no período, Folha do anúncio, Cronologia de preços, cartões de tarefa e 80/20, Plano por anúncio e Ofertas (promocoes.js tem o hSelo equivalente, pois a página não carrega acomp.js)",
+    "#alertasCliente (dentro de #secDependeCliente, abaixo de #pendencias; contêiner vivo em VIVOS; alertas.js montarResumo lista os alertas ao Notion deste cliente com estado, motivo, link e [data-alerta] Ver prévia e enviar; GET /api/alertas/cliente, POST /api/alertas/enviar)",
+    "#cad-sec / #cad-corpo (aba Configurar, seção 'Cadastro do cliente'; carregarCadastro → GET /api/cliente/cadastro; preservado em VIVOS), #cad-cs, #cad-hs, #cad-classe, #cad-canais, #cad-obs, #cad-por, #cad-salvar (.btn, não primário: prévia → PS.confirmar → POST /api/cliente/cadastro confirmar:true), #cad-msg",
+    "#secNotion (details recolhido)",
+    "#notion (innerHTML; em VIVOS)",
+    "#nNotion (textContent)",
+    "#ntSecao (change)",
+    "#ntBusca (input)",
+    "#ntCorpo (innerHTML)",
+    "#btnNotionAtualizar (onclick, disabled, textContent)",
+    "#secAlinhamentos / #alinhamentos (aba Resumo, depois de #secDependeCliente e antes do Motor de decisão; alinhamentos.js montar → GET /api/cliente/alinhamentos?cliente=; contêiner vivo), #alVeredito (vivos · vencidos para revisar), #alTabela (6 colunas: Motivo · Onde · Detalhe interno · Desde · Revisar em · Ações; vencidos primeiro com selo 'revisar'), [data-al-renovar] (POST /api/cliente/alinhamentos/renovar) e [data-al-encerrar] (POST /api/cliente/alinhamentos/encerrar), ambos pedem o nome (PSRelatorio.ui.pedirPor)",
+    "#btnAlRegistrar (secundário) → diálogo de registro: #alEscopo (anúncio | conta), #alAnuncio (select dos anúncios do cliente), #alRegra (regra coberta; obrigatória na conta), campos do motivo por camposMotivo('al') — alTipo, alMotivo (≤200, interno), alRevisar (padrão +30 d), alPermanente (só descontinuado), #alAcos (só campanha de visibilidade), #alPor, #alSaida; Ver prévia → Registrar (primário só no diálogo; POST /api/cliente/alinhamentos com confirmar:true)",
+    "[data-st=descartada] em Próximas ações e na aba Plano (ligarDecisao) → PSAlinhamentos.descartar: diálogo com camposMotivo('ds') — dsTipo (motivo da lista, obrigatório), dsMotivo, dsRevisar, dsPermanente — e #dsPor, #dsSaida; 'Descartar' é o único primário (no diálogo) e manda POST /api/planos/acoes/status com por + motivo_tipo; Reabrir segue direto (o servidor encerra o alinhamento)",
+    "alinhamentos.js (window.PSAlinhamentos; carrega antes de gatilhos.js — a ordem gatilhos.js → relatorio.js → pendencias.js → alertas.js → cliente.js fica intacta; PSRelatorio.ui é lido só no clique)",
+    "#secDossie / #dossie (aba Configurar, depois de #secCatalogo e do Cadastro, antes de #secAvisos; dossie.js montarCliente → GET /api/cliente/dossies; contêiner vivo), #dsVeredito, #dsDe, #dsAte, #btnDsCliente e #btnDsDefesa (secundários: POST /api/cliente/dossie), #dsMsg, #dsTabela, [data-ds-notion] (POST /api/dossie/:id/notion)",
+    "#secRisco / #risco (aba Configurar; dossie.js → GET /api/cliente/risco + GET /api/risco; contêiner vivo), #rkVeredito, #rkTabela, #btnRkMarcar (diálogo #rkMotivo/#rkDesc/#rkDesde/#rkPor → POST /api/cliente/risco), [data-rk-encerrar] (#rkNota/#rkPor2 → POST /api/cliente/risco/encerrar)",
+    "#secContrato / #contrato (aba Configurar; dossie.js → GET /api/cliente/contrato; contêiner vivo), #ctVeredito, #ctResumo, #pgTabela, #btnCtContrato (diálogo #ctIni/#ctFim/#ctValor/#ctCanais/#ctEnt/#ctMeio/#ctClausula/#ctArq/#ctPor → POST /api/cliente/contrato), #btnCtPagamento (diálogo #pgData/#pgValor/#pgRef/#pgArq/#pgPor → POST /api/cliente/pagamento)",
+    "#secPerfilCliente / #perfilInfo (aba Configurar, logo depois de #secPerfil; perfil-informacao.js montarCliente → GET /api/cliente/perfil-informacao?cliente=; contêiner vivo), #piVeredito, #piOrdem (ordem dos blocos no relatório), #piServico, #piNivel, #piFonte, #piPor (+ #piPorLista), #piObs, #piTemas (3 colunas: Receber · Ordem · Tema; [data-pi-tema] checkbox, [data-pi-ordem] número), #btnPiSalvar (secundário: prévia POST /api/cliente/perfil-informacao → PS.confirmar → confirmar:true), #piMsg, #piHist (histórico)",
+    "perfil-informacao.js (window.PSPerfilInfo; carrega depois de dossie.js e antes de cliente.js)",
+    "galeria-anuncio.js (window.PSGaleria: miniatura(thumb, titulo, item) / nitida(url) / fechar(); carrega depois de anuncio-historico.js e antes de cliente.js) → [data-galeria] = span.an-galeria tabindex=0 role=button aria-expanded em volta da .an-thumb (Anúncios no período, Folha do anúncio, Cronologia de preços; cliente.js miniAn); #psGaleria (div.gl-painel fixed criado sob demanda no body, um por vez; GET /api/cliente/anuncio/fotos no 1º hover, cache por cliente+item na página, exceto a resposta só-capa), [data-gl-foto] (foto pequena: hover troca a capa). Delegação no document (pointerover/pointerout/click/focusin/focusout/keydown/scroll), nenhum listener por linha",
+    "produtos.js (window.PSProdutos.montar(alvo, cliente); carrega depois de galeria-anuncio.js e antes de cliente.js) → aba Produtos (V3 F2, SOMBRA; carrega só quando a aba abre: carregarProdutos em mostrarAba, guarda data-cliente) #secProdutos / #produtos (contêiner vivo) → GET /api/cliente/produtos?cliente=; #prSombra (faixa «somando por anúncio × contado uma vez»), #tabProdutos (6 colunas: Produto · Estoque · Vende/dia · Cobertura · Pedir · Situação; folha do produto numa linha de detalhe (tr.det#pdet-N, colspan 6) aberta por [data-pr-det] com aria-expanded/aria-controls), #prMais (Mostrar mais, 50 por vez), #btnMapeamento (secundário → gaveta), #gavMapeamento (aside.gaveta: Sugestões | Mapeados | Não mapeados por [data-aba-map]; [data-juntar] / [data-recusar] / [data-separar] → prévia POST /api/cliente/produtos/juntar|separar → nome → confirmar:true no diálogo do PSRelatorio.ui), #btnAtualizarEstoque (secundário: prévia POST /api/cliente/produtos/estoque/atualizar → PS.confirmar → confirmar:true; só GET no ML, teto por dia)",
+    "#secNotaFiscal / #notaFiscal e #secNotas / #notas (aba Configurar, depois de #secContrato e antes de #secAvisos; contêineres vivos) — nota-fiscal.js (window.PSNota.montarCliente; carrega depois de produtos.js e antes de alinhamentos.js; PSRelatorio.ui é lido só no clique) → GET /api/cliente/nf (regime, termo, certificado, regras por SKU, importação CSV do contador) e GET /api/cliente/nf/notas (6 colunas: Pedido · Comprador mascarado · Total · Estado · Emitida em · Anexo ML); botões secundários, primário só dentro do diálogo (PSRelatorio.ui); prévia → confirmar:true",
+    "#secCustosUpload / #custosUpload (aba Configurar, depois de #secContrato e antes de #secNotaFiscal; contêiner vivo) — custos-upload.js (window.PSCustosUpload.montar(alvo, cliente); carrega depois de nota-fiscal.js e antes de cliente.js; PSRelatorio.ui só no clique) → POST /api/cliente/custos/upload (multipart: cliente + arquivo .csv/.xlsx ≤ 5 MB; PRÉVIA = gravação desfeita) e POST /api/cliente/custos/upload/confirmar {upload_id, por, confirmar:true}; #cuArquivo, #btnCuPrevia (secundário), #cuPrevia, #cuVeredito, #cuTabAnuncios (6 colunas: MLB · Título · Preço · Custo · Margem bruta · Critério), #btnCuAplicar (secundário) → diálogo com o ÚNICO primário (Confirmar)"
+  ],
+  "classes_geradas_por_js": [
+    "res-item",
+    "sub",
+    "lado",
+    "pill-mini",
+    "alerta",
+    "res-vazio",
+    "ativo",
+    "volta",
+    "vazio-box",
+    "skeleton",
+    "cab",
+    "chips",
+    "chip",
+    "laranja",
+    "cab-acoes",
+    "btn",
+    "cheio",
+    "aviso-faixa",
+    "kpis",
+    "kpi",
+    "rotulo",
+    "valor",
+    "detalhe",
+    "selo",
+    "bom",
+    "neutro",
+    "atencao",
+    "ruim",
+    "secao",
+    "motor",
+    "cartao",
+    "inativo",
+    "num",
+    "mini",
+    "cadeia",
+    "elo",
+    "elo-t",
+    "fato",
+    "hipotese",
+    "projecao",
+    "seta",
+    "jogadas",
+    "jogada",
+    "jog-acao",
+    "p-badge",
+    "p-P0",
+    "p-P1",
+    "p-P2",
+    "p-P3",
+    "evid (details)",
+    "box",
+    "filtros",
+    "f-chip",
+    "on",
+    "n-acoes",
+    "acao",
+    "acao-topo",
+    "acao-corpo",
+    "acao-meta",
+    "acao-tags",
+    "tagzinha",
+    "impacto",
+    "acao-lado",
+    "acao-botoes",
+    "btn-mini",
+    "ok",
+    "no",
+    "st-rotulo",
+    "st-proposta",
+    "st-aprovada",
+    "st-distribuida",
+    "st-descartada",
+    "item-card",
+    "item-corpo",
+    "item-num",
+    "flag (+ tom: ruim | atencao)",
+    "pos",
+    "neg",
+    "mudo",
+    "estado",
+    "e-melhorou",
+    "e-piorou",
+    "e-lancamento",
+    "e-sem_efeito",
+    "pf-grid",
+    "pf-campo",
+    "pf-rot",
+    "pf-desc",
+    "pf-chips",
+    "pf-rodape",
+    "ac-semimg",
+    "micro (svg do servidor)",
+    "ac-v",
+    "mid",
+    "ac-estado",
+    "ac-badge",
+    "ac-queda",
+    "ac-estagnacao",
+    "ac-crescimento",
+    "ac-sem_base",
+    "ac-grande",
+    "ac-bloco",
+    "ac-lista",
+    "ac-minis",
+    "ac-mini",
+    "ac-tab",
+    "ac-grade",
+    "ac-card",
+    "ac-item",
+    "ac-item-um",
+    "ac-img",
+    "ac-item-txt",
+    "ac-corpo",
+    "ac-topo",
+    "ac-leitura",
+    "ac-rolagem",
+    "ac-marcos",
+    "base",
+    "nd",
+    "ag",
+    "b / r / n (em <i> dos deltas)",
+    "ac-graf",
+    "ac-ganho",
+    "ac-mudou",
+    "ac-abas",
+    "ac-vinc",
+    "ac-cand",
+    "ac-manual",
+    "fch",
+    "grade",
+    "rodape",
+    "msg",
+    "aviso",
+    "erro",
+    "b",
+    "sec",
+    "sug",
+    "psItem",
+    "psToast",
+    "sucesso",
+    "nova",
+    "fechar",
+    "sino",
+    "cont",
+    "topo",
+    "relatorio.js (estilo injetado, só tokens): rl-dlg, rl-corpo, rl-kv, rl-linhas, rl-opcao, rl-lista, rl-cfg",
+    "pendencias.js (estilo injetado, só tokens): pc-resumo, pc-acoes, pc-texto, pc-impacto; reaproveita .acao, .selo ruim/atencao/neutro, .aviso erro",
+    "catálogo (cliente.js/acomp.js, sem CSS novo): .selo.azul (selo Catálogo / Catálogo próprio), .cartao, .campo, .pf-rot, .pf-desc, .pf-rodape, .btn-mini, .recolhido, .form-grade, .aviso.ok/.erro",
+    "galeria do anúncio (galeria-anuncio.js, CSS em tela-cliente.css só com tokens): an-galeria, gl-painel, gl-capa, gl-grade, gl-rodape, gl-msg, on; .an-thumb passou de 40 para 76 px",
+    "produtos.js (sem CSS novo): .veredito-frase, .aviso.info, .kpis/.kpi, .t.empilha com data-rotulo, .selo ruim/atencao/amb/neutro/bom (situação), .recolhido (folha do produto e premissas), .gaveta (Gerenciar mapeamento), .seg com aria-pressed, .btn/.btn-mini/.btn-p"
+  ],
+  "css_origem": "Quatro fontes, sobrepostas. (1) <style> inline em cliente.html, com cerca de 140 linhas: tokens :root (laranja, tinta, cinza, verde, âmbar, verm, azul, sombra, raio 16px), header, hero de busca, kpis, cartões, ações, filtros, perfil, Merovíngio. Esses tokens DUPLICAM os de ui.css, e a página não linka ui.css. (2) ui-extra.css (compartilhado com gmv, metodologia, resultados e promocoes): tabelas, .item-card, .flag, .estado/.e-*, .pos/.neg/.mudo e o override do header (altura auto + wrap). (3) acomp.css (só esta tela): .ac-* da retroalimentação e do antes e depois. (4) CSS injetado via JS: ficha.js cria <style> com .fch e botões azuis próprios (.fch button.b, background var(--azul)); alerta.js cria <style> com #psSino, .psItem, .psToast e cores hex fixas. Ainda há cerca de 100 atributos style=\"\" em template strings (80 em cliente.js, 20 em acomp.js). Bug visto: .mini só tem estilo dentro de .cartao, então as linhas 'Depois: …' e a regra de ouro do Merovíngio (fora do cartão) saem em 15px. Se o redesenho levar a tela para ui.css: scripts/teste-promocoes-ui.mjs (caso 58) lê os tokens de src/web/ui.css e exige contraste ≥ 4,5:1 nos pares laranja-escuro/#fff1e8, verde/verde-suave, cinza/fundo-suave, âmbar/âmbar-suave, verm/verm-suave, azul/azul-suave etc.",
+  "links_navegacao": [
+    "Header (marca): /cliente, 'Place2u · Planos'",
+    "Header nav, 9 links sem estado ativo: /analistas, /comercial, /gmv, /promocoes, /resultados ('O que funciona'), /integracoes, /planos ('Distribuição em massa'), /processos, / ('Painel executivo', o último)",
+    "Cabeçalho do cliente: /plano?cliente= (Documento completo, nova aba), /promocoes?cliente=, /plano.pdf?cliente= (Baixar PDF, nova aba)",
+    "Corpo: /integracoes (meta de GMV sem canal, vendas não conectadas, NAO_CONECTADO), /metodologia ('Como o algoritmo funciona'), /resultados ('Como medimos')",
+    "Plano-conta: /plano-conta.pdf?cliente=, /plano-conta?cliente=, /api/plano-conta/acoes.csv?cliente=",
+    "Perfil: /semanal?cliente= e /semanal?cliente=&interno=1 (nova aba)",
+    "Externos: notion_url de ações e tarefas (↗), permalink público dos anúncios do ML, links das contas salvos na ficha ('abrir ↗')",
+    "Entram nesta tela: analistas.js, gmv.js e integracoes.js (/cliente?cliente=) e os links de notificação do alerta.js; todas as outras telas têm /cliente no header"
+  ],
+  "dependencias_externas": [
+    "Nenhuma CDN, biblioteca de gráfico ou webfont: fonte do sistema (-apple-system, Segoe UI, Roboto)",
+    "/logo servido pelo próprio servidor (onerror esconde a imagem)",
+    "Thumbnails do Mercado Livre (mlstatic) carregados com referrerpolicy=no-referrer e validados por urlOk",
+    "Micro gráficos SVG prontos do servidor (c.grafico.svg), injetados só depois do filtro svgSeguro",
+    "Web Audio API, Notification API e BroadcastChannel (alerta.js)",
+    "APIs internas GET: /api/clientes/busca, /api/cliente/painel (58KB), /api/cliente/vendas, /api/cliente/impacto (111KB), /api/plano-conta, /api/cliente/perfil, /api/ficha, /api/cliente/retroalimentacao (cerca de 1,3s), /api/cliente/tarefas-anuncio?dias=60&limite=120, /api/cliente/precos?dias=90&pagina=, /api/cliente/vinculos, /api/planos/job/:id, /api/notificacoes",
+    "APIs internas POST: /api/placeplan/publicar, /api/cliente/metas, /api/anuncio/diagnostico, /api/planos/acoes/status, /api/planos/acoes/resultado, /api/cliente/coletar, /api/plano-conta/gerar, /api/cliente/custos, /api/planos/distribuir, /api/cliente/acompanhar, /api/cliente/vinculo, /api/cliente/perfil, /api/ficha, /api/prestadores/sincronizar, /api/notificacoes/lidas",
+    "Notion (destino de PlacePlan e distribuição; fonte da ficha e dos prestadores)",
+    "Galeria do anúncio: GET /api/cliente/anuncio/fotos?cliente=&item= (só leitura; snapshot ≤ 7 d → ML ao vivo → capa); imagens do CDN do ML com sufixo -N.webp (200 px, miniatura) e -O.webp (proporção original, até 500 px, painel), montadas a partir do id da foto"
+  ],
+  "testes_que_leem_esta_tela": [
+    "scripts/teste-sistemas.mjs — selos span.sis[data-sistema] desta tela: todo data-sistema existe em config/sistemas.json e bate com selos_sistema deste inventário",
+    "scripts/teste-semanal-rotas.mjs:245-250 lê src/web/cliente.js e faz bloco = j.slice(j.indexOf('function desenharPerfil')), um trecho que vai ATÉ O FIM do arquivo. Asserts: assert.match(bloco, /api\\('\\/api\\/cliente\\/perfil', \\{ cliente, perfis: \\[primario, \\.\\.\\.extras\\], objetivo: obj\\.value, por, tarefas_no_relatorio: tv === 'sim' \\? true : tv === 'nao' \\? false : null \\}\\)/); assert.match(bloco, /\\.textContent = r\\.perfis\\.find/); assert.doesNotMatch(bloco, /\\$\\{x\\.(rotulo|descricao|id)\\}/). Consequências: a função tem que continuar se chamando desenharPerfil, a chamada api() tem que manter esse texto literal, e nenhum código colocado depois dela em cliente.js pode interpolar ${x.rotulo}, ${x.descricao} ou ${x.id} sem esc()",
+    "scripts/teste-notificacoes.mjs:32-39 lê src/web/alerta.js (carregado nesta tela). Asserts: todo 'innerHTML = ...' tem que ser um literal fixo entre aspas simples, sem $ (/^'[^'$]*'$/); /linkSeguro/ precisa existir; a regex é extraída de js.match(/const linkSeguro = l => \\/(.+)\\/\\.test/) e precisa aceitar '/cliente?cliente=Acme%20Ltda' e rejeitar '//evil.example', '/\\\\evil.example', 'https://…', 'javascript:', '/ com espaço'",
+    "scripts/teste-comercial-publico.mjs:47: a rota '/cliente' NÃO pode passar pelo host comercial público (só roteamento; a URL /cliente não pode mudar de natureza)",
+    "scripts/teste-promocoes-ui.mjs caso 58 (contraste ≥ 4,5:1 sobre os tokens de src/web/ui.css): só importa se o redesenho unificar os tokens desta tela em ui.css",
+    "Nenhum teste lê cliente.html, acomp.js, acomp.css, ficha.js ou ui-extra.css diretamente. teste-ficha.mjs testa src/lib/ficha-cliente.js e as rotas, não o ficha.js do front"
+  ],
+  "problemas_ux": [
+    "Tamanho: cerca de 18.500px de altura no desktop e cerca de 40.000px no celular, com 15 seções, 111 botões, 80 <details>, 15 KPIs em 4 faixas diferentes, 5 faixas âmbar de aviso e uns 200 glifos e emojis (🗺️ 🎩 ⏳ ⚠️ 🧭 ⚡ ⏱ 🌱 🔥 ✓ 📅 👤 📚 ★ ✔ ✘). Está longe de limpo, premium e simples",
+    "Hierarquia invertida: a ação principal (aprovar ou descartar o plano) fica na última seção, uns 15 mil px abaixo, enquanto formulários de configuração (Ficha, cerca de 760px, e Perfil, cerca de 570px) vêm ANTES do motor de decisão e da leitura estratégica",
+    "Conceitos duplicados que confundem: dois planos de ação paralelos ('Plano de ação', 39 ações via /plano, e 'Plano da conta por anúncio', 32 ações via /plano-conta); dois botões 'Baixar PDF' com significados diferentes; duas seções 'o Merovíngio' (Leitura estratégica e Retroalimentação); duas medições de resultado (Antes e depois e Medição técnica) com KPIs que se sobrepõem (Melhoraram/Pioraram × Geraram resultado)",
+    "Sinais contraditórios sem reconciliação: no topo, 'Tendência de execução ×0,43 QUEDA CRÍTICA' (entregas da equipe) e, mais abaixo, 'Crescimento forte +69,2% de faturamento'; probabilidade '68 INCERTO' com ritmo ×5,52 e projeção de 70 contra uma meta de 20; meta de GMV registrada como R$ 100. A tela mistura 'execução da equipe' com 'resultado do cliente' sob rótulos parecidos, e o sócio não consegue tirar disso um veredito",
+    "Jargão e fórmulas à mostra para o executivo: '30d×20% + 14d×30% + 7d×50%', 'renormalizado', 'p.p.', 'reversão à média', 'falsificador', 'cobertura % dos pesos', 'Merovíngio', 'Score de distribuição'",
+    "Aprovar ou descartar uma ação chama desenhar(), que refaz a tela inteira: 7 novas requisições (incluindo 452KB de tarefas-anuncio), skeleton em todas as seções, perda de edições não salvas na Ficha e no Perfil e salto de scroll. Salvar metas recarrega o painel todo (abrirCliente)",
+    "Uso de alert(), confirm() e prompt() nativos (PlacePlan, Registrar resultado com 3 prompts seguidos, nome no vínculo, erros): visual cru e pouco acessível",
+    "Cinco estilos de botão concorrentes (.btn, .btn.cheio, .btn-mini, .f-chip e o .fch button.b azul do ficha.js), além de links laranja e azuis. O cabeçalho tem 4 botões do mesmo peso, e o único 'cheio' é Baixar PDF, que não é a ação principal",
+    "Bug no celular: .ac-grade usa grid minmax(420px,1fr). Com 375px os cartões da retroalimentação ficam com cerca de 601px, o layout viewport sobe para 617px, a media query de 560px nunca dispara e a página ganha scroll horizontal",
+    "O header sticky com 9 links quebra em várias linhas e chega a 188px de altura em telas estreitas (quase 1/4 da tela de um celular). Não há estado ativo, e o 'Painel executivo' é o último link",
+    "Identidade inconsistente: <title> 'Plano do Cliente', marca 'Place2u · Planos' e nome funcional 'Visão por cliente'",
+    "Não há índice ou navegação por âncoras numa página de 15 seções, e várias seções não têm id (Motor, Leitura estratégica, Diagnóstico, Plano de ação)",
+    "A ferramenta genérica 'Diagnóstico de anúncio' (13 inputs, sem ligação com o cliente) fica no meio da visão do cliente",
+    "Carregamento: há um skeleton genérico por seção e 7 fetches em paralelo logo de saída, sem lazy-load. Os erros aparecem como mensagem crua do servidor dentro de .vazio-box, sem tentar de novo",
+    "Estilos órfãos e HTML quebrado: .mini só tem estilo dentro de .cartao (as linhas 'Depois:' e a regra de ouro saem em 15px); a <div id=\"impacto\"> não fecha antes de </details>; há cerca de 100 style=\"\" inline e tokens duplicados de ui.css",
+    "Acessibilidade: os chips de filtro do plano não têm aria-pressed (os do perfil têm); .ac-abas usa role=tablist sem role=tab; os emojis nos rótulos são lidos pelo leitor de tela; o KPI de Renovação ocupa 1 dos 4 cards de destaque mesmo vazio ('—')",
+    "Chips sem valor de decisão ocupam o cabeçalho (CNPJ, 'consultor a definir' com o mesmo peso visual do tier)"
+  ],
+  "estados": [
+    "Busca: inicial (hero), menos de 3 caracteres (lista oculta), resultados (até 12, navegáveis por teclado), 'Nenhum cliente com esse nome ou CNPJ…', erro da API dentro da lista, resposta antiga descartada (buscaSeq)",
+    "Cliente carregando: um .skeleton único em #telaCliente e depois um .skeleton por seção assíncrona",
+    "Erro no painel: .vazio-box com a mensagem + '← Voltar à busca'",
+    "Resposta atrasada de outro cliente: descartada (painelSeq; dados.cliente !== cliente)",
+    "Cliente inelegível: faixa 'Cliente fora da geração de planos — motivo…'",
+    "Sem meta: cartão de Probabilidade .inativo ('Aguardando a meta do mês'); GMV aguardando o canal",
+    "Sem plano gerado: Merovíngio 'Gere o plano deste cliente…'; m.sem_leitura (🎩 motivo); causalidade 'Gere o plano…'",
+    "Sem renovação registrada: KPI '—' e 'sem vencimento registrado na central'; data inválida; vencido",
+    "Mercado Livre não conectado (NAO_CONECTADO): link para Integrações. Conectado sem coleta: botão 'Coletar dados agora'. Coletando: o botão mostra a fase e o progresso feitos/total, com polling a cada 2s. Coleta com falhas: alert",
+    "Vendas: 'Nenhuma venda no período'; anúncio sem alertas (flag verde)",
+    "Plano-conta: não gerado ('O plano ainda não foi gerado…'), gerando, pré-visualização de distribuição, 'Nada novo para distribuir', criando no Notion (progresso), concluído (faixa verde), custos não informados × informados (ROAS)",
+    "Retroalimentação: sem_base ('Nada foi estimado'), queda (bloco 'Por que caiu'), estagnação ou crescimento (jogadas), tipos com menos de 3 medidas, sem combinações, duplicação com erro ou vazia",
+    "Acompanhamento: 'Nenhuma tarefa… teve melhora medida com confiança' (modo resultado), nenhuma tarefa com anúncio (modo todas), em andamento ('fotografando o antes'), marco aguardando ('fecha em dd/mm'), dado não coletado ('—'), sem Ads, lista truncada, recalculando (timeout de cerca de 3 min), vínculos pendentes ou todas vinculadas",
+    "Medição técnica: 'Nenhuma tarefa com efeito medido ainda'",
+    "Plano de ação: filtros sem resultado ('Nenhuma ação com essas características…'), descartadas riscadas, distribuídas com link ↗ do Notion",
+    "Ficha: carregando ('Carregando a ficha…'), erro, ainda não preenchida, prestador sem usuário no Notion (aviso), atribuído inativo (erro), salva, sincronizando prestadores",
+    "Perfil: padrão (sem perfil salvo), salvo (faixa verde), sem nome (erro), erro da API",
+    "Diagnóstico de anúncio: 'analisando…', achados por gravidade, campos faltando, erro",
+    "Avisos (alerta.js): sem avisos, toasts (no máximo 4; erro fica 2 min), contador no título, som ligado ou desligado, permissão do navegador"
+  ],
+  "recomendacao": "Reorganizar a tela num cockpit do cliente em três camadas: veredito, ação e detalhe. (1) Cabeçalho enxuto com nome, tier, canais e responsável, sem emojis, com UMA ação primária ('Revisar plano da semana' ou 'Aprovar P0') e um menu 'Exportar' (Documento, PDF do plano, PDF, documento e CSV do plano-conta, Semanal cliente/interno) mais um menu 'Notion' (PlacePlan, Distribuir). (2) Faixa de veredito com 3 cartões que separam de vez Resultado do cliente (faturamento real 28d e estado Crescimento, Estagnação ou Queda), Execução da equipe (entregas vs meta, ritmo e probabilidade) e Risco (P0 abertas e renovação), mais uma frase única de leitura que reconcilie os sinais (ex.: 'faturamento +69% enquanto a execução caiu ×0,43: proteger o ritmo'), com fórmulas e pesos só em tooltip. (3) 'Próximas ações' logo abaixo: as 5 ações de maior prioridade com Aprovar e Descartar inline, atualizando só o cartão e o contador, sem chamar desenhar() inteiro. (4) Abas ou âncoras fixas para o detalhe: Plano (unir 'Plano de ação' e 'Plano por anúncio' sob um toggle 'por cliente / por anúncio', com os filtros sem emoji), Resultados (antes e depois, com a medição técnica como drill-down e os mais vendidos), Estratégia (Leitura do Merovíngio e Retroalimentação fundidas, mostrando por padrão só tese, cadeia causal e as 3 jogadas, com tabelas recolhidas) e Configurar cliente (Ficha, Perfil, Metas e Custos num painel lateral ou aba; a ferramenta de Diagnóstico de anúncio sai da tela ou vai para essa aba). Visual: tokens de ui.css (sem duplicar e mantendo contraste ≥ 4,5:1), 3 estilos de botão (primário, secundário, ghost), pills de status neutras no lugar de emojis, grid com minmax(min(420px,100%),1fr), header compartilhado com estado ativo e colapsável no celular, modais inline no lugar de alert, confirm e prompt, e skeletons por bloco com 'tentar de novo'. Restrição técnica: todos os ids e data-* da lista de hooks continuam no DOM (as abas só escondem, não removem, porque os carregar* abortam em silêncio se o container não existir), a ordem dos scripts ficha.js → acomp.js → cliente.js se mantém e a função desenharPerfil continua com a chamada api('/api/cliente/perfil', …) literal exigida pelo teste.",
+  "como_era_anuncio": {
+    "data": "2026-10-09",
+    "modulo": "src/web/anuncio-historico.js (window.PSHistorico.render(container, dados) / .abrir(cliente, item[, container]))",
+    "rotas": [
+      "GET /api/cliente/anuncio/historico?cliente=&item=",
+      "POST /api/cliente/anuncio/snapshot {cliente,item}"
+    ],
+    "ids": {
+      "hstDialog": "<dialog> nativo criado sob demanda por PSHistorico.abrir sem container",
+      "hstTitulo": "título do diálogo (Como era · MLB…)",
+      "hstCorpo": "corpo do diálogo onde render() desenha",
+      "hstCapturar": "botão secundário (.btn-mini) \"Tirar uma fotografia agora\" — único controle; sem botão primário",
+      "hstAviso": "texto aria-live com o resultado da captura"
+    },
+    "classes": [
+      "hst",
+      "hst-lista",
+      "hst-diff",
+      "hst-mud",
+      "hst-dialog",
+      "hst-cab"
+    ],
+    "selos": "reaproveita .selo bom|ruim|atencao|neutro (sem token novo): piorou=ruim, melhorou=bom, sem_controle=atencao, resto=neutro",
+    "onde_chamar": "cliente.js: link \"Como era\" na linha da tabela Anúncios (#anuncios) e no detalhe da Folha (#folha) → PSHistorico.abrir(cliente, item)",
+    "restaurar": "texto fixo \"Restaurar chega na fase 3\" — nenhum botão"
+  },
+  "galeria_anuncio": {
+    "data": "2026-10-14",
+    "pedido": "David: imagem do anúncio maior para ver o produto como está (capa) e, ao passar o mouse, abrir as próximas 3 a 7 fotos sem clicar",
+    "modulo": "src/web/galeria-anuncio.js (window.PSGaleria) + src/lib/anuncio-fotos.js (criarFotosAnuncio) + rota em src/rotas-historico.js",
+    "rota": "GET /api/cliente/anuncio/fotos?cliente=&item=MLB… → { item_id, fotos:[{ url, ordem }] (capa + até 7), total, fonte:'snapshot'|'ml'|'capa', lido_em }",
+    "ids": {
+      "psGaleria": "painel flutuante (div.gl-painel, role=group) criado sob demanda; um por vez"
+    },
+    "atributos": {
+      "data-galeria": "id do anúncio (^MLB\\d+$) no span.an-galeria focável",
+      "data-gl-foto": "foto pequena na grade do painel"
+    },
+    "classes": [
+      "an-galeria",
+      "gl-painel",
+      "gl-capa",
+      "gl-grade",
+      "gl-rodape",
+      "gl-msg",
+      "on"
+    ],
+    "comportamento": "abre ao passar o mouse (200 ms), no foco de teclado (Enter alterna) e no toque (alterna); fecha ao sair da miniatura E do painel (150 ms para atravessar), Escape, rolagem, clique fora, blur do teclado; posição fixed que vira para a esquerda/cima perto das bordas; esqueleto ao carregar, 'Não foi possível carregar as fotos agora' no erro, 'demais fotos indisponíveis agora' quando só há a capa; prefers-reduced-motion sem animação",
+    "sufixos_cdn": "medidos com curl em 14/10/2026: -R 70, -I/-S 90, -T 160, -N 200, -E 280, -V 320, -C 400, -W 568 (quadrados aparados), -O ≤ 500 na proporção original, -F ≤ 1200 na proporção original (3–5× o peso do -O). Miniatura = -N.webp (nítida em 76 px até 2,5×; o CDN converte também o .jpg), painel = -O.webp",
+    "testes": [
+      "scripts/teste-anuncio-fotos.mjs (rota e lib)",
+      "scripts/teste-shell-ui.mjs (script em cliente.html, classes, delegação, contador da aba)"
+    ]
+  },
+  "produtos": {
+    "data": "2026-10-14",
+    "pedido": "David (14/10): absorver a lógica do UpSeller — anúncio ≠ produto; 2, 3, 5, 10 anúncios do mesmo produto descontando o mesmo estoque",
+    "fase": "V3 F2 — SOMBRA (produto.diagnostico_ligado = false) + F4 — visão Lucro e DRE (financeiro.margem_medida_nas_regras = false: nada muda ao cliente) + F5 (kits, duplicação ciente do estoque) + F6 (prévia do sincronismo de estoque do Chaveiro; chave chaveiro.sync_estoque_ligado = false)",
+    "modulo": "src/web/produtos.js (window.PSProdutos) + src/lib/produto-estoque.js (puro) + src/lib/produto-estoque-real.js + src/rotas-produtos.js",
+    "rotas": [
+      "GET /api/cliente/produtos?cliente=",
+      "GET /api/cliente/produtos/mapeamento?cliente=",
+      "POST /api/cliente/produtos/juntar { cliente, origem, produto, por, confirmar }",
+      "POST /api/cliente/produtos/separar { cliente, origem, produto, por, confirmar }",
+      "POST /api/cliente/produtos/estoque/atualizar { cliente, produtos[], confirmar }",
+      "POST /api/cliente/produtos/estoque-fisico { cliente, sku, quantidade, fonte, por, confirmar } (V3 F3)",
+      "GET /api/cliente/dre?cliente=&mes=AAAA-MM",
+      "GET /api/cliente/produtos/kits?cliente= (V3 F5)",
+      "POST /api/cliente/produtos/kit { cliente, kit, componentes[], modo, por, confirmar } (V3 F5)",
+      "POST /api/chaveiro/estoque/previa { cliente } (V3 F6, só leitura)"
+    ],
+    "ids": {
+      "secProdutos": "seção da aba",
+      "produtos": "contêiner vivo",
+      "tabProdutos": "tabela de 6 colunas",
+      "btnMapeamento": "secundário: abre a gaveta",
+      "gavMapeamento": "gaveta Gerenciar mapeamento",
+      "btnAtualizarEstoque": "secundário: lê /stock dos produtos da página",
+      "prSombra": "faixa da sombra (comparativo por anúncio × por produto)",
+      "prSeloF3": "selo: diagnóstico por produto ligado | desligado (sombra) — V3 F3",
+      "prMais": "paginação",
+      "prVisao": "chip Estoque | Lucro (aria-pressed)",
+      "prLucroNota": "faixa da visão Lucro (janela, dias com linhas, envios lidos, «Não é lucro líquido»)",
+      "secDre": "DRE simples do mês (visão Lucro)",
+      "dreMes": "seletor nativo de mês do DRE",
+      "dreCorpo": "contêiner do DRE",
+      "tabDre": "tabela do DRE (3 colunas)",
+      "secSyncEstoque": "V3 F6: prévia do sincronismo (details, carrega ao abrir; sem botão novo)",
+      "syncCorpo": "corpo da prévia",
+      "tabSyncEstoque": "tabela de 6 colunas: anúncio, SKU, hoje no ML, seria escrito, escrita, situação"
+    },
+    "primario": "nenhum novo (o único da tela segue «Revisar plano»; o diálogo de confirmação usa o primário do PSRelatorio.ui)",
+    "testes": [
+      "scripts/teste-produto-estoque.mjs",
+      "scripts/teste-produto-rotas.mjs",
+      "scripts/teste-shell-ui.mjs (aba Produtos)",
+      "scripts/teste-lucro.mjs",
+      "scripts/teste-financeiro-coleta.mjs",
+      "scripts/teste-produto-f5.mjs",
+      "scripts/teste-chaveiro-estoque.mjs"
+    ]
+  },
+  "relatorios_ciclo": {
+    "data": "2026-10-15",
+    "pedido": "David (15/10, ~01h55): relatórios obrigatórios da F9 com Previsão / Chance / Medido, por produto e por conta, exportáveis e nos blocos do relatório de terça",
+    "modulo": "src/web/relatorios-ciclo.js (window.PSRelatoriosCiclo) + src/lib/relatorios-ciclo.js (puro) + src/lib/relatorios-ciclo-real.js + src/rotas-relatorios-ciclo.js",
+    "rotas": [
+      "GET /api/cliente/relatorios?cliente=",
+      "GET /api/cliente/relatorios/<nome>[.csv|.html|.pdf]?cliente=",
+      "GET|POST /api/cliente/estoque/mov",
+      "GET|POST /api/cliente/compras/pedidos"
+    ],
+    "primario": "nenhum novo (exportações são links secundários)",
+    "testes": [
+      "scripts/teste-relatorios-ciclo.mjs",
+      "scripts/teste-shell-ui.mjs",
+      "scripts/teste-sistemas.mjs"
+    ]
+  },
+  "selos_sistema": {
+    "regra": "Selo discreto do sistema de origem (config/sistemas.json, 15/10/2026) ao lado do título da seção: span.sis[data-sistema], classe .sis em ui.css. Só tela interna; não muda id nem nº de colunas. Teste: scripts/teste-sistemas.mjs.",
+    "secoes": {
+      "#secProximas": "arquiteto",
+      "#secChaveiro": "chaveiro",
+      "#secSaude": "trinity",
+      "#secAcomp": "merovingio",
+      "#secFolha": "trinity",
+      "#secDependeCliente": "arquiteto",
+      "#secAlinhamentos": "arquiteto",
+      "#secFinanceiro": "smith",
+      "Motor de decisão": "oraculo",
+      "#secGatilhos": "morpheus",
+      "#secNotion": "trinity",
+      "#secDoCliente": "arquiteto",
+      "#secPlanoConta": "arquiteto",
+      "#secExecutar": "chaveiro",
+      "#secOfertas": "arquiteto",
+      "#secAnuncios": "trinity",
+      "#secPrecos": "smith",
+      "#secVendas": "trinity",
+      "#secImpacto": "merovingio",
+      "#secRelatoriosCiclo": "morpheus",
+      "Leitura estratégica": "merovingio",
+      "#secRetro": "oraculo",
+      "#secRelatorio": "morpheus",
+      "#secPerfil": "morpheus",
+      "#secPerfilCliente": "morpheus",
+      "#secCatalogo": "trinity",
+      "#secDossie": "morpheus",
+      "#secContrato": "smith",
+      "#secCustosUpload": "smith",
+      "#secNotaFiscal": "smith",
+      "#secNotas": "chaveiro",
+      "#secAvisos": "morpheus"
+    }
+  },
+  "guardiao": {
+    "data": "2026-10-15",
+    "pedido": "David (15/10): Agente Smith G0 — raio-X financeiro e pauta de reunião gerada (JBM Têxtil, terça 20/10 16h), decisão do cliente com 1 clique",
+    "modulo": "src/web/guardiao.js (window.PSGuardiao) + src/lib/guardiao.js (puro) + src/lib/guardiao-real.js + src/rotas-guardiao.js",
+    "rotas": [
+      "GET /api/cliente/guardiao?cliente=",
+      "GET /api/cliente/guardiao/pauta[.html|.pdf|.txt]?cliente=&data=&hora=",
+      "POST /api/cliente/preco/decisao",
+      "POST /api/cliente/contas-canal"
+    ],
+    "ids": {
+      "secFinanceiro": "seção no Resumo",
+      "guardiao": "alvo do PSGuardiao",
+      "gdEstado": "cartão de estado do custo",
+      "gdPauta": "data/hora + botão",
+      "btnGerarPauta": "secundário (a tela já tem o primário «Revisar plano»)",
+      "gdPautaLinks": "links HTML/PDF/texto",
+      "gdTab-<chave>": "tabela de 6 colunas por seção",
+      "gdFaltando": "o que falta"
+    },
+    "atributos": {
+      "data-gd-ref": "ref da mudança de preço",
+      "data-gd-dec": "cliente|assessoria"
+    },
+    "primario": "nenhum novo (secundário)",
+    "testes": [
+      "scripts/teste-guardiao.mjs",
+      "scripts/teste-sistemas.mjs (selo smith)"
+    ]
+  },
+  "executar": {
+    "data": "2026-10-15",
+    "pedido": "David (15/10): «Continue a estruturação dos F, principalmente pra eu conseguir fazer QUALQUER ESTRATÉGIA pelo meu próprio sistema.»",
+    "fase": "Chaveiro F4+ (console de execução; config/chaveiro.json → execucao_ligada e adaptadores_live NASCEM false)",
+    "modulo": "src/web/executar.js (window.PSExecutar) + src/lib/chaveiro-executor.js (puro) + src/lib/chaveiro-executor-real.js + src/rotas-chaveiro-executor.js",
+    "por_que_aba": "executar é um fluxo com estado que atravessa anúncios e operações; Anúncios e Produtos são leitura e já têm 4 seções; o Resumo mantém a cobertura (#secChaveiro) com o botão que abre esta aba preenchida",
+    "primario": "nenhum fixo: o único primário é o do diálogo de confirmação (PSRelatorio.ui)",
+    "colunas": {
+      "exTabAnuncios": 6,
+      "exTabPrevia": 6,
+      "exOrdens": 6,
+      "exTabLib": 6
+    },
+    "rotas": [
+      "GET /api/chaveiro/exec/painel",
+      "GET /api/chaveiro/exec/anuncios",
+      "GET /api/chaveiro/exec/preset",
+      "GET /api/chaveiro/exec/marco",
+      "POST /api/chaveiro/exec/previa",
+      "POST /api/chaveiro/exec/preparar",
+      "POST /api/chaveiro/exec/aprovar",
+      "POST /api/chaveiro/exec/executar",
+      "POST /api/chaveiro/exec/executar-lote",
+      "POST /api/chaveiro/exec/reverter",
+      "POST /api/chaveiro/exec/conferir",
+      "POST /api/chaveiro/exec/feito",
+      "POST /api/chaveiro/exec/cancelar",
+      "POST /api/chaveiro/exec/liberar",
+      "POST /api/chaveiro/exec/revogar",
+      "POST /api/chaveiro/exec/vetar",
+      "POST /api/chaveiro/exec/parar",
+      "POST /api/chaveiro/exec/retomar",
+      "POST /api/chaveiro/exec/estrategia"
+    ]
+  },
+  "custos_upload": {
+    "data": "2026-10-15",
+    "pedido": "David (15/10): «Se eu subir uma planilha de custos você consegue associar automaticamente ao anúncio?»",
+    "modulo": "src/web/custos-upload.js + src/lib/custos-upload.js + src/rotas-custos-upload.js",
+    "primario": "nenhum fixo: o único primário é o Confirmar do diálogo (PSRelatorio.ui)",
+    "colunas": {
+      "cuTabAnuncios": 6
+    },
+    "rotas": [
+      "POST /api/cliente/custos/upload",
+      "POST /api/cliente/custos/upload/confirmar"
+    ]
+  }
+}

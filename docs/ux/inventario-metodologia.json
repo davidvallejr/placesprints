@@ -1,0 +1,184 @@
+{
+ "id": "metodologia",
+ "pergunta": "Dá para confiar no algoritmo que monta o plano de ação: como ele decide, está acertando as previsões e quais regras funcionam ou devem ser aposentadas?",
+ "usuarios": [
+  "CEO e sócio (precisam confiar no motor antes de aprovar o plano)",
+  "Gestor de operação ou head de entrega (decide aposentar ou manter uma regra e ajusta config/algoritmo.json)",
+  "Consultor ou analista de performance (chega pelo link 'Como o algoritmo funciona →' na tela Cliente, seção Plano da conta)"
+ ],
+ "acao_principal": "Ver a saúde das regras e a calibração (previsto × realizado) para decidir se o algoritmo merece confiança e qual regra manter, revisar ou aposentar. A tela é só de leitura: a decisão é aplicada fora dela, em config/algoritmo.json.",
+ "acoes_secundarias": [
+  "Entender os 5 princípios e o ritual semanal, quinzenal e mensal do algoritmo",
+  "Consultar os limiares e parâmetros ativos (foco + limiares) e a versão do algoritmo",
+  "Navegar pelo header para Cliente, GMV, O que funciona e Painel",
+  "Abrir o sino de avisos (alerta.js, global)"
+ ],
+ "secoes": [
+  {
+   "titulo": "Header (marca + nav)",
+   "conteudo": "a.marca leva para /cliente (não para o Painel). Nav: Cliente, GMV, O que funciona, Painel. Não tem link para Planos/Distribuição, Processos nem Integrações.",
+   "ids_container": [],
+   "importancia": "baixa"
+  },
+  {
+   "titulo": "Título + subtítulo + selo de versão",
+   "conteudo": "H1 'Metodologia do algoritmo' com estilo inline. p.sub com a explicação e span#versao (selo neutro) preenchido com 'versão 1.0.0'. O p.sub fica fora de .secao e por isso perde o estilo de .sub.",
+   "ids_container": [
+    "versao"
+   ],
+   "importancia": "media"
+  },
+  {
+   "titulo": "Cinco princípios (texto estático)",
+   "conteudo": "Caixa .explica com 5 itens longos: foco no que move dinheiro, regra mensurável, premissa é premissa (bayesiano), medir aos 14 dias com grupo de controle, aposentar com Wilson abaixo de 25%. É uma parede de texto antes de qualquer dado.",
+   "ids_container": [],
+   "importancia": "media"
+  },
+  {
+   "titulo": "Ritual + regra de entrada",
+   "conteudo": "Segunda caixa .explica, gerada pelo JS: semanal, quinzenal, mensal e a regra de entrada de novas regras. Fica visualmente igual à caixa anterior, então são duas caixas cinza de texto seguidas.",
+   "ids_container": [
+    "ritual"
+   ],
+   "importancia": "baixa"
+  },
+  {
+   "titulo": "Calibração: previsto × realizado",
+   "conteudo": "Com c.n > 0 mostra 4 KPIs: Ações medidas, Erro absoluto médio (R$), Viés (R$, superestima ou subestima), Dentro do intervalo (%) com Brier, e a nota. Com n = 0 (situação de hoje) mostra só vazio-box com a nota 'Nenhuma ação distribuída foi medida ainda…'. As calibracao.linhas que a API devolve nunca são renderizadas.",
+   "ids_container": [
+    "calib"
+   ],
+   "importancia": "alta"
+  },
+  {
+   "titulo": "Registro de regras e saúde de cada uma",
+   "conteudo": "Tabela de 8 colunas, uma linha por regra (hoje 15): id técnico (ex. ima_conversao) + descrição, KPI + tipo de tarefa, Geradas, Distribuídas, Medidas, Melhoraram, Probabilidade efetiva com a fonte em texto, e selo de Situação (sem dados ainda, em observação, validada pelos dados, candidata à aposentadoria). Não ordena por situação, não tem filtro nem totais.",
+   "ids_container": [
+    "regras"
+   ],
+   "importancia": "alta"
+  },
+  {
+   "titulo": "Limiares ativos",
+   "conteudo": "Tabela parâmetro/valor com cerca de 23 linhas (foco escalar + limiares). As chaves aparecem cruas, só com o '_' trocado por espaço (ex. 'ads roas vs conta escalar'), sem unidade e sem agrupamento. foco.max_por_regra (objeto) é filtrado e não aparece. Nota final: editáveis em config/algoritmo.json, mudança sobe a versão.",
+   "ids_container": [
+    "limiares"
+   ],
+   "importancia": "baixa"
+  },
+  {
+   "titulo": "Os 8 sistemas (15/10/2026)",
+   "conteudo": "Lista estática ol.principios#listaSistemas, gerada do catálogo config/sistemas.json (nome, papel em 1 linha, o que assina): Trinity, Arquiteto, Oráculo, Merovíngio, Chaveiro, Morpheus, Smith, Neo. Explica que toda mensagem interna diz de qual sistema vem e que ao cliente só o Merovíngio assina. scripts/teste-sistemas.mjs confere que a lista bate com o catálogo.",
+   "ids_container": [
+    "secSistemas",
+    "listaSistemas"
+   ],
+   "importancia": "media"
+  },
+  {
+   "titulo": "Footer + sino de avisos",
+   "conteudo": "Footer institucional. O alerta.js injeta o #psSino fixo no canto inferior direito e o #psToasts.",
+   "ids_container": [],
+   "importancia": "baixa"
+  }
+ ],
+ "kpis": [
+  "Versão do algoritmo (#versao, hoje 1.0.0)",
+  "Ações medidas (calibracao.n, hoje 0)",
+  "Erro absoluto médio previsto × realizado (R$)",
+  "Viés (R$; positivo = superestima)",
+  "% dentro do intervalo previsto + Brier score",
+  "Por regra: Geradas, Distribuídas, Medidas, Melhoraram, Probabilidade efetiva (prior calibrado), Situação",
+  "Não exibidos mas disponíveis na API: total de regras ativas (15), total geradas (563) vs distribuídas (10, ~1,8%) vs medidas (0), taxa/taxa_baixo/taxa_alto (Wilson), prior inicial, descartadas, dados, justificativa, ativa, foco.max_por_regra"
+ ],
+ "hooks_js": [
+  "#versao (getElementById via $('versao'), recebe textContent)",
+  "#ritual ($('ritual').innerHTML)",
+  "#calib ($('calib').innerHTML, também o container do erro no catch)",
+  "#regras ($('regras').innerHTML)",
+  "#limiares ($('limiares').innerHTML)",
+  "metodologia.js não usa querySelector, classList nem dataset. O único seletor é document.getElementById, por meio de const $ = id => document.getElementById(id)",
+  "Ordem dos scripts: <script src=\"metodologia.js\"> no fim do body (sem defer; depende dos ids já existirem no DOM) + <script src=\"/alerta.js\" defer>",
+  "Globais injetados pelo alerta.js que o layout não pode esconder nem colidir: #psSino, #psPainel, #psToasts, button.sino, .cont, .ico, .psItem, .psToast, .mini, .topo, .fechar (fixos em bottom/right, z-index 9998/9999)",
+  "Strings do mapa SIT usadas como chave de selo: 'sem dados ainda'→neutro, 'em observação'→atencao, 'validada pelos dados'→bom, 'candidata à aposentadoria'→ruim (vêm de src/lib/calibracao.js:83-86)"
+ ],
+ "classes_geradas_por_js": [
+  "explica (div, com h4, ul, li, b, p dentro)",
+  "kpis",
+  "kpi",
+  "rotulo",
+  "valor",
+  "detalhe",
+  "mudo",
+  "vazio-box",
+  "tabela-wrap",
+  "t (table.t, com thead/th/tbody/tr/td)",
+  "n (th.n e td.n, colunas numéricas)",
+  "selo",
+  "neutro",
+  "atencao",
+  "bom",
+  "ruim",
+  "Os templates também geram estilos inline: style=\"font-size:12.5px\", \"font-size:11.5px\", \"font-size:11px;white-space:normal;max-width:210px\", \"margin-top:8px\", \"font-size:12.5px;margin-top:8px\". Se o redesenho tirar esses inline, precisa trocar por classes."
+ ],
+ "css_origem": "Dois arquivos linkados e compartilhados com as outras telas. ui.css traz os tokens :root (--laranja, --laranja-escuro, --tinta, --cinza, --borda, --fundo, --fundo-suave, verde/ambar/verm/azul + -suave, --sombra, --raio:16px) e header, .marca, .header-links, main (max-width 1060px), .kpis/.kpi, .selo.*, .secao/.secao h3/.secao .sub, .vazio-box, footer e media queries de 860/560px. ui-extra.css traz .explica, .tabela-wrap, table.t (min-width 640px), .n, .mudo, .pos/.neg e o override do header com wrap. A página não tem bloco <style>. Há estilos inline no HTML (h1 com clamp 24–32px/800, p.sub com max-width 70ch e margin, a.marca text-decoration:none) e nos templates JS (font-sizes 11–12.5px, max-width 210px). O alerta.js injeta o próprio <style> (sino e toasts com cores hex fixas). Fonte de sistema, sem dark mode.",
+ "links_navegacao": [
+  "Header marca: /cliente",
+  "Header nav: /cliente (Cliente), /gmv (GMV), /resultados (O que funciona), / (Painel)",
+  "Única entrada para esta tela: src/web/cliente.js:227, link 'Como o algoritmo funciona →' em #secPlanoConta. Nenhum header de outra tela linka /metodologia",
+  "Rota: src/server.js:168 app.get('/metodologia') → metodologia.html; API: src/rotas-planos.js:620 GET /api/metodologia → { versao, foco, limiares, ritual, regra_de_entrada, regras: saudeRegras(), calibracao: compararPrevisaoRealizado() }"
+ ],
+ "dependencias_externas": [
+  "Nenhuma CDN, Chart.js ou webfont (stack de fonte do sistema)",
+  "GET /api/metodologia (mesmo servidor, porta 3012)",
+  "/logo (imagem servida pelo servidor, com onerror que esconde)",
+  "/alerta.js (sino global, consulta /api/notificacoes a cada 8 s)",
+  "config/algoritmo.json (fonte dos limiares, citada no texto da tela)"
+ ],
+ "testes_que_leem_esta_tela": [
+  "scripts/teste-sistemas.mjs — selos span.sis[data-sistema] desta tela: todo data-sistema existe em config/sistemas.json e bate com selos_sistema deste inventário; a lista #listaSistemas bate com o catálogo",
+  "Nenhum scripts/teste-*.mjs faz assert em src/web/metodologia.html ou src/web/metodologia.js (grep por 'metodologia.html', 'metodologia.js', '/metodologia', 'api/metodologia' não acha nada em scripts/).",
+  "Falsos positivos que NÃO são desta tela: teste-semanal-render.mjs:221-222 e :288 (h.includes('Método do item 1'), h.includes('class=\"metodologia\"')), teste-semanal-dados.mjs:19/:34 e teste-semanal-rotas.mjs:206 (regras.metodologia === true). Todos se referem à flag 'metodologia' do relatório semanal e à caixa .metodologia de src/lib/render-semanal.js, que não podem ser renomeadas.",
+  "Indireto, CSS compartilhado: teste-promocoes-ui.mjs caso '58 · contraste ≥ 4,5:1' lê src/web/ui.css com a regex /--([a-z-]+)\\s*:\\s*(#[0-9a-fA-F]{6})/g e exige contraste ≥ 4,5 em laranja-escuro/#fff1e8, laranja-escuro/#ffffff, verde/verde-suave, verde/#ffffff, verde/#f6fbf6, cinza/#ffffff, cinza/fundo-suave, cinza/verm-suave, cinza/ambar-suave, cinza/#f6fbf6, azul/azul-suave, ambar/ambar-suave, ambar/#ffffff, verm/verm-suave, verm/#ffffff e #ffffff/verm. Se o redesenho mexer nos tokens de ui.css, eles precisam continuar como hex de 6 dígitos e passar nesses pares.",
+  "Indireto, alerta.js (incluído nesta tela): teste-notificacoes.mjs:33-39 exige que todo innerHTML do alerta.js seja literal fixo (regex /^'[^'$]*'$/), /linkSeguro/ presente e o padrão js.match(/const linkSeguro = l => \\/(.+)\\/\\.test/). Não editar alerta.js no redesenho.",
+  "teste-promocoes-ui.mjs:15 também carrega CSS_UI só para o caso 58; não há assert de classes de ui-extra.css."
+ ],
+ "problemas_ux": [
+  "Hierarquia invertida: duas paredes de texto (5 princípios + ritual), em caixas cinza idênticas, vêm antes de qualquer dado. Quem quer saber 'está funcionando?' rola meia tela até a calibração.",
+  "Hoje a seção mais importante (calibração) está vazia (n = 0) e a tabela tem 15 regras 'em observação' ou 'sem dados' com 0 medidas. A tela não diz quando a calibração começa nem mostra o progresso (10 distribuídas, 0 maduras).",
+  "Falta um veredito no topo: sem resumo como 'v1.0.0 · 15 regras ativas · 563 ações geradas · 10 distribuídas (1,8%) · 0 medidas'. O gargalo real (quase nada é distribuído) fica invisível.",
+  "A tabela de regras usa ids técnicos (ima_conversao, ads_otimizar_antes) como título, tem 8 colunas densas com min-width 640px (scroll horizontal no celular) e põe a 'fonte' do prior em texto corrido dentro da célula. Não ordena por situação e não tem totais nem filtro.",
+  "O funil Geradas → Distribuídas → Medidas → Melhoraram aparece como 4 números soltos, quando uma barra de funil por regra leria muito melhor.",
+  "Limiares: cerca de 23 linhas com chaves cruas ('ima gap conversao pct', 'ads roas vs conta escalar'), sem unidade, sem grupo e sem explicação. É um dump de config que pesa a tela para o sócio. Os tetos por regra (foco.max_por_regra) são omitidos.",
+  "Sem estado de carregamento: containers vazios até o fetch e o #versao fica como pílula cinza vazia (a classe .selo tem padding).",
+  "Erro frágil: não confere r.ok. Se a API responder 500 com {erro}, d.ritual undefined gera um TypeError técnico ('Cannot read properties of undefined…') exibido só em #calib, enquanto ritual, regras e limiares ficam em branco. Também não há botão de tentar de novo.",
+  "Tabela de regras sem estado vazio (com 0 regras renderiza só o cabeçalho).",
+  "Bug de texto: com viés exatamente 0 mostra 'o algoritmo subestima'.",
+  "p.sub do topo fica fora de .secao e não herda o estilo .sub (tamanho e cor default). Calibração e Limiares não têm subtítulo, enquanto Regras tem: inconsistência.",
+  "Estilos inline espalhados (h1, p.sub, a.marca e vários font-size 11–12.5px nos templates) em vez de classes.",
+  "Navegação inconsistente: a marca leva a /cliente, o nav difere de todas as outras telas, não há link para Planos/Distribuição (onde o algoritmo é usado) e nenhuma tela além do Cliente linka /metodologia.",
+  "Jargão estatístico sem tradução para o público executivo: Brier, encolhimento bayesiano, limite superior de Wilson, prior.",
+  "Dados úteis da API não são usados: calibracao.linhas (as ações medidas uma a uma), taxa com intervalo de Wilson, justificativa e dados de cada regra.",
+  "Sem dark mode. Os emojis 🔔🔊🔇 vêm do alerta.js global, não desta tela."
+ ],
+ "estados": [
+  "Carregando: inexistente (containers vazios, #versao como pílula vazia)",
+  "Calibração vazia (n = 0, estado atual): vazio-box com calibracao.nota",
+  "Calibração com dados (n > 0): 4 KPIs + nota (código existe, nunca exercitado com dados reais)",
+  "Regras: cada linha com um de 4 selos (neutro/atencao/bom/ruim). Hoje 13 'em observação' e 2 'sem dados ainda'",
+  "Lista de regras vazia: sem tratamento (tabela só com cabeçalho)",
+  "Erro de rede ou JSON: catch escreve e.message em vazio-box dentro de #calib; resto em branco",
+  "Erro HTTP 500 com corpo JSON: não detectado (sem r.ok) e vira TypeError técnico",
+  "Sem ML ou sem conexão: não se aplica (tela não depende do Mercado Livre)"
+ ],
+ "recomendacao": "Reorganizar a tela como 'Confiança no algoritmo', do veredito ao detalhe, mantendo os ids versao, ritual, calib, regras e limiares e as classes que o JS gera. (1) Faixa-veredito no topo, uma linha só: versão (#versao), regras ativas, ações geradas → distribuídas → medidas com a taxa de distribuição, e uma frase de estado ('Calibração começa quando as 10 tarefas distribuídas completarem 14 dias'). (2) 'Está acertando?' (#calib): os 4 KPIs atuais com rótulos em português executivo (Brier e intervalo como detalhe secundário) ou, com n = 0, um estado vazio que mostre o progresso até a primeira medição em vez de só a nota. (3) 'Quais regras funcionam?' (#regras): tabela enxuta ordenada por situação (aposentadoria → validada → observação → sem dados), nome legível no lugar do id, mini-funil Geradas → Distribuídas → Medidas → Melhoraram numa barra, probabilidade efetiva com a fonte recolhida (title/details), totais no rodapé e, no celular, a tabela vira lista de cards. (4) 'Como funciona' (#ritual + princípios): os 5 princípios em 5 cards curtos de uma linha cada e o ritual como linha do tempo semanal → quinzenal → mensal. Esta parte vem depois dos dados, porque é referência e não decisão. (5) 'Parâmetros' (#limiares) dentro de um <details> recolhido, com rótulos humanos, unidades (%, dias, R$, ×) e grupos (Foco, Estoque/Full, Ads, Conteúdo), incluindo os tetos de foco.max_por_regra. Complementos: header e nav iguais às outras telas, com Metodologia incluída e a marca levando ao Painel; skeleton enquanto carrega; erro com mensagem amigável, checagem de r.ok e botão de tentar de novo; nada de estilo inline, tudo em classes sobre os tokens de ui.css (sem mudar os hex validados pelo teste de contraste 58); alerta.js intocado.",
+ "selos_sistema": {
+  "regra": "Selo discreto do sistema de origem (config/sistemas.json, 15/10/2026) ao lado do título da seção: span.sis[data-sistema], classe .sis em ui.css. Só tela interna; não muda id nem nº de colunas. Teste: scripts/teste-sistemas.mjs.",
+  "secoes": {
+   "#secCalib": "oraculo",
+   "#secRegras": "oraculo",
+   "#secComo": "arquiteto",
+   "#secParam": "arquiteto"
+  }
+ }
+}

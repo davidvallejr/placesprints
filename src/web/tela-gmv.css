@@ -1,0 +1,41 @@
+/* GMV (/gmv) · só o que o ui.css não cobre. Tokens vêm do ui.css. */
+/* barra de filtros: atalho de período (.seg) e o botão "Filtros" do PSFiltros na mesma linha; chips e painel do componente descem para a linha de baixo, na largura toda */
+.filtros #periodo{margin-bottom:0}
+#filtros.flt{display:contents}
+#filtros .flt-chips,#filtros .flt-painel{flex:1 1 100%}
+#filtros .flt-chips:empty{display:none}
+/* chip de período é longo ("Data da venda (dia do pedido…) · Últimos 3 meses: …"): no celular ele quebra linha em vez de vazar sobre o vizinho */
+#filtros .flt-chip{height:auto;min-height:28px;padding-top:3px;padding-bottom:3px}
+#filtros .flt-chip>span{overflow-wrap:anywhere}
+/* valores abreviados com decimal ("R$ 3,8 mil"): com tabular-nums a vírgula ganha largura de dígito e vira "3 , 8" */
+#kpis .valor{font-variant-numeric:normal}
+/* chip/aviso de cobertura na meta: sem o separador " · " do .pg-meta (ele cairia dentro da pílula); o espaço vem do HTML */
+.pg-meta>#aviso::before{content:none}
+.pg-meta>#aviso.aviso{margin:var(--e-2) 0 0}
+#tabela td>.badge{margin-top:4px}
+/* ponte: rótulo | trilho | valor; larguras e deslocamentos vêm do JS (element.style), cores por classe */
+.ponte{display:grid;grid-template-columns:minmax(120px,auto) 1fr auto;grid-auto-flow:dense;gap:0 var(--e-3);align-items:center;font-size:var(--t-13);color:var(--cinza)}
+.ponte .rot{grid-column:1}
+.ponte .barra{grid-column:2;margin:6px 0}
+.ponte .val{grid-column:3}
+.ponte .barra i.anterior,.ponte .barra i.atual{background:var(--cinza)}
+.ponte .barra i.assoc{background:var(--laranja)}
+.ponte .barra i.rest{background:var(--borda-campo)}
+.ponte .barra i.esp{background:transparent}
+.ponte .val{font-variant-numeric:tabular-nums;color:var(--tinta);font-weight:500;white-space:nowrap}
+@media (max-width:639px){.ponte{grid-template-columns:1fr auto}.ponte .val{grid-column:2}.ponte .barra{grid-column:1/-1;margin:0 0 var(--e-3)}}
+/* celular estreito: "R$ 357 mil" não quebra dentro da célula de KPI (2 colunas) */
+@media (max-width:420px){#kpis .valor{font-size:var(--t-24);white-space:nowrap}}
+/* linha expansível: chevron pequeno no nome; o detalhe abre na linha irmã tr.det (fundo pelo ui.css), largura toda, sem subtabela */
+details.lin>summary{display:flex;align-items:center;gap:6px}
+details.lin>summary::after{content:"";width:12px;height:12px;flex:none;background:currentColor;opacity:.6;transition:transform .15s;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") center/contain no-repeat;
+          mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") center/contain no-repeat}
+details.lin[open]>summary::after{transform:rotate(180deg)}
+#tabela tr.det>td{font-weight:400;color:var(--tinta);white-space:normal;padding:8px 16px}
+#tabela tr.det>td div{padding:3px 0}
+#tabela td a{text-decoration:none}
+#tabela td a:hover{text-decoration:underline}
+.recolhido ul.nota{padding-left:20px}
+.recolhido ul.nota li{margin:4px 0}
+@media (prefers-reduced-motion:reduce){details.lin>summary::after{transition:none}}

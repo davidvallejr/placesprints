@@ -1,0 +1,13 @@
+{
+  "_fonte_doc": "https://developer.bling.com.br/webhooks (campos de data: precoCusto, precoCompra, padrao, produto.id, fornecedor.id revalidados em 05/10/2026)",
+  "_aviso": "construída a partir da documentação; não é captura real. NÃO CONFIRMADO: envelope (eventId, date, version, companyId) conforme pesquisa; padrao como booleano; se editar custo na tela dispara o evento. O 'codigo' de data é o código NO FORNECEDOR, não o SKU.",
+  "evento": {
+    "eventId": "01945e5a-0b6f-7c2e-9d1a-3f2b7c8d9e10",
+    "date": "2026-10-05T12:00:00Z",
+    "version": "v1",
+    "event": "product_supplier.updated",
+    "companyId": "d4475854366a36c86a37e792f9634a51",
+    "data": { "id": 555, "descricao": "Caneca preta (no fornecedor)", "codigo": "FORN-CX-02", "precoCusto": 12.5, "precoCompra": 11, "padrao": true,
+              "produto": { "id": 1002 }, "fornecedor": { "id": 777 } }
+  }
+}

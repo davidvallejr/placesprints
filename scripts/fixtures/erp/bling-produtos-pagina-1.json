@@ -1,0 +1,17 @@
+{
+  "_fonte_doc": "paginação: https://developer.bling.com.br/boas-praticas · campos: https://github.com/tempont/bling-erp-api-python/blob/HEAD/specs/bling-openapi-reference.json (SPEC-CÓPIA; conferir em https://developer.bling.com.br/referencia)",
+  "_aviso": "construída a partir da documentação; não é captura real. O teste completa a página até 100 itens (limite) com itens simples. NÃO CONFIRMADO: idProdutoPai na listagem; situacao 'E' = excluído (criterio=5); precoCusto 0/null quando falta fornecedor padrão.",
+  "_requisicao": "GET /Api/v3/produtos?criterio=5&pagina=1&limite=100",
+  "data": [
+    { "id": 1001, "idProdutoPai": 0, "nome": "Caneca branca 325 ml", "codigo": "CAM-001", "preco": 89.9, "precoCusto": 36.32, "precoCompra": 30, "tipo": "P", "situacao": "A", "formato": "S", "estoque": { "saldoVirtualTotal": 12 } },
+    { "id": 1002, "idProdutoPai": 0, "nome": "Caneca preta 325 ml", "codigo": "CAM-002", "preco": 89.9, "precoCusto": 0, "tipo": "P", "situacao": "A", "formato": "S", "estoque": { "saldoVirtualTotal": 3 } },
+    { "id": 1003, "idProdutoPai": 0, "nome": "Produto sem fornecedor padrão", "codigo": "SEM-FORN", "preco": 19.9, "precoCusto": 0, "tipo": "P", "situacao": "A", "formato": "S", "estoque": { "saldoVirtualTotal": 0 } },
+    { "id": 1005, "idProdutoPai": 2001, "nome": "Camiseta azul M", "codigo": "VAR-AZUL", "preco": 59.9, "precoCusto": 20, "tipo": "P", "situacao": "A", "formato": "S", "estoque": { "saldoVirtualTotal": 7 } },
+    { "id": 1006, "idProdutoPai": 0, "nome": "Kit 2 canecas brancas + 1 preta", "codigo": "KIT-01", "preco": 199.9, "precoCusto": 50, "tipo": "P", "situacao": "A", "formato": "E", "estoque": { "saldoVirtualTotal": 1 } },
+    { "id": 1007, "idProdutoPai": 0, "nome": "Kit sem estrutura cadastrada", "codigo": "KIT-SEM", "preco": 99.9, "precoCusto": null, "tipo": "P", "situacao": "A", "formato": "E", "estoque": { "saldoVirtualTotal": 0 } },
+    { "id": 1008, "idProdutoPai": 0, "nome": "Produto inativo", "codigo": "INATIVO-1", "preco": 29.9, "precoCusto": 15, "tipo": "P", "situacao": "I", "formato": "S", "estoque": { "saldoVirtualTotal": 0 } },
+    { "id": 1009, "idProdutoPai": 0, "nome": "Produto excluído", "codigo": "EXCLUIDO-1", "preco": 29.9, "precoCusto": 15, "tipo": "P", "situacao": "E", "formato": "S", "estoque": { "saldoVirtualTotal": 0 } },
+    { "id": 1010, "idProdutoPai": 0, "nome": "Produto sem código (SKU)", "codigo": "", "preco": 39.9, "precoCusto": 10, "tipo": "P", "situacao": "A", "formato": "S", "estoque": { "saldoVirtualTotal": 5 } },
+    { "id": 1011, "idProdutoPai": 0, "nome": "Só preço de compra", "codigo": "CUSTO-NULL", "preco": 49.9, "precoCusto": null, "precoCompra": 8, "tipo": "P", "situacao": "A", "formato": "S", "estoque": { "saldoVirtualTotal": 2 } }
+  ]
+}

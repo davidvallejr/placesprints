@@ -1,0 +1,196 @@
+{
+ "id": "comercial",
+ "pergunta": "Quais prospects já posso apresentar com diagnóstico da conta do Mercado Livre, e qual o próximo passo de cada um (enviar link, ler os dados, abrir o relatório, chamar no WhatsApp)?",
+ "usuarios": [
+  "Closer / comercial (cadastra, envia o link, chama no WhatsApp, apresenta o relatório)",
+  "CEO / sócio (acompanha o funil de pré-venda e a qualidade dos leads do site)",
+  "Consultor que apresenta o diagnóstico na reunião de venda"
+ ],
+ "acao_principal": "Levar cada prospect até o relatório de diagnóstico pronto para apresentar (\"Ver relatório\" / \"Baixar PDF\"). Hoje o caminho é cadastro, depois Copiar link, depois conexão, depois Ler os dados da conta, depois relatório.",
+ "acoes_secundarias": [
+  "Cadastrar novo prospect (form #fNovo; gera o link de conexão)",
+  "Copiar o link de conexão OAuth do ML (data-link)",
+  "Ler os dados da conta / Atualizar dados: job de coleta de 90 dias com polling em /api/planos/job/:id (data-ler)",
+  "Resumo rápido: abre uma linha com 6 números dos últimos 28 dias + leitura causal (data-diag)",
+  "Abrir conversa no WhatsApp do lead (wa.me)",
+  "Remover cadastro: revoga no ML e apaga, LGPD (data-del, com confirm())",
+  "Ler os avisos do sino (alerta.js: prospect conectou, diagnóstico pronto, coleta falhou)",
+  "Link do formulário público (btLinkPublico): monta o link universal com UTMs e copia; mostra o /conectar",
+  "Apagar cadastros de teste (btApagarTestes): prévia + confirmar, só líder/dono"
+ ],
+ "secoes": [
+  {
+   "titulo": "Header (marca + nav)",
+   "conteudo": "Logo /logo + 'Place2u · Comercial' (link para /comercial). Nav .header-links: Visão por cliente (/cliente), Analistas (/analistas), Distribuição (/planos). Não tem link para o Painel executivo (/). Sticky, 64px.",
+   "ids_container": [],
+   "importancia": "media"
+  },
+  {
+   "titulo": "Título + subtítulo",
+   "conteudo": "h2 'Diagnóstico de conta para prospect' + .sub: parágrafo longo e técnico (OAuth, MELI_CLIENT_ID_COMERCIAL, 'sem Notion', 'nada é alterado').",
+   "ids_container": [],
+   "importancia": "baixa"
+  },
+  {
+   "titulo": "Aviso de infraestrutura do ML",
+   "conteudo": "Só aparece se infra_pronta=false: faixa âmbar com ⚠️ falando de MELI_CLIENT_ID / PUBLIC_BASE_URL no .env + túnel público. Fica vazia quando a infra está pronta, como hoje.",
+   "ids_container": [
+    "infra"
+   ],
+   "importancia": "baixa"
+  },
+  {
+   "titulo": "Card 'Novo prospect'",
+   "conteudo": "Form em linha com 4 inputs só com placeholder (Nome do contato*, Empresa*, E-mail opcional, Telefone opcional) + botão .bt 'Cadastrar e gerar link'. Ocupa a posição mais nobre da tela, mas hoje os 3 leads vieram do site (origem 'publico').",
+   "ids_container": [
+    "fNovo",
+    "pNome",
+    "pEmpresa",
+    "pEmail",
+    "pFone"
+   ],
+   "importancia": "media"
+  },
+  {
+   "titulo": "Lista de prospects (tabela)",
+   "conteudo": "Card com tabela de 5 colunas: Prospect (nome em negrito + selos site/closer, repetido, '🔥 pediu contato', botão 'WhatsApp do lead'; linha .mini com empresa, e-mail, telefone, 'desde', consentimento LGPD) | Conexão (selo conectado/erro/aguardando) | Link (Copiar link ou 'indisponível') | Diagnóstico ('após conectar' ou 'Ler os dados da conta' ou [Ver relatório, Baixar PDF, Atualizar dados], sempre com 'Resumo rápido' quando conectado) | ✕ remover. Ordem: criado_em DESC, sem priorização.",
+   "ids_container": [
+    "lista"
+   ],
+   "importancia": "alta"
+  },
+  {
+   "titulo": "Linha expansível 'Resumo rápido' (por prospect)",
+   "conteudo": "tr#dx-<id> hidden com td colspan=5 > div.diag#dxbox-<id>: empresa + janela de 28 dias (+ selo 'amostra parcial'), grade .kv com 6 números (faturamento Δ%, pedidos Δ%, visitas Δ%, conversão, ticket médio, cancelamentos), 'Leitura causal', 'Onde a consultoria ataca primeiro' (até 5 itens), nota de rodapé. Não tem botão de fechar.",
+   "ids_container": [
+    "dx-<id>",
+    "dxbox-<id>"
+   ],
+   "importancia": "alta"
+  },
+  {
+   "titulo": "Footer",
+   "conteudo": "Texto de garantia LGPD / 'nada é alterado na conta'. É a terceira vez que a mesma frase aparece na tela.",
+   "ids_container": [],
+   "importancia": "baixa"
+  },
+  {
+   "titulo": "Sino de avisos (injetado por /alerta.js)",
+   "conteudo": "Botão fixo no canto inferior direito com contador, painel de histórico, toasts e som; prefixa '(n)' no document.title. É global, aparece em todas as telas.",
+   "ids_container": [
+    "psSino",
+    "psPainel",
+    "psToasts"
+   ],
+   "importancia": "media"
+  }
+ ],
+ "kpis": [
+  "A tela não tem KPI no topo: faltam os números do funil (total de prospects, aguardando conexão, conectados sem dados, prontos para apresentar, pediram contato, com erro)",
+  "Dentro do Resumo rápido (por prospect, últimos 28 dias completos vs. 28 anteriores): faturamento (Δ%), pedidos (Δ%), visitas (Δ%), conversão %, ticket médio, cancelamentos",
+  "Selo 'amostra parcial' quando numeros.parcial",
+  "Leitura causal (dx.leitura) + 'Onde a consultoria ataca primeiro' (dx.causalidade.investigar, até 5)"
+ ],
+ "hooks_js": [
+  "#infra (getElementById('infra'): recebe o aviso de infra via innerHTML)",
+  "#lista (getElementById('lista'): recebe a tabela/estado vazio/erro via innerHTML; é a raiz dos querySelectorAll)",
+  "#fNovo (getElementById('fNovo').onsubmit; e.target.reset())",
+  "#pNome, #pEmpresa, #pEmail, #pFone (getElementById(...).value no POST /api/comercial/prospectos)",
+  ".bt (e.target.querySelector('.bt'): o botão submit DENTRO do #fNovo precisa manter a classe bt; é desabilitado durante o envio)",
+  "#dx-<id> (tr gerada; getElementById('dx-'+id).hidden = false)",
+  "#dxbox-<id> (div.diag gerada; getElementById('dxbox-'+id).innerHTML)",
+  "[data-link] / dataset.link (botão Copiar link; o texto vira 'copiado ✓' e volta para 'Copiar link')",
+  "[data-del] / dataset.del (remover; confirm() + POST /api/comercial/remover)",
+  "[data-ler] / dataset.ler (Ler os dados / Atualizar dados; o textContent vira 'Lendo… fase n/total'; disabled)",
+  "[data-diag] / dataset.diag (Resumo rápido; abre #dx-<id>)",
+  "atributo hidden na tr#dx-<id> (o CSS não pode forçar display nessa tr)",
+  "td colspan=\"5\" na linha de resumo: precisa bater com o nº de colunas da tabela se o layout mudar",
+  "<script src=\"comercial.js\"> (caminho relativo) + <script src=\"/alerta.js\" defer>",
+  "Classes geradas pelo JS que o CSS precisa estilizar: aviso, amb, cartao, vazio, selo, bom, neutro, btn-mini, mini, diag, kv (kv>div, kv b, kv span), table/thead/th/td/tr",
+  "Classes do HTML estático: marca, header-links, sub, cartao, linha, bt, (bt.sec definida mas não usada)",
+  "IDs/classes injetados por alerta.js que não podem colidir: #psSino, #psPainel, #psToasts, .sino, .cont, .psItem, .psToast, .fechar e 'button.mini' dentro de #psPainel (o .mini global da tela já vaza a cor cinza para esses botões)",
+  "Acoplamento de texto fora da tela: src/lib/diagnostico-comercial.js:32 devolve a mensagem 'Use \"Ler os dados da conta\"', então o rótulo do botão data-ler precisa continuar igual ou a mensagem precisa ser ajustada junto",
+  "Avisos do servidor (rotas-planos.js:307, server.js:255) dizem 'Abra o Comercial e emita o relatório (PDF)', então o botão do PDF precisa continuar visível",
+  "Endpoints chamados: GET/POST /api/comercial/prospectos, POST /api/comercial/remover, POST /api/comercial/coletar, GET /api/planos/job/:id, GET /api/comercial/diagnostico?id=, links /comercial/diagnostico?id= e /comercial/diagnostico.pdf?id=",
+  "#btLinkPublico (diálogo do link único universal https://<COMERCIAL_PUBLIC_HOST>/ com UTMs → copia; mostra /conectar como link direto; ids lpUrl/lpSource/lpMedium/lpCampaign/lpConectar gerados)",
+  "#btApagarTestes (POST /api/comercial/apagar-testes { por } prévia → confirmar:true; nome em localStorage ps_perfil_por)"
+ ],
+ "classes_geradas_por_js": [
+  "aviso",
+  "amb",
+  "cartao",
+  "vazio",
+  "selo",
+  "bom",
+  "neutro",
+  "btn-mini",
+  "mini",
+  "diag",
+  "kv"
+ ],
+ "css_origem": "O CSS vem só de um <style> inline no <head> de comercial.html, com tokens próprios no :root (--laranja, --tinta, --cinza, --borda, --verde/--ambar/--verm/--azul + versões suaves, --sombra, --raio 16px). A tela não usa o ui.css / ui-extra.css compartilhados (que gmv, promocoes, resultados e metodologia usam) nem o styles.css. Há estilo inline em atributos do HTML (form style=\"margin-top:12px\", <b style=\"font-size:15px\">) e dentro dos template strings do JS (card da tabela style=\"padding:0;overflow:hidden\", link do WhatsApp style=\"text-decoration:none\", style=\"margin:8px 0\", style=\"margin-top:8px\"). O alerta.js injeta o próprio <style> para o sino e os toasts.",
+ "links_navegacao": [
+  "/comercial (marca/logo)",
+  "/cliente (Visão por cliente)",
+  "/analistas (Analistas)",
+  "/planos (Distribuição)",
+  "/comercial/diagnostico?id=<id> (Ver relatório, nova aba)",
+  "/comercial/diagnostico.pdf?id=<id> (Baixar PDF, nova aba)",
+  "https://wa.me/55<telefone> (WhatsApp do lead, externo)",
+  "Avisos do sino com 'Abrir →' para /comercial e /cliente?cliente=...",
+  "FALTA: / (Painel executivo), que analistas.html e cliente.html têm; também faltam GMV, Promoções, O que funciona, Integrações e Processos, presentes na nav de cliente.html"
+ ],
+ "dependencias_externas": [
+  "Nenhuma CDN, biblioteca ou fonte web (stack de fontes do sistema -apple-system/Segoe UI/Roboto)",
+  "/logo (rota do servidor, com onerror que esconde a imagem)",
+  "/alerta.js (sino de avisos global, polling de /api/notificacoes a cada 8 s, som via WebAudio, Notification API)",
+  "wa.me (WhatsApp externo)",
+  "navigator.clipboard (fallback para prompt())",
+  "confirm()/alert()/prompt() nativos para confirmação e erros",
+  "Relatório HTML e PDF gerados no servidor (renderDiagnosticoComercial + servirPdf)"
+ ],
+ "testes_que_leem_esta_tela": [
+  "scripts/teste-comercial-publico.mjs:47: loop for (const p of ['/comercial', '/cliente', '/analistas', '/planos', '/api/comercial/prospectos', '/api/planos/equipe', '/api/tarefas', '/comercial.js', '/d/curto', `/d/${TOKEN}/outra`]) assert.ok(!passa(p), `painel/rota interna NÃO pode passar pelo host comercial: ${p}`). A rota /comercial e o arquivo /comercial.js precisam continuar existindo com esse nome e bloqueados pelo host público (guarda-local). Um CSS novo, como /comercial.css, também fica bloqueado pela guarda por padrão.",
+  "scripts/teste-comercial-publico.mjs:55: assert.ok(passa('/comercial', { host: 'localhost:3012' }), 'localhost segue com acesso total')",
+  "scripts/teste-comercial-publico.mjs:144-145: r = await get('/api/comercial/prospectos'); assert.equal(r.status, 403, 'lista de leads INACESSÍVEL pelo host público'). É o endpoint que alimenta #lista.",
+  "NENHUM teste faz assert em strings do conteúdo de src/web/comercial.html ou src/web/comercial.js. O grep por fNovo, pEmpresa, data-ler, data-diag, dxbox, 'Ler os dados', 'Resumo rápido', 'Copiar link', 'Diagnóstico de conta para prospect', 'WhatsApp do lead' e infra_pronta em scripts/ só achou o próprio arquivo e o backend. Os asserts de HTML em teste-comercial-publico.mjs:110-181 ('Autorizo a Place2u', 'noindex', 'Falta só conectar', 'Conectar no Mercado Livre', /somente leitura/i, /wa\\.me|13991692731/) são da landing pública em src/rotas-publicas.js, não desta tela.",
+  "scripts/teste-diagnostico-comercial.mjs testa src/lib/render-diagnostico-comercial.js e diagnostico-comercial.js (o relatório aberto por 'Ver relatório'/'Baixar PDF'), não esta tela.",
+  "scripts/teste-notificacoes.mjs:32+ lê src/web/alerta.js (carregado nesta tela): assert de innerHTML só com literal fixo (/^'[^'$]*'$/) e /linkSeguro/.test(js). Não mexer em alerta.js no redesenho."
+ ],
+ "problemas_ux": [
+  "Sem visão de funil: o CEO/sócio não vê de relance quantos prospects estão em cada etapa (aguardando, conectado sem dados, pronto para apresentar, pediu contato, erro). Nenhum KPI no topo.",
+  "Sem priorização: a lista é ordenada por criado_em DESC e nada sobe primeiro quem 'pediu contato' ou já está pronto para apresentar. Não há filtro nem busca.",
+  "Hierarquia invertida: o form de cadastro (ação rara, já que os 3 leads atuais vieram do site) ocupa o topo e empurra para baixo a lista, que é o trabalho do dia a dia.",
+  "Subtítulo com jargão de dev (OAuth, MELI_CLIENT_ID_COMERCIAL, 'sem Notion') e o aviso de infra falando de .env e túnel público: texto para desenvolvedor numa tela de vendedor. A garantia 'nada é alterado na conta' se repete 3 vezes (subtítulo, nota, footer).",
+  "Coluna Diagnóstico com até 4 botões btn-mini do mesmo peso (Ver relatório, Baixar PDF, Atualizar dados, Resumo rápido): sem CTA primário, o usuário não sabe qual é o próximo passo.",
+  "Célula do nome poluída: selos site/closer + repetido + '🔥 pediu contato' + botão 'WhatsApp do lead' (que quebra em duas linhas) + linha cinza com empresa, e-mail, telefone, data e consentimento LGPD.",
+  "Emojis na interface: ⚠️ (aviso infra), 🔥 (pediu contato), ✓ (copiado), ✕ (remover), além do 🔔 do sino.",
+  "Motivos de erro escondidos em tooltip (title): conexão 'erro' e link 'indisponível' só explicam o motivo no hover, o que não funciona no toque e não é visível.",
+  "'Conectado' sem dados lidos: o servidor coleta sozinho ao conectar, mas a tela não mostra se a coleta está rodando ou falhou (a falha só aparece no sino). Hoje há 2 prospects conectados sem dados lidos.",
+  "Progresso da coleta fica só no texto de um botão minúsculo ('Lendo… fase n/total') e se perde ao recarregar a página.",
+  "Leads duplicados ('repetido', mesmo e-mail) aparecem como linhas soltas, sem ação de mesclar nem agrupar (o Ricardo Gomes aparece 2x).",
+  "Resumo rápido abre uma linha sem botão de fechar: clicar de novo só reconsulta a API.",
+  "Ações destrutivas e erros usam confirm()/alert()/prompt() nativos. O botão '✕' de remover não tem rótulo acessível (só title) e fica colado às ações.",
+  "Lista sem atualização automática: quando o prospect conecta, o sino avisa, mas a tabela só muda com reload.",
+  "Mobile quebrado: a 375px a página rola na horizontal (scrollWidth 500), a nav estoura ('Visão por cliente' quebra, 'Distribuição' some), a tabela de 5 colunas é cortada, os inputs têm min-width 170px e o sino fixo pode cobrir a coluna de remover.",
+  "Navegação inconsistente com as outras telas: falta 'Painel executivo' (/) e os demais módulos. A marca leva para /comercial enquanto outras telas variam.",
+  "Design system isolado: <style> inline com tokens próprios duplicados, fora do ui.css/ui-extra.css compartilhados. O .mini global vaza cor para os botões do painel do sino.",
+  "Acessibilidade: título é h2 (não existe h1), inputs só com placeholder e sem <label>, ações de linha sem aria-label.",
+  "Estados pobres: loading é só o texto 'Carregando…', o vazio não orienta (não diz que leads do site entram sozinhos nem dá um CTA) e o erro de carga substitui a lista pela mensagem crua, sem botão de tentar de novo."
+ ],
+ "estados": [
+  "Carregando: '<div class=\"vazio\">Carregando…</div>' em #lista",
+  "Vazio: 'Nenhum prospect cadastrado ainda.' (.vazio)",
+  "Erro ao carregar a lista: mensagem do erro crua dentro de .vazio em #lista, sem retry",
+  "Infra ML não configurada (infra_pronta=false): aviso âmbar em #infra. Com infra pronta (hoje), #infra fica vazio",
+  "Conexão por prospect: aguardando (selo neutro) / conectado (selo bom) / erro (selo amb, motivo só no title)",
+  "Link: 'Copiar link' / 'copiado ✓' por 1,5 s / fallback prompt('Copie o link:') / 'indisponível' (motivo link_erro no title)",
+  "Diagnóstico: 'após conectar' (não conectado) / 'Ler os dados da conta' (conectado sem dados) / 'Lendo… fase n/total' (job rodando, botão desabilitado) / [Ver relatório, Baixar PDF, Atualizar dados] (dados lidos) / erro da coleta via alert()",
+  "Resumo rápido: 'consultando a API do Mercado Livre…' / indisponível (motivo: não conectado, conexão perdida/revogada, sem dados no período, dados ainda não lidos) / disponível (6 números + selo 'amostra parcial') / erro (mensagem)",
+  "Cadastro: botão .bt desabilitado durante o envio, erro via alert(), form resetado no sucesso",
+  "Remoção: confirm() nativo antes de apagar",
+  "Relatório /comercial/diagnostico indisponível: HTTP 409 com <pre> mostrando o motivo (página crua, fora do layout)",
+  "Avisos assíncronos (alerta.js): toast/sino quando o prospect conecta, o diagnóstico fica pronto ou a coleta falha"
+ ],
+ "recomendacao": "Reorganizar como uma tela de funil direcional, do tipo \"quem eu ataco agora\". No topo: um h1 \"Comercial\", uma linha curta (\"Prospects em diagnóstico de conta\") e um único botão primário \"Novo prospect\", que abre o form atual (#fNovo com os mesmos ids e o .bt) colapsado ou em drawer, em vez de fixo no topo. Logo abaixo, uma faixa de 4 a 5 números do funil, que também servem de filtro: Pediram contato (destaque laranja), Prontos para apresentar, Conectados sem dados (coletando/falhou), Aguardando conexão, Com erro. Depois, a lista em #lista ordenada por prioridade (pediu contato, pronto, sem dados, aguardando, erro). Cada linha mostra só nome + empresa, origem discreta, a etapa como um único selo/stepper e UM botão primário conforme a etapa (Copiar link, depois Ler os dados da conta, depois Ver relatório). PDF, Atualizar, Resumo rápido, WhatsApp e Remover vão para ações secundárias (ícones de texto ou menu), mantendo os data-link/data-ler/data-diag/data-del e o rótulo \"Ler os dados da conta\". Motivos de erro em texto visível, sem tooltip. O Resumo rápido continua expansível (#dx-/#dxbox-, colspan igual ao nº de colunas), agora com botão de fechar. O jargão técnico (MELI_CLIENT_ID_COMERCIAL, .env, túnel) sai para um aviso de admin, e a garantia \"nada é alterado\" aparece uma vez só. Sem emojis. Tokens e componentes do ui.css/ui-extra.css compartilhados, nav comum com \"Painel executivo\". No mobile, linhas viram cards empilhados sem rolagem horizontal. Estados de carregando/vazio/erro com orientação e botão de tentar de novo."
+}

@@ -1,0 +1,272 @@
+{
+  "$comentario": "Catálogo do que depende do cliente por canal (08/10/2026). Fonte: respostas da equipe em docs/fonte-equipe-dependencias-cliente.md + Manual 5.9. Revisável pelo David. Validado na carga (src/lib/pendencias-cliente.js → validarCatalogo): todo texto ao cliente passa pelo auditor (relatorio-seguro.js). Os 4 textos de cada item aceitam string ou { padrao, <canal>: texto }. Tokens permitidos: {produtos} {n} {canal} {dias}. Tom: neutro, datado, sem culpa, sem promessa, sem nome interno, sem prazo. 'deteccao' é a fonte mais forte do item (medido > tarefa > registro); todo item pode ser registrado à mão. 'tipos_tarefa' liga o tipo REGISTRADO da tarefa em dependência ao item (nunca por palavra do texto); em empate de canal vence o item com menos canais. 'parado' completa o rótulo 'Impacto não estimado (parado: …)'.",
+  "versao": "1.1.0",
+  "canais": [
+    { "id": "ml", "rotulo": "Mercado Livre" },
+    { "id": "shopee", "rotulo": "Shopee" },
+    { "id": "amazon", "rotulo": "Amazon" },
+    { "id": "tiktok", "rotulo": "TikTok Shop" },
+    { "id": "magalu", "rotulo": "Magalu" },
+    { "id": "geral", "rotulo": "Todos os canais" }
+  ],
+  "gravidades": [
+    { "id": "critico", "rotulo": "Crítico" },
+    { "id": "atencao", "rotulo": "Atenção" },
+    { "id": "info", "rotulo": "Informativo" }
+  ],
+  "limiares": {
+    "estoque": { "cobertura_atencao_dias": 10, "cobertura_critica_dias": 5, "curvas_alerta": ["A"], "curvas_avaliar": ["A", "B"], "unidades_min_28d": 5, "frescor_max_horas": 30 },
+    "conta_ml": { "sem_renovar_horas": 24 },
+    "saude_ml": { "atrasos_critico": 3 }
+  },
+  "itens": {
+    "estoque_curva_a": {
+      "rotulo": "Estoque dos produtos que mais vendem",
+      "canais": ["ml", "shopee", "amazon", "tiktok", "magalu"],
+      "tipo": "produto", "tipos_tarefa": ["produto"],
+      "gravidade_base": "atencao", "deteccao": "medido", "medido_em": ["ml"], "metodo_impacto": "ruptura_receita",
+      "produtos_padrao": "produtos que mais vendem",
+      "parado": "a reposição e o planejamento de campanhas dos produtos que mais vendem",
+      "por_que_importa": {
+        "padrao": "Os produtos que mais vendem concentram a maior parte do faturamento. Com estoque baixo, o anúncio pode ficar indisponível e as vendas desses produtos param até a reposição.",
+        "ml": "No Mercado Livre, o anúncio sem estoque é pausado e deixa de vender. Os produtos que mais vendem são os que mais pesam no faturamento do mês.",
+        "shopee": "Na Shopee, os produtos que mais vendem concentram o faturamento e dependem de estoque disponível para continuar aparecendo e vendendo.",
+        "amazon": "Na Amazon, o produto sem estoque disponível deixa de ser exibido para compra, e a retomada do ritmo anterior depois da reposição pode levar algum tempo.",
+        "tiktok": "No TikTok Shop, o produto sem estoque disponível deixa de ser vendido, e os produtos que mais vendem são os que mais pesam no faturamento da loja."
+      },
+      "efeito_se_atrasar": {
+        "padrao": "Se o estoque acabar antes da reposição, as vendas desses produtos ficam paradas durante o período sem estoque, e o ritmo anterior pode demorar a voltar.",
+        "ml": "Se o estoque acabar antes da reposição, {produtos} podem ficar sem vender até a chegada do novo lote, e o ritmo anterior pode demorar a voltar."
+      },
+      "o_que_precisamos": "Para seguirmos no ritmo combinado, precisamos da confirmação do estoque atual e da data de entrada da reposição de {produtos}.",
+      "o_que_fazemos": "Quando recebermos a confirmação, atualizamos as informações do canal e acompanhamos a cobertura de estoque, ajustando o planejamento de campanhas e anúncios à disponibilidade."
+    },
+    "preco_custo": {
+      "rotulo": "Preço de venda e custo dos produtos",
+      "canais": ["ml", "shopee", "amazon", "tiktok", "magalu"],
+      "tipo": "custos", "tipos_tarefa": ["custos"],
+      "gravidade_base": "atencao", "deteccao": "medido", "medido_em": ["ml"], "metodo_impacto": "nenhum",
+      "produtos_padrao": "produtos da loja",
+      "parado": "o cálculo de margem, o retorno mínimo dos anúncios pagos e os descontos",
+      "por_que_importa": {
+        "padrao": "Sem o preço de custo, não é possível calcular a margem de cada produto. Isso limita a definição de descontos, de promoções e do investimento em anúncios pagos.",
+        "amazon": "Na Amazon, o preço mínimo de cada produto depende do custo informado. Sem ele, ficamos sem base para definir preço, promoções e investimento em anúncios."
+      },
+      "efeito_se_atrasar": "Enquanto o custo não é informado, preços, promoções e campanhas ficam sem referência de margem, e as entregas que dependem dessa base ficam em espera.",
+      "o_que_precisamos": {
+        "padrao": "Para seguirmos no ritmo combinado, precisamos do preço de custo atualizado de {produtos}.",
+        "shopee": "Para seguirmos no ritmo combinado, precisamos do preço de custo atualizado e do preço de venda definido para {produtos}.",
+        "amazon": "Para seguirmos no ritmo combinado, precisamos do preço de custo e do preço mínimo aceito para {produtos}."
+      },
+      "o_que_fazemos": "Quando recebermos, calculamos a margem de cada produto e usamos esse resultado para definir preços, descontos e o investimento em anúncios dentro de uma margem adequada para a loja."
+    },
+    "midia_produto": {
+      "rotulo": "Imagens e vídeo dos produtos",
+      "canais": ["ml", "shopee", "amazon", "tiktok", "magalu"],
+      "tipo": "fotos", "tipos_tarefa": ["fotos"],
+      "gravidade_base": "atencao", "deteccao": "medido", "medido_em": ["ml"], "metodo_impacto": "acoes_paradas",
+      "produtos_padrao": "produtos da loja",
+      "parado": "a atualização das imagens e dos anúncios",
+      "por_que_importa": {
+        "padrao": "Imagens e vídeos do produto são a base do anúncio: influenciam a decisão de compra e a qualidade da página do produto no canal.",
+        "shopee": "Na Shopee, as imagens e o vídeo do produto fazem parte da qualidade da página e ajudam na decisão de compra."
+      },
+      "efeito_se_atrasar": "Sem o material, a criação e a melhoria dos anúncios ficam em espera, e datas importantes de venda podem passar sem o anúncio ajustado.",
+      "o_que_precisamos": "Para seguirmos no ritmo combinado, precisamos de imagens com boa qualidade e, quando houver, de vídeo de {produtos}.",
+      "o_que_fazemos": "Quando recebermos, preparamos as imagens do anúncio, atualizamos a página dos produtos e acompanhamos o resultado depois da publicação."
+    },
+    "dados_produto": {
+      "rotulo": "Informações e cadastro dos produtos",
+      "canais": ["ml", "shopee", "amazon", "tiktok", "magalu"],
+      "tipo": "informacao", "tipos_tarefa": ["informacao"],
+      "gravidade_base": "atencao", "deteccao": "tarefa", "metodo_impacto": "acoes_paradas",
+      "parado": "o cadastro e a revisão dos anúncios",
+      "por_que_importa": {
+        "padrao": "Informações corretas do produto, como nome, SKU, peso, medidas, cor e demais características, evitam erro no cadastro e permitem publicar o anúncio completo.",
+        "amazon": "Na Amazon, o cadastro depende da planilha de produtos com informações e links de referência corretos."
+      },
+      "efeito_se_atrasar": "Sem essas informações, o cadastro e a revisão dos anúncios ficam em espera ou seguem com risco de erro, e oportunidades sazonais de venda podem ser perdidas.",
+      "o_que_precisamos": {
+        "padrao": "Para seguirmos no ritmo combinado, precisamos das informações básicas dos produtos: nome, SKU, peso, medidas, cor e características.",
+        "amazon": "Para seguirmos no ritmo combinado, precisamos da planilha dos produtos a cadastrar, com informações e links de referência corretos."
+      },
+      "o_que_fazemos": "Quando recebermos, cadastramos ou revisamos os anúncios com as informações enviadas e confirmamos com a loja antes de publicar."
+    },
+    "resposta_solicitacoes": {
+      "rotulo": "Resposta às solicitações da equipe",
+      "canais": ["ml", "shopee", "amazon", "tiktok", "magalu"],
+      "tipo": "informacao", "tipos_tarefa": [],
+      "gravidade_base": "atencao", "deteccao": "registro", "metodo_impacto": "nenhum",
+      "parado": "as tarefas que dependem de uma informação ou decisão da loja",
+      "por_que_importa": "Muitas entregas dependem de uma informação simples, como confirmar um dado ou aprovar uma etapa. Uma resposta rápida mantém o trabalho andando.",
+      "efeito_se_atrasar": "Enquanto a resposta não chega, a tarefa fica parada, e as etapas que dependem dela também.",
+      "o_que_precisamos": "Para seguirmos no ritmo combinado, precisamos do retorno às últimas solicitações enviadas pelo canal de comunicação combinado.",
+      "o_que_fazemos": "Quando recebermos, retomamos a tarefa e confirmamos o andamento."
+    },
+    "regulatorio": {
+      "rotulo": "Registro regulatório e categoria restrita",
+      "canais": ["ml", "shopee", "amazon", "tiktok", "magalu"],
+      "tipo": "regulatorio", "tipos_tarefa": ["regulatorio"],
+      "gravidade_base": "critico", "deteccao": "tarefa", "metodo_impacto": "acoes_paradas",
+      "parado": "a publicação dos produtos que exigem registro",
+      "por_que_importa": {
+        "padrao": "Alguns produtos exigem código de registro (ANVISA ou INMETRO) ou liberação de categoria para serem publicados no canal.",
+        "tiktok": "No TikTok Shop, produtos de categoria restrita precisam da liberação da categoria antes de serem publicados."
+      },
+      "efeito_se_atrasar": "Sem o código ou a liberação, o anúncio não pode ser publicado ou pode ser removido, e os produtos ficam fora do canal.",
+      "o_que_precisamos": {
+        "padrao": "Para seguirmos no ritmo combinado, precisamos do número do registro (ANVISA ou INMETRO) dos produtos que o exigem e, quando for o caso, da documentação para liberar a categoria.",
+        "tiktok": "Para seguirmos no ritmo combinado, precisamos da liberação da categoria restrita no TikTok Shop e do registro (ANVISA ou INMETRO) dos produtos que o exigem."
+      },
+      "o_que_fazemos": "Quando recebermos, informamos o registro no cadastro dos produtos e seguimos com a publicação ou a revisão dos anúncios."
+    },
+    "documentos_conta": {
+      "rotulo": "Documentos e validação da conta",
+      "canais": ["ml", "shopee", "amazon", "tiktok", "magalu"],
+      "tipo": "documentos", "tipos_tarefa": ["documentos"],
+      "gravidade_base": "critico", "deteccao": "tarefa", "metodo_impacto": "acoes_paradas",
+      "parado": "a validação da conta e as etapas seguintes",
+      "por_que_importa": {
+        "padrao": "O canal exige documentos para validar a conta do vendedor, como certificado digital, contrato social, comprovante de endereço, documento de identidade e notas fiscais.",
+        "amazon": "Na Amazon, a conta pode precisar de atualização do cartão de crédito e de documentos de endereço, identidade e contrato social, principalmente em contas novas.",
+        "shopee": "Na Shopee, a validação da conta pede documentos fiscais, como o certificado digital A1 e o contrato social."
+      },
+      "efeito_se_atrasar": "Sem a validação, a conta pode ter funções limitadas, e as demais entregas ficam em espera porque dependem desse primeiro passo.",
+      "o_que_precisamos": {
+        "padrao": "Para seguirmos no ritmo combinado, precisamos dos documentos pedidos pelo canal, enviados completos e atualizados.",
+        "amazon": "Para seguirmos no ritmo combinado, precisamos do cartão de crédito atualizado na conta e dos documentos pedidos pela Amazon, completos e atualizados."
+      },
+      "o_que_fazemos": "Quando recebermos, encaminhamos a documentação ao canal, acompanhamos a validação e seguimos com as próximas etapas da conta."
+    },
+    "acesso_conta": {
+      "rotulo": "Acesso à conta do canal",
+      "canais": ["ml", "shopee", "amazon", "tiktok", "magalu"],
+      "tipo": "acesso", "tipos_tarefa": ["acesso"],
+      "gravidade_base": "critico", "deteccao": "medido", "medido_em": ["ml"], "metodo_impacto": "nenhum",
+      "parado": "o acompanhamento e as alterações na conta",
+      "por_que_importa": {
+        "padrao": "Para trabalhar na conta, a equipe precisa de um acesso ativo e autorizado. Sem ele, não conseguimos acompanhar as vendas nem fazer alterações.",
+        "ml": "No Mercado Livre, o acesso precisa ser autorizado de novo quando a conexão expira ou é revogada. Sem ele, a leitura de vendas e estoque fica desatualizada.",
+        "shopee": "Em lojas de subconta, o acesso depende de uma liberação de login feita pelo titular da conta.",
+        "tiktok": "No TikTok Shop, o acesso depende de uma liberação de login feita pelo titular da conta."
+      },
+      "efeito_se_atrasar": "Sem acesso, o acompanhamento diário e as alterações nos anúncios ficam em espera.",
+      "o_que_precisamos": {
+        "padrao": "Para seguirmos no ritmo combinado, precisamos que o acesso à conta seja liberado ou autorizado novamente.",
+        "ml": "Para seguirmos no ritmo combinado, precisamos que a conta do Mercado Livre seja autorizada novamente pelo botão de conexão."
+      },
+      "o_que_fazemos": "Quando o acesso estiver ativo, retomamos o acompanhamento e as tarefas em aberto da conta."
+    },
+    "despacho_prazo": {
+      "rotulo": "Despacho dos pedidos no prazo",
+      "canais": ["ml", "shopee", "amazon", "tiktok", "magalu"],
+      "tipo": "logistica", "tipos_tarefa": ["logistica"],
+      "gravidade_base": "atencao", "deteccao": "medido", "medido_em": ["ml"], "metodo_impacto": "nenhum",
+      "parado": "o acompanhamento da reputação e as campanhas",
+      "por_que_importa": {
+        "padrao": "O prazo de despacho e de entrega faz parte da avaliação do vendedor no canal e da experiência de quem compra.",
+        "shopee": "Na Shopee, pedidos enviados fora do prazo geram pontos de penalidade na conta.",
+        "ml": "No Mercado Livre, atrasos no despacho afetam a reputação do vendedor.",
+        "amazon": "Na Amazon, o prazo de entrega, o agendamento dos pedidos antes das 11h e o cancelamento correto de pedidos fazem parte da avaliação da conta."
+      },
+      "efeito_se_atrasar": {
+        "padrao": "Atrasos recorrentes podem reduzir a exibição dos anúncios e limitar funções da conta.",
+        "shopee": "Pontos de penalidade acumulados podem limitar funções da conta e a exibição dos anúncios."
+      },
+      "o_que_precisamos": "Para seguirmos no ritmo combinado, precisamos que os pedidos sejam despachados dentro do prazo do canal e que a equipe seja avisada quando algum atraso for previsto.",
+      "o_que_fazemos": "Quando a rotina de despacho estiver em dia, acompanhamos os indicadores da conta e ajustamos prazos e campanhas à capacidade de envio."
+    },
+    "verba_ads": {
+      "rotulo": "Verba de anúncios pagos",
+      "canais": ["ml", "shopee", "amazon"],
+      "tipo": "aprovacao", "tipos_tarefa": [],
+      "gravidade_base": "atencao", "deteccao": "registro", "metodo_impacto": "nenhum",
+      "parado": "as campanhas de anúncios pagos",
+      "por_que_importa": "Campanhas de anúncios pagos só funcionam enquanto há orçamento disponível na conta do canal.",
+      "efeito_se_atrasar": "Sem verba, as campanhas pausam, e os produtos podem perder a exposição adicional que vinham tendo.",
+      "o_que_precisamos": "Para seguirmos no ritmo combinado, precisamos da confirmação do orçamento disponível para anúncios pagos neste período.",
+      "o_que_fazemos": "Quando recebermos, ajustamos as campanhas ao orçamento definido e acompanhamos o retorno de cada produto."
+    },
+    "remessa_fba_full": {
+      "rotulo": "Remessa ao FBA ou envio ao Full",
+      "canais": ["ml", "amazon"],
+      "tipo": "logistica", "tipos_tarefa": ["logistica"],
+      "gravidade_base": "atencao", "deteccao": "tarefa", "metodo_impacto": "acoes_paradas",
+      "parado": "o abastecimento do estoque no canal",
+      "por_que_importa": {
+        "padrao": "Os produtos só passam a ser entregues pelo canal depois que a remessa de envio é criada e despachada ao centro de distribuição.",
+        "amazon": "Na Amazon, os produtos só passam a ser entregues pelo FBA depois que a remessa de envio é criada e despachada ao centro de distribuição.",
+        "ml": "No Mercado Livre, os produtos só entram no Full depois que o envio é agendado e despachado ao centro de distribuição."
+      },
+      "efeito_se_atrasar": "Sem a remessa, os produtos ficam fora do FBA ou do Full, e o estoque nesses locais pode acabar antes da reposição.",
+      "o_que_precisamos": {
+        "padrao": "Para seguirmos no ritmo combinado, precisamos que a remessa de envio seja criada e despachada, com as quantidades definidas em conjunto.",
+        "ml": "Para seguirmos no ritmo combinado, precisamos que o envio ao Full seja agendado e despachado, com as quantidades definidas em conjunto."
+      },
+      "o_que_fazemos": "Quando a remessa estiver criada, acompanhamos o recebimento e a disponibilidade do estoque no canal."
+    },
+    "aprovacoes": {
+      "rotulo": "Aprovações pedidas pela equipe",
+      "canais": ["ml", "shopee", "amazon", "tiktok", "magalu"],
+      "tipo": "aprovacao", "tipos_tarefa": ["aprovacao"],
+      "gravidade_base": "atencao", "deteccao": "tarefa", "metodo_impacto": "acoes_paradas",
+      "parado": "as alterações que aguardam decisão",
+      "por_que_importa": {
+        "padrao": "Preço mínimo, margem, campanhas e participação em catálogo dependem de uma decisão da loja antes de serem aplicados.",
+        "amazon": "Na Amazon, o preço mínimo, as campanhas e a disputa pela caixa de compra (buy box) dependem de uma decisão da loja antes de serem aplicados."
+      },
+      "efeito_se_atrasar": "Sem a aprovação, a alteração fica em espera, e a oportunidade da campanha ou do ajuste de preço pode passar.",
+      "o_que_precisamos": "Para seguirmos no ritmo combinado, precisamos da decisão da loja sobre as propostas enviadas (preço, margem mínima, campanhas ou participação em catálogo).",
+      "o_que_fazemos": "Quando recebermos a aprovação, aplicamos a alteração no canal e acompanhamos o resultado."
+    },
+    "atendimento_sac": {
+      "rotulo": "Atendimento aos compradores",
+      "canais": ["ml", "shopee", "amazon", "tiktok", "magalu"],
+      "tipo": "atendimento", "tipos_tarefa": ["atendimento"],
+      "gravidade_base": "atencao", "deteccao": "medido", "medido_em": ["ml"], "metodo_impacto": "nenhum",
+      "parado": "os ajustes de anúncio baseados nas dúvidas dos compradores",
+      "por_que_importa": "Perguntas, mensagens e reclamações respondidas no prazo fazem parte da avaliação da conta e ajudam a concluir a venda.",
+      "efeito_se_atrasar": "Mensagens sem resposta podem virar reclamação ou cancelamento e afetar a avaliação da conta.",
+      "o_que_precisamos": "Para seguirmos no ritmo combinado, precisamos que as mensagens e os chamados dos compradores sejam respondidos dentro do prazo do canal.",
+      "o_que_fazemos": "Quando o atendimento estiver em dia, acompanhamos as avaliações da conta e sugerimos ajustes nos anúncios com base nas dúvidas mais frequentes."
+    },
+    "prazo_fornecedor": {
+      "rotulo": "Prazo de entrega do fornecedor ou da produção",
+      "canais": ["ml", "shopee", "amazon", "tiktok", "magalu"],
+      "tipo": "informacao", "tipos_tarefa": [],
+      "gravidade_base": "info", "deteccao": "medido", "medido_em": ["ml"], "metodo_impacto": "nenhum",
+      "parado": "o cálculo de quando e quanto pedir de cada produto",
+      "por_que_importa": "O momento certo de fazer cada pedido depende de quantos dias o fornecedor, ou a produção, leva entre o pedido e a chegada do produto. Com esse prazo, o cálculo de reposição passa a usar o tempo real da loja.",
+      "efeito_se_atrasar": "Enquanto o prazo não é informado, o cálculo usa um prazo de referência, que pode adiantar ou atrasar a sugestão de pedido em relação ao tempo real de entrega.",
+      "o_que_precisamos": "Para seguirmos no ritmo combinado, precisamos saber quantos dias, em média, o fornecedor ou a produção leva entre o pedido e a chegada dos produtos da loja.",
+      "o_que_fazemos": "Quando recebermos, ajustamos o cálculo de quando e quanto pedir de cada produto e acompanhamos o ciclo de estoque com esse prazo."
+    },
+    "estoque_espelhado": {
+      "rotulo": "Quantas unidades existem de verdade (produto em mais de um anúncio)",
+      "canais": ["ml"],
+      "tipo": "produto",
+      "tipos_tarefa": [],
+      "gravidade_base": "info",
+      "deteccao": "medido",
+      "medido_em": ["ml"],
+      "metodo_impacto": "nenhum",
+      "produtos_padrao": "produtos que mais vendem em mais de um anúncio",
+      "parado": "a contagem certa do estoque e a sugestão de reposição desses produtos",
+      "por_que_importa": "Vimos {produtos} em mais de um anúncio, cada um com estoque próprio no Mercado Livre e o mesmo número em todos. Se nenhum sistema desconta a venda de um anúncio nos outros, o Mercado Livre pode vender mais do que existe.",
+      "efeito_se_atrasar": "Enquanto não soubermos quantas unidades existem, contamos esse estoque uma vez, como se fosse o mesmo, e a venda pode passar do que há no depósito.",
+      "o_que_precisamos": "Quantas unidades você tem hoje de {produtos}, fora do Full, e se algum sistema atualiza o estoque desses anúncios.",
+      "o_que_fazemos": "Com a resposta, passamos a usar o número informado no cálculo de reposição e de compras desses produtos."
+    },
+    "retorno_pendente": {
+      "rotulo": "Retorno pendente do cliente",
+      "canais": ["ml", "shopee", "amazon", "tiktok", "magalu"],
+      "tipo": "outro", "tipos_tarefa": ["outro"],
+      "gravidade_base": "info", "deteccao": "tarefa", "metodo_impacto": "acoes_paradas",
+      "parado": "as tarefas em espera",
+      "por_que_importa": "Há tarefas que só avançam com uma informação, um material ou uma decisão da loja.",
+      "efeito_se_atrasar": "Enquanto o retorno não chega, essas tarefas ficam em espera, e o que depende delas também.",
+      "o_que_precisamos": "Para seguirmos no ritmo combinado, precisamos do retorno sobre {n} ponto(s) em aberto ({canal}).",
+      "o_que_fazemos": "Quando recebermos, retomamos as tarefas em espera e atualizamos o andamento."
+    }
+  }
+}

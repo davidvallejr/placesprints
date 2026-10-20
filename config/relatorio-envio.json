@@ -1,0 +1,34 @@
+{
+  "$comentario": "Envio do Relatório de Sprints Place2u ao Notion do cliente (src/lib/relatorio-envio.js; validado na carga). Hora e dia da semana do agendador são lidos em «fuso» (IANA; nunca no fuso do processo). Dia/hora PADRÃO do envio: sexta-feira (dia_semana_padrao 5, 0=domingo) a partir das 17:00 (hora_inicio). O agendador (tick a cada 10 min) só envia entre hora_inicio e hora_fim, de segunda a sexta (dias_uteis_apenas), e só a quem um líder liberou; o que sobrar vai para o próximo dia útil. O interruptor geral NASCE DESLIGADO (agendador_ligado só vale enquanto a chave relatorio_agendador nunca foi gravada). Quem é elegível: status do cliente na central EXPLICITAMENTE em status_elegiveis (status vazio ou ausente NÃO é elegível; a lista de ignorados da central continua valendo). categoria é fixa (relatorio-seguro.CATEGORIA): mudar aqui sem mudar lá derruba a carga. categoria_alternativas: opções JÁ EXISTENTES em Secção (tipo status) aceitas quando a categoria própria não existe (o Notion não cria opção de status pela API) — ex.: a opção «Relatórios» que as bases Informações já têm; a prévia avisa qual opção foi usada.",
+  "fuso": "America/Sao_Paulo",
+  "hora_inicio": "17:00",
+  "hora_fim": "23:00",
+  "dia_semana_padrao": 5,
+  "dias_uteis_apenas": true,
+  "status_elegiveis": [
+    "Ativo"
+  ],
+  "intervalo_minimo_dias": {
+    "semanal": 4,
+    "quinzenal": 9,
+    "mensal": 18
+  },
+  "lote_por_tick": 6,
+  "orcamento_tick_min": 6,
+  "lote_max_manual": 40,
+  "tentativas_max": 3,
+  "backoff_base_min": 30,
+  "backoff_max_min": 360,
+  "timeout_cliente_s": 120,
+  "previa_ttl_min": 15,
+  "agendador_ligado": false,
+  "categoria": "Relatório de Sprints Place2u",
+  "categoria_alternativas": [
+    "Relatórios",
+    "Relatório"
+  ],
+  "$comentario_fallback_tarefa": "PLANO B (pedido do David, 09/10/2026). Entra SÓ quando a base Informações não aceita o relatório por motivo que o Notion não deixa corrigir pela API: categoria `opcao_ausente_status` (Secção do tipo status sem a opção própria nem alternativa — a API não cria opção de status), `sem_pagina` ou `sem_base` — e o quadro «Tarefas - {Cliente}» do cliente é localizável. Nunca entra quando a Informações aceita (ok, ok_alternativa, select_cria) nem quando o quadro não existe (aí vale o bloqueio antigo). O relatório vira UMA tarefa no quadro: título «{titulo_prefixo} · {título do brief}», Canal e Demanda abaixo (select cria a opção; status só usa opção que já existe), Responsável = usuário do Notion cujo nome normalizado bate com `responsavel` (se houver 0 ou 2+, a tarefa nasce sem responsável e a prévia avisa), Descrição = resumo do relatório (≤ descricao_max, auditado por relatorio-seguro) e o corpo = os MESMOS blocos do relatório. O alerta ao cliente NÃO usa este plano B.",
+  "fallback_tarefa": { "ligado": true, "titulo_prefixo": "Relatório", "canal": "Geral", "demanda": "Relatório", "responsavel": "Pamela", "descricao_max": 1900 },
+  "$comentario_anexo_pdf": "Documento do relatório (PDF, 09/10/2026): depois de criar a página/tarefa, o MESMO brief auditado vira PDF (Chrome headless, data/relatorios/pdf/) e é anexado no topo da página (bloco file) e, se a página é linha de quadro com propriedade do tipo files, também na propriedade. Falha do PDF/upload = aviso (`anexo: falhou:<codigo>` no retorno e em relatorio_envio.anexo), nunca desfaz o envio. Reanexo: POST /api/relatorio/anexar e /anexar-lote.",
+  "anexo_pdf": { "ligado": true, "timeout_ms": 60000 }
+}

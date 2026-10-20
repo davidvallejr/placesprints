@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- Recriação da marca Place2u (carrinho). Para usar o arquivo oficial,
+       salve-o como assets/logo.png — ele passa a valer automaticamente. -->
+  <rect width="400" height="400" fill="#FF6B1A"/>
+  <g fill="none" stroke="#FCFCFC" stroke-linecap="round">
+    <path d="M113 176 c2 22 6 44 16 63 c14 28 39 49 71 49 c30 0 52 -20 60 -48 c4 -13 5 -27 5 -41 V 143 c0 -16 8 -24 24 -24 h 27" stroke-width="31"/>
+  </g>
+  <circle cx="152" cy="327" r="17" fill="#FCFCFC"/>
+  <circle cx="252" cy="327" r="17" fill="#FCFCFC"/>
+</svg>

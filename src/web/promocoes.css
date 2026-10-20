@@ -1,0 +1,87 @@
+:root{/* tokens vêm de ui.css; bloco exigido por teste-promocoes-ui caso 58 */}
+/* Complementos da tela de Promoções por cliente. Tudo que é comum (botões, badges, kpis, tabela, toast, famílias .curva/.acao-*) vem do ui.css. */
+.pr-topo{display:flex;gap:var(--e-3);align-items:center;flex-wrap:wrap;margin-bottom:var(--e-3)}
+.pr-busca{flex:1 1 320px;max-width:520px}
+.pr-quem{display:flex;align-items:center;gap:var(--e-2);font:500 var(--t-13)/1.3 var(--fonte);color:var(--cinza)}
+.pr-quem input{width:210px;max-width:100%}
+#quem:placeholder-shown{border-color:var(--ambar)}                 /* obrigatório para gravar: avisa enquanto vazio */
+.pr-chk{display:inline-flex;align-items:center;gap:6px;font-size:var(--t-13);color:var(--cinza)}
+.pr-coleta{display:inline-flex;align-items:center;gap:var(--e-3);flex-wrap:wrap}
+.pr-status{display:flex;gap:var(--e-2);flex-wrap:wrap;align-items:center;margin-bottom:var(--e-3);font-size:var(--t-13)}
+.pr-status .progresso{color:var(--tinta);font-weight:600}
+/* escolha: a carteira é uma lista em linhas (.res-item), não chips soltos (spec 7.4) */
+#telaEscolha #chipsClientes:has(>.res-item){background:var(--superficie);border:1px solid var(--borda);border-radius:var(--raio);overflow:hidden}
+#telaEscolha #chipsClientes .res-item .lado{white-space:nowrap}
+/* cliente aberto: chips e status viram itens da meta-linha; a troca de cliente e o "Seu nome" moram nas ações do cabeçalho */
+#telaCliente .pg-meta{display:flex;flex-direction:column;gap:4px;max-width:none}
+#telaCliente .pg-meta>*+*::before{content:none}
+#telaCliente .pr-chips,#telaCliente .pr-status{display:flex;gap:4px var(--e-2);flex-wrap:wrap;align-items:center;margin:0}
+#telaCliente .pr-topo{margin:0}
+#telaCliente .pr-busca{flex:0 1 320px}
+#telaCliente .proxima .pr-coleta{margin-left:auto}
+#telaCliente .proxima .proxima-acao:empty{display:none}
+#telaCliente .proxima .proxima-acao:not(:empty)+.pr-coleta{margin-left:0}
+#telaCliente #abas{margin-top:var(--e-4)}
+#telaCliente .recolhido .pr-inv,#telaCliente .recolhido .pr-pend{margin-top:var(--e-2)}
+@media (max-width:639px){#telaCliente .pr-busca{flex-basis:100%}#telaCliente .proxima .pr-coleta{width:100%;margin-left:0}}
+/* KPIs: 4 em destaque; da 5ª em diante, linha compacta (spec 7.4). No celular as compactas viram linhas rótulo → valor, sem detalhe */
+#telaCliente .kpis{grid-template-columns:repeat(4,minmax(0,1fr))}
+#telaCliente .kpi:nth-child(n+5) .valor{font-size:var(--t-16)}
+@media (max-width:899px){
+  #telaCliente .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #telaCliente .kpi:nth-child(n+5){grid-column:1/-1;flex-direction:row;justify-content:space-between;align-items:baseline;padding:8px 16px}
+  #telaCliente .kpi:nth-child(n+5) .detalhe{display:none}
+}
+/* invariante da rodada: aviso em linha; cada item leva o estado num ponto de 6px (.it.ok/.it.ruim), não num glifo */
+.pr-inv{display:flex;gap:var(--e-2) var(--e-4);flex-wrap:wrap;align-items:center;border:1px solid var(--borda)}
+.pr-inv b{font-weight:600}
+.pr-inv .it::before{content:"";display:inline-block;width:6px;height:6px;margin-right:6px;border-radius:50%;vertical-align:middle;background:var(--cinza-claro)}
+.pr-inv .it.ok::before{background:var(--verde)}
+.pr-inv .it.ruim::before{background:var(--verm)}
+.pr-pend{margin-bottom:var(--e-3)}
+.pr-pend details{padding:10px 16px;border:1px solid var(--borda);border-radius:var(--raio-p);background:var(--fundo-suave);font-size:var(--t-13)}
+.pr-pend summary{cursor:pointer;font-weight:600}
+.pr-pend li{margin:6px 0 0 16px}
+/* abas: os grupos secundários (a partir da 5ª) vêm depois de um filete, em cinza (spec 7.4) */
+#abas .f-chip:nth-child(5){position:relative;margin-left:var(--e-4)}
+#abas .f-chip:nth-child(5)::before{content:"";position:absolute;left:calc(-1 * var(--e-2) - 1px);top:10px;bottom:10px;width:1px;background:var(--borda)}
+/* filtros e formulários */
+.pr-filtros label,.pr-form label{display:flex;align-items:center;gap:6px;font-size:var(--t-13);color:var(--cinza)}
+#fQ{flex:1 1 240px;min-width:0;max-width:420px}   /* cabe o placeholder; limitado para o painel de "Mais filtros" (left:0, 320px) não sair da tela em 1366 */
+.pr-form{align-items:end;margin-bottom:var(--e-4)}
+.pr-form textarea{width:100%;min-height:90px}
+.pr-form label.v{flex-direction:column;align-items:flex-start;gap:4px;color:var(--tinta);font-weight:500}
+.pr-form label.v :is(input,select,textarea){width:100%}
+table.t td,table.t th{overflow-wrap:break-word}   /* quebra só a palavra que não cabe: a tabela rola no .tabela-wrap, nunca parte palavras */
+table.t tr.det>td{padding:14px 16px}
+.pr-badges{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
+.pr-det-t{width:100%;border-collapse:collapse;margin:6px 0}
+.pr-det-t th{padding:6px 8px}
+.pr-det-t td{padding:6px 8px;border-top:1px solid var(--borda);border-bottom:0;vertical-align:middle}
+.pr-obs{margin:6px 0;font-size:var(--t-13);color:var(--tinta);overflow-wrap:anywhere}
+.pr-acoes{display:flex;gap:6px;flex-wrap:wrap}
+.pr-pag{display:flex;gap:var(--e-3);align-items:center;justify-content:center;margin:var(--e-3) 0;font-size:var(--t-13);color:var(--cinza)}
+.pr-plano-it{display:block;padding:6px 8px;border:1px solid var(--borda);border-radius:var(--raio-p);background:var(--superficie);font:var(--t-12)/1.5 var(--fonte-mono);overflow-wrap:anywhere}
+.pr-q{padding:14px 16px;margin-bottom:var(--e-3)}
+.pr-q h4{margin:0 0 4px;font:600 var(--t-14)/1.3 var(--fonte)}
+.pr-q .perg{padding:10px 0;border-top:1px solid var(--borda);font-size:var(--t-13)}
+.pr-q form{margin-top:var(--e-2)}
+.pr-toast:empty{opacity:0;padding:0;box-shadow:none;pointer-events:none}   /* regiões vivas (#toast/#toastErro) ficam no DOM e nunca recebem hidden; vazias, não aparecem */
+.pr-bloco{margin-bottom:var(--e-3)}
+code.pr{padding:1px 6px;background:var(--fundo-suave);border-radius:var(--raio-p);font:var(--t-12)/1.5 var(--fonte-mono);overflow-wrap:anywhere}
+.mudo.peq{font-size:var(--t-12)}
+/* vínculo custo ↔ anúncio (aba Custos): o desenho do vínculo de tarefa da tela do cliente (miniatura, título, MLB, semelhança, Confirmar / Não é este) */
+.pr-vinc{padding:12px 0;border-top:1px solid var(--borda);font-size:var(--t-13)}
+.pr-vinc-an{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.pr-vinc.foco{padding-left:10px;padding-right:10px;border-radius:var(--raio-p);background:var(--laranja-suave);box-shadow:inset 3px 0 0 var(--laranja)}   /* anúncio vindo do atalho de Elegíveis */
+.pr-cand{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;margin-top:6px}
+.pr-cand-txt{flex:1 1 220px;min-width:0;overflow-wrap:anywhere}
+.pr-thumb{flex:none;width:44px;height:44px;object-fit:contain;border:1px solid var(--borda);border-radius:var(--raio-p);background:var(--superficie)}
+.pr-semimg{display:inline-flex;align-items:center;justify-content:center;font-size:var(--t-12);line-height:1.1;text-align:center;color:var(--cinza)}
+.pr-manual{display:flex;flex-wrap:wrap;gap:var(--e-2);margin-top:6px}
+.pr-vinc-an .pr-manual{margin-top:0}
+.pr-manual input{flex:0 1 260px;min-width:0;font-size:var(--t-13)}
+@media (max-width:559px){
+  .pr-quem{width:100%}.pr-quem input{flex:1;width:auto}
+  .pr-filtros>*{flex:1 1 140px}
+}

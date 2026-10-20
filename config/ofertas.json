@@ -1,0 +1,67 @@
+{
+  "$comentario": "Parâmetros do módulo Ofertas Estratégicas (src/lib/ofertas-*.js). Nada aqui é alíquota/comissão: taxas vêm de of_regra_canal com fonte e validade. Limites de canal são OBSERVAÇÕES datadas (histórico da skill oferta-mkt), nunca regra universal — reconferir por canal/conta/categoria antes de usar.",
+  "versao": "1.0",
+  "termos_proibidos": {
+    "$comentario": "Termo promocional/sazonal/promessa: NUNCA entra em MPN, fabricante, modelo (ehPromocional). Também vetado em título e descrição. Comparação sem acento e sem caixa, por palavra inteira.",
+    "promocionais": ["promoção", "promocional", "oferta", "ofertas", "imperdível", "barato", "mais barato", "melhor preço", "menor preço", "desconto", "grátis", "gratis", "frete grátis", "brinde", "compre", "aproveite", "liquidação", "queima de estoque", "última unidade", "últimas unidades", "exclusivo", "imbatível", "top", "top de linha", "nº 1", "número 1", "numero 1", "o melhor", "a melhor", "líder de vendas", "mais vendido", "lançamento", "novidade"],
+    "sazonais": ["presente", "presentes", "dia das mães", "dia dos pais", "dia das crianças", "dia dos namorados", "black friday", "natal", "páscoa", "volta às aulas", "férias", "kit presente"],
+    "promessas": ["ranking", "primeira página", "indexa", "indexação", "mais vendas", "garantia de resultado", "aumenta vendas", "venda mais"],
+    "marcas_vetadas": ["strava"]
+  },
+  "arredondamento_preco": {
+    "$comentario": "modo 'centavos' = 2 casas (83,333… → 83,33); modo 'final' = menor preço ≥ exato terminado em um dos finais (83,333… → 83,90). Sempre recalcular a margem no preço operacional.",
+    "modo": "centavos",
+    "finais": ["90"]
+  },
+  "limiares_diagnostico": {
+    "$comentario": "Limiares para classificar sinais. Benchmark de conversão é SEMPRE o da própria conta (benchmarkConversao em diagnostico-conta.js), nunca número de mercado; CTR baixo = CTR Ads do anúncio < CTR da própria conta × algoritmo.limiares.ads_ctr_vs_conta_baixo (sem CTR da conta → sem_dado). Nenhum valor universal de CTR/conversão/ROAS vive aqui.",
+    "min_visitas_para_ler_conversao": 30,
+    "min_impressoes_para_ler_ctr": 1000,
+    "visitas_dia_baixa": 5,
+    "janela_padrao_dias": 14,
+    "produto_novo_dias": 14,
+    "titulo_max_chars_padrao": 60
+  },
+  "galeria_padrao": {
+    "$comentario": "Briefing de galeria por canal e, opcionalmente, por categoria (chave 'canal/categoria_id'). papeis em ordem de publicação. texto_permitido por papel. Formato/resolução são o que o canal aceitou na última conferência (observação datada).",
+    "mercadolivre": {
+      "papeis": ["capa", "beneficio_principal", "uso_real", "diferenciais", "medidas", "conteudo_embalagem", "compatibilidade_cuidados"],
+      "quantidade": 7,
+      "formato": "jpg",
+      "resolucao": "1200x1200",
+      "texto_permitido": { "capa": false, "demais": true },
+      "observacao": "capa sem texto/fundo branco é exigência do canal; conferido em 09/2026 (skill oferta-mkt). Capa não quadrada perde área no card."
+    },
+    "shopee": {
+      "papeis": ["capa", "beneficio_principal", "uso_real", "diferenciais", "medidas", "conteudo_embalagem"],
+      "quantidade": 6,
+      "formato": "jpg",
+      "resolucao": "1024x1024",
+      "texto_permitido": { "capa": true, "demais": true },
+      "observacao": "não verificado nesta implementação (spec §Fontes): confirmar na documentação oficial antes de exportar."
+    },
+    "magalu": {
+      "papeis": ["capa", "beneficio_principal", "uso_real", "diferenciais", "medidas", "conteudo_embalagem"],
+      "quantidade": 6,
+      "formato": "jpg",
+      "resolucao": "1200x1200",
+      "texto_permitido": { "capa": true, "demais": true },
+      "observacao": "galeria ZW13 aplicada em 25/09/2026 via PATCH portfolios/skus (skill oferta-mkt); confirmar limites atuais."
+    }
+  },
+  "limites_observados": {
+    "$comentario": "OBSERVAÇÕES históricas por canal — informam, não bloqueiam. Cada item tem data e fonte. Reconferir capacidades atuais por conta/categoria via adaptador (consultarCapacidades).",
+    "mercadolivre": [
+      { "campo": "titulo", "observacao": "título aceito até 60 caracteres; após a 1ª venda o canal passou a travar edição em várias contas", "data": "2026-09", "fonte": "skill oferta-mkt (contas 01Smart/01Esporte)" },
+      { "campo": "atributos_texto", "observacao": "em smartwatch/fones, palavras além do caractere 40 dentro de um valor não indexaram na busca da loja (Idiomas, Funções, Acessórios incluídos)", "data": "2026-09-30", "fonte": "piloto MLB1845576308 / MLB2145180151, skill oferta-mkt" },
+      { "campo": "MPN", "observacao": "indexou na busca da loja e não aparece na página; o canal usa MPN para casar catálogo — nunca usar em anúncio de catálogo e nunca com termo de campanha", "data": "2026-09-30", "fonte": "skill oferta-mkt; decisão da spec §2 (MPN = atributo real)" },
+      { "campo": "pictures", "observacao": "item com variações: PUT precisa de pictures (união) E variations[].picture_ids; o canal pode trocar pictures[0] por recorte em fundo branco ~25 min depois", "data": "2026-09-08", "fonte": "skill oferta-mkt (D20/W11)" },
+      { "campo": "catalogo", "observacao": "anúncio de catálogo não tem capa própria; alteração passa por sugestão/revisão do canal", "data": "2026-09-22", "fonte": "skill oferta-mkt (MLB5769758762)" }
+    ],
+    "magalu": [
+      { "campo": "ficha", "observacao": "ficha segue molde próprio (cauda longa no Modelo, 8–10 campos de conteúdo, Anatel/Anvisa/MAPA); janela de 40 c do ML não se aplica", "data": "2026-09-25", "fonte": "skill oferta-mkt, MOLDE/ficha-magalu" }
+    ],
+    "shopee": [],
+    "amazon": []
+  }
+}

@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Algoritmo · Place Sprints</title>
+<link rel="stylesheet" href="/ui.css">
+<link rel="stylesheet" href="/tela-algoritmo.css">
+</head>
+<body data-pagina="algoritmo">
+<header class="ps-shell" id="psShell"></header>
+<script src="/shell.js"></script>
+<main class="pg">
+  <div class="pg-cab">
+    <div class="pg-titulo">
+      <h1>Algoritmo do plano</h1>
+      <p class="pg-meta"><span id="versao" class="badge contorno">versão —</span><span id="metaRegras">regras ativas: —</span></p>
+    </div>
+  </div>
+
+  <section class="veredito" aria-label="Resumo">
+    <p class="veredito-frase" id="veredito">Lendo o algoritmo…</p>
+    <div class="regua" id="regua" hidden></div>
+  </section>
+
+  <div class="proxima" id="proxima">
+    <span class="proxima-rotulo">Próxima ação</span>
+    <span class="proxima-texto" id="proximaTexto">O gargalo é distribuir</span>
+    <a class="btn btn-primario" href="/planos">Ir para Distribuição</a>
+  </div>
+
+  <section class="bloco" id="secCalib">
+    <div class="bloco-cab"><h2>Está acertando?</h2><span class="sis" data-sistema="oraculo" title="Sistema de origem: Oráculo">Oráculo</span></div>
+    <p class="sub">Previsto × realizado nas ações distribuídas que completaram 14 dias</p>
+    <div id="calib"></div>
+  </section>
+
+  <section class="bloco" id="secRegras">
+    <div class="bloco-cab"><h2>Quais regras funcionam?</h2><span class="sis" data-sistema="oraculo" title="Sistema de origem: Oráculo">Oráculo</span></div>
+    <p class="sub">Funil geradas → distribuídas → medidas → melhoraram. Probabilidade efetiva = premissa inicial até haver tarefas medidas suficientes do tipo.</p>
+    <div id="regras"></div>
+  </section>
+
+  <section class="bloco" id="secComo">
+    <div class="bloco-cab"><h2>Como funciona</h2><span class="sis" data-sistema="arquiteto" title="Sistema de origem: Arquiteto">Arquiteto</span></div>
+    <ol class="principios">
+      <li><b>Foco no que move dinheiro.</b> Só anúncios curva A/B ou acima de 0,5% do GMV; no máximo 5 ações por cliente por semana.</li>
+      <li><b>Toda regra é mensurável.</b> Para entrar, declara o dado que usa, o KPI de resultado, o tipo de tarefa e a justificativa.</li>
+      <li><b>Premissa é premissa.</b> Probabilidade e ganho nascem rotulados como premissa e são trocados pelo histórico medido do mesmo tipo.</li>
+      <li><b>Medir e comparar.</b> Cada tarefa distribuída é medida aos 14 dias, contra grupo de controle e contra a previsão.</li>
+      <li><b>Aposentar o que não funciona.</b> Regra com 10 tarefas medidas e taxa de melhora abaixo de 25% vira candidata à aposentadoria.</li>
+    </ol>
+    <div id="ritual"></div>
+  </section>
+
+  <section class="bloco" id="secSistemas">
+    <div class="bloco-cab"><h2>Os 8 sistemas</h2></div>
+    <p class="sub">Cada parte do Place Sprints tem um nome. Toda mensagem interna (avisos, Discord do time, logs e o selo ao lado do título de cada seção) diz de qual sistema vem. Ao cliente, só o Merovíngio assina, com o texto de sempre.</p>
+    <ol class="principios" id="listaSistemas">
+      <li data-sistema="trinity"><b>Trinity.</b> Coleta: lê o Mercado Livre e o Notion (só leitura) e entrega o dado limpo aos outros sistemas. <span class="mudo peq">Assina: Avisos e logs de conexão, coleta e sync.</span></li>
+      <li data-sistema="arquiteto"><b>Arquiteto.</b> O Algoritmo: regras, plano por anúncio, prioridade e Foco 80/20. <span class="mudo peq">Assina: Plano da semana interno, ações propostas e diagnóstico.</span></li>
+      <li data-sistema="oraculo"><b>Oráculo.</b> Previsão e calibração: probabilidade, faixas, cobertura de estoque e aprendizado com o que já foi medido. <span class="mudo peq">Assina: Previsões, calibração e retroalimentação.</span></li>
+      <li data-sistema="merovingio"><b>Merovíngio.</b> Medição e causalidade: antes × depois com controle e atribuição. Única assinatura ao cliente. <span class="mudo peq">Assina: Medições internas e tudo o que vai ao cliente (Merovíngio · Place Sprints | Equipe Place2u).</span></li>
+      <li data-sistema="chaveiro"><b>Chaveiro.</b> Execução: o caminho de cada ação e a escrita no Mercado Livre com aprovação e conferência. <span class="mudo peq">Assina: Execução do plano.</span></li>
+      <li data-sistema="morpheus"><b>Morpheus.</b> Comunicação: plano de terça, alertas, relatórios, Discord, respostas e dossiê. <span class="mudo peq">Assina: Discord do time, avisos ao time e entregas (ou falhas) de envio.</span></li>
+      <li data-sistema="smith"><b>Smith.</b> Agente Smith, o Guardião financeiro: custo, preço, margem e caixa. <span class="mudo peq">Assina: Custos, preço, margem e Ads sem retorno.</span></li>
+      <li data-sistema="neo"><b>Neo.</b> Modo autônomo (marcos M3–M5): age sozinho dentro dos limites aprovados. <span class="mudo peq">Assina: Ações autônomas (ainda não ligado).</span></li>
+    </ol>
+  </section>
+
+  <details class="recolhido" id="secParam">
+    <summary>Parâmetros <span class="n" id="nParam"></span> <span class="sis" data-sistema="arquiteto" title="Sistema de origem: Arquiteto">Arquiteto</span></summary>
+    <div id="limiares"></div>
+  </details>
+</main>
+<footer class="pg-rodape">Fonte: config/algoritmo.json e tarefas medidas · só leitura; mudança de regra ou limiar sobe a versão</footer>
+<script src="metodologia.js"></script>
+<script src="/alerta.js" defer></script>
+</body>
+</html>

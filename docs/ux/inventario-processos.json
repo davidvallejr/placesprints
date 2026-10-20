@@ -1,0 +1,225 @@
+{
+ "id": "processos",
+ "pergunta": "Como cada tarefa do plano deve ser feita em cada canal (passo a passo, evidência a registrar e critério de \"concluída\") e quando e como fazer a duplicação estratégica de anúncios?",
+ "usuarios": [
+  "Analista (executor das 33 de 33 tarefas: consulta o passo a passo antes de executar)",
+  "Consultor (confere a evidência e o critério de conclusão; decide os gatilhos de duplicação)",
+  "Head/gestor de operação e treinamento (onboarding de analista novo, padronização)",
+  "Sócio/CEO (aprovação do método: quer ver a ordem lógica do plano e as regras, não o detalhe)"
+ ],
+ "acao_principal": "Achar uma tarefa (escolher o canal, depois buscar) e abrir o roteiro dela para executar ou conferir se está concluída: caminho no marketplace, passo a passo, evidência e critério.",
+ "acoes_secundarias": [
+  "Trocar de canal (Shopee, Mercado Livre, Amazon)",
+  "Ler a ordem lógica do plano (6 etapas: Saúde, Disponibilidade, Cadastros, Otimização, Tráfego/Promoção, Expansão)",
+  "Abrir 'Outras variações' de uma tarefa (2 tarefas têm outros_blocos)",
+  "Consultar o playbook de Duplicação estratégica (gatilhos, tipos/volume, urgência oculta, papéis, erros comuns, checklist)",
+  "Navegar para Cliente, Distribuição, Analistas, O que funciona e Painel",
+  "Abrir o sino de avisos (alerta.js, flutuante)"
+ ],
+ "secoes": [
+  {
+   "titulo": "Header fixo (marca + nav)",
+   "conteudo": "Marca 'Place2u · Processos' (link para /processos) e nav .header-links com Cliente, Distribuição, Analistas, O que funciona, Painel. Não indica a página ativa. Altura fixa de 64px e não quebra no mobile.",
+   "ids_container": [],
+   "importancia": "media"
+  },
+  {
+   "titulo": "Título + subtítulo explicativo",
+   "conteudo": "h2 'Como cada tarefa é feita' e .sub longo e técnico (Notion, MAPA, Manual do Analista, treinamento de Duplicação Estratégica).",
+   "ids_container": [],
+   "importancia": "baixa"
+  },
+  {
+   "titulo": "Abas de canal",
+   "conteudo": "Botões gerados pelo JS: Shopee 16, Mercado Livre 8, Amazon 9 (ordem das chaves do JSON) e 'Duplicação estratégica'. A aba padrão é ML, que fica em 2º lugar. Clique delegado no container.",
+   "ids_container": [
+    "abas"
+   ],
+   "importancia": "alta"
+  },
+  {
+   "titulo": "Conteúdo (trocado inteiro a cada aba via innerHTML)",
+   "conteudo": "Começa com 'Carregando…'. Recebe a view de canal ou a view de Duplicação. Em caso de erro mostra texto vermelho.",
+   "ids_container": [
+    "conteudo"
+   ],
+   "importancia": "alta"
+  },
+  {
+   "titulo": "View canal: faixa 'Ordem do plano'",
+   "conteudo": ".seq com as 6 etapas da sequencia_logica em pílulas azuis (span.p) separadas por setas <i>→</i>. Ocupa 5 linhas no mobile e a lista abaixo não segue essa ordem.",
+   "ids_container": [],
+   "importancia": "media"
+  },
+  {
+   "titulo": "View canal: busca",
+   "conteudo": "input#busca type=search, sem label. Filtra os .cart de #lista por data-txt (nome + demanda + nome_manual). É recriado a cada troca de aba e perde o termo.",
+   "ids_container": [
+    "busca"
+   ],
+   "importancia": "alta"
+  },
+  {
+   "titulo": "View canal: contagem + regras gerais",
+   "conteudo": ".sub com 'N tarefa(s) do MAPA de <canal>' seguido do texto de regras_gerais.criterio_conclusao num parágrafo cinza. As outras 7 regras gerais vêm da API e não aparecem.",
+   "ids_container": [],
+   "importancia": "baixa"
+  },
+  {
+   "titulo": "View canal: lista de tarefas (cartões <details>)",
+   "conteudo": "Cada tarefa é um <details class='cart' data-txt>. O summary traz o nome, a tag do tipo (.tg.t), a tag de duplicação (.tg.d), 'Manual X.Y' e o executor. O .corpo traz aviso de erro, 'Demanda no Notion' + prazo (.mini), Caminho (.cam), Passo a passo (ol), Outras variações (details aninhado), Atenção, Evidência a registrar, Concluída quando (.ok) e Depende do cliente. Os cartões saem na ordem do JSON, sem agrupar por etapa.",
+   "ids_container": [
+    "lista"
+   ],
+   "importancia": "alta"
+  },
+  {
+   "titulo": "View Duplicação: definição + regra de ouro",
+   "conteudo": ".cart com a definição em negrito e .aviso com a 'Regra de ouro'.",
+   "ids_container": [],
+   "importancia": "alta"
+  },
+  {
+   "titulo": "View Duplicação: Quando duplicar (gatilhos)",
+   "conteudo": "Grade .gat com 5 cartões: id · nome, descrição, tipo sugerido e se 'o sistema detecta pelos dados' ou se 'exige pesquisa do consultor'.",
+   "ids_container": [],
+   "importancia": "alta"
+  },
+  {
+   "titulo": "View Duplicação: Tipos e volume",
+   "conteudo": "Grade .gat com 5 tipos e o texto de volume.",
+   "ids_container": [],
+   "importancia": "media"
+  },
+  {
+   "titulo": "View Duplicação: Urgência oculta",
+   "conteudo": "Cartão com o que é, a regra (.aviso) e um exemplo.",
+   "ids_container": [],
+   "importancia": "media"
+  },
+  {
+   "titulo": "View Duplicação: Quem faz o quê",
+   "conteudo": "Dois cartões (Consultor / Analista) com as listas de papéis.",
+   "ids_container": [],
+   "importancia": "media"
+  },
+  {
+   "titulo": "View Duplicação: Erros comuns",
+   "conteudo": "5 cartões empilhados com nome e texto.",
+   "ids_container": [],
+   "importancia": "media"
+  },
+  {
+   "titulo": "View Duplicação: Checklist",
+   "conteudo": "Dois cartões (Consultor / Analista) com o checklist.",
+   "ids_container": [],
+   "importancia": "media"
+  },
+  {
+   "titulo": "View Duplicação: nota final",
+   "conteudo": ".sub dizendo que o aprendizado das duplicações aparece na tela do cliente, sem link para ela.",
+   "ids_container": [],
+   "importancia": "baixa"
+  },
+  {
+   "titulo": "Sino de avisos (injetado por /alerta.js)",
+   "conteudo": "Botão flutuante no canto inferior direito, com painel e toasts. Autocontido, com CSS e ids próprios.",
+   "ids_container": [
+    "psSino",
+    "psPainel",
+    "psToasts"
+   ],
+   "importancia": "baixa"
+  }
+ ],
+ "kpis": [
+  "Hoje não há KPI de verdade, só contagens:",
+  "Nº de tarefas por canal no badge da aba (Shopee 16, Mercado Livre 8, Amazon 9)",
+  "'N tarefa(s) do MAPA de <canal>' acima da lista",
+  "Possíveis com dados que já vêm da API, sem backend novo: tarefas por etapa da sequência (saude 2, disponibilidade 8, cadastro 8, otimizacao 8, trafego_promocao 7), tarefas que dependem do cliente (10 de 33), tarefas de duplicação (3), gatilhos detectáveis pelo sistema vs. que exigem pesquisa, cobertura de passo a passo (33 de 33)"
+ ],
+ "hooks_js": [
+  "#abas (getElementById('abas'): innerHTML com os botões + onclick delegado com e.target.closest('button'))",
+  "#abas button (querySelectorAll('#abas button'): classList.toggle('on', ...))",
+  "data-a nos botões de aba (dataset.a; valores ML, SHO, AMZ e o fixo DUP)",
+  "classe 'on' (aba ativa)",
+  "#conteudo (getElementById('conteudo'): innerHTML substituído por inteiro a cada aba e no erro; tudo dentro é recriado)",
+  "#busca (getElementById('busca'): input type=search, oninput; só existe na view de canal; o if(busca) protege a aba DUP)",
+  "#lista (container dos cartões, usado em querySelectorAll('#lista .cart'))",
+  "#lista .cart (cada cartão é um <details class='cart'>, filtrado pelo atributo hidden)",
+  "data-txt nos .cart (dataset.txt.includes(q); texto em minúsculas)",
+  "atributo hidden em .cart: se o novo CSS der display:flex ou grid a .cart, precisa de '.cart[hidden]{display:none}', senão a busca para de esconder",
+  "<details>/<summary> como mecanismo de expandir: trocar por div quebra o abrir/fechar sem JS",
+  "/alerta.js injeta #psSino, #psPainel, #psToasts, .psItem, .psToast, button.sino, .cont, .mini (dentro de #psPainel): não reutilizar esses ids e não estilizar .mini globalmente sem escopo"
+ ],
+ "classes_geradas_por_js": [
+  "cart",
+  "corpo",
+  "tg",
+  "tg t",
+  "tg d",
+  "mini",
+  "cam",
+  "aviso",
+  "ok",
+  "seq",
+  "p (span.p dentro de .seq)",
+  "busca",
+  "sub",
+  "gat",
+  "on",
+  "Elementos sem classe estilizados por seletor descendente: .cart summary, .cart summary b, .corpo h5, .corpo ol/ul/li, .corpo li small, .seq i, h3 (com style inline), details aninhado em .corpo (Outras variações)",
+  "Estilos inline nas templates que o novo CSS deve substituir por classes: h3 style='margin:16px 0 8px', .cart style='padding:14px 18px' / '12px 16px' / '10px 16px', .sub style='margin:4px 0' / 'margin:2px 0 0' / 'margin-top:16px' / 'margin-top:6px', .mini style='color:var(--cinza);font-size:12.5px' (a classe .mini não tem regra no CSS), erro style='color:var(--verm)'"
+ ],
+ "css_origem": "Um único <style> inline no <head> de processos.html, com tokens :root próprios (cópia de ui.css, só que com --raio 14px em vez de 16px). A tela NÃO linka ui.css, styles.css nem ui-extra.css (o design system compartilhado que cliente, index, planos, gmv, metodologia, resultados e promocoes usam). Somam-se a ele estilos inline (style=\"...\") nas template strings do processos.js e o CSS que /alerta.js injeta em runtime via document.createElement('style') para #psSino, #psPainel, #psToasts, .psItem e .psToast. Não há dark mode.",
+ "links_navegacao": [
+  "/processos (marca no header)",
+  "/cliente (Cliente)",
+  "/planos (Distribuição)",
+  "/analistas (Analistas)",
+  "/resultados (O que funciona)",
+  "/ (Painel)",
+  "Corpo: nenhum link. A nota final da aba Duplicação cita a tela do cliente, seção 'Duplicação estratégica', sem link",
+  "Quem aponta para esta tela: index.html (botão .btn.btn-claro 'Processos') e a nav de cliente.html",
+  "Os toasts do alerta.js podem trazer link interno 'Abrir →'"
+ ],
+ "dependencias_externas": [
+  "Nenhuma CDN, Chart.js ou fonte externa: só a pilha de fontes do sistema (-apple-system, Segoe UI, Roboto)",
+  "/alerta.js (interno, defer): consulta /api/notificacoes a cada 8 s, toca som e usa BroadcastChannel e localStorage",
+  "GET /api/processos (src/rotas-planos.js:368), que devolve canais, sequencia, regras_gerais, mapa{ML,SHO,AMZ}, familias e duplicacao; os dados vêm de config/processos-base.json + config/processos-curadoria.json via src/lib/processos.js (estáticos, não dependem de conexão com o ML nem do Notion)",
+  "GET /processos servido em src/server.js:170"
+ ],
+ "testes_que_leem_esta_tela": [
+  "Nenhum scripts/teste-*.mjs lê src/web/processos.html ou src/web/processos.js. Um grep por 'processos.html', 'processos.js' (fora de lib), '/processos' e 'api/processos' em scripts/ não acha nada. O redesenho está livre de asserts de string nestes dois arquivos.",
+  "Indireto, contrato de dados que a tela consome (scripts/teste-processos.mjs sobre src/lib/processos.js): assert.ok(e.bloco && e.bloco.passos.length >= 3), assert.ok(e.bloco.caminho), assert.ok(e.criterio && e.evidencia.length && e.tipo), assert.ok(e.bloco.passos.every((p, i) => p.n === i + 1 && p.titulo)). A UI pode contar com esses campos.",
+  "Indireto: scripts/teste-duplicacao.mjs importa { duplicacao as PB } de src/lib/processos.js (o objeto que vira dados.duplicacao na aba DUP).",
+  "Indireto: scripts/teste-notificacoes.mjs lê src/web/alerta.js, que esta tela carrega. Exige innerHTML só com literal fixo (regex /innerHTML\\s*=\\s*([^\\n]+)/g e cada valor casando /^'[^'$]*'$/), /linkSeguro/ presente e o padrão `const linkSeguro = l => \\/(.+)\\/\\.test`. Manter <script src=\"/alerta.js\" defer> e não reescrever o alerta.js no redesenho."
+ ],
+ "problemas_ux": [
+  "Hierarquia fraca: o subtítulo longo e técnico ('MAPA', 'Manual do Analista', 'Notion') vem antes de tudo, e as regras gerais ficam num parágrafo cinza depois da busca. No mobile o primeiro cartão só aparece abaixo da dobra (~800px).",
+  "A faixa 'Ordem do plano' não conversa com a lista: os cartões não seguem nem agrupam a sequência (ML abre com Cadastro(3), Variações(3), Editar(4), SKU(2); na Amazon, 'Como resgatar um anúncio' (etapa 1) aparece em 7º). A direção que o sócio quer ver existe mas não estrutura a tela.",
+  "Tags que viram ruído: 'analista' aparece em 33 de 33 tarefas (não informa nada) e 'Manual 6.1' é código interno. São até 4 pílulas por linha competindo com o nome da tarefa.",
+  "Ordem das abas inconsistente: Shopee vem primeiro (ordem do JSON), mas a aba aberta por padrão é Mercado Livre, que é a 2ª.",
+  "Dados que a API manda e a tela não mostra: e.descricao (o que é a tarefa, até 351 caracteres; só 6 tarefas estão sem), 7 das 8 regras_gerais (sequencia, movimentar_diariamente, responsavel, prazos, evidencia, nome_do_arquivo, registro), familias, e no playbook o_que_varia, missoes, beneficios, primeira_pagina (meta: 3 ou mais anúncios na 1ª página), copia_simples_vs_estrategica e aprendizado.",
+  "O cartão aberto é um muro: caminho, passo a passo de até 10 itens, atenção, evidência, critério e dependências, tudo com o mesmo peso. O critério 'Concluída quando' (o que decide a tarefa) fica no fim.",
+  "A aba Duplicação é uma página longa com 7 blocos verticais, sem resumo no topo nem âncoras. Os erros comuns aparecem como 5 cartões empilhados.",
+  "Busca limitada: procura só em nome, demanda e nome_manual (não acha palavra de passo, critério ou caminho), não busca entre canais, perde o termo ao trocar de aba (o input é recriado em desenhar()) e não tem estado 'nenhuma tarefa encontrada'.",
+  "Mobile quebrado: o header não quebra linha (scrollWidth 529px num viewport de 375px, com rolagem horizontal), a marca cai em 2 linhas e a faixa de sequência ocupa 5 linhas.",
+  "Inconsistência visual: não usa ui.css, duplica tokens (--raio 14px contra 16px), tem h3 sem estilo base, estilos inline nas templates e a classe .mini sem CSS. O <details> aninhado de 'Outras variações' herda o flex/padding de .cart summary sem querer.",
+  "A nav muda de tela para tela (aqui falta Comercial, Promoções, Integrações e Metodologia), não marca a página ativa e o 'Painel' vem por último.",
+  "Acessibilidade: as abas são <button> sem role=tablist e sem aria-selected, a busca não tem <label> (só placeholder) e as setas da sequência usam --cinza-claro, de contraste baixo.",
+  "Tela isolada: nada leva da tarefa ao uso real (cards do plano no Notion, a Distribuição ou o cliente). A nota final de Duplicação cita a tela do cliente sem link.",
+  "Emojis: nenhum na tela. O único é o 🔔 do sino compartilhado do alerta.js."
+ ],
+ "estados": [
+  "Carregando: só o texto 'Carregando…' (.sub dentro de #conteudo), sem skeleton, e as abas ficam vazias até a resposta chegar",
+  "Erro de API ou d.erro: texto vermelho com e.message no lugar do conteúdo; as abas continuam vazias, sem botão 'tentar de novo' e sem orientação",
+  "Canal sem tarefas: sem estado vazio próprio; aparece '0 tarefa(s)' com a lista vazia",
+  "Busca sem resultado: sem estado; a lista simplesmente some",
+  "Tarefa sem passo a passo: aviso âmbar 'O Manual não traz passo a passo para este canal…' (hoje 0 casos)",
+  "Tarefa com e.erro: aviso âmbar no topo do corpo (hoje 0 casos)",
+  "Aba Duplicação: sem estado de vazio ou erro se algum array do playbook vier vazio (gatilhos.map etc. quebrariam se o campo faltasse)",
+  "Não depende de conexão com o ML nem do Notion: os dados são de configuração estática, então não existe estado 'sem conexão ML'"
+ ],
+ "recomendacao": "Transformar a tela num \"Manual de execução\" direcional, organizado pela ordem do plano. Por cima: título curto (\"Como cada tarefa é feita\") com uma linha de propósito e uma faixa de 3 ou 4 números-resumo calculados no front com os dados que a API já manda (tarefas por canal, quantas dependem do cliente, quantas são de duplicação). Logo abaixo, um controle segmentado de canal com Mercado Livre primeiro e Duplicação como aba à parte, mais uma busca com label que procura também em passos e critério, guarda o termo entre abas e mostra estado \"nenhuma tarefa\". A lista deixa de ser plana e passa a vir agrupada pelas 6 etapas da sequência, como seções numeradas (1 Saúde → 6 Expansão). Isso substitui a faixa de pílulas e entrega a \"direção\" que o sócio quer ver de relance. Cada linha recolhida mostra só nome, tipo e, se houver, \"depende do cliente\". Saem as tags \"analista\" e \"Manual X.Y\" (o código do Manual pode ir para o rodapé do cartão). Aberto, o cartão mostra primeiro o \"Concluída quando\" e a evidência, depois a descrição (hoje oculta), caminho e passo a passo numerado, com atenção e variações no fim. As regras gerais vão para um bloco recolhível \"Regras do método\" com as 8 regras. A aba Duplicação ganha um resumo no topo (definição + regra de ouro + meta da 1ª página) e blocos em grade com âncoras, aproveitando missoes, o_que_varia e copia_simples_vs_estrategica, mais um link real para a tela do cliente. Tudo isso sobre o ui.css compartilhado: header responsivo com página ativa, sem estilos inline, com dark mode e aria nas abas. Preservar os hooks #abas, #conteudo, #busca, #lista, .cart (como <details>, com regra para [hidden]), data-a, data-txt, a classe on e o <script src=\"/alerta.js\" defer>."
+}

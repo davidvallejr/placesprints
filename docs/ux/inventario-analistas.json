@@ -1,0 +1,213 @@
+{
+ "id": "analistas",
+ "pergunta": "Quem do time de analistas de marketplace está entregando, quem está sobrecarregado ou travado, e em quais clientes a gestão precisa intervir agora?",
+ "usuarios": [
+  "CEO (David) e sócio: visão estratégica de capacidade e produtividade do time, e quem aprova o layout",
+  "Head/coordenador de operação e líderes de squad: cobrar, redistribuir e destravar tarefas (o drill-down leva direto ao card no Notion)",
+  "Analistas de e-commerce: autoavaliação de carteira, menos frequente",
+  "Administrador do sistema: sincronizar a lista oficial de analistas com o Notion"
+ ],
+ "acao_principal": "Achar o analista ou o cliente que precisa de intervenção (bloqueadas e paradas há mais de 30 dias) e abrir o detalhe: clicar no nome do analista (.nome-btn) mostra as tarefas críticas com link para o card no Notion e os clientes da carteira.",
+ "acoes_secundarias": [
+  "Ordenar o ranking clicando nos cabeçalhos (th[data-k]: nome, concluidas28, ritmo_semana, mediana_dias, abertas, clientes, atencao)",
+  "Abrir a Visão por cliente a partir da tabela de clientes travados ou do drill (/cliente?cliente=X)",
+  "Abrir o card da tarefa no Notion a partir do drill (target=_blank)",
+  "Atualizar a lista oficial de analistas a partir do Notion (#btnSync → POST /api/analistas/sincronizar, depois recarrega a página)",
+  "Abrir o <details> 'maiores volumes fora da lista' para ver responsáveis que ficaram de fora",
+  "Consultar o mix de tipos de tarefa e as combinações de tipos (só leitura)"
+ ],
+ "secoes": [
+  {
+   "titulo": "Header (marca + navegação)",
+   "conteudo": "Logo /logo + 'Place2u · Analistas' (link para /analistas); nav .header-links: Visão por cliente, Comercial, Distribuição, Painel executivo. Fica fixo no topo (sticky), com 64px de altura.",
+   "ids_container": [],
+   "importancia": "media"
+  },
+  {
+   "titulo": "Título e subtítulo",
+   "conteudo": "h2 'Gestão por analista' + .sub explicando volume/velocidade/atraso/resultado e as instruções 'clique num nome / clique nos cabeçalhos'. É HTML estático, fora do #conteudo.",
+   "ids_container": [],
+   "importancia": "media"
+  },
+  {
+   "titulo": "Faixa de KPIs (5 cards)",
+   "conteudo": "Analistas ativos (13); Concluídas 28d do time (2266); Em carteira (3611, com detalhe '108 bloqueadas · 865 paradas 30d+'); Atrasadas por prazo vencido (0, 'só 0 de 3611 abertas têm prazo'); Cegueira de prazo (100%). Desenhada pelo JS dentro de #conteudo (.kpis > .kpi > .rotulo/.valor/.detalhe).",
+   "ids_container": [
+    "conteudo"
+   ],
+   "importancia": "alta"
+  },
+  {
+   "titulo": "Aviso azul: lista oficial do Notion",
+   "conteudo": "'👥 Só analistas de marketplace': 17 nomes da base oficial (Cadastro de Prestadores, Cargo Analista de E-commerce, Ativo); 62 responsáveis fora. <details> com os maiores volumes fora da lista (ex.: Thayna Alves Lava, 1136 créditos; Bianca, 726) e dica técnica sobre config/equipe.json. Botão '↻ Atualizar lista do Notion'.",
+   "ids_container": [
+    "btnSync"
+   ],
+   "importancia": "baixa"
+  },
+  {
+   "titulo": "Aviso âmbar: leitura honesta",
+   "conteudo": "'⚠️' 100% das tarefas sem prazo, então bloqueada e parada 30d+ entram como proxy de atraso; 83% das concluídas têm início igual à conclusão, mais o texto longo do aviso_duracao.",
+   "ids_container": [],
+   "importancia": "baixa"
+  },
+  {
+   "titulo": "Ranking do time (tabela ordenável + drill-down)",
+   "conteudo": "7 colunas: Analista (botão), Concluídas 28d (+ 90d), Ritmo/semana, Velocidade (mediana com selo 'medida fiel' ou 'registro no mesmo dia'), Em carteira (+ % com prazo), Clientes, Atenção (selos: prazo vencido, bloqueadas, paradas 30d+ ou 'em dia'). Ordenada por concluidas28 desc. Cada analista tem uma linha oculta tr#drill-<nome> com div#drillbox-<nome>. O drill traz: nome + 'X em carteira · Y concluídas em 90d'; 'Precisa de atenção (N)', até 12 tarefas (Cliente, Tarefa com link Notion, Motivo); grade2 com 'Clientes da carteira' (8: Abertas, Travadas) e 'O que mais entrega (90d)' (8: Tipo, N, Mediana).",
+   "ids_container": [
+    "conteudo",
+    "drill-<nome>",
+    "drillbox-<nome>"
+   ],
+   "importancia": "alta"
+  },
+  {
+   "titulo": "Clientes com tarefas atrasadas ou travadas",
+   "conteudo": "Subtítulo = AT.cegueira. Tabela com até 40 de 117 clientes por gravidade: Cliente (link /cliente?cliente=, + N abertas), Prazo vencido (sempre '—' hoje), Bloqueadas, Paradas 30d+, Parada mais antiga (dd/mm/aaaa), Analistas envolvidos (até 4 + N; vazio em 45 clientes). Rodapé 'Mostrando os 40 de maior gravidade de N'. Estado vazio: .vazio-box.",
+   "ids_container": [
+    "conteudo"
+   ],
+   "importancia": "alta"
+  },
+  {
+   "titulo": "Que tarefa move resultado? / …ou a junção de tarefas? (grade2)",
+   "conteudo": "À esquerda, os tipos de tarefa em 90 dias (Tipo, Concluídas, Clientes, Mediana; 14 tipos, '(sem tipo)' é o 2º maior com 555). À direita, as 10 combinações de pares de tipos no mesmo cliente em até 7 dias (Combinação, Clientes). Nota: o resultado de vendas +1/+3/+5/+15/+20 só liga quando o canal conectar. O texto de TP.resultado_comercial expõe '(janelasResultado)'.",
+   "ids_container": [
+    "conteudo"
+   ],
+   "importancia": "baixa"
+  },
+  {
+   "titulo": "Rodapé",
+   "conteudo": "'Place2u · fonte oficial: Notion · crédito compartilhado em cards com mais de um responsável'.",
+   "ids_container": [],
+   "importancia": "baixa"
+  },
+  {
+   "titulo": "Widget global de avisos (alerta.js)",
+   "conteudo": "Sino fixo no canto inferior direito com contador, painel e toasts. Consulta /api/notificacoes a cada 8 s e injeta o próprio CSS. Aparece em todas as telas.",
+   "ids_container": [
+    "psSino",
+    "psPainel",
+    "psToasts"
+   ],
+   "importancia": "baixa"
+  }
+ ],
+ "kpis": [
+  "Analistas ativos: time.analistas (13), detalhe 'com 3+ tarefas (90d)'",
+  "Concluídas 28d: time.concluidas28 (2266), 'time inteiro'. Conta TODAS as tarefas, inclusive as de quem está fora da lista oficial e as sem responsável",
+  "Em carteira: time.abertas (3611), detalhe 'time.bloqueadas (108) bloqueadas · time.paradas30 (865) paradas 30d+'",
+  "Atrasadas (prazo vencido): time.atrasadas_reais (0), detalhe 'só time.abertas_com_prazo (0) de time.abertas têm prazo'",
+  "Cegueira de prazo: time.pct_sem_prazo (100%), 'abertas sem o campo Prazo'",
+  "Indicadores por analista no ranking: concluidas28, concluidas90, ritmo_semana, mediana_dias (+ pct_mesmo_dia, cobertura_duracao), abertas, pct_sem_prazo, clientes, atrasadas, bloqueadas, paradas30. A ordenação 'Atenção' usa atrasadas*3 + bloqueadas*2 + paradas30",
+  "Indicador de contexto no aviso: time.pct_mesmo_dia_time (83%)"
+ ],
+ "hooks_js": [
+  "#conteudo: getElementById('conteudo'). Recebe o innerHTML da tela inteira e também a mensagem de erro geral. Começa com <div class=\"skeleton\">",
+  "#btnSync: getElementById('btnSync'). Usa onclick, disabled e textContent ('sincronizando…' / '↻ Atualizar lista do Notion')",
+  "#drill-<nome do analista>: getElementById('drill-' + nome). É um <tr> com o atributo hidden alternado pelo JS. O CSS não pode forçar display em tr[hidden]",
+  "#drillbox-<nome do analista>: getElementById('drillbox-' + nome). Recebe o innerHTML do detalhe",
+  "seletor [id^=\"drill-\"]: querySelectorAll para esconder todos os drills. O prefixo 'drill-' deve ser usado só pelas linhas de drill",
+  "seletor th[data-k]: querySelectorAll + th.dataset.k. Os valores de data-k precisam continuar: nome, concluidas28, ritmo_semana, mediana_dias, abertas, clientes, atencao",
+  "classe .on no <th>: marca a coluna ordenada; as setas ↓/↑ vêm no texto",
+  "seletor .nome-btn: querySelectorAll + b.dataset.n (atributo data-n = nome do analista) para abrir o drill",
+  "atributo hidden nas linhas tr#drill-*",
+  "<script src=\"analistas.js\"> com caminho relativo e <script src=\"/alerta.js\" defer>: os dois precisam continuar no HTML",
+  "tokens CSS usados direto em style= nas template strings: --azul-suave, --azul. Os nomes têm que continuar existindo em :root",
+  "APIs consumidas: GET /api/analistas/visao, GET /api/analistas/clientes-atrasados, GET /api/analistas/tipos, GET /api/analistas/detalhe?nome=, POST /api/analistas/sincronizar",
+  "rota /analistas: src/server.js:161 faz sendFile de src/web/analistas.html, então o nome do arquivo não pode mudar",
+  "ids injetados pelo alerta.js (globais, não mexer): #psSino, #psPainel, #psToasts, .psItem, .psToast"
+ ],
+ "classes_geradas_por_js": [
+  "kpis",
+  "kpi",
+  "rotulo",
+  "valor",
+  "detalhe",
+  "aviso-faixa",
+  "btn-mini (usada no #btnSync, mas NÃO definida no CSS desta página)",
+  "secao",
+  "sub",
+  "cartao",
+  "tabela-rolagem",
+  "on",
+  "nome-btn",
+  "mini",
+  "selo",
+  "bom",
+  "neutro",
+  "atencao",
+  "ruim",
+  "azul",
+  "drill (com h5 e table dentro: .drill h5, .drill table)",
+  "grade2",
+  "vazio-box",
+  "skeleton (no HTML inicial, dentro de #conteudo)",
+  "elementos sem classe estilizados por tag: table, thead, th, td, tr, h3, h5, details, summary, b, a",
+  "estilos inline nas template strings: aviso azul (background:var(--azul-suave);color:var(--azul)), details margin-top, summary cursor, #btnSync margin-top, link font-weight:700;text-decoration:none, .mini margin-top 8px/4px, cabeçalho do drill display:flex;gap:16px;flex-wrap:wrap, grade2 margin-top:10px"
+ ],
+ "css_origem": "Um único <style> inline em src/web/analistas.html (linhas 7-64), com tokens em :root copiados do padrão ui.css (--laranja, --tinta, --cinza, --borda, --verde/--ambar/--verm/--azul e versões -suave, --sombra, --raio:16px). A página não carrega nenhum stylesheet externo (nem ui.css, ui-extra.css ou styles.css). Há também estilos inline dentro das template strings do analistas.js. O alerta.js injeta o próprio <style> (#psSino, #psToasts, .psItem, .psToast). Não há dark mode. Fonte: pilha do sistema (-apple-system, Segoe UI, Roboto). A única media query é @media(max-width:900px), que muda .kpis para 2 colunas, .grade2 para 1 coluna, o padding do main e o overflow de .tabela-rolagem.",
+ "links_navegacao": [
+  "Header, marca: /analistas",
+  "Header: /cliente ('Visão por cliente')",
+  "Header: /comercial ('Comercial')",
+  "Header: /planos ('Distribuição'; no painel executivo esse destino se chama 'Planos de ação')",
+  "Header: / ('Painel executivo')",
+  "Corpo: /cliente?cliente=<nome> na tabela de clientes travados e na tabela 'Clientes da carteira' do drill",
+  "Corpo: URLs dos cards no Notion (app.notion.com/p/...) no drill, com target=_blank",
+  "Telas que trazem para cá: index.html ('👥 Analistas'), cliente.html, comercial.html, planos.html, processos.html",
+  "Telas que existem mas não aparecem no menu desta página: /gmv, /promocoes, /resultados ('O que funciona'), /integracoes, /processos, /metodologia, /relatorio"
+ ],
+ "dependencias_externas": [
+  "Nenhum CDN, Chart.js ou web font",
+  "/logo: imagem servida pelo próprio servidor (onerror esconde)",
+  "/alerta.js: sino de avisos global que consulta /api/notificacoes a cada 8 s, usa localStorage, BroadcastChannel, AudioContext e Notification",
+  "Notion: fonte oficial dos dados. GET /api/analistas/visao pode disparar sincronizarAnalistasOficiais() na primeira visita, quando a lista oficial está vazia",
+  "Links externos para app.notion.com"
+ ],
+ "testes_que_leem_esta_tela": [
+  "Nenhum teste lê src/web/analistas.html ou src/web/analistas.js: o grep de readFileSync/src/web em scripts/teste-*.mjs só encontra integracoes, promocoes, cliente.js e alerta.js. Não há assert de string sobre estes arquivos, então o redesenho está livre desse lado.",
+  "scripts/teste-comercial-publico.mjs:47-48 depende só da rota, não do conteúdo: for (const p of ['/comercial', '/cliente', '/analistas', '/planos', ...]) assert.ok(!passa(p), `painel/rota interna NÃO pode passar pelo host comercial: ${p}`). A rota /analistas precisa continuar existindo como painel interno.",
+  "scripts/teste-analistas.mjs testa o contrato de dados que a tela consome (src/lib/analistas.js), não a UI: v.time.analistas > 3 && v.time.abertas > 100; seed demo ['Carlos Lima','Ana Souza','Bruna Alves'] fora; v.time.pct_sem_prazo >= 90; a.concluidas28 <= a.concluidas90; c.clientes ordenados por gravidade; c.cegueira.includes('Prazo'); t.combos.every(x => x.combo.includes(' + ')); detalheAnalista coerente com visaoTime (concluidas90, abertas); casadorOficial('Vitória Oliveira') === 'Vitória de Jesus Rodrigues de Oliveira'; v.lista_oficial.fora_total > 0.",
+  "scripts/teste-placeplan.mjs só importa listaOficial de src/lib/analistas.js e não toca na UI."
+ ],
+ "problemas_ux": [
+  "Dois dos 5 KPIs não informam nada: 'Atrasadas (prazo vencido)' é sempre 0, porque 0 de 3611 abertas têm prazo, e 'Cegueira de prazo' dá 100%. São 40% da faixa gastos com higiene de dado, enquanto o atraso que existe de fato (108 bloqueadas + 865 paradas = 973 travadas) fica escondido no subtexto do card 'Em carteira'.",
+  "Os números do topo não fecham com o ranking. 'Concluídas 28d · time inteiro' = 2266 e 'Em carteira' = 3611 contam todas as tarefas, inclusive as de 62 responsáveis fora da lista e as sem responsável, mas a soma das 13 linhas do ranking dá cerca de 1273 concluídas e 1865 abertas. O sócio vai notar a diferença e perder a confiança no painel.",
+  "A coluna Velocidade não informa: a mediana é 0 dia em 10 dos 13 analistas e quase todos levam o selo 'registro no mesmo dia'. A coluna Mediana dos tipos também mostra 0 d. Ocupa espaço e confunde.",
+  "Duas faixas de aviso (azul com 👥 e âmbar com ⚠️) aparecem antes do ranking, com texto longo e técnico ('proxy', 'config/equipe.json (aliases)', '(janelasResultado)' vindo da API). Elas empurram a tabela principal para baixo da dobra.",
+  "O botão '↻ Atualizar lista do Notion' usa .btn-mini, que não existe no CSS desta página, então aparece como botão cru do navegador. É uma ação de admin no meio da leitura executiva; o erro sai por alert() e o sucesso recarrega a página inteira.",
+  "Emojis e símbolos (👥 ⚠️ ↻ 👏) quebram o padrão clean e premium.",
+  "O título 'Que tarefa move resultado?' promete resultado que não existe: sem vendas conectadas, a seção só mostra volume. É uma seção de pouco valor ocupando meia largura de tela.",
+  "A tabela de clientes travados mostra até 40 linhas e 6 colunas. A coluna 'Prazo vencido' é sempre '—' (nenhum cliente tem atraso real), e 45 dos 117 clientes ficam com 'Analistas envolvidos' em branco, sem nenhum rótulo, quando cliente sem responsável deveria ser o alerta principal.",
+  "A mesma palavra 'Clientes' dá números diferentes: no ranking, Sara aparece com 18 (abertas + concluídas em 90d) e no drill 'Clientes da carteira' com 9 (só os com tarefa aberta).",
+  "O motivo no drill vem em formato ISO ('parada desde 2026-08-31'), enquanto o resto da tela usa dd/mm/aaaa. O aviso de corte também aparece duas vezes ('mostrando as N mais críticas' e '+ X outras').",
+  "Todo th tem cursor:pointer, inclusive nas tabelas que não ordenam. A ordenação não funciona por teclado: o th não é botão e não tem aria-sort.",
+  "A ordenação padrão é por volume (concluidas28), o que premia quantidade. Para uma gestão direcional, o padrão deveria ser 'Atenção' (quem precisa de ajuda).",
+  "Mobile: o header não tem media query (marca com nowrap + 4 links) e estoura a 375px. As tabelas de 7 e 6 colunas dependem só de rolagem horizontal, e com 5 KPIs em 2 colunas sobra um card órfão.",
+  "A navegação muda de tela para tela (cada página tem um menu diferente). Aqui faltam GMV, Promoções, O que funciona, Integrações e Processos, e o mesmo destino se chama 'Distribuição' aqui e 'Planos de ação' no painel executivo.",
+  "O CSS está inline e duplicado (tokens copiados de ui.css, body com background declarado duas vezes) e há estilos inline nas template strings, o que dificulta aplicar um layout padrão em todas as telas.",
+  "A lista 'fora da lista' esconde informação relevante: nomes com muito volume (Thayna Alves Lava, 1136 créditos; Bianca, 726) ficam num <details> dentro de um aviso. E '(sem tipo)' é o 2º maior tipo de tarefa (555), uma higiene de dado que a tela não sinaliza.",
+  "Os links para o Notion usam target=_blank sem rel=\"noopener\".",
+  "Rodapé com texto técnico."
+ ],
+ "estados": [
+  "Carregando (inicial): um único .skeleton de 120px dentro de #conteudo, sem texto. Na primeira visita, GET /api/analistas/visao pode sincronizar com o Notion e demorar sem avisar.",
+  "Erro geral: .vazio-box com a mensagem crua (e.message) em #conteudo, sem botão de tentar de novo. Como é um Promise.all de 3 APIs, se qualquer uma falhar (até /tipos, que é secundária) a tela inteira some.",
+  "Vazio, clientes travados: .vazio-box 'Nenhum cliente com atraso ou travamento agora.'",
+  "Truncado, clientes: 'Mostrando os 40 de maior gravidade de N.'",
+  "Ranking vazio (0 analistas): sem tratamento; tbody vazio e KPIs zerados.",
+  "Tipos e combos vazios: sem tratamento; tabelas sem corpo.",
+  "Velocidade sem dado: 'sem medida'. Selos 'medida fiel' (verde) ou 'registro no mesmo dia' (neutro), com tooltip title.",
+  "Analista sem pendência: selo 'em dia'.",
+  "Lista fora vazia: o <details> não aparece.",
+  "Drill carregando: 'carregando…' (.mini). Drill com erro: mensagem (.mini). Drill sem pendência: 'Nada travado ou vencido na carteira. 👏'. Drill truncado: 'mostrando as N mais críticas' e '+ X outras'.",
+  "Drill alterna: clicar no mesmo nome fecha; só um drill fica aberto; depois de reordenar, o drill aberto é mantido (aberto + manter=true).",
+  "Sincronizando: #btnSync desabilitado com 'sincronizando…'; erro sai por alert() e o botão volta ao normal; sucesso recarrega a página.",
+  "API detalhe com nome menor que 3 caracteres: 400 {erro}, mostrado no drill.",
+  "Sem conexão de vendas: notas fixas de que o resultado +1/+3/+5/+15/+20 dias 'liga quando conectar'. Não há estado visual dedicado.",
+  "Avisos globais (alerta.js): contador do sino, toasts e o estado do som."
+ ],
+ "recomendacao": "Reorganizar a tela em torno de uma pergunta só, 'quem precisa de ajuda agora?', lida de cima para baixo. Começa pelo header global padronizado, igual em todas as telas, que colapsa no mobile. Depois o título com uma linha de contexto, sem instruções de uso. Em seguida, 4 KPIs que fecham com a tabela, calculados só com analistas oficiais: Analistas ativos, Entregas em 28d (ritmo/semana como subtexto), Carteira aberta e Travadas (bloqueadas + paradas 30d+, com o rótulo 'proxy de atraso'). Os KPIs mortos (Atrasadas = 0, Cegueira 100%) saem e vão, junto com os 83% de 'registro no mesmo dia' e a lista oficial, para uma faixa discreta 'Qualidade do dado' recolhível no fim da página. O botão de sincronizar vira ação de admin nessa área, estilizado e sem emoji. O bloco central é o ranking com 5 colunas (Analista, Entregas 28d, Carteira, Clientes ativos, Atenção), ordenado por Atenção por padrão. A Velocidade sai da tabela até o dado ficar confiável. O drill-down continua inline (preservando #drill-<nome>, #drillbox-<nome>, th[data-k], .nome-btn com data-n e #btnSync) e mostra primeiro 'Precisa de atenção', com datas em dd/mm. Depois vem 'Clientes travados': top 10 com 'ver todos', o destaque 'sem responsável' substituindo a coluna 'Prazo vencido' (sempre vazia) e link para /cliente. Por último, recolhido, 'O que o time entrega' (tipos + combinações), renomeado para não prometer resultado de vendas que ainda não existe. Ao longo da tela: nenhum emoji, tokens de cor de um CSS compartilhado (mantendo --azul e --azul-suave ou trocando junto no JS), cursor de ordenação só nas colunas que ordenam, estado vazio e de erro com 'tentar de novo' em cada bloco (trocar o Promise.all por carregamento independente) e skeletons por seção."
+}

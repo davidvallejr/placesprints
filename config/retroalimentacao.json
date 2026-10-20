@@ -1,0 +1,403 @@
+{
+  "$comentario": "Retroalimentação do Merovíngio. Tudo aqui é editável sem mexer em código. O sistema lê o ESTADO da conta (queda / estagnação / crescimento), diz o que fazer em cada um, aprende com as tarefas já medidas (o que funciona e o que não funciona, por tipo de tarefa e por estado) e devolve isso ao plano de ação como fator de prioridade. Associação temporal ajustada por controle — nunca causalidade comprovada.",
+  "estado": {
+    "janela_dias": 14,
+    "limiar_pct": 10,
+    "limiar_forte_pct": 25,
+    "min_unidades_base": 8,
+    "z_significativo": 1.645,
+    "$nota": "Receita dos últimos 14 dias contra os 14 anteriores. Variação pequena sem significância estatística (ruído de contagem) é lida como estagnação, nunca como queda ou crescimento."
+  },
+  "plano": {
+    "fator_min": 0.7,
+    "fator_max": 1.35,
+    "k_pseudo": 5,
+    "min_n_aprendizado": 8,
+    "taxa_base_padrao": 0.3,
+    "$nota": "fator final de uma regra = ajuste aprendido × peso do estado, limitado a [fator_min, fator_max]. O ajuste aprendido só existe quando a taxa de melhora do tipo de tarefa NESTE ESTADO da conta difere de forma conclusiva (intervalo de Wilson) da taxa do tipo em geral — o efeito do tipo em geral já entra na probabilidade de sucesso do plano (calibracao.js), então não é contado duas vezes. Regras de risco (estoque, redução de Ads) não são julgadas por 'vendas subiram'.",
+    "ajuste_estado_min": 0.85,
+    "ajuste_estado_max": 1.15,
+    "isentas_de_aprendizado": [
+      "estoque_ruptura",
+      "ads_reduzir",
+      "cadastrar_custos"
+    ]
+  },
+  "veredito": {
+    "piso_funciona": 0.1,
+    "$nota": "'funciona': limite INFERIOR do intervalo de Wilson (95%) acima da taxa habitual de melhora (e de um piso de 10%); 'sem resultado mensurável': limite SUPERIOR abaixo da taxa habitual; entre os dois, 'misto'. Abaixo de min_n_aprendizado medidas: 'sem amostra'. A taxa habitual é a de todas as tarefas medidas do mesmo conjunto — a medição por controle é conservadora (a base real gira em torno de 9% de melhora), então um limite fixo de 35% nunca seria alcançado."
+  },
+  "pareto": {
+    "pct": 80,
+    "top1_alerta_pct": 40
+  },
+  "estrategia": {
+    "$comentario": "Estratégia da conta em 4 classes (Sobrevivência / Manutenção / Crescimento / Desenvolvimento): encaixe do ESTADO (queda/estagnação/crescimento/sem base) com a economia do Ads, a parcela da receita em ruptura e a cobertura da série — a primeira condição que casa decide, nesta ordem. CAIXA, CAPACIDADE e MERCADO não existem no sistema (nenhuma fonte os mede): por isso TODA classificação nasce provisória e declara o que falta. O estado continua sendo o que o plano usa; a classe é só um gancho declarado (pesos 1,0 em todas).",
+    "sobrevivencia": {
+      "share_ruptura_pct": 40
+    },
+    "desenvolvimento": {
+      "min_dias_cobertura": 56,
+      "share_acoes_cadastro_pct": 50,
+      "regras_cadastro": [
+        "oferta_cadastro"
+      ],
+      "$nota": "ação de cadastro = regra em regras_cadastro OU duplicação com gatilho G1 (produto novo)."
+    },
+    "revisar_dias": 14,
+    "revisar_dias_sinal_misto": 7,
+    "faltam_padrao": [
+      "caixa",
+      "capacidade",
+      "mercado"
+    ],
+    "$doc_pesos": "Hoje a classe estratégica é descritiva: não altera a prioridade de nenhuma ação (pesos 1,0 → fator neutro em fatoresDoPlano). Os pesos passam a governar a política de autonomia do executor (F7 de docs/desenho-causalidade-executor.md), não a ordem do plano.",
+    "pesos": {
+      "Sobrevivência": 1,
+      "Manutenção": 1,
+      "Crescimento": 1,
+      "Desenvolvimento": 1
+    },
+    "condicoes_revisao": [
+      "Reavaliar quando o estado da conta mudar de classe em uma janela completa de 14 dias.",
+      "Reavaliar quando os custos forem informados ou alterados (a economia do Ads muda a classe).",
+      "Reavaliar quando caixa, capacidade ou mercado passarem a ser medidos — até lá a classe é provisória.",
+      "Reavaliar antes do prazo se houver ruptura de estoque em anúncio curva A ou perda da caixa de compra."
+    ]
+  },
+  "combos": {
+    "janela_episodio_dias": 14,
+    "min_n": 5,
+    "min_taxa_funciona": 0.5,
+    "min_piorou_alerta": 2
+  },
+  "pior_tarefa": {
+    "min_n": 5,
+    "min_taxa_pior": 0.25,
+    "min_piorou": 2
+  },
+  "queda": {
+    "limiar_ruptura_dias": 10,
+    "min_share_ruptura_pct": 8,
+    "concentracao_top_pct": 50,
+    "ads_queda_investimento_pct": 30,
+    "ads_queda_roas_pct": 25,
+    "execucao_queda_pct": 40,
+    "execucao_base_minima": 3,
+    "mercado_queda_controle_pct": 10,
+    "min_receita_controle": 300,
+    "queda_nos_tocados_min_anuncios": 3
+  },
+  "elos": {
+    "visitas": {
+      "rotulo": "TRÁFEGO (menos gente chegando aos anúncios)",
+      "regras": [
+        "ads_entrar",
+        "ads_escalar",
+        "conteudo_fotos"
+      ],
+      "tipos": [
+        "Duplicação de Títulos",
+        "Ajuste ADS",
+        "Melhorar Imagens"
+      ],
+      "acao": "Recuperar a exposição: título e imagem de capa nos anúncios que mais perderam visita, e Ads só onde o anúncio já converte."
+    },
+    "conversao": {
+      "rotulo": "CONVERSÃO (a visita não vira pedido)",
+      "regras": [
+        "ima_conversao",
+        "ads_otimizar_antes",
+        "catalogo_buybox",
+        "frete_gratis"
+      ],
+      "tipos": [
+        "Otimizar Anúncios",
+        "Corrigir Anúncios"
+      ],
+      "acao": "Fechar a objeção do comprador: preço/oferta, frete, prazo, confiança e conteúdo, anúncio por anúncio, começando pelos que mais perderam."
+    },
+    "ticket": {
+      "rotulo": "TICKET (valor por pedido caiu)",
+      "regras": [
+        "urgencia_oculta",
+        "promocao_giro"
+      ],
+      "tipos": [
+        "Criar Kits",
+        "Campanhas de Desconto"
+      ],
+      "acao": "Recompor o ticket: kits e combos nos campeões, e rever desconto que esteja puxando o preço médio para baixo."
+    }
+  },
+  "playbook": {
+    "queda": {
+      "rotulo": "Queda",
+      "titulo": "Estancar a perda, achar o elo rompido, só então testar",
+      "leitura": "A conta está vendendo menos que no período anterior. A ordem importa: primeiro o que está vazando dinheiro, depois o elo rompido, depois o que ainda não foi testado.",
+      "pesos": {
+        "estoque_ruptura": 1.25,
+        "catalogo_buybox": 1.2,
+        "ima_conversao": 1.1,
+        "ads_otimizar_antes": 1.1,
+        "ads_reduzir": 1.1,
+        "frete_gratis": 1.05,
+        "conteudo_fotos": 1.05,
+        "ads_escalar": 0.9,
+        "ads_entrar": 0.75,
+        "urgencia_oculta": 0.7,
+        "full_envio": 0.9,
+        "sazonal": 0.95,
+        "promocao_giro": 0.85
+      },
+      "jogadas": [
+        {
+          "k": "estancar",
+          "titulo": "Estancar o que vaza",
+          "regras": [
+            "estoque_ruptura",
+            "catalogo_buybox"
+          ],
+          "tipos": [
+            "Planejamento full",
+            "Corrigir Anúncios"
+          ],
+          "porque": "Ruptura de estoque e perda da caixa de compra derrubam o anúncio campeão em dias; recuperar isso rende mais rápido que qualquer otimização."
+        },
+        {
+          "k": "elo",
+          "titulo": "Consertar o elo rompido",
+          "regras": [
+            "ima_conversao",
+            "ads_otimizar_antes",
+            "conteudo_fotos"
+          ],
+          "tipos": [
+            "Otimizar Anúncios",
+            "Melhorar Imagens"
+          ],
+          "porque": "O diagnóstico aponta o elo (tráfego, conversão ou ticket); a ação certa muda com o elo."
+        },
+        {
+          "k": "proteger_verba",
+          "titulo": "Proteger a verba",
+          "regras": [
+            "ads_reduzir"
+          ],
+          "tipos": [
+            "Ajuste ADS"
+          ],
+          "porque": "Em queda, Ads sem retorno queima margem justamente quando a venda está fraca."
+        },
+        {
+          "k": "so_depois",
+          "titulo": "Só depois: expandir",
+          "regras": [
+            "ads_entrar",
+            "urgencia_oculta"
+          ],
+          "tipos": [
+            "Criar Kits"
+          ],
+          "porque": "Expansão em conta caindo mistura causas e impede de medir o que funcionou."
+        }
+      ],
+      "atitudes": [
+        "Vamos mexer em poucos anúncios por vez (no máximo 3 por dia útil): mudar tudo ao mesmo tempo impede saber o que funcionou.",
+        "Não vamos pausar Ads nem baixar preço por causa de um único dia ruim: a decisão usa a janela de 14 dias.",
+        "Você recebe o número, a causa provável e o plano da semana antes de precisar perguntar.",
+        "Nenhuma tarefa é replicada em massa antes de um piloto mostrar melhora medida.",
+        "Cada mudança é registrada com data e descrição, para podermos medir o antes e o depois."
+      ]
+    },
+    "estagnacao": {
+      "rotulo": "Estagnação",
+      "titulo": "Testar uma alavanca nova no 20% que vende",
+      "leitura": "A conta está estável, sem queda nem crescimento relevantes. Estagnação não se resolve com mais do mesmo: precisa de uma alavanca nova aplicada onde já existe venda.",
+      "pesos": {
+        "ima_conversao": 1.15,
+        "ads_entrar": 1.15,
+        "ads_escalar": 1.1,
+        "urgencia_oculta": 1.15,
+        "full_envio": 1.1,
+        "frete_gratis": 1.05,
+        "sazonal": 1.1,
+        "estoque_ruptura": 1.0,
+        "catalogo_buybox": 1.0,
+        "ads_reduzir": 1.0,
+        "conteudo_fotos": 1.0,
+        "promocao_giro": 1.0
+      },
+      "jogadas": [
+        {
+          "k": "replicar",
+          "titulo": "Repetir o que já funcionou nesta conta",
+          "regras": [],
+          "tipos": [],
+          "porque": "Os tipos de tarefa que já melhoraram vendas nesta conta têm mais chance de funcionar de novo do que uma ideia nova."
+        },
+        {
+          "k": "conversao",
+          "titulo": "Subir a conversão dos anúncios que já têm tráfego",
+          "regras": [
+            "ima_conversao",
+            "frete_gratis",
+            "conteudo_fotos"
+          ],
+          "tipos": [
+            "Otimizar Anúncios",
+            "Melhorar Imagens"
+          ],
+          "porque": "Mais conversão no que já recebe visita é o ganho mais barato."
+        },
+        {
+          "k": "demanda",
+          "titulo": "Puxar demanda onde converte",
+          "regras": [
+            "ads_entrar",
+            "ads_escalar",
+            "sazonal"
+          ],
+          "tipos": [
+            "Ajuste ADS",
+            "Campanhas de Desconto"
+          ],
+          "porque": "Tráfego pago só em anúncio que já converte; campanha na janela comercial certa."
+        },
+        {
+          "k": "ticket",
+          "titulo": "Aumentar o ticket e a logística",
+          "regras": [
+            "urgencia_oculta",
+            "full_envio"
+          ],
+          "tipos": [
+            "Criar Kits",
+            "Planejamento full"
+          ],
+          "porque": "Kits e Full elevam ticket e exposição sem depender de mais visita."
+        }
+      ],
+      "atitudes": [
+        "Vamos escolher UMA alavanca por quinzena e medir antes de abrir a próxima.",
+        "Estagnação não é sinônimo de estabilidade saudável: conferimos se a categoria cresce enquanto a conta fica parada.",
+        "As ações começam pelos anúncios do 20% que gera 80% da receita; o resto só depois do piloto."
+      ]
+    },
+    "crescimento": {
+      "rotulo": "Crescimento",
+      "titulo": "Proteger o que cresce e replicar o padrão vencedor",
+      "leitura": "A conta está vendendo mais que no período anterior. O risco agora é perder o ritmo por ruptura de estoque e mexer no que está funcionando.",
+      "pesos": {
+        "estoque_ruptura": 1.3,
+        "full_envio": 1.2,
+        "ads_escalar": 1.15,
+        "catalogo_buybox": 1.15,
+        "ads_entrar": 1.05,
+        "ima_conversao": 1.0,
+        "ads_reduzir": 1.0,
+        "sazonal": 1.1,
+        "frete_gratis": 0.95,
+        "conteudo_fotos": 0.9,
+        "urgencia_oculta": 0.95,
+        "promocao_giro": 0.9
+      },
+      "jogadas": [
+        {
+          "k": "proteger",
+          "titulo": "Proteger o ritmo",
+          "regras": [
+            "estoque_ruptura",
+            "catalogo_buybox"
+          ],
+          "tipos": [
+            "Planejamento full"
+          ],
+          "porque": "Crescer com estoque curto vira ruptura: o anúncio campeão some justamente no pico."
+        },
+        {
+          "k": "escalar",
+          "titulo": "Escalar o que provou retorno",
+          "regras": [
+            "ads_escalar",
+            "full_envio"
+          ],
+          "tipos": [
+            "Ajuste ADS",
+            "Planejamento full"
+          ],
+          "porque": "Verba e logística vão para onde o resultado já apareceu, em passos de 30% com leitura a cada 7 dias."
+        },
+        {
+          "k": "replicar",
+          "titulo": "Replicar o padrão vencedor nos anúncios parecidos",
+          "regras": [],
+          "tipos": [],
+          "porque": "Se um tipo de tarefa melhorou os campeões, os anúncios de mesma categoria e perfil são os próximos."
+        },
+        {
+          "k": "nao_mexer",
+          "titulo": "Não mexer no que está funcionando",
+          "regras": [],
+          "tipos": [],
+          "porque": "Anúncio que melhorou depois de uma tarefa fica em janela de proteção: sem novas mudanças até estabilizar."
+        }
+      ],
+      "atitudes": [
+        "Anúncio que acabou de melhorar fica em janela de proteção de 14 dias: sem título, preço ou foto novos.",
+        "A verba sobe em passos de até 30%, com leitura a cada 7 dias.",
+        "O que funcionou (tarefa, data, anúncio) fica documentado para as próximas decisões.",
+        "O estoque dos campeões é conferido toda semana: crescer consome cobertura."
+      ]
+    }
+  },
+  "cuidados_pior_tarefa": [
+    "Rodar primeiro em UM anúncio piloto que não seja curva A, e só replicar se o piloto subir em 14 dias.",
+    "Registrar o anúncio, a data e exatamente o que mudou, para a medição depois ser possível.",
+    "Nunca aplicar em lote nos anúncios campeões antes do piloto.",
+    "Ter o rollback pronto (valor anterior de preço, título e fotos guardados)."
+  ],
+  "limites": [
+    "Todo efeito é uma ASSOCIAÇÃO TEMPORAL ajustada por grupo de controle e ruído — nunca causalidade comprovada.",
+    "A série cobre os anúncios acompanhados da conta (os de maior receita), não necessariamente o catálogo inteiro.",
+    "Tarefas costumam ser aplicadas em anúncios que já estavam caindo (ou que já eram campeões). Esse viés de SELEÇÃO pode puxar o resultado para baixo ou para cima mesmo com o grupo de controle — por isso 'sem resultado mensurável' não é o mesmo que 'tarefa inútil'.",
+    "Preço, título, fotos, estoque, status, frete e logística do anúncio têm histórico desde {inicio_historico} (uma leitura por dia, na coleta das 4–6h: mudança dentro do mesmo dia não é vista). Antes disso valem o preço pago (receita ÷ unidades) nos dias com venda, as promoções registradas e as fotografias do acompanhamento.",
+    "Toda mudança de preço tira 1 ponto da confiança da medida. Mudança de {limiar_preco}% ou mais na janela, em tarefa que não é de preço, tira a medida do aprendizado, da tarefa de cuidado e do 80/20: o efeito pode ser do preço, não da tarefa. Tarefa de preço, oferta relâmpago ou campanha de desconto é a própria intervenção.",
+    "Tarefas de relacionamento, reunião e comunicação não entram na medição de vendas.",
+    "Tarefa feita num pico do anúncio (nível anterior muito acima do habitual) tende a 'piorar' por regressão à média: essas medidas (reversão provável) ficam FORA do aprendizado, da tarefa de cuidado e do 80/20."
+  ],
+  "protecao": {
+    "fator": 0.6,
+    "regras": [
+      "ima_conversao",
+      "conteudo_fotos",
+      "frete_gratis",
+      "ads_otimizar_antes",
+      "urgencia_oculta",
+      "oferta_galeria",
+      "oferta_titulo_descricao",
+      "oferta_completa",
+      "oferta_ficha",
+      "oferta_preco",
+      "preco_mudou_vendas_cairam"
+    ],
+    "$nota": "anúncio que MELHOROU depois de uma tarefa fica protegido por 14 dias após o fim da janela medida: ações que mudam o conteúdo/oferta dele pesam menos no plano (não mexer no que está funcionando)."
+  },
+  "acompanhamento": {
+    "lancamento_min_unidades": 3,
+    "lancamento_max_dias_primeira_venda": 14,
+    "piso_base": {
+      "unidades": 10,
+      "visitas": 50,
+      "ads_clicks": 30,
+      "ads_prints": 500
+    },
+    "piso_esperado_na_janela": {
+      "unidades": 3,
+      "visitas": 10,
+      "ads_clicks": 5,
+      "ads_prints": 100
+    },
+    "$nota": "Percentual só aparece com base e janela suficientes: 1 venda no 1º dia contra uma base de 5 em 14 dias seria '+178%' — ruído de contagem, não resultado. Lançamento (anúncio parado que voltou a vender) só conta como 'gerou venda' com 3+ unidades e 1ª venda em até 14 dias."
+  }
+}

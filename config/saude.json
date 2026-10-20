@@ -1,0 +1,17 @@
+{
+  "_": "Saúde da conta gravada (src/lib/saude-coleta.js). Janelas em dias, limites e tetos de paginação; textos fixos do motivo 'pendente' (nunca ecoam valor da API).",
+  "pedidos_dias": 7,
+  "perguntas_limite_horas": 24,
+  "pagina": 50,
+  "teto_paginas": { "pedidos": 20, "claims": 4, "perguntas": 4 },
+  "teto_envios_por_coleta": 200,
+  "full_dias_sem_venda_alerta": 60,
+  "aceita_ontem": true,
+  "pendente": {
+    "permissao_do_app": "Perguntas: o app do Mercado Livre não tem a permissão de perguntas/mensagens. No app, marcar o escopo e reconectar o cliente em Integrações.",
+    "endpoint_nao_verificado": "Endpoint do Mercado Livre ainda não verificado em conta real: o dado não é gravado até a confirmação do campo.",
+    "indisponivel": "O Mercado Livre não respondeu (erro temporário ou tempo esgotado). A próxima coleta tenta de novo; o dia fica sem número, não com zero.",
+    "sem_coleta": "Ainda não houve coleta de saúde para este cliente. Use «Atualizar agora» ou aguarde a coleta diária.",
+    "sem_full": "Nenhum anúncio em Full nesta conta na última leitura de anúncios."
+  }
+}

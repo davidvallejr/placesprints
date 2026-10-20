@@ -1,0 +1,126 @@
+{
+  "$doc": "Chaveiro F1 — caminho declarado por regra do plano (docs/desenho-causalidade-executor.md § 5). Só classificação e cobertura: nenhuma escrita externa. 'caminho' ∈ automatico|assistido|cliente; adaptador·operação da lista fechada de chaveiro.js; 'escopo' é o escopo do job de Ofertas (conteúdo em catálogo de terceiros vira sem_caminho); 'experimento' = regra elegível a experimento escalonado (só vale no caminho automático). Regras por causa: 'operacao_por_causa' indexado por dados.causas_possiveis[0].causa; causa ausente ou não listada → assistido. Ads sempre assistido até a F6. Textos de motivo/pendência são fixos: nunca dado do cliente.",
+  "preco_max_var_pct_padrao": 10,
+  "execucao_ligada": false,
+  "adaptadores_live": {
+    "$doc": "F4+ (console de execução, src/lib/chaveiro-executor.js): chave POR OPERAÇÃO, todas NASCEM false. Só com execucao_ligada = true E a operação = true (aqui, com o reinício combinado) a ordem pode sair para o Mercado Livre; ainda assim exige liberação do líder por cliente (cliente informado), estreia em 1 anúncio, confirmar === true e releitura ao vivo. estoque segue a chave própria sync_estoque_ligado (F6).",
+    "preco": false, "status": false, "frete_gratis": false, "titulo": false, "descricao": false, "atributos": false, "fotos": false, "restaurar": false, "duplicar": false, "promocao": false
+  },
+  "execucao": {
+    "$doc": "Limites do executor F4+ (docs/manual-integracao-ml.md § Chaveiro F4+). teto_ordens_por_lote = ordens executadas numa chamada de lote (1 por vez); teto_dia_estreia = ordens/dia por operação × cliente até ordens_para_ampliar conferidas sem divergência (aí o Neo propõe ampliar e o líder tem veto_horas de veto — decisão D-C1); conferência por releitura depois de conferir_apos_min, até conferencias_max tentativas a cada conferir_intervalo_min.",
+    "teto_ordens_por_lote": 20,
+    "teto_dia_estreia": 1,
+    "teto_dia_ampliado": 20,
+    "ordens_para_ampliar": 10,
+    "veto_horas": 48,
+    "conferir_apos_min": 10,
+    "conferir_intervalo_min": 15,
+    "conferencias_max": 4,
+    "tentativas_429": 3,
+    "janela_medicao_dias": 14,
+    "titulo_max": 60,
+    "descricao_max": 50000,
+    "atributos_permitidos": ["COLOR", "MAIN_COLOR", "SIZE", "MATERIAL", "STYLE", "SHAPE", "PATTERN_NAME", "GENDER", "RECOMMENDED_AGE_GROUP", "UNITS_PER_PACK", "SALE_FORMAT", "CAPACITY", "VOLTAGE", "POWER", "LENGTH", "WIDTH", "HEIGHT", "WEIGHT", "DIAMETER", "WARRANTY_TYPE", "WARRANTY_TIME", "IS_KIT", "PACKAGE_CONTENT", "ACCESSORIES_INCLUDED"],
+    "subestados_moderacao": ["forbidden", "held", "under_review", "waiting_for_patch", "suspended", "picture_download_pending", "deleted", "freezed", "banned"]
+  },
+  "sync_estoque_ligado": false,
+  "sync_estoque": {
+    "$doc": "V3 F6 — sincronismo de estoque pelo Chaveiro (docs/desenho-v3-erp.md § A; src/lib/chaveiro-estoque.js puro + chaveiro-estoque-real.js). Escreve no ML SÓ com: sync_estoque_ligado = true (aqui, reinício combinado) + kill switch solto (sync_estado chaveiro_estoque_parado ≠ 1) + liberação por cliente (exec_politica: líder + cliente informado, adaptador ml_estoque = 1) + produto na estreia + confirmar === true + releitura ao vivo. Fonte do físico = declarado (produto_estoque_declarado: cliente/equipe/erp/planilha) com até validade_fisico_horas — nunca o available_quantity. Segurança = dias_protecao × venda prevista (por cliente/produto em produto_regra_estoque); sem «mínimo» nem faixas. Full e Flex independente fora.",
+    "dias_protecao_padrao": 2,
+    "validade_fisico_horas": 24,
+    "conferir_apos_min": 5,
+    "conferencias_max": 3,
+    "max_ordens_dia_estreia": 1,
+    "ordens_para_ampliar": 10,
+    "tolerancia_un": 2,
+    "tolerancia_pct": 10,
+    "aviso_zerar_dias": 7,
+    "tentativas_429": 3,
+    "paginas_pedidos_max": 10
+  },
+  "janela_prova_padrao_dias": 14,
+  "motivos": {
+    "declarado": "caminho declarado na matriz da regra",
+    "sem_regra": "regra sem caminho declarado na matriz",
+    "sem_causa": "regra por causa sem causa escolhida: fica assistido",
+    "causa_nao_listada": "causa sem caminho declarado: fica assistido",
+    "ads_assistido": "Product Ads sem escrita pelo sistema até a F6: valor preparado, aplicação humana",
+    "sem_custos": "preço sem custos informados: sem piso de margem, aplicação humana",
+    "sem_execucao": "ação gerada antes do caminho declarado",
+    "regra_operacional": "regra da operação (Notion/equipe): fora do executor por desenho",
+    "catalogo_proprio": "catálogo próprio: conteúdo só por sugestão de correção, aplicação humana",
+    "sync_desligado": "sincronismo de estoque desligado (chave sync_estoque_ligado ou cliente não liberado): ajuste preparado, aplicação humana no painel"
+  },
+  "pendencias": {
+    "custos": "Custos do cliente",
+    "api_ads": "Escrita de Ads (F6)",
+    "catalogo": "Conteúdo do catálogo",
+    "sync_estoque": "Liberação do sincronismo de estoque"
+  },
+  "caminho_por_regra": {
+    "ima_conversao": { "caminho": "automatico", "adaptador": "ofertas", "operacao": "job", "escopo": "oferta_completa", "experimento": true },
+    "catalogo_buybox": { "caminho": "automatico", "adaptador": "ml_item", "operacao": "preco", "experimento": true },
+    "estoque_ruptura": { "caminho": "cliente", "adaptador": "pendencia", "operacao": "registrar" },
+    "full_envio": { "caminho": "cliente", "adaptador": "pendencia", "operacao": "registrar" },
+    "estoque_dividido": { "operacao_por_causa": {
+      "confirmar_fisico": { "caminho": "cliente", "adaptador": "pendencia", "operacao": "registrar" },
+      "pool_zerando": { "caminho": "assistido", "adaptador": "notion", "operacao": "card" }
+    } },
+    "sku_ausente": { "caminho": "assistido", "adaptador": "notion", "operacao": "card" },
+    "estoque_sincronizar": { "caminho": "automatico", "adaptador": "ml_estoque", "operacao": "alocar" },
+    "estoque_divergente": { "caminho": "cliente", "adaptador": "pendencia", "operacao": "registrar" },
+    "nf_pendente": { "caminho": "automatico", "adaptador": "nf", "operacao": "emitir" },
+    "nf_regra_faltando": { "caminho": "cliente", "adaptador": "pendencia", "operacao": "registrar" },
+    "ads_entrar": { "caminho": "assistido", "adaptador": "ads", "operacao": "verba" },
+    "ads_escalar": { "caminho": "assistido", "adaptador": "ads", "operacao": "verba" },
+    "ads_reduzir": { "caminho": "assistido", "adaptador": "ads", "operacao": "verba" },
+    "ads_otimizar_antes": { "caminho": "automatico", "adaptador": "ofertas", "operacao": "job", "escopo": "oferta_completa", "experimento": true },
+    "conteudo_fotos": { "caminho": "automatico", "adaptador": "ofertas", "operacao": "job", "escopo": "galeria", "experimento": true },
+    "frete_gratis": { "caminho": "automatico", "adaptador": "ml_item", "operacao": "frete_gratis", "experimento": true },
+    "sazonal": { "caminho": "assistido", "adaptador": "notion", "operacao": "card" },
+    "urgencia_oculta": { "caminho": "assistido", "adaptador": "notion", "operacao": "card" },
+    "promocao_giro": { "caminho": "automatico", "adaptador": "promocoes", "operacao": "plano" },
+    "cadastrar_custos": { "caminho": "cliente", "adaptador": "pendencia", "operacao": "registrar" },
+    "duplicacao_estrategica": { "caminho": "automatico", "adaptador": "ofertas", "operacao": "job", "escopo": "oferta_completa" },
+    "oferta_galeria": { "caminho": "automatico", "adaptador": "ofertas", "operacao": "job", "escopo": "galeria", "experimento": true },
+    "oferta_titulo_descricao": { "caminho": "automatico", "adaptador": "ofertas", "operacao": "job", "escopo": "titulo_descricao", "experimento": true },
+    "oferta_completa": { "caminho": "automatico", "adaptador": "ofertas", "operacao": "job", "escopo": "oferta_completa", "experimento": true },
+    "oferta_ficha": { "caminho": "automatico", "adaptador": "ofertas", "operacao": "job", "escopo": "ficha", "experimento": true },
+    "oferta_preco": { "caminho": "automatico", "adaptador": "ofertas", "operacao": "job", "escopo": "preco", "experimento": true },
+    "oferta_cadastro": { "caminho": "automatico", "adaptador": "ofertas", "operacao": "job", "escopo": "cadastro" },
+    "preco_mudou_vendas_cairam": { "caminho": "automatico", "adaptador": "ml_item", "operacao": "preco", "experimento": true },
+    "queda_conversao_anuncio": { "operacao_por_causa": {
+      "preco": { "caminho": "automatico", "adaptador": "ml_item", "operacao": "preco", "experimento": true },
+      "conteudo": { "caminho": "automatico", "adaptador": "ofertas", "operacao": "job", "escopo": "oferta_completa", "experimento": true },
+      "disponibilidade": { "caminho": "cliente", "adaptador": "pendencia", "operacao": "registrar" },
+      "catalogo": { "caminho": "automatico", "adaptador": "ml_item", "operacao": "preco", "experimento": true },
+      "mercado_ou_concorrencia": { "caminho": "assistido", "adaptador": "notion", "operacao": "card" }
+    } },
+    "queda_exposicao_anuncio": { "operacao_por_causa": {
+      "ads_desligou": { "caminho": "assistido", "adaptador": "ads", "operacao": "verba" },
+      "preco_subiu": { "caminho": "automatico", "adaptador": "ml_item", "operacao": "preco", "experimento": true },
+      "conteudo_mudou": { "caminho": "automatico", "adaptador": "ofertas", "operacao": "job", "escopo": "oferta_completa", "experimento": true },
+      "sazonal": { "caminho": "assistido", "adaptador": "notion", "operacao": "card" }
+    } },
+    "queda_ctr_ads": { "caminho": "automatico", "adaptador": "ofertas", "operacao": "job", "escopo": "galeria", "experimento": true },
+    "margem_negativa": { "operacao_por_causa": {
+      "preco_abaixo_do_custo": { "caminho": "automatico", "adaptador": "ml_item", "operacao": "preco" },
+      "ads_consome_a_margem": { "caminho": "assistido", "adaptador": "ads", "operacao": "verba" }
+    } },
+    "ads_abaixo_meta": { "caminho": "assistido", "adaptador": "ads", "operacao": "verba" },
+    "concentracao_receita": { "caminho": "assistido", "adaptador": "notion", "operacao": "card" },
+    "anuncio_restrito": { "operacao_por_causa": {
+      "pausa": { "caminho": "automatico", "adaptador": "ml_item", "operacao": "status_ativar" },
+      "moderacao": { "caminho": "cliente", "adaptador": "pendencia", "operacao": "registrar" },
+      "pausa_ou_moderacao": { "caminho": "assistido", "adaptador": "ml_item", "operacao": "status_ativar" }
+    } },
+    "reputacao_em_risco": { "caminho": "assistido", "adaptador": "notion", "operacao": "card" },
+    "envio_atrasado": { "caminho": "cliente", "adaptador": "pendencia", "operacao": "registrar" },
+    "reclamacao_sem_resposta": { "caminho": "cliente", "adaptador": "pendencia", "operacao": "registrar" },
+    "pergunta_sem_resposta": { "caminho": "cliente", "adaptador": "pendencia", "operacao": "registrar" },
+    "full_estoque_antigo": { "operacao_por_causa": {
+      "giro_com_promocao": { "caminho": "automatico", "adaptador": "promocoes", "operacao": "plano" },
+      "retirada_do_full": { "caminho": "cliente", "adaptador": "pendencia", "operacao": "registrar" }
+    } }
+  }
+}

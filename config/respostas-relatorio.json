@@ -1,0 +1,324 @@
+{
+  "$comentario": "Coleta das respostas dos clientes ao relatório semanal (pedido do David, 13/10/2026): só o que responde às NOSSAS mensagens-âncora nos grupos de WhatsApp do Mercado Livre; conversa operacional nunca é guardada. Lido por src/lib/respostas-relatorio.js (docs/respostas-relatorio.md). Padrões comparados SEM acento, caixa, pontuação e emoji. Palavras casam pelo INÍCIO da palavra (\"anuncio\" pega \"anúncios\"); item terminado em \"$\" casa a palavra inteira (\"envio$\" não pega \"enviou\").",
+  "webhook": {
+    "caminho": "/webhook/place-respostas",
+    "timeout_ms": 60000,
+    "grupos_por_chamada": 10,
+    "paginas": 3
+  },
+  "ancoras": {
+    "pergunta": {
+      "comeca": [
+        "Oi, pessoal! 😊 Uma pergunta rápida",
+        "Oie, tudo bem? 👋 Aqui é o Merovíngio"
+      ],
+      "$comentario_foco": "14/10: o relatório focado (Estoque, ações e resultados) abre com «Aqui é o Merovíngio» (o semanal abre com «Eu sou o Merovíngio» e continua âncora de relatório, só por citação) e termina com uma pergunta: vale como âncora de pergunta, com janela.",
+      "janela_h": 12
+    },
+    "$comentario_relatorio": "janela_h 0 = o plano só conta por CITAÇÃO: o dia seguinte ao plano é pico de conversa operacional nos grupos.",
+    "relatorio": {
+      "contem": [
+        "Merovíngio",
+        "Place Sprints"
+      ],
+      "janela_h": 0
+    }
+  },
+  "coleta": {
+    "hora": "18:00",
+    "fuso": "America/Sao_Paulo",
+    "dias_apos_ancora": 14
+  },
+  "tipos_texto": [
+    "conversation",
+    "extendedTextMessage"
+  ],
+  "$comentario_operacional": "Pedido ao consultor = NUNCA guardado na janela: (1) vocativo a uma pessoa («Gi,», «Bom dia! 😊 Ana,», «Gi bom dia,») ou menção @número em qualquer lugar — a palavra do vocativo não pode estar em nao_vocativo nem no vocabulário; (2) pedido (pedido) + produto (objeto), link ou código MLB; (3) só link, ou o texto de compartilhamento do ML (frases); (4) sem vocabulário do relatório (opiniao): verbo de pedido no começo, por_favor ou «?».",
+  "operacional": {
+    "saudacoes": [
+      "bom dia",
+      "boa tarde",
+      "boa noite",
+      "oi",
+      "oie",
+      "ola",
+      "opa",
+      "tudo bem",
+      "tudo bom"
+    ],
+    "nao_vocativo": [
+      "pessoal",
+      "gente",
+      "galera",
+      "time",
+      "equipe",
+      "sim",
+      "nao",
+      "ok",
+      "okay",
+      "obrigado",
+      "obrigada",
+      "certo",
+      "beleza",
+      "perfeito",
+      "show",
+      "adorei",
+      "amei",
+      "achei",
+      "acho",
+      "entao",
+      "olha",
+      "nossa",
+      "uau",
+      "bem",
+      "muito",
+      "verdade",
+      "exato",
+      "isso"
+    ],
+    "pedido": [
+      "por favor",
+      "pfv",
+      "pf",
+      "pode",
+      "poderia",
+      "consegue",
+      "conseguem",
+      "coloca",
+      "coloque",
+      "colocar",
+      "troca",
+      "trocar",
+      "manda",
+      "mandar",
+      "sobe",
+      "subir",
+      "cadastra",
+      "cadastrar",
+      "envia",
+      "enviar",
+      "ativa",
+      "ativar",
+      "pausa",
+      "pausar",
+      "altera",
+      "alterar",
+      "muda",
+      "mudar",
+      "ajusta",
+      "ajustar",
+      "cria",
+      "criar",
+      "inclui",
+      "incluir"
+    ],
+    "objeto": [
+      "produto",
+      "item",
+      "kit",
+      "sku",
+      "codigo",
+      "foto",
+      "imagem",
+      "variacao",
+      "mlb"
+    ],
+    "frases": [
+      "olha o que eu encontrei"
+    ],
+    "por_favor": [
+      "por favor",
+      "porfavor",
+      "pfv",
+      "pf$"
+    ]
+  },
+  "$comentario_opiniao": "Vocabulário do RELATÓRIO (fala da nossa mensagem ou responde à pergunta). Palavras da operação (vendas, estoque, full, preço…) NUNCA provam opinião: só dão tema, e só contam como item da lista curta na janela da pergunta.",
+  "opiniao": [
+    "relatorio",
+    "semanal",
+    "toda semana",
+    "plano da semana",
+    "merovingio",
+    "place sprints",
+    "informacao",
+    "informacoes",
+    "acho importante",
+    "mais importante",
+    "seria importante",
+    "importante receber",
+    "receber toda",
+    "gostaria de receber",
+    "quero receber",
+    "queria receber",
+    "mencionou",
+    "mencionado",
+    "mencionada",
+    "mencionaram",
+    "citou",
+    "citado",
+    "tudo isso",
+    "que voce mencionou",
+    "nao foi mencionado",
+    "faltou mencionar",
+    "nao apareceu no",
+    "estatistica",
+    "estatisticas"
+  ],
+  "$comentario_lista": "Resposta curta em lista («Vendas, Estoque, reposição, compras») só conta na janela da PERGUNTA: ao menos min_itens itens são assunto (temas, exceto elogio/crítica/dúvida, ou opiniao) e nenhum item tem verbo de conversa (verbos) — «Bom dia, Gi», «Ok, vou ver», «Tapete azul, tamanho G» não são lista.",
+  "lista_curta": {
+    "max_chars": 140,
+    "min_itens": 2,
+    "max_palavras_item": 4,
+    "verbos": [
+      "chegou",
+      "chegaram",
+      "enviei",
+      "enviou",
+      "mandei",
+      "paguei",
+      "pagou",
+      "recebi",
+      "vou$",
+      "vai$",
+      "estou$",
+      "ja$",
+      "aqui$"
+    ]
+  },
+  "$comentario_temas": "Tema = determinístico por palavra (início da palavra, sem acento). critica e duvida leem o texto inteiro; os outros temas leem o texto SEM as frases de crítica e sem a palavra depois de não/nada/nem (\"não gostei\" não vira elogio). duvida também vale com «?».",
+  "temas": {
+    "vendas": [
+      "venda",
+      "faturamento",
+      "faturou",
+      "gmv",
+      "pedido",
+      "receita",
+      "curva abc",
+      "abc$",
+      "ranking",
+      "mais vendid"
+    ],
+    "estoque_reposicao": [
+      "estoque",
+      "reposicao",
+      "repor$",
+      "ruptura",
+      "cobertura",
+      "giro"
+    ],
+    "compras": [
+      "compra",
+      "fornecedor"
+    ],
+    "full": [
+      "full",
+      "fulfillment"
+    ],
+    "logistica": [
+      "logistica",
+      "envio$",
+      "envios$",
+      "frete",
+      "despacho",
+      "entrega",
+      "flex"
+    ],
+    "anuncios": [
+      "anuncio",
+      "cadastro",
+      "titulo",
+      "foto",
+      "descricao",
+      "catalogo",
+      "visita",
+      "conversao"
+    ],
+    "ads": [
+      "ads",
+      "publicidade",
+      "patrocinad",
+      "acos$",
+      "roas",
+      "campanha"
+    ],
+    "preco_promocao": [
+      "preco",
+      "promocao",
+      "promocoes",
+      "oferta",
+      "desconto",
+      "cupom"
+    ],
+    "concorrencia": [
+      "concorrencia",
+      "concorrente"
+    ],
+    "margem_custos": [
+      "margem",
+      "custo",
+      "lucro",
+      "rentabilidade"
+    ],
+    "previsao": [
+      "previsao",
+      "projecao",
+      "tendencia",
+      "meta$",
+      "metas$"
+    ],
+    "formato_frequencia": [
+      "semanal",
+      "semana",
+      "frequencia",
+      "resumo",
+      "formato",
+      "pdf",
+      "diario",
+      "mensal$",
+      "mensais$",
+      "quinzenal",
+      "curto",
+      "longo"
+    ],
+    "elogio": [
+      "gostei",
+      "otimo",
+      "top",
+      "legal",
+      "interessante",
+      "util$",
+      "uteis$",
+      "ajuda",
+      "parabens",
+      "excelente",
+      "muito bom",
+      "show",
+      "perfeito",
+      "obrigad"
+    ],
+    "critica": [
+      "nao gostei",
+      "faltou",
+      "confuso",
+      "nao entendi",
+      "ruim",
+      "nao ajuda",
+      "errado",
+      "muito longo",
+      "nao achei util",
+      "nada util",
+      "nao e bom",
+      "nao curti",
+      "nao serve"
+    ],
+    "duvida": [
+      "duvida",
+      "nao entendi",
+      "como funciona",
+      "o que significa",
+      "o que e isso"
+    ]
+  }
+}

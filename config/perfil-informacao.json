@@ -1,0 +1,92 @@
+{
+  "$comentario": "Perfil de informação do cliente (13/10/2026): o que cada cliente quer receber no relatório. Lista FECHADA de temas (chave → rótulo + temas das respostas do WhatsApp que viram sugestão, config/respostas-relatorio.json → temas). base_fixa = decisões 1 e 2 do David (vendas, estoque e reposição, compras e previsibilidade para TODOS, ações da semana e resultado): todo relatório tem esses blocos; os temas PEDIDOS pelo cliente sobem para o topo, na ordem dele. Tema novo entra aqui (a tabela guarda só a chave). src/lib/perfil-informacao.js",
+  "temas": {
+    "vendas": { "rotulo": "Vendas", "feedback": ["vendas"] },
+    "estoque_reposicao": { "rotulo": "Estoque e reposição", "feedback": ["estoque_reposicao"] },
+    "compras_previsao": { "rotulo": "Compras e previsibilidade do estoque", "feedback": ["compras", "previsao"] },
+    "causa_efeito": { "rotulo": "Causa e efeito nos resultados", "feedback": [] },
+    "acoes_realizadas": { "rotulo": "Ações realizadas na conta", "feedback": [] },
+    "anuncios_performance": { "rotulo": "Situação e desempenho dos anúncios", "feedback": ["anuncios"] },
+    "anuncios_criacao_melhoria": { "rotulo": "Criação e melhoria de anúncios", "feedback": [] },
+    "ads": { "rotulo": "Ads", "feedback": ["ads"] },
+    "promocoes": { "rotulo": "Promoções", "feedback": ["preco_promocao"] },
+    "acoes_vendas": { "rotulo": "Ações para aumentar as vendas", "feedback": [] },
+    "concorrencia": { "rotulo": "Concorrência e preços do mercado", "feedback": ["concorrencia"] },
+    "logistica_full": { "rotulo": "Logística e Full", "feedback": ["full", "logistica"] },
+    "margem_custos": { "rotulo": "Margem e custos", "feedback": ["margem_custos"] }
+  },
+  "base_fixa": ["vendas", "estoque_reposicao", "compras_previsao", "acoes_realizadas"],
+  "servicos": { "assessoria": "Assessoria", "consultoria": "Consultoria" },
+  "niveis": {
+    "padrao": "Padrão",
+    "didatico": "Didático (explica cada número e o porquê; para quem está aprendendo)",
+    "completo": "Completo (todos os blocos, sem resumir)"
+  },
+  "fontes": { "equipe": "Equipe (conversa com o cliente)", "whatsapp": "Resposta no grupo do WhatsApp", "sugestao": "Sugestão pelas respostas (não confirmada)" },
+  "relatorio": {
+    "$comentario": "Etapa 3 (13/10/2026): relatório semanal personalizado (src/lib/plano-semana-texto.js → montarPlanoSemanal com perfil). Cada tema da ordem do perfil (perfil-informacao.ler → efetivo.ordem) vira os blocos abaixo: 'base' quando o tema é só da base fixa, 'pedido' quando o cliente pediu (o pedido sobe para o topo e pode ganhar bloco a mais). Bloco sem dado nunca vira número inventado: frase honesta. Textos daqui passam pelo auditor (relatorio-seguro) como o resto da mensagem.",
+    "base": { "vendas": [], "estoque_reposicao": ["plano"], "compras_previsao": ["compras"], "acoes_realizadas": ["entregas"] },
+    "pedido": {
+      "vendas": ["estatisticas"], "estoque_reposicao": ["plano"], "compras_previsao": ["compras"], "acoes_realizadas": ["entregas", "acoes_semana"],
+      "causa_efeito": ["causa"], "anuncios_performance": ["atencao"], "anuncios_criacao_melhoria": ["criacao"], "ads": ["ads"], "promocoes": ["promocoes"],
+      "acoes_vendas": ["acoes_vendas"], "concorrencia": ["concorrencia"], "logistica_full": ["plano"], "margem_custos": []
+    },
+    "blocos": {
+      "estatisticas": { "titulo": "📈 *Como foram as vendas*", "significa": "Mostra quanto a conta vendeu nos últimos 28 dias e quais produtos puxam o faturamento. A curva ABC separa os poucos produtos que fazem a maior parte das vendas (curva A) dos demais: são eles que pedem mais cuidado com estoque, preço e anúncio." },
+      "plano": { "titulo": "🎯 *O plano da semana*", "significa": "São as ações mais importantes da semana, escolhidas pelo peso no faturamento. Estoque vem primeiro porque produto que zera sai da busca e deixa de vender." },
+      "compras": { "titulo": "🛒 *Compras e previsibilidade*", "significa": "Ponto de pedido é o momento de pedir ao fornecedor para o produto chegar antes de acabar: considera o prazo de entrega mais uma folga de segurança. A quantidade cobre esse prazo mais o próximo ciclo de compra." },
+      "entregas": { "titulo": "✅ *O que já fizemos e está dando resultado*", "significa": "São entregas da equipe que já aparecem nas vendas: mostramos o que o anúncio vendeu desde a entrega, pelo registro do Mercado Livre." },
+      "acoes_semana": { "titulo": "🛠️ *O que a equipe fez na sua conta nesta semana*", "significa": "Cada linha é um tipo de trabalho concluído no Mercado Livre nos últimos 7 dias. O efeito nas vendas aparece com o tempo e é medido depois." },
+      "causa": { "titulo": "🔍 *O que explica os números*", "significa": "Vendas = visitas × conversão × valor médio por unidade. A primeira linha compara a conta inteira com os 28 dias anteriores, sem controle. Nas ações medidas, comparamos o anúncio com os que não mexemos no mesmo período, o que reduz (não elimina) o efeito do mercado." },
+      "atencao": { "titulo": "📉 *Anúncios que pedem atenção*", "significa": "Conversão é a parte das visitas que vira venda. Quando as visitas ou a conversão de um anúncio caem mais que o resto da conta, algo nele (preço, foto, concorrência, estoque) pede revisão." },
+      "ads": { "titulo": "📣 *Anúncios pagos (Ads)*", "significa": "ROAS é quanto o Mercado Livre registrou de vendas nos anúncios pagos para cada R$ 1 investido neles. É uma referência: parte dessas vendas poderia acontecer mesmo sem o anúncio pago." },
+      "promocoes": { "titulo": "🏷️ *Promoções*", "significa": "Promoção ajuda o produto a aparecer e girar, mas só vale com margem: o desconto precisa caber no custo do produto." },
+      "concorrencia": { "titulo": "🆚 *Concorrência e preços do mercado*", "significa": "No catálogo do Mercado Livre vários vendedores disputam a mesma página do produto; o preço para ganhar é o valor que o Mercado Livre indica para a sua oferta ser a principal da página. É uma referência do canal: só vale se couber na sua margem." },
+      "acoes_vendas": { "titulo": "🚀 *Ações para vender mais*", "significa": "São ações do plano do mês já aprovadas para aumentar as vendas; cada uma é medida depois, comparando o anúncio com o resto da conta." },
+      "criacao": { "titulo": "✨ *Criação e melhoria de anúncios*", "significa": "Anúncio novo ou melhorado (fotos, título, ficha) costuma levar alguns dias para aparecer na busca; medimos o antes e o depois de cada um." }
+    },
+    "significa_prefixo": "💡 _O que isso significa:_",
+    "sem_dado_titulo": "📋 *Nas outras frentes que você acompanha*",
+    "glossario_titulo": "📖 *Pequeno glossário*",
+    "glossario": [
+      ["Conversão", "a parte das visitas que vira venda (100 visitas e 2 vendas = 2%)."],
+      ["Curva A", "os poucos produtos que somam cerca de 80% do faturamento."],
+      ["Cobertura", "quantos dias o estoque atual dura no ritmo de vendas."],
+      ["Ponto de pedido", "o momento de pedir ao fornecedor para o produto chegar antes de acabar (prazo de entrega + folga de segurança)."],
+      ["ROAS", "vendas registradas nos anúncios pagos ÷ valor investido neles."]
+    ],
+    "frases_acoes": {
+      "duplicacao_estrategica": "Criar uma nova versão do anúncio, com outro ângulo", "ima_conversao": "Refazer fotos e texto para vender mais com as mesmas visitas", "conteudo_fotos": "Melhorar as fotos",
+      "oferta_galeria": "Melhorar as fotos", "oferta_titulo_descricao": "Melhorar título e descrição", "oferta_completa": "Melhorar fotos, título e ficha", "oferta_ficha": "Completar a ficha técnica", "oferta_cadastro": "Cadastrar um novo anúncio",
+      "frete_gratis": "Rever o frete para ficar mais competitivo", "full_envio": "Levar ao Full", "sazonal": "Preparar para a próxima data comercial", "urgencia_oculta": "Explorar uma busca com procura pouco atendida",
+      "promocao_giro": "Fazer uma ação de giro", "catalogo_buybox": "Rever a oferta no catálogo", "queda_conversao_anuncio": "Recuperar a conversão", "queda_exposicao_anuncio": "Recuperar as visitas",
+      "ads_entrar": "Colocar em anúncio pago", "ads_escalar": "Reforçar o anúncio pago de quem vende bem", "ads_otimizar_antes": "Ajustar o anúncio antes de investir mais em Ads"
+    },
+    "regras_criacao": ["duplicacao_estrategica", "ima_conversao", "conteudo_fotos", "oferta_galeria", "oferta_titulo_descricao", "oferta_completa", "oferta_ficha", "oferta_cadastro"],
+    "familias_criacao": ["cadastro", "duplicacao", "kits", "imagens", "otimizar", "corrigir", "ficha", "variacoes"],
+    "frases_ads": {
+      "ads_escalar": "reforçar o investimento em quem vende bem com Ads", "ads_reduzir": "levar a verba dos anúncios com retorno abaixo da média para os que rendem mais", "ads_entrar": "colocar em Ads produtos que vendem bem sem anúncio pago",
+      "ads_otimizar_antes": "ajustar o anúncio antes de aumentar o investimento", "queda_ctr_ads": "renovar capa e título dos anúncios pagos que perderam cliques", "ads_abaixo_meta": "trazer o retorno de volta para a meta combinada"
+    },
+    "$premissas": "Cortes de EXIBIÇÃO (não criam ação nem prioridade; premissa da casa): curva A caindo = faturamento do anúncio ≥ curva_a_queda_pct abaixo do período anterior (só com as duas janelas de 28 dias inteiras); visitas sem venda = ≥ visitas_sem_venda_min visitas em 28 dias e nenhuma venda (o mesmo mínimo de visitas do benchmark de conversão do Algoritmo); causa_janela_dias = medições do Merovíngio que entram no 🔍; acoes_semana_dias = janela das tarefas concluídas; promocao_terminando_dias = janela de 'terminando'; preço para ganhar do catálogo vai ao cliente só com leitura de até ptw_max_dias e diferença de até ptw_max_dif_pct do preço atual (acima disso: «conferir» na prévia interna, nunca no texto).",
+    "curva_a_queda_pct": 20,
+    "visitas_sem_venda_min": 100,
+    "causa_janela_dias": 60,
+    "foco_entregas_dias": 120,
+    "foco_tarefas_min": 4,
+    "$foco_entregas_dias": "relatório focado (14/10): entrega da equipe que AINDA vende (venda nos 28 d, fora do «já fora do ar») entra no ✅ até 120 dias depois, sempre com a data da entrega no texto; medições seguem em causa_janela_dias",
+    "acoes_semana_dias": 7,
+    "foco_tarefas_dias": 30,
+    "$foco_tarefas_dias": "relatório FOCADO (14/10/2026, scripts/relatorio-foco.mjs): janela das tarefas do Mercado Livre concluídas no 🛠️ «O que a nossa equipe fez na sua conta»",
+    "promocao_terminando_dias": 7,
+    "ptw_max_dias": 7,
+    "ptw_max_dif_pct": 30,
+    "max_linhas": 5,
+    "max_linhas_completo": 10,
+    "compras_max": 3,
+    "compras_min_un": 3,
+    "$compras_min_un": "premissa da casa (13/10): sugestão de pedido abaixo de 3 un no cenário base não entra no texto ao cliente (ruído: «pedir 1 un»)",
+    "whatsapp_max_caracteres": 4000,
+    "continua": "_(continua na próxima mensagem)_"
+  }
+}

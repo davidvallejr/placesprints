@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Backup diário cifrado do banco no Google Drive (docs/plano-autogestao.md A7, D-A2): 02:30, fora da coleta das 04h. Retenção 14 (no script).
+  Só funciona com BACKUP_DIR no .env apontando para a pasta do Drive; sem ela o script sai sem fazer nada (código 3). Instalação: docs/autogestao-instalar.md.
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.place2u.place-sprints.backup</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/zsh</string>
+    <string>-c</string>
+    <string>export PATH="$HOME/.local/node/bin:$PATH"; cd "$HOME/place-sprints" &amp;&amp; node scripts/backup-banco.mjs --confirmar</string>
+  </array>
+  <key>WorkingDirectory</key><string>/Users/davidvallejr/place-sprints</string>
+  <key>StartCalendarInterval</key><dict><key>Hour</key><integer>2</integer><key>Minute</key><integer>30</integer></dict>
+  <key>ProcessType</key><string>Background</string>
+  <key>StandardOutPath</key><string>/Users/davidvallejr/place-sprints/data/backup.log</string>
+  <key>StandardErrorPath</key><string>/Users/davidvallejr/place-sprints/data/backup.log</string>
+</dict>
+</plist>

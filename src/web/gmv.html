@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GMV · Place Sprints</title>
+<link rel="stylesheet" href="/ui.css">
+<link rel="stylesheet" href="/tela-gmv.css">
+</head>
+<body data-pagina="gmv">
+<header class="ps-shell" id="psShell"></header>
+<script src="/shell.js"></script>
+<main class="pg">
+  <div class="pg-cab">
+    <div class="pg-titulo">
+      <h1>GMV da carteira</h1>
+      <p class="pg-meta"><span id="metaPeriodo">Lendo o período…</span> <span id="aviso" hidden></span></p>
+    </div>
+  </div>
+
+  <!-- uma barra só acima do que filtra: atalho de período (.seg) e, ao lado, os filtros avançados (PSFiltros: período explícito, comparação, condições E/OU, favoritos, ?f=) -->
+  <div class="filtros" id="barraFiltros">
+    <div class="seg" id="periodo" role="group" aria-label="Período">
+      <button type="button" data-d="14" aria-pressed="false">14 dias</button>
+      <button type="button" data-d="28" aria-pressed="true" class="on">28 dias</button>
+      <button type="button" data-d="56" aria-pressed="false">56 dias</button>
+    </div>
+    <div id="filtros"></div>
+  </div>
+
+  <section class="veredito" aria-label="Resumo">
+    <p class="veredito-frase" id="veredito">Lendo o GMV das contas conectadas…</p>
+    <div class="regua" id="regua" hidden></div>
+    <div class="kpis" id="kpis" aria-busy="true"></div>
+  </section>
+
+  <div class="proxima" id="proxima" hidden>
+    <span class="proxima-rotulo">Próxima ação</span>
+    <span class="proxima-texto" id="proximaTexto"></span>
+    <a class="btn btn-primario" href="/integracoes">Conectar contas</a>
+  </div>
+
+  <section class="bloco" id="secPonte">
+    <div class="bloco-cab"><h2>De onde veio a variação</h2></div>
+    <p class="sub" id="ponteSub">GMV do período anterior, a parte associada ao trabalho, o restante e o GMV atual.</p>
+    <div id="ponte" aria-busy="true"></div>
+  </section>
+
+  <section class="bloco" id="secQuem">
+    <div class="bloco-cab"><h2>Quem move o resultado</h2></div>
+    <p class="sub">Consultor cuida da carteira; analistas executam as tarefas dentro dela. Ordenado por impacto associado ao trabalho.</p>
+    <div class="abas" id="abas">
+      <button type="button" data-a="consultor" aria-pressed="true" class="on">Por consultor</button>
+      <button type="button" data-a="analista" aria-pressed="false">Por analista</button>
+      <button type="button" data-a="cliente" aria-pressed="false">Por cliente</button>
+    </div>
+    <div id="tabela" aria-busy="true"></div>
+  </section>
+
+  <details class="recolhido">
+    <summary>Como ler esta página</summary>
+    <ul class="nota">
+      <li><b>GMV</b> é a soma de preço × quantidade dos pedidos pagos no Mercado Livre no período. É faturamento bruto: vem antes de cancelamentos, devoluções, tarifas e frete, e não é lucro.</li>
+      <li><b>Associado ao trabalho</b> é o que as tarefas concluídas parecem ter movido, medido com grupo de controle: <b>ganho</b> (otimizações que melhoraram além do ruído normal) e <b>perdas</b> (otimizações que pioraram) formam o efeito líquido. Os <b>lançamentos</b> (anúncios criados ou reativados) aparecem à parte porque são receita bruta e podem canibalizar um anúncio irmão. É associação temporal ajustada, não prova de causa.</li>
+      <li>O <b>restante</b> da variação é mercado, sazonalidade, preço, Ads, estoque e tudo o que os dados atuais não separam. Tarefas de conta inteira ficam fora: sem como isolar do mercado, nada é atribuído a elas.</li>
+      <li>Só entram contas <b>conectadas</b>. As demais aparecem como pendentes e nunca são estimadas.</li>
+    </ul>
+  </details>
+</main>
+<footer class="pg-rodape">Fonte: Mercado Livre das contas conectadas · GMV é faturamento bruto, antes de cancelamentos, tarifas e frete</footer>
+<script src="/filtros.js"></script>
+<script src="gmv.js"></script>
+<script src="/alerta.js" defer></script></body>
+</html>

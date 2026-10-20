@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cliente · Place Sprints</title>
+<link rel="stylesheet" href="/ui.css">
+<link rel="stylesheet" href="/acomp.css">
+<link rel="stylesheet" href="/tela-cliente.css">
+</head>
+<body data-pagina="cliente">
+<header class="ps-shell" id="psShell"></header>
+<script src="/shell.js"></script>
+<main class="pg">
+  <!-- tela 1: busca -->
+  <section class="pg-busca" id="telaBusca">
+    <h1>Qual cliente?</h1>
+    <p class="pg-pergunta">Nome ou CNPJ · atalho / em qualquer tela</p>
+    <div class="busca-wrap">
+      <div class="busca"><label class="sr" for="q">Buscar cliente</label><input id="q" type="search" autocomplete="off" placeholder="Nome ou CNPJ"><button class="btn" id="btnBuscar" type="button">Buscar</button></div>
+      <div class="resultados" id="resultados" hidden></div>
+    </div>
+  </section>
+  <!-- tela 2: cliente (desenhar() escreve tudo aqui) -->
+  <div id="telaCliente" hidden></div>
+</main>
+<footer class="pg-rodape">Fonte: Notion e Mercado Livre · indicadores calculados por código · nada é alterado sem confirmação</footer>
+<script src="/filtros.js"></script>
+<script src="ficha.js"></script>
+<script src="acomp.js"></script>
+<script src="ofertas.js"></script>
+<script src="anuncio-historico.js"></script>
+<script src="galeria-anuncio.js"></script>
+<script src="produtos.js"></script>
+<script src="executar.js"></script>
+<script src="relatorios-ciclo.js"></script>
+<script src="nota-fiscal.js"></script>
+<script src="custos-upload.js"></script>
+<script src="guardiao.js"></script>
+<script src="do-cliente.js"></script>
+<script src="alinhamentos.js"></script>
+<script src="gatilhos.js"></script>
+<script src="relatorio.js"></script>
+<script src="pendencias.js"></script>
+<script src="alertas.js"></script>
+<script src="dossie.js"></script>
+<script src="perfil-informacao.js"></script>
+<script src="cliente.js"></script>
+<script src="/alerta.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,277 @@
+{
+ "id": "painel-executivo",
+ "pergunta": "A operação está entregando o que planejou (no sprint/cliente/responsável filtrado) e quais tarefas estão em risco e pedem ação agora?",
+ "usuarios": [
+  "CEO / sócio (visão executiva da carteira inteira)",
+  "Heads de squad / gestores de operação (ritmo do sprint, bloqueios, cobertura de evidência)",
+  "Consultores / analistas (filtram pelo próprio nome, abrem a Matriz Eisenhower interna e a tarefa no Notion)",
+  "Quem gera relatório para o cliente (relatório do sprint, semanal e PDF a partir do filtro)"
+ ],
+ "acao_principal": "Ler a saúde da execução (% concluído contra o planejado e o ritmo ideal) e ir direto às tarefas em risco (atrasadas, bloqueadas, sem responsável), abrindo cada uma no Notion para agir",
+ "acoes_secundarias": [
+  "Filtrar por cliente, projeto, sprint, processo, responsável, status e período (8 controles, cada mudança recarrega tudo)",
+  "Sincronizar com o Notion (POST /api/sync, só o que mudou)",
+  "Gerar o relatório do sprint (/relatorio?{filtros}) e o PDF (/relatorio.pdf?{filtros})",
+  "Gerar o relatório semanal (/semanal?cliente=), só com cliente filtrado",
+  "Abrir a Matriz Eisenhower (/matriz?responsavel=), só com responsável filtrado, de uso interno",
+  "Navegar para Cliente, Analistas, Planos de ação e Processos",
+  "Ver o status da conexão Mercado Livre (x/y conectados) e do último sync",
+  "Consultar a tabela completa de tarefas e abrir no Notion",
+  "Avisos do sistema (sino do alerta.js, com som e toasts)"
+ ],
+ "secoes": [
+  {
+   "titulo": "Cabeçalho (marca + estado + ações)",
+   "conteudo": "Logo (/logo) e o título 'Place Sprints' com o subtítulo 'Performance Estratégica em Marketplaces · fonte oficial: Notion'. Dois textos de estado: o último sync com o total de tarefas, e '🛒 Mercado Livre: 30/160 conectados'. Depois vêm 9 controles de mesmo peso, com emoji e alternando .btn/.btn-claro sem critério: Sincronizar, Relatório semanal, Relatório do sprint, PDF, Cliente, Analistas, Planos de ação, Processos e Matriz Eisenhower.",
+   "ids_container": [
+    "estadoSync",
+    "estadoMeli",
+    "btnSync",
+    "lnkSemanal",
+    "lnkRelatorio",
+    "lnkPdf",
+    "lnkMatriz"
+   ],
+   "importancia": "media"
+  },
+  {
+   "titulo": "Barra de filtros (sticky)",
+   "conteudo": "Selects de Cliente (160), Projeto (2), Sprint (27), Processo (31, com taxonomia suja: Shopee/Shopee 1/Shopee2/Tiktok/TIKTOK/tiktok...), Responsável (145, com combinações como 'Adriano L., Deliani') e Status (6 valores fixos); datas De/Até; botão Limpar. Não há labels visíveis e o padrão é 'tudo', ou seja, a carteira inteira desde 2024.",
+   "ids_container": [
+    "filtros",
+    "fCliente",
+    "fProjeto",
+    "fSprint",
+    "fProcesso",
+    "fResponsavel",
+    "fStatus",
+    "fDe",
+    "fAte",
+    "btnLimpar"
+   ],
+   "importancia": "alta"
+  },
+  {
+   "titulo": "Linha de KPIs",
+   "conteudo": "9 cartões centralizados, todos com o mesmo peso: Planejadas (13.968), Concluídas (10.327), % conclusão (74%, cor por limiar 70/40), Em andamento (139), Bloqueadas (110), Atrasadas (16), Transferidas (0, 'para outro sprint'), Esforço entregue (10.357/14.046, 74%) e Com evidência (6.994, 68% das entregas). Tudo é renderizado por innerHTML via kpiHtml().",
+   "ids_container": [
+    "kpis"
+   ],
+   "importancia": "alta"
+  },
+  {
+   "titulo": "Evolução acumulada do sprint (burnup)",
+   "conteudo": "Linhas Concluído × Planejado × Ritmo ideal por dia (22 dias de snapshots). Com menos de 2 dias, esconde o canvas e mostra #vazioBurnup. Sem filtro de sprint, mistura todos os sprints.",
+   "ids_container": [
+    "gBurnup",
+    "vazioBurnup"
+   ],
+   "importancia": "alta"
+  },
+  {
+   "titulo": "Planejado × entregue",
+   "conteudo": "Barras de Quantidade e Esforço (planejado vs entregue). Repete os KPIs Planejadas/Concluídas/Esforço. Como o esforço quase sempre é nulo e vira peso 1, as duas barras saem praticamente iguais.",
+   "ids_container": [
+    "gPlanejado"
+   ],
+   "importancia": "baixa"
+  },
+  {
+   "titulo": "Distribuição por status",
+   "conteudo": "Rosca com os 7 status (inclui Dependência do cliente). Repete os KPIs de andamento/bloqueadas/concluídas.",
+   "ids_container": [
+    "gStatus"
+   ],
+   "importancia": "baixa"
+  },
+  {
+   "titulo": "Evolução por processo",
+   "conteudo": "Barras horizontais de % concluído no top 10 de 31 processos, com rótulo 'x% (conc/total)'. A taxonomia suja divide o mesmo canal em várias barras.",
+   "ids_container": [
+    "gProcessos"
+   ],
+   "importancia": "media"
+  },
+  {
+   "titulo": "Entregas por semana",
+   "conteudo": "Barras de conclusões por semana. Sem filtro, são 66 barras, incluindo outliers de 2024 e semanas futuras (2026-10-12 e 2026-10-26).",
+   "ids_container": [
+    "gSemanas"
+   ],
+   "importancia": "media"
+  },
+  {
+   "titulo": "Riscos e atrasos",
+   "conteudo": "5 grupos (Atrasadas 16, Bloqueadas 110, Sem responsável 542, Sem prazo 3.621, Concluídas sem evidência 3.333), cada um com até 6 links para o Notion e '+ N outras…'. Fica no fim da grade, embaixo de 5 gráficos. 'Sem prazo' domina e é um problema de qualidade de dado, não de risco.",
+   "ids_container": [
+    "cartaoRiscos",
+    "riscos"
+   ],
+   "importancia": "alta"
+  },
+  {
+   "titulo": "Tabela de tarefas",
+   "conteudo": "Badge com o total e uma tabela de 9 colunas (Tarefa, Cliente, Sprint, Processo, Responsável, Status, Prazo, Peso e uma coluna sem cabeçalho com ⚠️ para concluída sem data). Sem filtro, renderiza as 13.970 linhas de uma vez (payload de 19,6 MB), sem paginação, busca ou ordenação.",
+   "ids_container": [
+    "nTarefas",
+    "tabelaTarefas"
+   ],
+   "importancia": "media"
+  },
+  {
+   "titulo": "Rodapé",
+   "conteudo": "'Place Sprints · dados espelhados do Notion — o Notion continua sendo a fonte oficial. Indicadores 100% calculados por código.' Repete o subtítulo do cabeçalho.",
+   "ids_container": [],
+   "importancia": "baixa"
+  },
+  {
+   "titulo": "Avisos do sistema (injetado pelo /alerta.js)",
+   "conteudo": "Sino fixo no canto inferior direito, com contador, painel de histórico, toasts, som e notificação do navegador. Consulta /api/notificacoes a cada 8 s e põe o prefixo '(n)' no document.title.",
+   "ids_container": [
+    "psSino",
+    "psPainel",
+    "psToasts"
+   ],
+   "importancia": "media"
+  }
+ ],
+ "kpis": [
+  "Planejadas (k.planejadas)",
+  "Concluídas (k.concluidas), tom 'bom'",
+  "% conclusão (k.pct_conclusao): bom >=70, alerta >=40, risco abaixo disso",
+  "Em andamento (k.andamento)",
+  "Bloqueadas (k.bloqueadas): risco se >0",
+  "Atrasadas (k.atrasadas): alerta se >0. Enganoso: 13.934 de 13.968 tarefas não têm prazo (a tela /analistas declara essa 'cegueira', o painel não)",
+  "Transferidas (k.transferidas): hoje é 0, ruído",
+  "Esforço entregue (k.esforco_concluido/k.esforco_planejado + k.pct_esforco)",
+  "Com evidência (k.com_evidencia + k.cobertura_evidencias%): bom >=70, senão alerta",
+  "Estado: último sync + total de tarefas (/api/estado)",
+  "Mercado Livre conectados x/total clientes (/api/meli/conexoes vs opções de #fCliente)"
+ ],
+ "hooks_js": [
+  "#estadoSync (textContent)",
+  "#estadoMeli (textContent; o texto inclui emoji)",
+  "#btnSync (click; disabled; o textContent é SOBRESCRITO para '↻ Sincronizando…'/'↻ Sincronizar', então qualquer ícone/markup interno some)",
+  "#lnkSemanal (href, style.opacity .55/1, title)",
+  "#lnkRelatorio (href = '/relatorio?'+q)",
+  "#lnkPdf (href = '/relatorio.pdf?'+q)",
+  "#lnkMatriz (href, style.opacity, title)",
+  "#fCliente (value; options.length-1 é o total de clientes, então a 1ª option precisa continuar como placeholder)",
+  "#fProjeto",
+  "#fSprint",
+  "#fProcesso",
+  "#fResponsavel",
+  "#fStatus (os values nao_iniciada/andamento/validacao/concluida/bloqueada/dependencia_cliente/cancelada vão para a API)",
+  "#fDe",
+  "#fAte",
+  "#btnLimpar (click)",
+  ".filtros (CLASSE obrigatória: o JS usa document.querySelectorAll('.filtros select, .filtros input') para o change→atualizar e para o Limpar; todo select/input dentro dela vira filtro, e um filtro fora dela não dispara)",
+  "#filtros (id presente, não usado pelo JS)",
+  "#kpis (innerHTML)",
+  "#gBurnup (canvas do Chart; style.display alternado entre '' e 'none')",
+  "#vazioBurnup (atributo hidden)",
+  "#gPlanejado (canvas)",
+  "#gStatus (canvas)",
+  "#gProcessos (canvas)",
+  "#gSemanas (canvas)",
+  "#riscos (innerHTML)",
+  "#cartaoRiscos (id presente, não usado pelo JS)",
+  "#nTarefas (textContent)",
+  "#tabelaTarefas + 'tbody' (o seletor '#tabelaTarefas tbody' precisa de um tbody dentro da table; 1ª coluna = input.sel só em tarefa aberta, value = id)",
+  "#selTodas (checkbox do thead: marca todas as .sel visíveis)",
+  "#nSel (textContent: quantas marcadas; a .barra-massa aparece via body:has(.sel:checked))",
+  "#btnDependencia (click → diálogo #dlgDependencia, DOM puro: prévia automática, POST /api/tarefas/dependencia-cliente com confirmar:true no primário)",
+  "#btnDesmarcar (click: desmarca todas)",
+  "#depResultado (innerHTML: .aviso.erro com 'título — motivo' das falhas do lote; vazio quando tudo encerrou)",
+  "img.logo com onerror que esconde (src=/logo)",
+  "alerta.js cria e usa: #psSino, #psPainel, #psToasts, button.sino, .cont, .ico, .mini, #psPainel .topo, .psItem(.sucesso/.alerta/.erro/.nova), .psToast(.sucesso/.alerta/.erro), .fechar"
+ ],
+ "classes_geradas_por_js": [
+  "kpi",
+  "bom",
+  "alerta",
+  "risco",
+  "v",
+  "r",
+  "e",
+  "risco-grupo",
+  "ruim",
+  "ok",
+  "n",
+  "meta",
+  "tag",
+  "t-nao_iniciada",
+  "t-andamento",
+  "t-validacao",
+  "t-concluida",
+  "t-bloqueada",
+  "t-dependencia_cliente",
+  "t-cancelada",
+  "atrasada",
+  "semdados (linha vazia do tbody, com colspan=10)",
+  "elementos crus que o CSS precisa estilizar: h3, ul, li, a dentro de .risco-grupo; td a; o <li class=\"meta\">nenhuma ✔</li>",
+  "do alerta.js (CSS próprio injetado): psItem, psToast, sucesso, erro, nova, mini, sino, cont, fechar, topo (dentro de #psPainel)"
+ ],
+ "css_origem": "Um único arquivo linkado, /Users/davidvallejr/place-sprints/src/web/styles.css (68 linhas, paleta legada azul: header com gradiente, tokens --azul/--fundo #f1f5f9 etc.). O mesmo styles.css é usado por planos.html, então mexer nele muda /planos também. As outras telas (gmv, promocoes, metodologia, resultados) usam o design system mais novo ui.css + ui-extra.css (paleta laranja Place2u, header branco de 64px com .header-links), por isso o painel executivo destoa hoje das telas novas. Não há <style> inline no index.html. Estilos inline vindos do JS: style.opacity em #lnkSemanal/#lnkMatriz e style.display em #gBurnup. As cores dos gráficos estão fixas em hex no app.js (const CORES, corStatus, '#93c5fd', '#cbd5e1') e a fonte vai em Chart.defaults.font.family, então um CSS novo não recolore os gráficos e é preciso editar essas constantes. O alerta.js injeta seu próprio <style>. Colisão encontrada: o `.topo` global do styles.css (gradiente azul + color #fff) também atinge o `<div class=\"topo\">` do painel de avisos (#psPainel .topo só sobrescreve layout e padding), então nesta tela o cabeçalho do sino ganha a faixa azul.",
+ "links_navegacao": [
+  "/relatorio?{filtros} (target _blank)",
+  "/relatorio.pdf?{filtros} (target _blank)",
+  "/semanal?cliente={cliente} (target _blank; sem cliente fica href='#', que com target=_blank abre uma cópia do painel numa aba nova)",
+  "/matriz?responsavel={resp} (target _blank; sem responsável tem o mesmo problema do href='#')",
+  "/cliente",
+  "/analistas",
+  "/planos",
+  "/processos",
+  "URLs do Notion por tarefa (t.url) nos riscos e na tabela (target _blank)",
+  "Links internos dos toasts/avisos (alerta.js, filtrados por linkSeguro)",
+  "AUSENTES no painel, embora existam e as outras telas já apontem para elas: /comercial, /gmv, /integracoes, /promocoes, /resultados, /metodologia"
+ ],
+ "dependencias_externas": [
+  "Chart.js 4.4.7 via CDN https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js",
+  "chartjs-plugin-datalabels 2.2.0 via CDN https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0 (o app.js chama Chart.register(ChartDataLabels) na linha 7: se o CDN falhar, o script inteiro quebra e a tela fica vazia)",
+  "/alerta.js (avisos do sistema, compartilhado por todas as telas)",
+  "/logo (rota do servidor que lê assets/logo.*)",
+  "APIs: GET /api/opcoes, /api/kpis, /api/graficos, /api/tarefas, /api/estado, /api/meli/conexoes; POST /api/sync; GET /api/notificacoes (alerta.js), POST /api/notificacoes/lidas",
+  "Fonte do sistema (-apple-system/Segoe UI/Roboto), sem webfont"
+ ],
+ "testes_que_leem_esta_tela": [
+  "Nenhum teste faz assert sobre o conteúdo de src/web/index.html, src/web/app.js ou src/web/styles.css (grep de readFileSync/ids/strings em scripts/teste-*.mjs deu zero). Os ids e textos podem mudar sem quebrar testes, só o JS.",
+  "scripts/teste-promocoes-rotas-mc.mjs (l.162-168) usa os NOMES dos arquivos como caminhos do guard, sem ler o conteúdo: '/index.html', '/meli/..%2findex.html', '/meli/..%2Findex.html', '/meli/../index.html', '/meli/conectar%2f..%2fapp.js', '/webhook/meli/..%5Capp.js' esperam status 403 no host do túnel, e guarda({path:'/meli/..%2findex.html', host:'localhost:3012'}).next === true ('no loopback o painel segue livre'). Os arquivos devem continuar com os nomes index.html e app.js.",
+  "scripts/teste-notificacoes.mjs (l.32-40) lê src/web/alerta.js, que esta tela carrega: todo match de /innerHTML\\s*=\\s*([^\\n]+)/g precisa casar com /^'[^'$]*'$/ (só literal fixo); /linkSeguro/ precisa existir; js.match(/const linkSeguro = l => \\/(.+)\\/\\.test/) precisa achar o regex. Só importa se o redesenho mexer no alerta.js.",
+  "scripts/teste-promocoes-ui.mjs caso 58 lê src/web/ui.css e exige contraste >= 4,5:1 nos tokens --laranja-escuro, --verde/--verde-suave, --cinza/--fundo-suave/--verm-suave/--ambar-suave, --azul/--azul-suave, --ambar, --verm (e #fff sobre --verm). Só importa se o painel migrar para ui.css e alguém alterar esses tokens."
+ ],
+ "problemas_ux": [
+  "Falta hierarquia e veredito: não há uma frase no topo dizendo 'como está a operação'. São 9 KPIs com o mesmo peso, 5 gráficos e, só no fim, os riscos, justamente a seção que pede ação.",
+  "O padrão 'todos os filtros vazios' mostra a carteira inteira desde 2024 (burnup de todos os sprints misturados, 66 semanas). O padrão executivo deveria ser o sprint atual.",
+  "Tabela sem paginação: sem filtro, /api/tarefas traz 13.970 linhas (19,6 MB) e todas viram DOM, a cada mudança de filtro. Pesa no navegador e não serve para leitura.",
+  "KPI 'Atrasadas 16' engana: 13.934 de 13.968 tarefas não têm prazo, e o painel não declara essa cegueira como a tela /analistas faz. 'Transferidas 0' é ruído.",
+  "Redundância: 'Planejado × entregue' e a rosca de status repetem os KPIs, e as barras de Quantidade e Esforço saem quase iguais porque o esforço é nulo na maioria das tarefas.",
+  "Dados sujos expostos sem tratamento: 31 processos duplicados (Shopee/Shopee 1/Shopee2, Tiktok/TikTok/TIKTOK/tiktok/Tik Tok), 145 responsáveis com combinações ('Adriano L., Deliani') e semanas futuras no gráfico semanal.",
+  "No grupo de riscos, 'Sem prazo' (3.621) domina e é qualidade de dado, não risco. Mistura 'risco operacional' com 'higiene do Notion'.",
+  "Cabeçalho poluído: 2 estados + 9 botões com emoji, alternando .btn e .btn-claro sem relação com a importância. Os relatórios (sprint, semanal, PDF, matriz) estão espalhados em vez de agrupados.",
+  "Bug: #lnkSemanal e #lnkMatriz sem filtro ficam com href='#' e target=_blank. A opacidade .55 só sugere desabilitado, e o clique abre uma cópia do painel numa aba nova.",
+  "Navegação incompleta e diferente das outras telas: faltam Comercial, GMV, Integrações, Promoções, Resultados e Metodologia. O header azul em gradiente (styles.css) destoa do header branco/laranja do ui.css das telas novas.",
+  "Emojis em botões, estados e riscos (📆📄⬇🔎👥🎯📘🧭🛒⏰🚫👤📅📎✔⚠️), o que destoa de um visual premium e clean.",
+  "Coluna da tabela sem cabeçalho, só com ⚠️, sem explicação (concluída sem data de conclusão).",
+  "Acessibilidade: selects e datas sem <label> (só a 1ª option e um title), status comunicado só por cor nos KPIs, links desabilitados só por opacidade.",
+  "Texto repetido no subtítulo e no rodapé ('fonte oficial: Notion'). A mensagem de vazio usa jargão de dev para o CEO ('Rode a sincronização ou \"npm run demo\"').",
+  "Cada change de filtro dispara 5 requisições, incluindo a lista completa, sem debounce nem indicador de carregamento.",
+  "Colisão de CSS: o `.topo` do styles.css pinta de azul o cabeçalho do painel de avisos (alerta.js) nesta tela.",
+  "Mobile: 9 botões quebram em várias linhas no header, os 8 filtros ocupam meia tela no sticky e a tabela de 9 colunas só funciona com rolagem horizontal."
+ ],
+ "estados": [
+  "Carregando: NÃO existe. Os KPIs ficam vazios e os estados mostram '—' até as 5 requisições voltarem, e a troca de filtro não dá nenhum feedback.",
+  "Sincronizando: #btnSync fica disabled com o texto '↻ Sincronizando…'. O resultado vem por alert() nativo ('Sync falhou: …' ou 'Sync concluído com avisos:').",
+  "Nunca sincronizado: #estadoSync = 'Nunca sincronizado — clique em Sincronizar'.",
+  "Sem Notion: #estadoSync = 'Sem NOTION_TOKEN (modo demo)'.",
+  "Burnup sem histórico (menos de 2 dias): o canvas some e aparece #vazioBurnup ('Ainda não há histórico suficiente…').",
+  "Grupo de risco vazio: classe .ok e '<li class=\"meta\">nenhuma ✔</li>'. Mais de 6 itens: '+ N outras…'.",
+  "Tabela vazia: linha .semdados 'Nenhuma tarefa no filtro. Rode a sincronização ou \"npm run demo\".'",
+  "Mercado Livre: '🛒 Mercado Livre: x/y conectados'. Se /api/meli/conexoes falhar, o catch devolve [] e mostra 0/y sem avisar do erro.",
+  "Erro de API: NÃO tratado. O atualizar() não tem try/catch e faz .json() sem checar r.ok, então qualquer falha gera unhandled rejection e a tela fica parada sem mensagem.",
+  "CDN do Chart.js/datalabels fora do ar ou offline: o app.js quebra na linha 7 e a tela inteira fica vazia, sem mensagem.",
+  "Links de relatório desabilitados: #lnkSemanal sem cliente e #lnkMatriz sem responsável ficam com opacity .55 e title explicativo, mas continuam clicáveis.",
+  "Avisos (alerta.js): sino com contador, painel vazio ('Nenhum aviso ainda…'), toasts com até 4 empilhados e erros que ficam 2 min."
+ ],
+ "recomendacao": "Reorganizar a tela como um painel de decisão em 4 faixas, de cima para baixo, migrando para o design system ui.css/ui-extra.css (header branco de 64px com .header-links, o mesmo das telas novas e com todas as rotas, inclusive Comercial, GMV, Integrações, Promoções e Resultados) e sem emojis. (1) Barra de contexto enxuta: Sprint (padrão = sprint atual), Cliente e Responsável visíveis; Projeto, Processo, Status e Período num 'Mais filtros' recolhível, ainda dentro de .filtros. O estado do sync e do ML vira uma pill discreta, e os relatórios (Sprint, Semanal, PDF, Matriz) entram num único botão 'Relatórios', com os itens sem pré-requisito de fato desabilitados, sem href='#'. (2) Veredito + 4 KPIs-chave: uma frase do tipo 'Sprint 2026-10: 74% concluído, X p.p. acima/abaixo do ritmo ideal, N tarefas pedem ação', depois % conclusão vs ritmo, Concluídas/Planejadas, Bloqueadas e Cobertura de evidência. Os demais KPIs vão para uma linha secundária, e 'Atrasadas' só aparece com a ressalva de cobertura de prazo. (3) 'O que pede ação', logo abaixo: bloqueadas, atrasadas e sem responsável como lista priorizada e clicável; 'sem prazo' e 'concluídas sem evidência' saem dos riscos e viram um bloco separado de 'Qualidade do dado'. (4) Tendência: o burnup como gráfico principal, mais processos normalizados (top 8) e entregas das últimas 12 semanas. Saem a rosca de status e o 'Planejado × entregue', que são redundantes. No fim, a tabela paginada (ex.: 50 linhas, busca e ordenação), com cabeçalho na coluna de alerta. Adicionar estados de carregamento, erro e CDN offline. Manter todos os ids e as classes .filtros/.kpi/.risco-grupo/.tag t-*/.atrasada/.semdados, e trocar o hex fixo das constantes CORES no app.js pelos tokens da nova paleta."
+}
