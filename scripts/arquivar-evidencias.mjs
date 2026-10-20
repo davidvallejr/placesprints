@@ -160,7 +160,10 @@ async function streaming() {
       //   já referenciado por 'frio:' no banco (conferido quando entrou) e despejado → reaproveita sem baixar; senão relê o hash (baixa se preciso).
       if (existsSync(dest)) {
         const ja = statusDe([dest]).get(dest), despejado = ja?.download && ja.download !== 'NSURLUbiquitousItemDownloadingStatusCurrent'
-        if (!(despejado && ja.uploaded && jaNoFrio(nome)) && await sha(dest) !== p.hash) { r.falhas.push(`${p.id}: destino existente com hash diferente`); continue }
+        // ponytail: nome = sha256 só é gravado pelo próprio script após conferir; passada anterior pode ter caído antes do 'frio:' —
+        //   despejado + uploaded + mesmo tamanho basta (reler forçaria o download e o File Provider devolve -11).
+        const confiavel = despejado && ja.uploaded && (jaNoFrio(nome) || ja.tamanho === p.bytes)
+        if (!confiavel && await sha(dest) !== p.hash) { r.falhas.push(`${p.id}: destino existente com hash diferente`); continue }
         r.reaproveitados++
       } else {
         copyFileSync(p.abs, tmp)
