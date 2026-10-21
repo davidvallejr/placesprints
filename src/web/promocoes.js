@@ -34,7 +34,7 @@ const impostoChip = r => {
   return Array.isArray(r?.pendencias) && !r.pendencias.some(p => p.codigo === 'SEM_IMPOSTO') ? 'imposto: fallback custos_cliente' : 'imposto não configurado'
 }
 // filtro que zera uma tabela que TEM linhas é só filtro (limpar mostra a base); o aviso da coleta é dito à parte, nunca no lugar dele
-const vazioElegiveis = (r, d) => !r?.coleta ? 'Faça a primeira coleta (botão "Coletar agora").'
+const vazioElegiveis = (r, d) => !r?.coleta ? 'Faça a primeira coleta (botão "Reler o Mercado Livre").'
   : d.total_base ? 'Nenhum anúncio com esses filtros.' + (coletaConcluida(r) ? '' : ` Coleta ${r.coleta.estado}: a base pode estar incompleta — veja o aviso da coleta acima.`)
   : !coletaConcluida(r) ? `Coleta ${r.coleta.estado}: não dá para afirmar que a conta não tem anúncios elegíveis — refaça a coleta.`
   : temLimiteFalha(r) ? 'Nenhum elegível apareceu, mas a coleta teve falhas de leitura (veja as pendências acima): refaça a coleta antes de concluir que não há.'
@@ -48,7 +48,7 @@ const opcoesDias = dias => [...new Set([7, 14, 30, 60, Number(dias)])].filter(n 
 const paginaAlvo = d => (!d.itens.length && d.total > 0 ? Math.max(1, Math.ceil(d.total / (d.limite || 50))) : 0)   // página fora do intervalo → última válida
 const textoAprovarTodas = (n, filtrado, barradas = 0) => `Aprovar ${n} anúncio(s) com sugestão 🤖 pendente(s) de TODO o cliente${filtrado ? ' — os filtros da tela NÃO limitam esta aprovação (inclui anúncios que você não está vendo)' : ''}. Aprovar não executa nada: só habilita a entrada no plano.${barradas ? ` (${barradas} sugestão(ões) barrada(s) por recusa/bloqueio seu não entram na conta.)` : ''}`
 // estado vazio de lista que depende da leitura dos anúncios: sem coleta concluída "nenhum/todos" é ausência de dado, nunca fato da conta
-const vazioFato = (r, oQue, fato) => (coletaConcluida(r) ? fato : !r?.coleta ? `Sem coleta: não dá para afirmar ${oQue} — rode "Coletar agora".` : `Sem leitura confiável (coleta ${r.coleta.estado}): não dá para afirmar ${oQue} — refaça a coleta.`)
+const vazioFato = (r, oQue, fato) => (coletaConcluida(r) ? fato : !r?.coleta ? `Sem coleta: não dá para afirmar ${oQue} — rode "Reler o Mercado Livre".` : `Sem leitura confiável (coleta ${r.coleta.estado}): não dá para afirmar ${oQue} — refaça a coleta.`)
 // toast do fim da coleta pelo estado REAL do resultado do job: parcial/erro e a falha de "atualizar vendas antes" nunca saem como "concluída" neutra
 const desfechoColeta = (cli, r) => {
   const est = r.estado || 'concluida', ok = est === 'concluida', n = Number(r.leituras_falhas) || 0, lidos = `${r.campanhas} campanha(s), ${r.campanhas_rebate} de rebate, ${r.anuncios_lidos} anúncio(s) lidos`
@@ -218,7 +218,7 @@ $('quem').value = (() => { try { return localStorage.getItem('promo_quem') || ''
 $('quem').addEventListener('change', () => { try { localStorage.setItem('promo_quem', quem()) } catch { /* sem storage: segue */ } })
 
 // ordem do trabalho (spec 7.4): decisão │ configuração │ histórico — as chaves ?aba= e os rótulos não mudam
-const ABAS = [['elegiveis', 'Elegíveis'], ['participando', 'Participando e cobertura'], ['relampago', 'Relâmpago'], ['plano', 'Plano'], ['custos', 'Custos'], ['regras', 'Regras por SKU'], ['interrogatorio', 'Interrogatório'], ['auditoria', 'Auditoria']]
+const ABAS = [['elegiveis', 'Campanhas candidatas'], ['participando', 'No ar e cobertura dos protegidos'], ['relampago', 'Ofertas relâmpago (candidatos)'], ['plano', 'Plano'], ['custos', 'Custo ligado ao anúncio'], ['regras', 'Regras por SKU'], ['interrogatorio', 'Divergências humano × analista automático'], ['auditoria', 'Auditoria']]
 // tok/nav/seqResumo = tokens de requisição (ver criarRender); jobs = { cliente: rótulo } dos jobs em acompanhamento; abertos = linhas "Detalhes" abertas; execBloq = { cli, id, aviso } após execução interrompida; mais = { lista: quantas linhas já mostra }; focoCusto = anúncio do atalho "Vincular custo"
 const S = { cliente: '', aba: 'elegiveis', resumo: null, f: filtrosPadrao(), planoId: '', jobs: {}, abertos: new Set(), tok: 0, nav: 0, seqResumo: 0, execBloq: null, mais: {}, focoCusto: '' }
 const { OBSOLETA, nova, carregar } = criarRender(S, api)
@@ -338,10 +338,10 @@ async function recarregarResumo() {
     + (r.execucao.habilitada ? '<span class="chip laranja">execução LIGADA</span>' : '<span>execução DESLIGADA</span>')
   // coleta_ligada:false = a coleta da madrugada pula este cliente (interruptor em Cliente → Configurar, decisão de 08/10); "Coletar agora" continua valendo.
   // Uma só faixa .aviso acima da dobra (§5.8): com erro de coleta, a nota de "desligada" entra na mesma faixa
-  const desligada = r.coleta_ligada === false ? `<b>Coleta desligada para este cliente</b> — a coleta da madrugada pula esta conta; "Coletar agora" continua funcionando. <a href="/cliente?cliente=${enc(cli)}&amp;aba=configurar">Ligue em Configurar</a>.` : ''
+  const desligada = r.coleta_ligada === false ? `<b>Coleta desligada para este cliente</b> — a coleta da madrugada pula esta conta; "Reler o Mercado Livre" continua funcionando. <a href="/cliente?cliente=${enc(cli)}&amp;aba=configurar">Ligue em Configurar</a>.` : ''
   $('faixaColeta').innerHTML = aviso ? `<div class="aviso erro">${esc(aviso)}${desligada ? ' ' + desligada : ''}</div>` : desligada ? `<div class="aviso info">${desligada}</div>` : ''
   const velha = ok && !f.fresca, quando = [c?.concluida_em && brHora(c.concluida_em), f.idade_horas != null && `há ${Number(f.idade_horas).toLocaleString('pt-BR', { maximumFractionDigits: 1 })} h`].filter(Boolean).join(' · ')
-  $('status').innerHTML = !c ? '<span class="selo ruim">sem coleta</span><span class="mudo">rode "Coletar agora" para começar</span>'
+  $('status').innerHTML = !c ? '<span class="selo ruim">sem coleta</span><span class="mudo">rode "Reler o Mercado Livre" para começar</span>'
     : `<span class="selo ${!ok || velha ? 'ruim' : 'bom'}">coleta ${ok ? (velha ? 'VELHA' : 'fresca') : esc(String(c.estado).toUpperCase())}</span>${quando ? `<span>${esc(quando)}</span>` : ''}${velha ? '<span class="neg">refaça a coleta: não se analisa foto velha</span>' : ''}${semVendas(r) ? '<span class="neg">sem dados de vendas (série indisponível ou vazia)</span>' : `<span class="mudo">vendas até ${esc(brData(r.vendas.ate))}</span>`}<span class="progresso" id="progresso"></span>`
   const inv = r.invariante
   $('invariante').innerHTML = !inv ? '' : `<div class="pr-inv ${inv.ok ? 'ok' : 'ruim'}"><b>${inv.ok ? '✔ Rodada fechada' : '✖ Rodada NÃO está fechada'}</b>${inv.itens.map(i => `<span class="it ${i.encontrado === 0 ? 'ok' : 'ruim'}">${esc(i.encontrado)} ${esc(i.rotulo)}</span>`).join('')}${inv.coleta_fresca ? '' : `<span class="it ruim">coleta ${ok ? 'velha' : esc(c?.estado || 'ausente')}</span>`}<span class="mudo peq">${esc(textoReadback(inv, r.config.dias_vigia))}</span></div>`

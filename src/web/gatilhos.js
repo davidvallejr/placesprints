@@ -1,7 +1,7 @@
 // Avisos ao cliente (gatilhos do Merovíngio, 09/10/2026): o servidor decide tudo (fontes, dedupe, cooldown, auditoria, chave, liberação, janela); esta tela só mostra e pede.
 // 12/10/2026: só Mercado Livre; ao cliente vai SÓ o plano semanal (TERÇA 09h, fuso do cliente; decisões finais): o urgente entra no plano de terça (a caixa «Urgente sai
-// na hora» saiu da tela; config urgente.na_hora_ligado = false); Discord é canal interno da equipe (fora daqui): o time recebe em todos os clientes ML com canal, independente do WhatsApp do cliente.
-// window.PSGatilhos.montarConfig(alvo, cliente) (Configurar › Avisos ao cliente), .montarResumo(alvo, cliente) (Resumo › Avisos) e .montarPlanos() (Distribuição › Avisos automáticos).
+// na hora» saiu da tela; config urgente.na_hora_ligado = true desde 14/10/2026 por decisão do David: só os tipos de urgente.tipos saem fora da terça); Discord é canal interno da equipe (fora daqui): o time recebe em todos os clientes ML com canal, independente do WhatsApp do cliente.
+// window.PSGatilhos.montarConfig(alvo, cliente) (Configurar › Canais do cliente), .montarResumo(alvo, cliente) (Resumo › Avisos ao cliente: fila e recibos) e .montarPlanos() (Distribuir ao Notion › Plano de terça: chave e recibos).
 // Tudo que vem do servidor passa por esc(); sem botão primário novo (o diálogo usa os botões do PSRelatorio.ui); valor de KPI nunca colorido; destino do canal nunca vai a log.
 (() => {
   if (window.PSGatilhos) return

@@ -257,7 +257,7 @@ const armado = b => {
 
 async function abrirCustos(cliente) {
   CU.cliente = cliente; msg('')
-  $('custosPainel').hidden = false; $('custosTitulo').textContent = `Custos por SKU · ${cliente}`
+  $('custosPainel').hidden = false; $('custosTitulo').textContent = `Custos: fontes automáticas · ${cliente}`
   $('custosCorpo').innerHTML = '<div class="skeleton"></div>'
   $('custosPainel').scrollIntoView({ block: 'start' }); $('custosTitulo').focus({ preventScroll: true })
   await recarregarCustos()

@@ -119,7 +119,7 @@
    "importancia": "alta"
   },
   {
-   "titulo": "Aba Elegíveis",
+   "titulo": "Aba Campanhas candidatas (id elegiveis; antes «Elegíveis»)",
    "conteudo": "Barra de filtros (busca, curva, situação com contadores, só ≥ piso, incluir sem rebate). Barra de ações com 4 botões de mesmo peso: Rodar analista (prévia), Aplicar analista (preenchido), Aprovar todas as sugestões 🤖, Exportar CSV. Abaixo: confirmação em linha, frase longa de total/legenda 🤖/👤 e a tabela de 9 colunas (Curva, Anúncio+badges, Fat. 30d, Campanha atual, Melhor elegível, MC, 🤖, 👤, Detalhes). A linha tr.det expansível traz a tabela de candidatas com Marcar/Recusar/Limpar/Aprovar 🤖, ordem direta e protegido. Paginador ← Anterior / página X de Y / Próxima →. Na coluna MC: a origem do custo ('custo: % da conta' ou 'custo: manual / SKU / SKU normalizado / herdado', com o SKU de custo quando não é o próprio) e, na célula SEM CUSTO com 'custo' faltando, o atalho 'Vincular custo' (data-acao='vincular-custo') que abre a aba Custos com o anúncio em foco.",
    "ids_container": [
     "conteudo",
@@ -137,7 +137,7 @@
    "importancia": "alta"
   },
   {
-   "titulo": "Aba Participando e cobertura",
+   "titulo": "Aba No ar e cobertura dos protegidos (id participando)",
    "conteudo": "Seções empilhadas: (1) 'Protegidos que ficam descobertos', com select de janela #selDias, link CSV e tabela Curva/Anúncio/Fat/Cobre até/Saída (MARCAR / SUGERIR MANUAL). (2) 'Cobertura incerta — confirmar (N)'. (3) Exceções em details.evid. (4) 'Rebate pior no ar', com ganho por venda e por mês. (5) 'Derrubadas antes do prazo', só quando houver. (6) 'Participando e cobertura (N)', com todas as ofertas started/pending.",
    "ids_container": [
     "conteudo",
@@ -146,7 +146,7 @@
    "importancia": "alta"
   },
   {
-   "titulo": "Aba Relâmpago",
+   "titulo": "Aba Ofertas relâmpago (candidatos) (id relampago)",
    "conteudo": "Faixa âmbar de avisos (LIGHTNING ignoradas) e a tabela Curva/Anúncio/Fat/Slots candidatos/Já no ar/🤖/👤. Só leitura, a execução é pelo painel do ML.",
    "ids_container": [
     "conteudo"
@@ -164,7 +164,7 @@
    "importancia": "media"
   },
   {
-   "titulo": "Aba Custos",
+   "titulo": "Aba Custo ligado ao anúncio (id custos)",
    "conteudo": "Faixa de pendências de custo vindas do ERP/planilha, quando houver. Depois o vínculo custo ↔ anúncio (GET /api/custos/vinculos, carregado junto; se falhar, só essas seções mostram o erro): 'Custos sem anúncio (N)' (cada custo com até 5 candidatos: miniatura, título, MLB, 'semelhança N%', Confirmar / Não é este, e o campo 'ID do anúncio (MLB…)' validado ^MLB[0-9]{6,12}$ + Vincular), 'Anúncios sem custo (N)' (por faturamento 30d; campo 'Escolher custo' com a datalist #cvCustos + Vincular; o anúncio vindo do atalho de Elegíveis sobe para o topo, destacado, com o foco em #cvFoco) e 'Custo por anúncio (N)' (Anúncio, SKU de custo, Origem do custo: manual / SKU / SKU normalizado / herdado, Quem / quando, Desvincular só no manual, com PS.confirmar). 50 por vez com 'Mostrar mais'. Depois: 'Importar custos por SKU' (textarea SKU;custo + fonte); 'Configuração do cliente' (piso_mc, piso_relampago, imposto_pct, dias_vigia, janela_cobertura_dias, execucao_max_itens, hedge); 'Elegíveis a rebate sem custo (N)'; 'SKUs sem custo cadastrado (N)'; 'Custos efetivos (N)' com Fonte/Campo do ERP/Frescor (bloco <custos-erp>); e 'Como funciona: de onde vem a MC'.",
    "ids_container": [
     "conteudo",
@@ -179,7 +179,7 @@
    "importancia": "alta"
   },
   {
-   "titulo": "Aba Interrogatório",
+   "titulo": "Aba Divergências humano × analista automático (id interrogatorio)",
    "conteudo": "Caixa .explica com o resumo, grupos de divergência (.pr-q) com perguntas e um details 'Responder' com o formulário .frmAprend, lembretes 'Revisar toda rodada' e a tabela de Aprendizados com Desativar.",
    "ids_container": [
     "conteudo"

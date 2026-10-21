@@ -60,16 +60,18 @@ O rótulo da aba é igual ao início do `h1` e ao `<title>`, sempre no formato "
 | URL | `data-pagina` no `<body>` | Grupo › aba | `h1` | `<title>` | Sinônimos que morrem |
 |---|---|---|---|---|---|
 | `/` | `execucao` | Visão geral › Execução | Execução do sprint | Execução · Place Sprints | Painel executivo, Painel, ← Painel |
-| `/gmv` | `gmv` | Visão geral › GMV | GMV da carteira | GMV · Place Sprints | Receita, GMV e resultado associado |
+| `/gmv` | `gmv` | Visão geral › Faturamento | Faturamento da carteira | Faturamento · Place Sprints | GMV, Receita, GMV e resultado associado |
 | `/cliente` | `cliente` | Clientes › Cliente | "Qual cliente?" na busca; o nome do cliente quando aberto | Cliente · Place Sprints | Visão por cliente, Plano do cliente, Conta, Place2u · Planos |
 | `/promocoes` | `promocoes` | Clientes › Promoções | "Promoções" na escolha; o nome do cliente quando aberto | Promoções · Place Sprints | Promoções por cliente |
 | `/analistas` | `analistas` | Time › Analistas | Analistas | Analistas · Place Sprints | Gestão por Analista |
-| `/planos` | `distribuicao` | Time › Distribuição | Distribuição de planos | Distribuição · Place Sprints | Planos de ação, Distribuição em massa |
+| `/planos` | `distribuicao` | Time › Distribuir ao Notion | Distribuir ao Notion | Distribuir ao Notion · Place Sprints | Distribuição, Distribuição de planos, Planos de ação, Distribuição em massa |
 | `/comercial` | `comercial` | Comercial | Comercial | Comercial · Place Sprints | Comercial · Diagnóstico de Conta |
 | `/resultados` | `o-que-funciona` | Método › O que funciona | O que funciona | O que funciona · Place Sprints | Resultados, O que melhor funciona |
-| `/metodologia` | `algoritmo` | Método › Algoritmo | Algoritmo do plano | Algoritmo · Place Sprints | Metodologia do algoritmo |
-| `/processos` | `processos` | Método › Processos | Processos | Processos · Place Sprints | Processos e Tarefas, Como cada tarefa é feita |
-| `/integracoes` | `integracoes` | utilitário | Integrações | Integrações · Place Sprints | Central de Integrações |
+| `/metodologia` | `algoritmo` | Método › Regras do método | Regras do método | Regras do método · Place Sprints | Algoritmo, Algoritmo do plano, Metodologia do algoritmo |
+| `/processos` | `processos` | Método › Como fazer | Como fazer (Manual do Analista) | Como fazer · Place Sprints | Processos, Processos e Tarefas, Como cada tarefa é feita |
+| `/integracoes` | `integracoes` | utilitário | Conexões | Conexões · Place Sprints | Integrações, Central de Integrações |
+
+**F0 — Nomes (21/10/2026, `docs/ux/arquitetura-5-menus.md` § E e § G).** Só texto, nenhum id, rota ou assert mudou: rótulos do shell (Faturamento, Distribuir ao Notion, Regras do método, Como fazer, Conexões), `<title>`/`h1` acima, títulos de seção pela tabela E (Raio-X financeiro, Canais do cliente, Relatório no Notion: frequência e envio, Estilo do relatório PDF, Temas que o cliente pediu, Equipe e contas do cliente, Cadastro do CS, Custos: planilha do cliente, Nota fiscal: regras e certificado, Notas emitidas, Estoque por produto, Os 8 ciclos do negócio, Leitura da conta, O que a conta aprendeu, Combinados com o cliente, O que só o cliente faz, Saúde da conta no ML, Saúde do Place Sprints, App do Mercado Livre, abas de Promoções, Reler o Notion / Reler o Mercado Livre). Ficam até a F6 os literais pinados: «Painel executivo», as abas do `/cliente` (`Do cliente`, `Executar`, `Produtos`, `Relatórios`) e seus `h2` espelho, «Motor de decisão», e os `<h2>` de `teste-shell-ui.mjs:553`. Todo selo `.sis` ganhou um irmão `<small class="sis-papel">· papel</small>` (texto e `title` do selo intactos; `papel_curto` em `config/sistemas.json`).
 
 **Como o usuário sabe onde está.** São 4 sinais, sempre os mesmos:
 1. Grupo ativo em tinta 600 com filete inferior de 2px em `--laranja` (`#b34100`, 5,72:1). É o único uso do acento na navegação.
@@ -1601,3 +1603,5 @@ Em **toda** fase rodar:
 2. **KPIs do Analistas só com a lista oficial** ("13 analistas oficiais"): fecham com o ranking, mas mudam os totais de hoje.
 3. **Nome da aba inicial:** "Execução" (recomendado: é o que a tela mede) ou "Painel executivo". A troca custa uma linha no `G` do `shell.js` mais o `h1` e o `<title>`.
 4. **Laranja na interface em `#b34100`** (a marca `#ff6b1a` só na logo). É a única forma de o acento passar em texto, foco e indicador.
+
+**Registro F0 (21/10/2026).** Nenhum assert de UI mudou. O único teste tocado foi `scripts/teste-meli-renovacao.mjs` (fixture do backup diário, fora do escopo dos nomes): `backupConexoes` guarda só os 14 nomes mais novos em `data/backups` e, com 14 backups reais acumulados, o fixture «2000-01-01» era podado no mesmo instante em que nascia (ENOENT). O fixture passou a «2999-12-31»; o propósito do teste (backup sem prospect, permissão 0600) é o mesmo. O selo ganhou o irmão `.sis-papel` sem mudar texto nem `title` (decisão 7 do doc dos 5 menus: `<small>` ao lado, não o `title`).

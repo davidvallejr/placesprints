@@ -114,8 +114,9 @@ try {
   desconectar(PROS)
   assert.equal(db.prepare('SELECT COUNT(*) n FROM meli_contas_arquivo WHERE cliente = ?').get(PROS).n, 0, 'prospect não é arquivado')
   // backup diário: só clientes (nunca prospect), arquivo com permissão restrita
-  const b = backupConexoes('2000-01-01')
-  assert.ok(b.n >= 1 && b.arquivo.endsWith('meli_contas-2000-01-01.json'))
+  // data no futuro: backupConexoes guarda só os 14 nomes mais novos de data/backups e um fixture «2000-01-01» era podado no mesmo instante quando já havia 14 backups reais (21/10/2026)
+  const b = backupConexoes('2999-12-31')
+  assert.ok(b.n >= 1 && b.arquivo.endsWith('meli_contas-2999-12-31.json'))
   assert.ok(!JSON.parse((await import('node:fs')).readFileSync(b.arquivo, 'utf-8')).linhas.some(l => l.cliente.startsWith('[Comercial]')))
   ;(await import('node:fs')).unlinkSync(b.arquivo)
   // 12) invalid_client (segredo do app errado no .env) NÃO marca a conta como caída — é o app, não o cliente

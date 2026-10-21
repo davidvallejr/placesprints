@@ -1,13 +1,13 @@
 {
   "$comentario": "Os 8 sistemas dentro do Place Sprints (decisão do David, 15/10/2026). Catálogo FECHADO: src/lib/sistemas.js recusa id fora desta lista (scripts/teste-sistemas.mjs confere). Toda comunicação INTERNA (avisos do sino, Discord do time, logs, selos das seções) diz de qual sistema vem; ao CLIENTE só assina o Merovíngio, com o texto de sempre. Glossário em docs/sistemas.md.",
   "sistemas": [
-    { "id": "trinity", "nome": "Trinity", "papel": "Coleta: lê o Mercado Livre e o Notion (só leitura) e entrega o dado limpo aos outros sistemas.", "assina": "Avisos e logs de conexão, coleta e sync." },
-    { "id": "arquiteto", "nome": "Arquiteto", "papel": "O Algoritmo: regras, plano por anúncio, prioridade e Foco 80/20.", "assina": "Plano da semana interno, ações propostas e diagnóstico." },
-    { "id": "oraculo", "nome": "Oráculo", "papel": "Previsão e calibração: probabilidade, faixas, cobertura de estoque e aprendizado com o que já foi medido.", "assina": "Previsões, calibração e retroalimentação." },
-    { "id": "merovingio", "nome": "Merovíngio", "papel": "Medição e causalidade: antes × depois com controle e atribuição. Única assinatura ao cliente.", "assina": "Medições internas e tudo o que vai ao cliente (Merovíngio · Place Sprints | Equipe Place2u)." },
-    { "id": "chaveiro", "nome": "Chaveiro", "papel": "Execução: o caminho de cada ação e a escrita no Mercado Livre com aprovação e conferência.", "assina": "Execução do plano." },
-    { "id": "morpheus", "nome": "Morpheus", "papel": "Comunicação: plano de terça, alertas, relatórios, Discord, respostas e dossiê.", "assina": "Discord do time, avisos ao time e entregas (ou falhas) de envio." },
-    { "id": "smith", "nome": "Smith", "papel": "Agente Smith, o Guardião financeiro: custo, preço, margem e caixa.", "assina": "Custos, preço, margem e Ads sem retorno." },
-    { "id": "neo", "nome": "Neo", "papel": "Modo autônomo (marcos M3–M5): age sozinho dentro dos limites aprovados.", "assina": "Ações autônomas (ainda não ligado)." }
+    { "id": "trinity", "nome": "Trinity", "papel_curto": "coleta", "papel": "Coleta: lê o Mercado Livre e o Notion (só leitura) e entrega o dado limpo aos outros sistemas.", "assina": "Avisos e logs de conexão, coleta e sync." },
+    { "id": "arquiteto", "nome": "Arquiteto", "papel_curto": "algoritmo", "papel": "O Algoritmo: regras, plano por anúncio, prioridade e Foco 80/20.", "assina": "Plano da semana interno, ações propostas e diagnóstico." },
+    { "id": "oraculo", "nome": "Oráculo", "papel_curto": "previsão", "papel": "Previsão e calibração: probabilidade, faixas, cobertura de estoque e aprendizado com o que já foi medido.", "assina": "Previsões, calibração e retroalimentação." },
+    { "id": "merovingio", "nome": "Merovíngio", "papel_curto": "medição", "papel": "Medição e causalidade: antes × depois com controle e atribuição. Única assinatura ao cliente.", "assina": "Medições internas e tudo o que vai ao cliente (Merovíngio · Place Sprints | Equipe Place2u)." },
+    { "id": "chaveiro", "nome": "Chaveiro", "papel_curto": "execução", "papel": "Execução: o caminho de cada ação e a escrita no Mercado Livre com aprovação e conferência.", "assina": "Execução do plano." },
+    { "id": "morpheus", "nome": "Morpheus", "papel_curto": "comunicação", "papel": "Comunicação: plano de terça, alertas, relatórios, Discord, respostas e dossiê.", "assina": "Discord do time, avisos ao time e entregas (ou falhas) de envio." },
+    { "id": "smith", "nome": "Smith", "papel_curto": "financeiro", "papel": "Agente Smith, o Guardião financeiro: custo, preço, margem e caixa.", "assina": "Custos, preço, margem e Ads sem retorno." },
+    { "id": "neo", "nome": "Neo", "papel_curto": "autonomia", "papel": "Modo autônomo (marcos M3–M5): age sozinho dentro dos limites aprovados.", "assina": "Ações autônomas (ainda não ligado)." }
   ]
 }

@@ -172,6 +172,10 @@ body:has(.ps-shell #psSino) #psToasts{bottom:16px}
 /* selo do sistema de origem (config/sistemas.json, 15/10/2026): discreto, contorno, nunca compete com o título; junto do título mesmo com botão à direita */
 .sis{display:inline-flex;align-items:center;height:18px;padding:0 6px;border:1px solid var(--borda);border-radius:var(--raio-pilula);color:var(--cinza);font:500 var(--t-12)/1 var(--fonte);white-space:nowrap;vertical-align:middle}
 .bloco-cab>.sis{margin-right:auto}
+/* papel curto do sistema (F0, 21/10/2026): <small class="sis-papel"> irmão logo depois do .sis, com papel_curto de config/sistemas.json; no .bloco-cab o auto passa para ele */
+.sis-papel{font-size:var(--t-12);color:var(--cinza);white-space:nowrap;vertical-align:middle}
+.bloco-cab>.sis:has(+.sis-papel){margin-right:0}
+.bloco-cab>.sis+.sis-papel{margin-right:auto}
 .pg .sub{margin:2px 0 var(--e-3);font-size:var(--t-13);color:var(--cinza)}
 .pg .mini{font-size:var(--t-12);color:var(--cinza)}            /* escopado: nunca vaza para o #psPainel */
 .grade{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr));gap:var(--e-4)}

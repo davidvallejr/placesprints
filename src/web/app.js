@@ -107,7 +107,7 @@ async function estado() {
     const min = e.ultimo_sync ? Math.round((Date.now() - new Date(e.ultimo_sync)) / 60000) : null
     const ha = min === null ? '' : min < 60 ? `há ${min} min` : min < 48 * 60 ? `há ${Math.round(min / 60)} h` : `em ${br(e.ultimo_sync)}`
     $('#estadoSync').textContent = e.ultimo_sync ? `Notion sincronizado ${ha} · ${fmt(e.tarefas)} tarefas`
-      : (e.notion_configurado ? 'Nunca sincronizado: clique em Sincronizar' : 'Sem NOTION_TOKEN (modo demo)')
+      : (e.notion_configurado ? 'Nunca sincronizado: clique em Reler o Notion' : 'Sem NOTION_TOKEN (modo demo)')
   } else $('#estadoSync').textContent = 'Estado do Notion indisponível'
   const totalClientes = Math.max(0, $('#fCliente').options.length - 1)
   $('#estadoMeli').textContent = `${meli.filter(c => !c.erro).length} de ${totalClientes} contas ML conectadas`
@@ -421,7 +421,7 @@ $('#btnSync').addEventListener('click', async () => {
     else toast('Sincronizado com o Notion')
     await carregarOpcoes(); await atualizar()
   } catch (e) { toast('Sincronização falhou: ' + e.message, 'erro') }
-  finally { btn.disabled = false; btn.removeAttribute('aria-busy'); btn.textContent = 'Sincronizar' }
+  finally { btn.disabled = false; btn.removeAttribute('aria-busy'); btn.textContent = 'Reler o Notion' }
 })
 $('#btnLimpar').addEventListener('click', () => {
   camposSimples().forEach(el => { el.value = '' })

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Distribuição · Place Sprints</title>
+<title>Distribuir ao Notion · Place Sprints</title>
 <link rel="stylesheet" href="/ui.css">
 <link rel="stylesheet" href="/tela-distribuicao.css">
 </head>
@@ -13,7 +13,7 @@
 <main class="pg">
   <div class="pg-cab">
     <div class="pg-titulo">
-      <h1>Distribuição de planos</h1>
+      <h1>Distribuir ao Notion</h1>
       <p class="pg-meta"><span>Nada vai ao Notion sem pré-visualização</span><span>no máximo 5 tarefas por cliente</span></p>
     </div>
     <div class="pg-acoes">
@@ -51,7 +51,7 @@
 
   <section class="bloco" id="secEscopo">
     <div class="cartao">
-      <h2>Escopo</h2><span class="sis" data-sistema="arquiteto" title="Sistema de origem: Arquiteto">Arquiteto</span>
+      <h2>Escopo</h2><span class="sis" data-sistema="arquiteto" title="Sistema de origem: Arquiteto">Arquiteto</span><small class="sis-papel">· algoritmo</small>
       <p class="sub">Clientes sem base de tarefas no Notion, desligados ou congelados ficam de fora.</p>
       <div class="seg" id="tipos">
         <button type="button" data-t="total" class="on">Total</button><button type="button" data-t="squad">Por squad</button><button type="button" data-t="consultor">Por consultor</button><button type="button" data-t="selecao">Seleção de clientes</button>
@@ -71,7 +71,7 @@
   </section>
 
   <section class="bloco" id="secRevisar">
-    <div class="bloco-cab"><h2>Revisar ações</h2><span class="sis" data-sistema="arquiteto" title="Sistema de origem: Arquiteto">Arquiteto</span><span class="mudo peq" id="nAcoes"></span></div>
+    <div class="bloco-cab"><h2>Revisar ações</h2><span class="sis" data-sistema="arquiteto" title="Sistema de origem: Arquiteto">Arquiteto</span><small class="sis-papel">· algoritmo</small><span class="mudo peq" id="nAcoes"></span></div>
     <p class="sub">Aprovar ou descartar é decisão sua e a regeneração do plano nunca a desfaz. Só proposta ou aprovada vai ao Notion.</p>
     <div class="filtros">
       <label class="sr" for="fHor">Horizonte</label>
@@ -106,7 +106,7 @@
   </section>
 
   <details class="recolhido" id="secClientes">
-    <summary>Planos por cliente <span class="n" id="nClientes"></span> <span class="sis" data-sistema="arquiteto" title="Sistema de origem: Arquiteto">Arquiteto</span></summary>
+    <summary>Planos por cliente <span class="n" id="nClientes"></span> <span class="sis" data-sistema="arquiteto" title="Sistema de origem: Arquiteto">Arquiteto</span><small class="sis-papel">· algoritmo</small></summary>
     <p class="sub">O documento tem as 12 partes do roteiro do estrategista. A equipe abre numa gaveta.</p>
     <div class="tabela-wrap fixa">
       <table class="t">
@@ -118,7 +118,7 @@
   </details>
 
   <details class="recolhido" id="secRelatorios">
-    <summary>Relatórios para o cliente <span class="n" id="nRelatorios"></span> <span class="sis" data-sistema="morpheus" title="Sistema de origem: Morpheus">Morpheus</span></summary>
+    <summary>Relatório no Notion: liberação em lote <span class="n" id="nRelatorios"></span> <span class="sis" data-sistema="morpheus" title="Sistema de origem: Morpheus">Morpheus</span><small class="sis-papel">· comunicação</small></summary>
     <p class="sub">Programação dos relatórios curtos enviados ao Notion de cada cliente (Informações › Relatório de Sprints Place2u): resultados, atividades, desenvolvimento e próximos passos dos últimos 7 dias. O envio automático só roda para quem foi liberado e com o interruptor geral ligado.</p>
     <p class="mini" id="relResumo"></p>
     <div class="linha">
@@ -146,7 +146,7 @@
   </details>
 
   <details class="recolhido" id="secAlertas">
-    <summary>Alertas ao cliente <span class="n" id="nAlertas"></span> <span class="sis" data-sistema="morpheus" title="Sistema de origem: Morpheus">Morpheus</span></summary>
+    <summary>Alerta de pendência crítica <span class="n" id="nAlertas"></span> <span class="sis" data-sistema="morpheus" title="Sistema de origem: Morpheus">Morpheus</span><small class="sis-papel">· comunicação</small></summary>
     <p class="sub">Pendência crítica do cliente (estoque dos produtos que mais vendem acabando, devolutiva parada além de 30 dias, conta sem acesso, pendência registrada pela equipe). O aviso interno com som soa na hora; a página de alerta vai ao Notion do cliente automaticamente se o automático estiver ligado e o cliente estiver liberado, ou à mão, com prévia.</p>
     <p class="mini" id="alResumo"></p>
     <div class="linha">
@@ -163,13 +163,13 @@
   </details>
 
   <details class="recolhido" id="secGargalos">
-    <summary>Gargalos da base <span class="sis" data-sistema="arquiteto" title="Sistema de origem: Arquiteto">Arquiteto</span></summary>
+    <summary>Onde as ações acumulam <span class="sis" data-sistema="arquiteto" title="Sistema de origem: Arquiteto">Arquiteto</span><small class="sis-papel">· algoritmo</small></summary>
     <p class="sub">Base inteira, não só o escopo: onde as ações se acumulam e o que falta nelas.</p>
     <div id="gargalos"></div>
   </details>
 
   <details class="recolhido" id="secFeedback">
-    <summary>Respostas dos clientes ao relatório <span class="n" id="nFeedback"></span> <span class="sis" data-sistema="morpheus" title="Sistema de origem: Morpheus">Morpheus</span></summary>
+    <summary>Respostas dos clientes ao relatório <span class="n" id="nFeedback"></span> <span class="sis" data-sistema="morpheus" title="Sistema de origem: Morpheus">Morpheus</span><small class="sis-papel">· comunicação</small></summary>
     <p class="sub">Só as mensagens dos grupos de WhatsApp do Mercado Livre que respondem ao plano do Merovíngio ou à pergunta do relatório: citou a nossa mensagem = certa; respondeu à pergunta nas 6 h seguintes, sem ser pedido ao consultor, falando do relatório ou listando assuntos = provável (o plano só conta por citação). O filtro descarta a conversa operacional; se algo escapar, descarte: o texto é apagado. Serve para desenhar o relatório semanal.</p>
     <p class="mini" id="fbResumo"></p>
     <div class="seg" id="fbTemas" role="group" aria-label="Filtrar por tema"></div>
@@ -188,7 +188,7 @@
   </details>
 
   <details class="recolhido" id="secPerfilInfo">
-    <summary>O que os clientes querem receber <span class="n" id="nPerfilInfo"></span> <span class="sis" data-sistema="morpheus" title="Sistema de origem: Morpheus">Morpheus</span></summary>
+    <summary>O que os clientes querem receber <span class="n" id="nPerfilInfo"></span> <span class="sis" data-sistema="morpheus" title="Sistema de origem: Morpheus">Morpheus</span><small class="sis-papel">· comunicação</small></summary>
     <p class="sub">Perfil de informação de cada cliente: serviço, temas em ordem e nível, curado pela equipe ou confirmado das respostas no grupo. Todo relatório tem a base fixa (vendas, estoque e reposição, compras e previsibilidade, ações da semana); os temas pedidos sobem para o topo. Sugestão vinda das respostas só sugere: vira perfil quando alguém salva em Configurar, no painel do cliente.</p>
     <div id="perfilInfoPlanos"></div>
   </details>
@@ -200,7 +200,7 @@
   </details>
 
   <details class="recolhido" id="secAvisosAuto">
-    <summary>Avisos automáticos ao cliente <span class="n" id="nAvisosAuto"></span> <span class="sis" data-sistema="morpheus" title="Sistema de origem: Morpheus">Morpheus</span></summary>
+    <summary>Plano de terça: chave e recibos <span class="n" id="nAvisosAuto"></span> <span class="sis" data-sistema="morpheus" title="Sistema de origem: Morpheus">Morpheus</span><small class="sis-papel">· comunicação</small></summary>
     <p class="sub">Só Mercado Livre. O que depende do cliente vira o plano semanal (terça 09h no fuso dele: estoque, próximo pedido, Full parado, preço mudado fora da Place2u, custos, perguntas, retornos e, em bloco próprio, os urgentes — estoque no fim dos campeões, despacho vencido, reclamação, reputação, anúncio pausado, queda depois de mudança de preço). Nada sai fora da terça (o urgente na hora nasce desligado). Só para cliente com integração Mercado Livre ativa, liberado por um líder ou consultor e com a chave geral ligada; texto no tom aprovado, auditado; o n8n só entrega e devolve o recibo.</p>
     <p class="mini" id="avResumo"></p>
     <div class="linha">

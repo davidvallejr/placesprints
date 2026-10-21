@@ -2,13 +2,13 @@
 (() => {
   const topo = document.getElementById('psShell'); if (!topo) return   // documentos e páginas públicas não têm o placeholder
   const G = [
-    ['Visão geral', [['execucao', 'Painel executivo', '/'], ['gmv', 'GMV', '/gmv']]],   // "Painel executivo": decisão do CEO (spec 8.7)
+    ['Visão geral', [['execucao', 'Painel executivo', '/'], ['gmv', 'Faturamento', '/gmv']]],   // "Painel executivo": decisão do CEO (spec 8.7)
     ['Clientes', [['cliente', 'Cliente', '/cliente'], ['promocoes', 'Promoções', '/promocoes']]],
-    ['Time', [['analistas', 'Analistas', '/analistas'], ['distribuicao', 'Distribuição', '/planos']]],
+    ['Time', [['analistas', 'Analistas', '/analistas'], ['distribuicao', 'Distribuir ao Notion', '/planos']]],
     ['Comercial', [['comercial', 'Comercial', '/comercial']]],
-    ['Método', [['o-que-funciona', 'O que funciona', '/resultados'], ['algoritmo', 'Algoritmo', '/metodologia'], ['processos', 'Processos', '/processos']]],
+    ['Método', [['o-que-funciona', 'O que funciona', '/resultados'], ['algoritmo', 'Regras do método', '/metodologia'], ['processos', 'Como fazer', '/processos']]],
   ]
-  const INT = ['integracoes', 'Integrações', '/integracoes']
+  const INT = ['integracoes', 'Conexões', '/integracoes']
   const CLI = new Set(['/cliente', '/promocoes'])                      // links que carregam ?cliente=
   const pag = document.body.dataset.pagina
   const grupo = G.find(g => g[1].some(a => a[0] === pag))

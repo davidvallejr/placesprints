@@ -54,7 +54,7 @@
       "importancia": "alta"
     },
     {
-      "titulo": "Ficha do cliente: equipe e contas",
+      "titulo": "Equipe e contas do cliente (antes «Ficha do cliente»)",
       "conteudo": "Formulário montado por ficha.js (PSFicha), que injeta CSS próprio: links das contas (inputs url), tabela de papéis × canais com selects de prestadores, avisos de quem está sem usuário no Notion ou inativo, observação, nome de quem grava e os botões Salvar ficha e Atualizar prestadores do Notion. Ocupa cerca de 760px.",
       "ids_container": [
         "secFicha",
@@ -63,7 +63,7 @@
       "importancia": "baixa"
     },
     {
-      "titulo": "Perfil do cliente (Relatório Semanal)",
+      "titulo": "Estilo do relatório PDF (antes «Perfil do relatório semanal»)",
       "conteudo": "Cartão com selects de perfil primário, objetivo, chips de perfis adicionais, lista de tarefas no relatório e seu nome. Botões: Salvar perfil, Relatório semanal (cliente) e (interno). No rodapé, as regras em vigor. Ocupa cerca de 570px.",
       "ids_container": [
         "secPerfil",
@@ -82,7 +82,7 @@
       "importancia": "media"
     },
     {
-      "titulo": "Leitura estratégica (o Merovíngio)",
+      "titulo": "Leitura da conta (o Merovíngio; antes «Leitura estratégica»)",
       "conteudo": "Cartão com emoji e arquétipo, pill de '% da leitura em fatos', tese, faixa de renovação (⏳), cadeia causal de elos rotulados (fato, hipótese, projeção), sinais mistos (⚠️) e o details 'O que derrubaria esta leitura'. Depois, 3 cartões de jogadas com ações (badge P + prazo), 'Depois: …' e a regra de ouro (🧭).",
       "ids_container": [],
       "importancia": "media"
@@ -112,7 +112,7 @@
       "importancia": "alta"
     },
     {
-      "titulo": "Retroalimentação (o Merovíngio)",
+      "titulo": "O que a conta aprendeu (o Oráculo; antes «Retroalimentação»)",
       "conteudo": "Estado da conta (badge Queda, Estagnação ou Crescimento + % de faturamento + receitas), leitura, ciclo anterior, bloco 'Por que caiu' ou jogadas. Depois uma grade .ac-grade com 80/20, O que funciona (tabela), Combinações (tabelas), A tarefa que pede mais cuidado e Duplicação estratégica (tabelas), e o details 'Limites'. É a maior seção da tela: cerca de 3.600px.",
       "ids_container": [
         "secRetro",
@@ -133,7 +133,7 @@
       "importancia": "alta"
     },
     {
-      "titulo": "Folha do anúncio (aba Resumo, entre Resultado das tarefas e Depende do cliente)",
+      "titulo": "Folha do anúncio (aba Resumo, entre Resultado das tarefas e O que só o cliente faz)",
       "conteudo": "Fieldset com 4 caixas de seleção nativas (Anúncios — ofertas e promoções · Ads · Full · Métricas), cada uma com o contador do tópico ('148 em promoção', '32 anunciando', '61 no Full', '236 anúncios'; 'promoções não coletadas' quando falta coleta), rótulo discreto 'Marque os tópicos que quer ver na folha' e o botão 'Marcar tudo e ver a leitura' (.btn.btn-p, só com menos de 4). Filtros do painel 'folha' (PSFiltros, ?ff=), select 'Ordenar por' (faturamento, piores variações, conversão, desconto, gasto em Ads, ROAS, dias de estoque: cada ordem só vale com o bloco dela) e o link 'Baixar a folha (com filtros e tópicos marcados)' → /api/cliente/folha.csv. Abaixo: linha do período, até 4 KPIs (um por tópico, valor nunca colorido), ul.an-comp com a ressalva honesta de cada tópico (data da coleta, o que não cobre; 'não coletado' com selo e o caminho para ligar a coleta), e a tabela table.t.empilha.folha de no máximo 6 colunas: Anúncio (foto, título ↗, MLB, status, preço, estoque, curva, SKU, botão 'Ver tudo') + 1 coluna por tópico marcado (2–3 linhas com os números-chave; '—' quando não coletado) + Leitura (só com os 4: selos fato e hipótese e as ações do plano). 'Ver tudo' abre tr.det com os detalhes de cada tópico, a leitura completa, as ações do plano (botão 'Ver no plano') e 'O que mudou em 30 dias'. 50 por página com 'Mostrar mais'; abaixo de 640px a linha vira cartão. Vazio honesto por estado: sem tópico marcado, nenhum anúncio com os filtros, não conectado.",
       "ids_container": [
         "secFolha",
@@ -157,7 +157,7 @@
       "importancia": "media"
     },
     {
-      "titulo": "Medição técnica por tarefa (details recolhido)",
+      "titulo": "Detalhe da medição (janelas e controle) por tarefa (details recolhido; antes «Medição técnica»)",
       "conteudo": "4 KPIs (melhoraram, pioraram, lançamentos, sem atribuição), faixa de não medidas e uma lista de .acao com estado, efeito, confiança e o details 'Como foi medido'. Repete conceitos da seção anterior. O HTML tem uma <div id=\"impacto\"> sem fechamento antes de </details>.",
       "ids_container": [
         "secImpacto",
@@ -166,7 +166,7 @@
       "importancia": "baixa"
     },
     {
-      "titulo": "Diagnóstico de anúncio (ferramenta)",
+      "titulo": "Calculadora: impressão, clique ou conversão (antes «Ferramenta: diagnóstico de anúncio»)",
       "conteudo": "Details 'Abrir a ferramenta' com 13 inputs (impressões, cliques e pedidos antes e depois, preços de/por próprios e do concorrente, frete, carrossel) e o botão Diagnosticar. Os achados aparecem com a borda colorida pela gravidade. É uma ferramenta genérica que não depende do cliente.",
       "ids_container": [
         "fAnuncio",
@@ -195,7 +195,7 @@
       "importancia": "baixa"
     },
     {
-      "titulo": "Cadastro do cliente (aba Configurar)",
+      "titulo": "Cadastro do CS (health score) (aba Configurar; antes «Cadastro do cliente»)",
       "conteudo": "Identificação da central só leitura (status, tier, nicho, canais do Notion, consultores, líderes, CNPJ/CPF, contato, vencimentos, programação do relatório se existir) e os campos do CS editáveis: CS responsável, health score + classificação (selo existente, número nunca colorido), canais informados pelo CS, observações. Selo de fonte e data (planilha AAAA-MM-DD | manual AAAA-MM-DD). Substitui o antigo bloco 'Identificação'. Contrato em docs/cadastro-clientes.md.",
       "ids_container": [
         "cad-sec",
@@ -215,7 +215,7 @@
       "importancia": "media"
     },
     {
-      "titulo": "Alinhado com o cliente (aba Resumo)",
+      "titulo": "Combinados com o cliente (aba Resumo; antes «Alinhado com o cliente»)",
       "conteudo": "Exceções intencionais combinadas com o cliente (PLANO ATIVO 4, docs/alinhamentos.md): lista viva, vencidos em atenção (voltam ao plano como 'observar'), renovar/encerrar e registrar novo (escopo, anúncio, regra, motivo da lista, detalhe interno, revisar em, ACOS alvo na campanha de visibilidade). O descarte de uma ação do plano também grava aqui, com o motivo.",
       "ids_container": [
         "secAlinhamentos",
@@ -266,7 +266,7 @@
       "importancia": "média"
     },
     {
-      "titulo": "Produtos (aba Produtos, V3 F2 em sombra)",
+      "titulo": "Estoque por produto (aba Produtos; sub «Ainda não decide nada — chave desligada»)",
       "conteudo": "Frase-veredito (anúncios ativos → produtos · estoque dividido · kits sem composição), faixa de sombra «somando por anúncio × contado uma vez» com ruptura e linhas de compra por anúncio × por produto, 4 KPIs (Produtos · Estoque contado uma vez · Capital em estoque · Produtos em ruptura), 2 secundárias (Gerenciar mapeamento, Atualizar estoque), tabela de 6 colunas com a folha do produto (anúncios e estoque por local com fonte, modo e premissa) e as premissas. Nada muda plano, aviso ou texto ao cliente (produto.diagnostico_ligado = false). docs/desenho-v3-produto-estoque-financeiro.md § 8.",
       "ids_container": [
         "secProdutos",
@@ -281,7 +281,7 @@
       "importancia": "media"
     },
     {
-      "titulo": "Relatórios (aba Relatórios, V3 F9)",
+      "titulo": "Os 8 ciclos do negócio (aba Relatórios, V3 F9)",
       "conteudo": "Seletor dos 8 relatórios (ciclo financeiro, ciclo de compras, ciclo de estoque, previsibilidade logística, escalabilidade mediante as vendas, lucro, geração de caixa, reinvestimento); seções empilhadas (Conta, Por produto e, no Lucro, Por anúncio e Por pedido) com a MESMA tabela de 6 colunas Item · Métrica · Previsão · Chance · Medido · Observação; «—» sempre com o motivo; links secundários Exportar CSV · Versão de 1 página · PDF; «Falta para ficar completo» e premissas. Nada grava; ao cliente nada muda.",
       "ids_container": [
         "secRelatoriosCiclo",
@@ -728,7 +728,7 @@
     ]
   },
   "selos_sistema": {
-    "regra": "Selo discreto do sistema de origem (config/sistemas.json, 15/10/2026) ao lado do título da seção: span.sis[data-sistema], classe .sis em ui.css. Só tela interna; não muda id nem nº de colunas. Teste: scripts/teste-sistemas.mjs.",
+    "regra": "Selo discreto do sistema de origem (config/sistemas.json, 15/10/2026) ao lado do título da seção: span.sis[data-sistema], classe .sis em ui.css. Só tela interna; não muda id nem nº de colunas. Teste: scripts/teste-sistemas.mjs. F0 (21/10/2026): logo depois do selo vem <small class=\"sis-papel\">· papel</small> com o papel_curto de config/sistemas.json; texto e title do selo não mudam.",
     "secoes": {
       "#secProximas": "arquiteto",
       "#secChaveiro": "chaveiro",

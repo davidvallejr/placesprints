@@ -190,6 +190,8 @@ excesso de emoji. Nenhuma peça entregue ao cliente expõe que foi gerada por IA
 cp ~/place-sprints/automacao/com.place2u.place-sprints.semanal.plist ~/Library/LaunchAgents/
 launchctl load ~/Library/LaunchAgents/com.place2u.place-sprints.semanal.plist
 ```
+
+> **Não carregar este plist junto com o relatório automático ao Notion** (`relatorio_agendador`, `docs/desenho-relatorio-notion.md`): o cliente receberia dois artefatos na mesma sexta. Hoje o plist não está carregado e continua assim enquanto o envio automático novo for o caminho.
 - **Métricas e Ads**: os prints dos painéis anexados nos cards são a evidência;
   os números da tabela vêm de `config/metricas-semanais.json` (uma chave por
   cliente — transcreva do painel). Sem eles, o item fica ❌ Faltando na versão

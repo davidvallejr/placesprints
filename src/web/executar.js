@@ -131,7 +131,7 @@
   // estratégia própria: nome, até 4 passos (operação + parâmetros «chave=valor»), KPI e janela; o servidor valida com a mesma lista fechada
   function novaEstrategia() {
     const ops = st.painel.operacoes.filter(o => o.escrita !== 'f6'), opc = `<option value="">—</option>${ops.map(o => `<option value="${esc(o.operacao)}">${esc(o.rotulo)}</option>`).join('')}`
-    dialogoAcao({ titulo: 'Nova estratégia', rotulo: 'Salvar estratégia',
+    dialogoAcao({ titulo: 'Nova sequência de operações', rotulo: 'Salvar estratégia',
       texto: `<p class="mini">Passos da lista fechada; parâmetros como chave=valor separados por vírgula (ex.: variacao_pct=-5, decisao_cliente=true). $nome vira um parâmetro pedido na hora de rodar (declare em «parâmetros»: nome=tipo, tipos numero, inteiro, texto, foto, snapshot).</p>
         <label class="campo"><span class="pf-rot">Nome</span><input id="exNNome" maxlength="60"></label><label class="campo"><span class="pf-rot">Parâmetros</span><input id="exNPar" maxlength="200" placeholder="capa=foto"></label>
         ${[1, 2, 3, 4].map(i => `<div class="form-grade"><label class="campo"><span class="pf-rot">Passo ${i}</span><select id="exNOp${i}">${opc}</select></label><label class="campo"><span class="pf-rot">Parâmetros do passo ${i}</span><input id="exNPp${i}" maxlength="300"></label></div>`).join('')}
@@ -167,11 +167,11 @@
       <h3 class="mt-4">1. Anúncios <span class="mini" id="exNSel"></span></h3><div class="filtros"><label class="campo"><span class="pf-rot">Buscar por título ou MLB</span><input id="exBusca" type="search" maxlength="60"></label></div><div id="exAnuncios"></div>
       <h3 class="mt-4">2. Estratégia ou operação</h3><label class="campo"><span class="pf-rot">O que fazer</span><select id="exOque"><option value="">—</option><optgroup label="Estratégias">${p.estrategias.map(e => `<option value="e:${esc(e.id)}">${esc(e.nome)}${e.origem === 'propria' ? ' (própria)' : ''}</option>`).join('')}</optgroup><optgroup label="Operação avulsa">${p.operacoes.filter(o => o.escrita !== 'f6').map(o => `<option value="o:${esc(o.operacao)}">${esc(o.rotulo)}</option>`).join('')}</optgroup></select></label>
       <div id="exParams"></div>
-      <div class="mt-2"><button class="btn" type="button" id="exPrevia">Ver prévia</button> <button class="btn" type="button" id="exPreparar">Preparar ordens</button> <button class="btn btn-fantasma" type="button" id="exNova">Nova estratégia</button></div>
+      <div class="mt-2"><button class="btn" type="button" id="exPrevia">Ver prévia</button> <button class="btn" type="button" id="exPreparar">Preparar ordens</button> <button class="btn btn-fantasma" type="button" id="exNova">Nova sequência de operações</button></div>
       <div id="exPreviaRes" class="mt-2"></div>
       <h3 class="mt-4">3. Ordens</h3><div id="exOrdensBox"></div><div class="mt-2"><button class="btn btn-fantasma" type="button" id="exConferir">Conferir agora</button></div>
       <details class="recolhido mt-4" id="exLiberacoes"><summary>Liberações, estreia e Neo</summary><div id="exLibBox"></div></details>
-      <div class="mt-4"><button class="btn" type="button" id="exParar"></button> <span class="mini">Estoque segue o sincronismo próprio na aba Produtos (F6).</span></div>`
+      <div class="mt-4"><button class="btn" type="button" id="exParar"></button> <span class="mini">Estoque segue o ajuste automático próprio na aba Produtos.</span></div>`
     pintarCabecalho(alvo); pintarAnuncios(alvo); pintarOrdens(alvo); pintarLiberacoes(alvo)
     if (preset?.operacao && preset.operacao !== 'estoque') { alvo.querySelector('#exOque').value = `o:${preset.operacao}` }
     pintarParams(alvo)

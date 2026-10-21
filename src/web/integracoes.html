@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Integrações · Place Sprints</title>
+<title>Conexões · Place Sprints</title>
 <link rel="stylesheet" href="/ui.css">
 <link rel="stylesheet" href="/tela-integracoes.css">
 </head>
@@ -13,7 +13,7 @@
 <main class="pg">
   <div class="pg-cab">
     <div class="pg-titulo">
-      <h1>Integrações</h1>
+      <h1>Conexões</h1>
       <p class="pg-meta"><span>Tokens cifrados</span><span>nunca pedimos senha do marketplace</span></p>
     </div>
     <div class="pg-acoes">
@@ -34,7 +34,7 @@
   </div>
 
   <section class="bloco" id="secLista">
-    <div class="bloco-cab"><h2 id="tituloLista">Precisa de ação</h2><span class="sis" data-sistema="trinity" title="Sistema de origem: Trinity">Trinity</span></div>
+    <div class="bloco-cab"><h2 id="tituloLista">Precisa de ação</h2><span class="sis" data-sistema="trinity" title="Sistema de origem: Trinity">Trinity</span><small class="sis-papel">· coleta</small></div>
     <p class="sub" id="subLista">Conexões caídas primeiro, depois quem opera ML e ainda não conectou</p>
     <div class="filtros">
       <label class="sr" for="fq">Filtrar clientes</label>
@@ -55,7 +55,7 @@
   <!-- gaveta lateral só por CSS (#custosPainel:not([hidden]) no ui.css); o JS continua alternando hidden -->
   <section id="custosPainel" hidden aria-labelledby="custosTitulo">
     <div class="cu-topo">
-      <h2 id="custosTitulo" tabindex="-1">Custos por SKU</h2><span class="sis" data-sistema="smith" title="Sistema de origem: Smith">Smith</span>
+      <h2 id="custosTitulo" tabindex="-1">Custos: fontes automáticas (planilha, Bling, Tiny)</h2><span class="sis" data-sistema="smith" title="Sistema de origem: Smith">Smith</span><small class="sis-papel">· financeiro</small>
       <label class="linha mini" for="custosQuem">Seu nome <input id="custosQuem" size="14" maxlength="80" autocomplete="name" placeholder="quem está alterando"></label>
       <button class="btn btn-p" type="button" id="custosAtualizar">Atualizar</button>
       <button class="btn btn-p" type="button" id="custosFechar">Fechar</button>
@@ -67,7 +67,7 @@
   </section>
 
   <section class="bloco" id="secS90" aria-labelledby="tituloS90">
-    <div class="bloco-cab"><h2 id="tituloS90">Assinantes Sprint 90</h2><span class="sis" data-sistema="trinity" title="Sistema de origem: Trinity">Trinity</span><label class="linha mini" for="s90Quem">Seu nome <input id="s90Quem" size="14" maxlength="80" autocomplete="name" placeholder="líder ou consultor"></label></div>
+    <div class="bloco-cab"><h2 id="tituloS90">Assinantes Sprint 90</h2><span class="sis" data-sistema="trinity" title="Sistema de origem: Trinity">Trinity</span><small class="sis-papel">· coleta</small><label class="linha mini" for="s90Quem">Seu nome <input id="s90Quem" size="14" maxlength="80" autocomplete="name" placeholder="líder ou consultor"></label></div>
     <p class="sub" id="subS90">Contas do autoatendimento (fora da central): situação, conexão do Mercado Livre e link de acesso para entregar ao cliente</p>
     <div id="s90Corpo" aria-busy="true"><div class="sk-tabela"></div></div>
     <div class="cu-url" id="s90LinkBox" hidden><code id="s90Link"></code><button class="btn btn-p" type="button" id="s90Copiar">Copiar</button></div>
@@ -88,7 +88,7 @@
   </section>
 
   <section class="bloco" id="secSaudeSistema" aria-labelledby="tituloSaudeSistema">
-    <div class="bloco-cab"><h2 id="tituloSaudeSistema">Saúde do sistema</h2><span class="sis" data-sistema="trinity" title="Sistema de origem: Trinity">Trinity</span></div>
+    <div class="bloco-cab"><h2 id="tituloSaudeSistema">Saúde do Place Sprints</h2><span class="sis" data-sistema="trinity" title="Sistema de origem: Trinity">Trinity</span><small class="sis-papel">· coleta</small></div>
     <p class="sub" id="subSaudeSistema">Cada parte do sistema com o limiar dela. Problema que passa do limiar vira incidente com dono e prazo; volta ao normal por duas leituras seguidas e fecha sozinho. Sem leitura aparece como sem dado, nunca como ok.</p>
     <div class="tabela-wrap"><table class="empilha">
       <thead><tr><th>Sistema</th><th>Sinal</th><th>Estado</th><th>Valor</th><th>Incidente</th><th>Dono</th></tr></thead>
@@ -98,7 +98,7 @@
   </section>
 
   <details class="recolhido" id="secConfig">
-    <summary>Configuração técnica <span class="n" id="configEstado"></span> <span class="sis" data-sistema="trinity" title="Sistema de origem: Trinity">Trinity</span></summary>
+    <summary>App do Mercado Livre (DevCenter) <span class="n" id="configEstado"></span> <span class="sis" data-sistema="trinity" title="Sistema de origem: Trinity">Trinity</span><small class="sis-papel">· coleta</small></summary>
     <div id="avisoConfig"></div>
     <div id="roadmap"></div>
   </details>

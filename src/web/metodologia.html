@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Algoritmo · Place Sprints</title>
+<title>Regras do método · Place Sprints</title>
 <link rel="stylesheet" href="/ui.css">
 <link rel="stylesheet" href="/tela-algoritmo.css">
 </head>
@@ -13,7 +13,7 @@
 <main class="pg">
   <div class="pg-cab">
     <div class="pg-titulo">
-      <h1>Algoritmo do plano</h1>
+      <h1>Regras do método</h1>
       <p class="pg-meta"><span id="versao" class="badge contorno">versão —</span><span id="metaRegras">regras ativas: —</span></p>
     </div>
   </div>
@@ -30,19 +30,19 @@
   </div>
 
   <section class="bloco" id="secCalib">
-    <div class="bloco-cab"><h2>Está acertando?</h2><span class="sis" data-sistema="oraculo" title="Sistema de origem: Oráculo">Oráculo</span></div>
+    <div class="bloco-cab"><h2>Está acertando?</h2><span class="sis" data-sistema="oraculo" title="Sistema de origem: Oráculo">Oráculo</span><small class="sis-papel">· previsão</small></div>
     <p class="sub">Previsto × realizado nas ações distribuídas que completaram 14 dias</p>
     <div id="calib"></div>
   </section>
 
   <section class="bloco" id="secRegras">
-    <div class="bloco-cab"><h2>Quais regras funcionam?</h2><span class="sis" data-sistema="oraculo" title="Sistema de origem: Oráculo">Oráculo</span></div>
+    <div class="bloco-cab"><h2>Quais regras funcionam?</h2><span class="sis" data-sistema="oraculo" title="Sistema de origem: Oráculo">Oráculo</span><small class="sis-papel">· previsão</small></div>
     <p class="sub">Funil geradas → distribuídas → medidas → melhoraram. Probabilidade efetiva = premissa inicial até haver tarefas medidas suficientes do tipo.</p>
     <div id="regras"></div>
   </section>
 
   <section class="bloco" id="secComo">
-    <div class="bloco-cab"><h2>Como funciona</h2><span class="sis" data-sistema="arquiteto" title="Sistema de origem: Arquiteto">Arquiteto</span></div>
+    <div class="bloco-cab"><h2>Como funciona</h2><span class="sis" data-sistema="arquiteto" title="Sistema de origem: Arquiteto">Arquiteto</span><small class="sis-papel">· algoritmo</small></div>
     <ol class="principios">
       <li><b>Foco no que move dinheiro.</b> Só anúncios curva A/B ou acima de 0,5% do GMV; no máximo 5 ações por cliente por semana.</li>
       <li><b>Toda regra é mensurável.</b> Para entrar, declara o dado que usa, o KPI de resultado, o tipo de tarefa e a justificativa.</li>
@@ -69,7 +69,7 @@
   </section>
 
   <details class="recolhido" id="secParam">
-    <summary>Parâmetros <span class="n" id="nParam"></span> <span class="sis" data-sistema="arquiteto" title="Sistema de origem: Arquiteto">Arquiteto</span></summary>
+    <summary>Parâmetros <span class="n" id="nParam"></span> <span class="sis" data-sistema="arquiteto" title="Sistema de origem: Arquiteto">Arquiteto</span><small class="sis-papel">· algoritmo</small></summary>
     <div id="limiares"></div>
   </details>
 </main>
