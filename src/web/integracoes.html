@@ -34,7 +34,7 @@
   </div>
 
   <section class="bloco" id="secLista">
-    <div class="bloco-cab"><h2 id="tituloLista">Precisa de ação</h2><span class="sis" data-sistema="trinity" title="Sistema de origem: Trinity">Trinity</span><small class="sis-papel">· coleta</small></div>
+    <div class="bloco-cab"><h2 id="tituloLista">Precisa de ação</h2><span class="sis" data-sistema="trinity" title="Sistema de origem: Trinity">Trinity</span><small class="sis-papel">· coleta</small><button class="btn-icone btn-ajuda" type="button" aria-label="Como fazer: Conexão da conta do Mercado Livre" data-ajuda="ml"></button></div>
     <p class="sub" id="subLista">Conexões caídas primeiro, depois quem opera ML e ainda não conectou</p>
     <div class="filtros">
       <label class="sr" for="fq">Filtrar clientes</label>
@@ -55,7 +55,7 @@
   <!-- gaveta lateral só por CSS (#custosPainel:not([hidden]) no ui.css); o JS continua alternando hidden -->
   <section id="custosPainel" hidden aria-labelledby="custosTitulo">
     <div class="cu-topo">
-      <h2 id="custosTitulo" tabindex="-1">Custos: fontes automáticas (planilha, Bling, Tiny)</h2><span class="sis" data-sistema="smith" title="Sistema de origem: Smith">Smith</span><small class="sis-papel">· financeiro</small>
+      <h2 id="custosTitulo" tabindex="-1">Custos: fontes automáticas (planilha, Bling, Tiny)</h2><span class="sis" data-sistema="smith" title="Sistema de origem: Smith">Smith</span><small class="sis-papel">· financeiro</small><button class="btn-icone btn-ajuda" type="button" aria-label="Como fazer: Custos do cliente" data-ajuda="custos_erp"></button>
       <label class="linha mini" for="custosQuem">Seu nome <input id="custosQuem" size="14" maxlength="80" autocomplete="name" placeholder="quem está alterando"></label>
       <button class="btn btn-p" type="button" id="custosAtualizar">Atualizar</button>
       <button class="btn btn-p" type="button" id="custosFechar">Fechar</button>
@@ -67,7 +67,7 @@
   </section>
 
   <section class="bloco" id="secS90" aria-labelledby="tituloS90">
-    <div class="bloco-cab"><h2 id="tituloS90">Assinantes Sprint 90</h2><span class="sis" data-sistema="trinity" title="Sistema de origem: Trinity">Trinity</span><small class="sis-papel">· coleta</small><label class="linha mini" for="s90Quem">Seu nome <input id="s90Quem" size="14" maxlength="80" autocomplete="name" placeholder="líder ou consultor"></label></div>
+    <div class="bloco-cab"><h2 id="tituloS90">Assinantes Sprint 90</h2><span class="sis" data-sistema="trinity" title="Sistema de origem: Trinity">Trinity</span><small class="sis-papel">· coleta</small><button class="btn-icone btn-ajuda" type="button" aria-label="Como fazer: Place Sprint 90" data-ajuda="sprint90"></button><label class="linha mini" for="s90Quem">Seu nome <input id="s90Quem" size="14" maxlength="80" autocomplete="name" placeholder="líder ou consultor"></label></div>
     <p class="sub" id="subS90">Contas do autoatendimento (fora da central): situação, conexão do Mercado Livre e link de acesso para entregar ao cliente</p>
     <div id="s90Corpo" aria-busy="true"><div class="sk-tabela"></div></div>
     <div class="cu-url" id="s90LinkBox" hidden><code id="s90Link"></code><button class="btn btn-p" type="button" id="s90Copiar">Copiar</button></div>
@@ -88,7 +88,7 @@
   </section>
 
   <section class="bloco" id="secSaudeSistema" aria-labelledby="tituloSaudeSistema">
-    <div class="bloco-cab"><h2 id="tituloSaudeSistema">Saúde do Place Sprints</h2><span class="sis" data-sistema="trinity" title="Sistema de origem: Trinity">Trinity</span><small class="sis-papel">· coleta</small></div>
+    <div class="bloco-cab"><h2 id="tituloSaudeSistema">Saúde do Place Sprints</h2><span class="sis" data-sistema="trinity" title="Sistema de origem: Trinity">Trinity</span><small class="sis-papel">· coleta</small><button class="btn-icone btn-ajuda" type="button" aria-label="Como fazer: Saúde do Place Sprints" data-ajuda="saude_sistema"></button></div>
     <p class="sub" id="subSaudeSistema">Cada parte do sistema com o limiar dela. Problema que passa do limiar vira incidente com dono e prazo; volta ao normal por duas leituras seguidas e fecha sozinho. Sem leitura aparece como sem dado, nunca como ok.</p>
     <div class="tabela-wrap"><table class="empilha">
       <thead><tr><th>Sistema</th><th>Sinal</th><th>Estado</th><th>Valor</th><th>Incidente</th><th>Dono</th></tr></thead>
@@ -98,7 +98,7 @@
   </section>
 
   <details class="recolhido" id="secConfig">
-    <summary>App do Mercado Livre (DevCenter) <span class="n" id="configEstado"></span> <span class="sis" data-sistema="trinity" title="Sistema de origem: Trinity">Trinity</span><small class="sis-papel">· coleta</small></summary>
+    <summary>App do Mercado Livre (DevCenter) <span class="n" id="configEstado"></span> <span class="sis" data-sistema="trinity" title="Sistema de origem: Trinity">Trinity</span><small class="sis-papel">· coleta</small><button class="btn-icone btn-ajuda" type="button" aria-label="Como fazer: App do Mercado Livre" data-ajuda="app_ml"></button></summary>
     <div id="avisoConfig"></div>
     <div id="roadmap"></div>
   </details>
@@ -126,5 +126,6 @@
 <footer class="pg-rodape">Fonte: Mercado Livre (OAuth oficial) e Notion · Bling, Tiny e planilha só em leitura</footer>
 <script src="integracoes.js"></script>
 <script src="/alerta.js" defer></script>
+<script src="/ajuda.js" defer></script>
 </body>
 </html>

@@ -1,0 +1,767 @@
+{
+  "$comentario": "Texto dos ícones (i) «Como fazer» (docs/ux/arquitetura-5-menus.md § C; F2, 21/10/2026). Um verbete por estrutura: titulo · sistema (id de config/sistemas.json) · escopo · chave · camada (onde a chave mora e o que custa mudar) · pre_requisitos [{texto, verificar}] (verificar = id que src/lib/estrutura-estado.js resolve na F3; até lá 'sem leitura') · passos [{titulo, texto, quem}] · concluido_quando (um número) · doc (caminho que existe em docs/) · doc_secao · onde (URL interna). Servido por GET /api/ajuda/:id (src/rotas-ajuda.js); desenhado por src/web/ajuda.js. Sem hex, sem emoji, sem dado de cliente: texto fixo. scripts/teste-ajuda.mjs confere.",
+  "verbetes": {
+    "nf": {
+      "titulo": "Emissão de nota fiscal",
+      "sistema": "smith",
+      "escopo": "por cliente, chave global",
+      "chave": "nf.ligado (e envio_ml_ligado, producao_ligada) em config/nota-fiscal.json",
+      "camada": "arquivo config/nota-fiscal.json — mudar = reiniciar o servidor na janela combinada",
+      "desde": "15/10/2026 (nasceu desligada)",
+      "motivo": "CNPJ do intermediador e da credenciadora vazios no config (bloqueio em toda nota); provedor fiscal (Focus NFe) sem credencial declarada em src/lib/env.js; termo fiscal em rascunho sem revisão jurídica.",
+      "pre_requisitos": [
+        { "texto": "Dados fiscais do cliente cadastrados (CNPJ, razão social, IE, UF, regime, modalidade de frete)", "verificar": "nf.dados_fiscais" },
+        { "texto": "Termo de responsabilidade aceito pelo cliente e registrado", "verificar": "nf.termo" },
+        { "texto": "Regras do contador por SKU importadas: SKUs vendidos em 28 d sem regra = 0 (sinal nf_regra_faltando)", "verificar": "nf.regras" },
+        { "texto": "Certificado A1 enviado ao provedor (aqui fica só cert_ref) e dentro da validade", "verificar": "nf.certificado" },
+        { "texto": "1 nota emitida em homologação com XML autorizado", "verificar": "nf.homologacao" }
+      ],
+      "passos": [
+        { "titulo": "Peça ao contador", "texto": "o CSV de regras por SKU, nas 19 colunas de csv_colunas de config/nota-fiscal.json. Sem regra o item fica em bloqueio nominal: nada é inferido.", "quem": "consultor + contador" },
+        { "titulo": "Dados fiscais", "texto": "em Empresa do cliente › Nota fiscal, preencha o formulário de dados fiscais (hoje são 9 perguntas seguidas).", "quem": "consultor" },
+        { "titulo": "Registrar termo", "texto": "com o texto de config/termo-fiscal.md; o cliente aceita, o consultor registra.", "quem": "cliente aceita, consultor registra" },
+        { "titulo": "Importar regras (CSV)", "texto": "e confira total_regras = SKUs vendidos.", "quem": "consultor" },
+        { "titulo": "Enviar certificado", "texto": "(.pfx + senha): o arquivo vai ao provedor fiscal, aqui fica só cert_ref; confira a validade.", "quem": "consultor" },
+        { "titulo": "Ligar em homologação", "texto": "criar a conta no provedor fiscal, preencher os CNPJs do intermediador e da credenciadora e ligar nf.ligado (reinício na janela combinada).", "quem": "David" },
+        { "titulo": "Primeira nota", "texto": "em Notas emitidas: «Buscar pedidos pagos» gera rascunhos; aprove 1; «Emitir aprovadas (homologação)»; confira o XML.", "quem": "líder" },
+        { "titulo": "Produção", "texto": "só depois producao_ligada, depois envio_ml_ligado; a emissão automática entra após 20 notas sem correção (automatica_apos_notas_sem_correcao).", "quem": "David" }
+      ],
+      "concluido_quando": "1 nota em homologação com XML autorizado e zero bloqueio nominal; SKUs vendidos sem regra = 0.",
+      "doc": "docs/desenho-v3-erp.md",
+      "doc_secao": "§ F8a CONSTRUÍDA · config/nota-fiscal.json",
+      "onde": "/cliente?aba=configurar&sec=secNotaFiscal"
+    },
+    "estoque_sync": {
+      "titulo": "Ajuste automático de estoque no Mercado Livre",
+      "sistema": "chaveiro",
+      "escopo": "global + por cliente + por produto",
+      "chave": "sync_estoque_ligado em config/chaveiro.json; freio chaveiro_estoque_parado (banco)",
+      "camada": "arquivo config/chaveiro.json — mudar = reiniciar; o freio é banco sync_estado — muda pela tela",
+      "desde": "15/10/2026 (nasceu desligado)",
+      "motivo": "produto.diagnostico_ligado também está desligado em config/algoritmo.json, então tudo nesta aba ainda não decide nada.",
+      "pre_requisitos": [
+        { "texto": "Diagnóstico por produto ligado (produto.diagnostico_ligado)", "verificar": "produto.diagnostico_ligado" },
+        { "texto": "Mapeamento anúncio → produto sem sugestões pendentes", "verificar": "produto.mapeamento_pendente" },
+        { "texto": "Estoque físico declarado há no máximo 24 h (cliente, equipe, ERP ou planilha)", "verificar": "estoque.declarado_24h" },
+        { "texto": "Cliente informado e líder liberou este cliente", "verificar": "chaveiro.estoque_liberado" }
+      ],
+      "passos": [
+        { "titulo": "Produtos e estoque › Gerenciar mapeamento", "texto": "Juntar / Não é o mesmo / Separar até zerar as sugestões.", "quem": "consultor" },
+        { "titulo": "Declare o estoque físico", "texto": "pela aba Produtos (POST /api/cliente/produtos/estoque-fisico) ou conecte planilha/ERP em Custos › fontes automáticas.", "quem": "cliente ou CS" },
+        { "titulo": "Leia a prévia", "texto": "«Ajuste automático de estoque (prévia)»: o que o sistema escreveria; confira 3 produtos à mão no painel do ML.", "quem": "líder" },
+        { "titulo": "Ligar as chaves", "texto": "produto.diagnostico_ligado e sync_estoque_ligado (reinício; scripts/teste-produto-diagnostico.mjs precisa passar).", "quem": "David" },
+        { "titulo": "Liberar o cliente", "texto": "Execução no ML › Liberações › Liberar, marcando «cliente informado» (/api/chaveiro/estoque/liberar).", "quem": "líder" },
+        { "titulo": "Estreia em 1 produto", "texto": "regra por produto (/api/chaveiro/estoque/regra); a 1ª ordem pede confirmar.", "quem": "líder" },
+        { "titulo": "Acompanhe em Ordens", "texto": "conferência por releitura (2xx não é «feito»); após 10 conferidas sem divergência o Neo propõe ampliar, com veto de 48 h.", "quem": "líder" }
+      ],
+      "concluido_quando": "10 ordens de estoque conferidas sem divergência neste cliente, freio não acionado.",
+      "doc": "docs/manual-integracao-ml.md",
+      "doc_secao": "§ F6 · docs/desenho-v3-erp.md § A",
+      "onde": "/cliente?aba=produtos&sec=secSyncEstoque"
+    },
+    "avisos_whatsapp": {
+      "titulo": "Plano de terça no WhatsApp do cliente",
+      "sistema": "morpheus",
+      "escopo": "global + por cliente",
+      "chave": "gatilhos_ligado (banco, Estrutura › Comunicação); inicio_envios em config/gatilhos.json",
+      "camada": "banco sync_estado — muda pela tela; entregador n8n por variável de ambiente (PLACE_GATILHOS_URL)",
+      "motivo": "Sem a chave global, sem entregador n8n configurado ou antes de inicio_envios nada sai, nem teste de canal.",
+      "pre_requisitos": [
+        { "texto": "Integração ML de fato: conexão viva, coleta há no máximo 3 dias e vendas em 28 d (motivos sem_conexao_ml / coleta_atrasada / sem_vendas_28d)", "verificar": "ml.integracao_ativa" },
+        { "texto": "Grupo do ML na central do Notion («Id whatsapp meli», termina em @g.us)", "verificar": "canal.whatsapp_grupo" },
+        { "texto": "Canal testado com recibo entregue", "verificar": "canal.teste_entregue" },
+        { "texto": "Cliente liberado por um líder", "verificar": "gatilhos.liberado" }
+      ],
+      "passos": [
+        { "titulo": "Preencher o grupo", "texto": "na central do Notion preencha «Id whatsapp meli» — ou, na seção Canais do cliente, clique «Preencher com a central».", "quem": "CS" },
+        { "titulo": "Ligar o canal", "texto": "marque WhatsApp ligado, confira o nome na mensagem, silêncio e fuso; Salvar.", "quem": "consultor" },
+        { "titulo": "Testar canal", "texto": "e espere o recibo entregue (falhou = veja a linha «Entregador n8n» em Estruturas).", "quem": "consultor" },
+        { "titulo": "Liberar", "texto": "na seção Canais do cliente — ou em lote em Estrutura › Comunicação › «Preparar lote» (prévia, depois confirmar).", "quem": "líder" },
+        { "titulo": "Terça 09:00", "texto": "o plano sai sozinho no fuso do cliente, idempotente por semana ISO; texto fixo, auditado por relatorio-seguro antes de sair.", "quem": "sistema" },
+        { "titulo": "Conferir o recibo", "texto": "em Resumo › «Avisos ao cliente: fila e recibos» e em Pelo cliente.", "quem": "consultor" }
+      ],
+      "concluido_quando": "Recibo entregue do lote semanal desta semana para este cliente.",
+      "doc": "docs/desenho-gatilhos-n8n.md",
+      "doc_secao": "§ Plano semanal · config/gatilhos.json",
+      "onde": "/cliente?aba=configurar&sec=secAvisos"
+    },
+    "ml": {
+      "titulo": "Conexão da conta do Mercado Livre",
+      "sistema": "trinity",
+      "escopo": "por cliente",
+      "chave": "sem chave: conexão por OAuth do cliente (meli_contas) + coleta diária",
+      "camada": "banco (tokens cifrados com MELI_TOKEN_KEY) — muda pela tela de Conexões",
+      "motivo": "Sem conexão não há coleta, diagnóstico, plano nem avisos para este cliente.",
+      "pre_requisitos": [
+        { "texto": "App do Mercado Livre configurado (MELI_CLIENT_ID e MELI_CLIENT_SECRET presentes)", "verificar": "env.meli_app" },
+        { "texto": "Link de conexão gerado para este cliente e aberto pelo dono da conta", "verificar": "ml.link_gerado" },
+        { "texto": "Conexão sem erro e token renovando", "verificar": "ml.conexao_ok" },
+        { "texto": "Coleta há no máximo 24 h", "verificar": "ml.coleta_24h" }
+      ],
+      "passos": [
+        { "titulo": "Gerar o link", "texto": "em Conexões, na linha do cliente: o link leva a /meli/conectar e expira; copie e envie ao dono da conta, nunca a um terceiro.", "quem": "consultor" },
+        { "titulo": "Cliente autoriza", "texto": "com o usuário dono da conta no Mercado Livre; o retorno cai em /meli/callback e grava a conexão.", "quem": "cliente" },
+        { "titulo": "Conferir a conexão", "texto": "a linha passa a conectado; erro ou expirada aparece com o motivo e o link para refazer.", "quem": "consultor" },
+        { "titulo": "Esperar a coleta", "texto": "a coleta diária lê anúncios, vendas, visitas, Ads, promoções e saúde; «Atualizar dados» no Resumo força uma leitura.", "quem": "sistema" }
+      ],
+      "concluido_quando": "Conexão conectado e coleta_ml_em com no máximo 24 h para este cliente.",
+      "doc": "docs/manual-integracao-ml.md",
+      "doc_secao": "§ Conexão e coleta",
+      "onde": "/integracoes"
+    },
+    "app_ml": {
+      "titulo": "App do Mercado Livre (DevCenter)",
+      "sistema": "trinity",
+      "escopo": "global",
+      "chave": "MELI_CLIENT_ID, MELI_CLIENT_SECRET, MELI_TOKEN_KEY, PUBLIC_BASE_URL",
+      "camada": ".env — mudar = reiniciar; os valores nunca aparecem na tela",
+      "motivo": "Sem o app nenhum cliente consegue conectar; o diagnóstico comercial usa um app separado (MELI_CLIENT_ID_COMERCIAL).",
+      "pre_requisitos": [
+        { "texto": "App criado no DevCenter do Mercado Livre com a URL de retorno = PUBLIC_BASE_URL + /meli/callback", "verificar": "env.meli_app" },
+        { "texto": "Chave de cifra dos tokens (MELI_TOKEN_KEY) presente", "verificar": "env.meli_token_key" },
+        { "texto": "Endereço público (PUBLIC_BASE_URL) acessível pela internet", "verificar": "env.public_base_url" }
+      ],
+      "passos": [
+        { "titulo": "Criar o app", "texto": "no DevCenter do Mercado Livre, com os escopos de leitura e escrita de itens, pedidos e métricas.", "quem": "David" },
+        { "titulo": "URL de retorno", "texto": "exatamente PUBLIC_BASE_URL + /meli/callback; qualquer diferença derruba a autorização.", "quem": "David" },
+        { "titulo": "Preencher o .env", "texto": "MELI_CLIENT_ID, MELI_CLIENT_SECRET, MELI_TOKEN_KEY e PUBLIC_BASE_URL; reiniciar na janela combinada.", "quem": "David" },
+        { "titulo": "Conferir nesta seção", "texto": "o estado mostra presente/ausente por variável, nunca o valor.", "quem": "líder" }
+      ],
+      "concluido_quando": "1 cliente conectado pelo link de /integracoes depois da configuração.",
+      "doc": "docs/manual-integracao-ml.md",
+      "doc_secao": "§ App e OAuth",
+      "onde": "/integracoes?sec=secConfig"
+    },
+    "notion": {
+      "titulo": "Integração com o Notion (quadros de tarefas e página do cliente)",
+      "sistema": "trinity",
+      "escopo": "global + por cliente",
+      "chave": "NOTION_TOKEN; quadro «Tarefas - {Cliente}» descoberto (sync_estado.fonte_descoberta)",
+      "camada": ".env (token) + banco sync_estado (quadros descobertos) — o sync roda a cada 2 h",
+      "motivo": "Sem token o sync devolve pendente com o que falta; sem o quadro do cliente a distribuição não tem destino.",
+      "pre_requisitos": [
+        { "texto": "NOTION_TOKEN presente e integração compartilhada na central de clientes", "verificar": "env.notion_token" },
+        { "texto": "Página do cliente e quadro «Tarefas - {Cliente}» compartilhados com a integração", "verificar": "notion.quadro_descoberto" },
+        { "texto": "Último sync há no máximo 3 h", "verificar": "notion.sync_3h" }
+      ],
+      "passos": [
+        { "titulo": "Compartilhar com a integração", "texto": "no Notion, a central de clientes, a página do cliente e o quadro de tarefas precisam ter a integração como convidada.", "quem": "CS" },
+        { "titulo": "Esperar ou forçar o sync", "texto": "o sync incremental roda a cada 2 h; «Atualizar do Notion» na seção Notion do cliente relê agora.", "quem": "consultor" },
+        { "titulo": "Conferir o quadro", "texto": "na seção Notion do cliente, o quadro encontrado pela página vira fonte_descoberta; sem quadro, a distribuição avisa.", "quem": "consultor" },
+        { "titulo": "Distribuir em dry-run", "texto": "a distribuição nasce em prévia; só cria cards com confirmar.", "quem": "líder" }
+      ],
+      "concluido_quando": "Quadro do cliente descoberto e ultimo_sync com no máximo 3 h.",
+      "doc": "docs/notion-cliente.md",
+      "doc_secao": "",
+      "onde": "/cliente?aba=resumo&sec=secNotion"
+    },
+    "n8n_whatsapp": {
+      "titulo": "Entregador n8n (WhatsApp e e-mail ao cliente)",
+      "sistema": "morpheus",
+      "escopo": "global",
+      "chave": "PLACE_GATILHOS_URL + PLACE_GATILHOS_SECRET (assinatura x-place-key / HMAC)",
+      "camada": ".env — mudar = reiniciar; os fluxos ficam fora do sistema, em automacao/n8n/",
+      "motivo": "Sem URL ou segredo o envio devolve «entrega n8n não configurada» e nenhum aviso sai; 502 ou timeout do n8n vira erro com retentativa.",
+      "pre_requisitos": [
+        { "texto": "Fluxos de automacao/n8n/ importados no n8n e ativos", "verificar": "n8n.fluxos" },
+        { "texto": "PLACE_GATILHOS_URL e PLACE_GATILHOS_SECRET presentes e iguais aos do n8n", "verificar": "env.n8n" },
+        { "texto": "Teste de canal com recibo entregue em 1 cliente", "verificar": "canal.teste_entregue" }
+      ],
+      "passos": [
+        { "titulo": "Importar os fluxos", "texto": "automacao/n8n/*.json no n8n; conferir o nó de assinatura (mesmo segredo dos dois lados).", "quem": "técnico" },
+        { "titulo": "Preencher o .env", "texto": "PLACE_GATILHOS_URL e PLACE_GATILHOS_SECRET; reiniciar na janela combinada.", "quem": "David" },
+        { "titulo": "Testar canal", "texto": "em Canais do cliente de 1 cliente liberado; o recibo precisa voltar como entregue.", "quem": "consultor" },
+        { "titulo": "Ler os recibos", "texto": "falhas por canal aparecem em Estrutura › Comunicação (tabela de falhas) com retentativa automática.", "quem": "líder" }
+      ],
+      "concluido_quando": "1 recibo entregue de teste de canal depois da configuração.",
+      "doc": "docs/desenho-gatilhos-n8n.md",
+      "doc_secao": "§ Entregador n8n",
+      "onde": "/planos?sec=secAvisosAuto"
+    },
+    "discord": {
+      "titulo": "Aviso interno ao consultor no Discord",
+      "sistema": "morpheus",
+      "escopo": "global + por cliente",
+      "chave": "consultor_discord_ligado (banco); «Webhook ML» e «Discord ID Consultor ML» na central do Notion",
+      "camada": "banco sync_estado — muda pela tela (Estrutura › Comunicação); webhook por cliente fora do sistema (central do Notion)",
+      "desde": "12/10/2026 (nasceu desligada)",
+      "motivo": "O Discord é canal INTERNO da equipe, nunca canal ao cliente; sem «Webhook ML» na central o cliente fica fora do resumo.",
+      "pre_requisitos": [
+        { "texto": "Chave consultor_discord_ligado ligada por um líder", "verificar": "discord.chave" },
+        { "texto": "«Webhook ML» preenchido na central para o cliente", "verificar": "discord.webhook_ml" },
+        { "texto": "Entregador n8n configurado (mesmo webhook dos gatilhos)", "verificar": "env.n8n" },
+        { "texto": "Cargos a marcar em config/discord-time.json", "verificar": "discord.cargos" }
+      ],
+      "passos": [
+        { "titulo": "Preencher a central", "texto": "«Webhook ML» (canal do cliente no Discord) e «Discord ID Consultor ML» para marcar o consultor.", "quem": "CS" },
+        { "titulo": "Ver a prévia", "texto": "em Resumo › Avisos › «Para o consultor (Discord)»: o resumo semanal como vai sair (resultado, sem resultado medido, pontos da assessoria, o que o cliente leu).", "quem": "consultor" },
+        { "titulo": "Ligar a chave", "texto": "Estrutura › Comunicação › «Aviso ao consultor no Discord», informando o nome.", "quem": "líder" },
+        { "titulo": "Terça 08:30", "texto": "o resumo sai no fuso do cliente, antes do plano ao cliente das 09:00; a tabela consultor_aviso guarda o recibo.", "quem": "sistema" }
+      ],
+      "concluido_quando": "Recibo entregue do resumo de terça para este cliente.",
+      "doc": "docs/desenho-gatilhos-n8n.md",
+      "doc_secao": "§ Aviso interno ao consultor no Discord",
+      "onde": "/planos?sec=secAvisosAuto"
+    },
+    "custos_erp": {
+      "titulo": "Custos do cliente (planilha, Bling, Tiny)",
+      "sistema": "smith",
+      "escopo": "por cliente, por SKU",
+      "chave": "sem chave global: fonte por cliente (upload, bling, tiny, sheets) com precedência manual > upload > bling > tiny > sheets",
+      "camada": "banco (custos por SKU e vínculo custo-anúncio) — muda pela tela; Bling/Tiny por OAuth com ERP_TOKEN_KEY; planilha por webhook com WEBHOOK_SECRET",
+      "motivo": "Sem custo não há margem, lucro nem regra financeira: o relatório diz «sem custo», nunca inventa.",
+      "pre_requisitos": [
+        { "texto": "Planilha do cliente com SKU e custo (ou conta no Bling/Tiny conectada)", "verificar": "custos.fonte" },
+        { "texto": "Custo informado para pelo menos 80 % da receita de 28 d (custo-vinculo)", "verificar": "custos.cobertura_80" },
+        { "texto": "Quarentena vazia (custo igual ou acima do preço)", "verificar": "custos.quarentena" }
+      ],
+      "passos": [
+        { "titulo": "Subir a planilha", "texto": "em Configurar cliente › Custos: planilha do cliente; «Ver prévia» mostra o casamento por MLB, SKU do anúncio ou da variação; nada grava sem confirmar.", "quem": "consultor" },
+        { "titulo": "Ou conectar o ERP", "texto": "em Conexões › Custos: fontes automáticas (Bling ou Tiny, só leitura); a leitura entra na precedência.", "quem": "consultor" },
+        { "titulo": "Vincular o que sobrou", "texto": "Anúncios sem custo e Custos sem anúncio, em Promoções › Custo ligado ao anúncio ou no cartão de custos.", "quem": "consultor" },
+        { "titulo": "Conferir a cobertura", "texto": "Raio-X financeiro mostra custo informado × não e há quantos dias.", "quem": "líder" }
+      ],
+      "concluido_quando": "Custo informado cobrindo 80 % da receita de 28 d e quarentena vazia.",
+      "doc": "docs/integracao-custos-erp.md",
+      "doc_secao": "",
+      "onde": "/cliente?aba=configurar&sec=secCustosUpload"
+    },
+    "canais_cliente": {
+      "titulo": "Canais do cliente: WhatsApp, e-mail e Notion (fila e recibos)",
+      "sistema": "morpheus",
+      "escopo": "por cliente",
+      "chave": "clientes_central.notificacao_json (canais, silêncio, fuso, liberação)",
+      "camada": "banco — muda pela tela Canais do cliente; «Id whatsapp meli» vem da central do Notion",
+      "motivo": "Canal desligado, não testado ou cliente não liberado = aviso fica interno; o número e o e-mail nunca saem desta tela.",
+      "pre_requisitos": [
+        { "texto": "Pelo menos 1 canal ligado e testado com recibo entregue", "verificar": "canal.teste_entregue" },
+        { "texto": "Cliente liberado por um líder", "verificar": "gatilhos.liberado" },
+        { "texto": "Integração ML de fato (conexão + coleta + vendas)", "verificar": "ml.integracao_ativa" }
+      ],
+      "passos": [
+        { "titulo": "Escolher os canais", "texto": "WhatsApp (grupo do ML), e-mail ou página do Notion do cliente; nome na mensagem, silêncio e fuso.", "quem": "consultor" },
+        { "titulo": "Testar cada canal", "texto": "botão Testar por canal; o recibo volta como entregue ou falhou com o motivo.", "quem": "consultor" },
+        { "titulo": "Liberar", "texto": "um líder libera o cliente; sem liberação a fila existe mas nada sai.", "quem": "líder" },
+        { "titulo": "Ler a fila", "texto": "nesta seção: o que depende do cliente e virou aviso, último lote e recibos por canal.", "quem": "consultor" }
+      ],
+      "concluido_quando": "1 recibo entregue por canal ligado deste cliente.",
+      "doc": "docs/desenho-gatilhos-n8n.md",
+      "doc_secao": "§ Canais",
+      "onde": "/cliente?aba=configurar&sec=secAvisos"
+    },
+    "relatorio_notion": {
+      "titulo": "Relatório curto no Notion do cliente",
+      "sistema": "morpheus",
+      "escopo": "global + por cliente",
+      "chave": "agendador (banco, Estrutura › Comunicação) + frequência e liberação por cliente",
+      "camada": "banco — muda pela tela; o agendador nasce desligado e só envia a quem um líder liberou",
+      "motivo": "Sem base Informações que aceite a categoria, o relatório vira tarefa no quadro do cliente (plano B); o alerta não usa o plano B.",
+      "pre_requisitos": [
+        { "texto": "Página do cliente e base Informações lidas pelo sync (seção Notion do cliente)", "verificar": "notion.quadro_descoberto" },
+        { "texto": "Frequência definida (semanal, quinzenal ou mensal)", "verificar": "relatorio.frequencia" },
+        { "texto": "Cliente liberado por um líder", "verificar": "relatorio.liberado" },
+        { "texto": "Agendador ligado (sexta 17h)", "verificar": "relatorio.agendador" }
+      ],
+      "passos": [
+        { "titulo": "Definir a frequência", "texto": "nesta seção: semanal, quinzenal ou mensal; o próximo envio aparece ao lado.", "quem": "consultor" },
+        { "titulo": "Enviar agora com prévia", "texto": "«Enviar relatório agora» abre a prévia auditada (relatorio-seguro); só vai com confirmar.", "quem": "líder ou consultor" },
+        { "titulo": "Liberar em lote", "texto": "Estrutura › Comunicação › «Relatório no Notion: liberação em lote».", "quem": "líder" },
+        { "titulo": "Ligar o agendador", "texto": "sexta 17h; o PDF do mesmo brief é anexado no topo da página (falha de anexo não desfaz o envio).", "quem": "líder" }
+      ],
+      "concluido_quando": "Último envio deste cliente com status enviado dentro do prazo da frequência.",
+      "doc": "docs/desenho-relatorio-notion.md",
+      "doc_secao": "· docs/contrato-relatorio-envio.md",
+      "onde": "/cliente?aba=configurar&sec=secRelatorio"
+    },
+    "alerta": {
+      "titulo": "Alerta de pendência crítica",
+      "sistema": "morpheus",
+      "escopo": "global + por cliente",
+      "chave": "alerta_auto (banco, Estrutura › Comunicação)",
+      "camada": "banco — muda pela tela; nasce desligado; config/alerta-cliente.json guarda cooldown e tetos (arquivo)",
+      "motivo": "Só cliente liberado e já atendido por relatório recebe; cooldown de 7 dias; reconferência ao vivo antes de cada envio.",
+      "pre_requisitos": [
+        { "texto": "Cliente liberado para o relatório no Notion", "verificar": "relatorio.liberado" },
+        { "texto": "Ao menos 1 relatório enviado antes", "verificar": "relatorio.enviado_antes" },
+        { "texto": "Interruptor alerta_auto ligado por um líder", "verificar": "alerta.automatico" }
+      ],
+      "passos": [
+        { "titulo": "Ver os pendentes", "texto": "nesta seção: pendências críticas elegíveis, com a prévia do texto fixo do catálogo.", "quem": "líder" },
+        { "titulo": "Enviar com prévia", "texto": "o envio manual exige a prévia vista (previa_id) e confirmar.", "quem": "líder" },
+        { "titulo": "Ligar o automático", "texto": "informando o nome; a varredura respeita cooldown, teto semanal por cliente e teto diário de páginas.", "quem": "líder" },
+        { "titulo": "Acompanhar", "texto": "aviso interno com som no sino a cada alerta criado; página de alerta no Notion do cliente.", "quem": "consultor" }
+      ],
+      "concluido_quando": "1 alerta enviado com página criada no Notion do cliente e aviso interno registrado.",
+      "doc": "docs/alerta-cliente.md",
+      "doc_secao": "",
+      "onde": "/planos?sec=secAlertas"
+    },
+    "catalogo": {
+      "titulo": "Anúncios de catálogo: próprio ou de terceiros",
+      "sistema": "trinity",
+      "escopo": "por cliente (conta inteira) e por anúncio",
+      "chave": "marcação manual «catálogo próprio» (banco); padrão seguro = terceiros",
+      "camada": "banco — muda pela tela com prévia e confirmar; config/algoritmo.json → catalogo define o que o plano recomenda",
+      "motivo": "Foto, título, descrição e ficha de catálogo de terceiros não são alterados pelo vendedor: o sistema não recomenda conteúdo neles.",
+      "pre_requisitos": [
+        { "texto": "Coleta com a origem do catálogo por anúncio", "verificar": "ml.coleta_24h" },
+        { "texto": "Decisão registrada: a conta é dona do catálogo (marca) ou não", "verificar": "catalogo.marcacao" }
+      ],
+      "passos": [
+        { "titulo": "Ler a contagem", "texto": "N anúncios de catálogo (M ativos) nesta seção.", "quem": "consultor" },
+        { "titulo": "Marcar a conta", "texto": "«Os anúncios de catálogo desta conta são próprios» só se o cliente é marca ou dono do produto; prévia e confirmar com o seu nome.", "quem": "líder ou consultor" },
+        { "titulo": "Exceções por anúncio", "texto": "um anúncio pode ser marcado ao contrário da conta; «tirar» volta ao padrão.", "quem": "consultor" },
+        { "titulo": "Conferir no plano", "texto": "o selo Catálogo aparece nas tabelas e o plano deixa de propor foto/título/descrição onde não é editável.", "quem": "consultor" }
+      ],
+      "concluido_quando": "Marcação da conta registrada e zero ação de conteúdo proposta em catálogo de terceiros.",
+      "doc": "docs/mapa-catalogo-conteudo-editavel.md",
+      "doc_secao": "",
+      "onde": "/cliente?aba=configurar&sec=secCatalogo"
+    },
+    "ficha": {
+      "titulo": "Equipe e contas do cliente (ficha)",
+      "sistema": "arquiteto",
+      "escopo": "por cliente",
+      "chave": "sem chave: ficha por canal e papel (banco) + prestadores lidos do Notion",
+      "camada": "banco — muda pela tela; a tarefa aprovada sai delegada no Notion a partir daqui",
+      "motivo": "Sem responsável por canal a distribuição cria o card sem pessoa e a fila do dia não sabe a quem cobrar.",
+      "pre_requisitos": [
+        { "texto": "Consultor e analista por canal preenchidos", "verificar": "ficha.responsaveis" },
+        { "texto": "Links das contas (ML, Shopee, Amazon) preenchidos", "verificar": "ficha.contas" }
+      ],
+      "passos": [
+        { "titulo": "Preencher quem atende", "texto": "por canal e papel (consultor, analista, CS); os prestadores do Notion aparecem como sugestão.", "quem": "líder" },
+        { "titulo": "Links das contas", "texto": "um por canal; o selo de conexão ML vem de Conexões, não daqui.", "quem": "CS" },
+        { "titulo": "Salvar com o seu nome", "texto": "fica registrado na ficha e no livro de registro.", "quem": "líder" },
+        { "titulo": "Conferir na distribuição", "texto": "a próxima distribuição leva o responsável da ficha no card.", "quem": "líder" }
+      ],
+      "concluido_quando": "Todos os canais ativos do cliente com responsável preenchido.",
+      "doc": "docs/acompanhamento-e-retroalimentacao.md",
+      "doc_secao": "§ ficha do cliente (06/10)",
+      "onde": "/cliente?aba=configurar&sec=secFicha"
+    },
+    "cadastro_cs": {
+      "titulo": "Cadastro do CS: responsável, health score e canais",
+      "sistema": "trinity",
+      "escopo": "por cliente",
+      "chave": "sem chave: colunas do CS em clientes_central (o sync do Notion não toca nelas)",
+      "camada": "banco — muda pela tela com prévia e confirmar; importação em massa por scripts/importar-base-clientes.mjs",
+      "motivo": "Sem CS responsável a etapa Cadastrado do progresso fica atrasada e o cliente não entra na fila de ninguém.",
+      "pre_requisitos": [
+        { "texto": "Cliente existe na central (o cadastro nunca cria cliente)", "verificar": "cadastro.na_central" },
+        { "texto": "CS responsável preenchido", "verificar": "cadastro.cs" },
+        { "texto": "Health score com classificação", "verificar": "cadastro.hs" }
+      ],
+      "passos": [
+        { "titulo": "Preencher o CS e o HS", "texto": "responsável, health score com classificação, canais informados e observações.", "quem": "CS" },
+        { "titulo": "Prévia e confirmar", "texto": "com o seu nome; a edição fica registrada.", "quem": "CS" },
+        { "titulo": "Importar a planilha do CS", "texto": "quando for em massa: casamento por nome exato, depois alias em config/clientes-aliases.json, senão contenção.", "quem": "técnico" },
+        { "titulo": "Conferir em Distribuir", "texto": "o selo de HS aparece ao lado do cliente em /planos.", "quem": "líder" }
+      ],
+      "concluido_quando": "CS responsável e health score preenchidos para este cliente.",
+      "doc": "docs/cadastro-clientes.md",
+      "doc_secao": "",
+      "onde": "/cliente?aba=configurar&sec=cad-sec"
+    },
+    "executor_chaveiro": {
+      "titulo": "Execução no Mercado Livre pelo Chaveiro",
+      "sistema": "chaveiro",
+      "escopo": "global + por operação + por cliente",
+      "chave": "execucao_ligada e adaptadores_live.* em config/chaveiro.json; freio chaveiro_execucao_parado (banco)",
+      "camada": "arquivo config/chaveiro.json — mudar = reiniciar; o freio, as liberações e as aprovações são banco — mudam pela tela",
+      "desde": "15/10/2026 (nasceu desligada)",
+      "motivo": "A única escrita é executarOrdem: chave global + chave da operação + liberação do líder com cliente informado + estreia em 1 anúncio + confirmar + releitura ao vivo. Tudo ainda desligado.",
+      "pre_requisitos": [
+        { "texto": "Chave global execucao_ligada e a chave da operação ligadas", "verificar": "chaveiro.execucao_ligada" },
+        { "texto": "Cliente liberado por um líder com «cliente informado»", "verificar": "chaveiro.liberado" },
+        { "texto": "Freio geral solto", "verificar": "chaveiro.freio" },
+        { "texto": "Estreia: 1 anúncio conferido sem divergência", "verificar": "chaveiro.estreia" }
+      ],
+      "passos": [
+        { "titulo": "Montar a ordem", "texto": "nesta aba: anúncios + estratégia (config/estrategias.json ou própria) ou operação avulsa; prévia campo a campo com a previsão do Oráculo.", "quem": "consultor" },
+        { "titulo": "Preparar", "texto": "relê o anúncio ao vivo (GET) e fecha o hash do que vai ser escrito.", "quem": "consultor" },
+        { "titulo": "Aprovar", "texto": "um líder aprova; o Neo pode vetar por 48 h quando a ordem amplia a estreia.", "quem": "líder" },
+        { "titulo": "Ligar as chaves", "texto": "execucao_ligada e o adaptador da operação (reinício); scripts/teste-chaveiro-executor.mjs precisa passar.", "quem": "David" },
+        { "titulo": "Executar e conferir", "texto": "a 1ª ordem pede confirmar; conferência por releitura grava o marco meli_item_mudanca (2xx não é «feito»).", "quem": "líder" }
+      ],
+      "concluido_quando": "10 ordens conferidas sem divergência neste cliente, freio não acionado.",
+      "doc": "docs/manual-integracao-ml.md",
+      "doc_secao": "§ Chaveiro F4+",
+      "onde": "/cliente?aba=executar"
+    },
+    "estoque": {
+      "titulo": "Estoque físico, prazo do fornecedor e compras",
+      "sistema": "oraculo",
+      "escopo": "por cliente, por produto",
+      "chave": "estoque declarado (produto_estoque_declarado) + prazo do fornecedor (lead_time_fonte) — sem chave global",
+      "camada": "banco — muda pela tela ou por planilha/ERP; os limiares ficam em config/algoritmo.json → compras (arquivo)",
+      "motivo": "Sem prazo do fornecedor a previsão usa a premissa padrão e o relatório diz de onde veio; sem estoque declarado o Full é a única fonte.",
+      "pre_requisitos": [
+        { "texto": "Prazo do fornecedor informado (conta, SKU ou anúncio)", "verificar": "estoque.lead_time" },
+        { "texto": "Estoque físico declarado há no máximo 24 h", "verificar": "estoque.declarado_24h" },
+        { "texto": "Coleta de vendas sem lacunas em 28 d", "verificar": "ml.lacunas" }
+      ],
+      "passos": [
+        { "titulo": "Informar o prazo", "texto": "em Compras (aba Ciclos do negócio › ciclo de compras) ou por produto; vence a premissa padrão.", "quem": "consultor ou cliente" },
+        { "titulo": "Declarar o estoque físico", "texto": "na aba Produtos e estoque; ou pela planilha/ERP conectado.", "quem": "cliente ou CS" },
+        { "titulo": "Ler a previsão", "texto": "30/60/90 d, ponto de reposição com segurança e «quando/quanto pedir» — a mesma conta do micro de compras e do plano.", "quem": "consultor" },
+        { "titulo": "Registrar a compra", "texto": "compra_fornecedor com prévia e confirmar, para a cobertura projetada considerar o pedido.", "quem": "consultor" }
+      ],
+      "concluido_quando": "Prazo do fornecedor informado e nenhum produto A/B em ruptura prevista sem pedido registrado.",
+      "doc": "docs/metodologia-algoritmo.md",
+      "doc_secao": "§ 10.6 Compras e previsibilidade",
+      "onde": "/cliente?aba=relatorios&rc=ciclo_compras"
+    },
+    "produto": {
+      "titulo": "Produto por trás do anúncio (estoque por produto)",
+      "sistema": "arquiteto",
+      "escopo": "global + por cliente",
+      "chave": "produto.diagnostico_ligado em config/algoritmo.json",
+      "camada": "arquivo config/algoritmo.json — mudar = reiniciar; o mapeamento anúncio → produto é banco e muda pela tela",
+      "desde": "15/10/2026 (nasceu desligada)",
+      "motivo": "Com a chave desligada o diagnóstico sai byte a byte igual ao de hoje: a aba mostra o produto em sombra e ainda não decide nada.",
+      "pre_requisitos": [
+        { "texto": "Chaves do produto lidas pela coleta (meli_anuncio_up)", "verificar": "produto.ups" },
+        { "texto": "Mapeamento sem sugestões pendentes", "verificar": "produto.mapeamento_pendente" },
+        { "texto": "Chave produto.diagnostico_ligado ligada", "verificar": "produto.diagnostico_ligado" }
+      ],
+      "passos": [
+        { "titulo": "Gerenciar mapeamento", "texto": "Juntar / Não é o mesmo / Separar até zerar as sugestões; kits só com a tag bundle.", "quem": "consultor" },
+        { "titulo": "Conferir a sombra", "texto": "scripts/sombra-produto.mjs compara o diagnóstico com e sem produto; nenhuma diferença inesperada.", "quem": "técnico" },
+        { "titulo": "Ligar a chave", "texto": "produto.diagnostico_ligado (reinício); scripts/teste-produto-diagnostico.mjs precisa passar.", "quem": "David" },
+        { "titulo": "Ler o plano por produto", "texto": "1 ação de ruptura por estoque físico, regras estoque_dividido e sku_ausente, pergunta estoque_espelhado só para A/B.", "quem": "consultor" }
+      ],
+      "concluido_quando": "Chave ligada e zero sugestão pendente de mapeamento neste cliente.",
+      "doc": "docs/desenho-v3-produto-estoque-financeiro.md",
+      "doc_secao": "§ F2 e F3",
+      "onde": "/cliente?aba=produtos"
+    },
+    "notas": {
+      "titulo": "Notas emitidas: do rascunho à emissão",
+      "sistema": "chaveiro",
+      "escopo": "por cliente",
+      "chave": "nf.ligado, producao_ligada, envio_ml_ligado em config/nota-fiscal.json",
+      "camada": "arquivo config/nota-fiscal.json — mudar = reiniciar; rascunhos e aprovações são banco",
+      "desde": "15/10/2026 (nasceu desligada)",
+      "motivo": "Sem nf.ligado nada é emitido: o fluxo para na aprovação. Produto sem regra do contador = bloqueio nominal.",
+      "pre_requisitos": [
+        { "texto": "Estrutura de nota fiscal concluída (dados fiscais, termo, regras, certificado)", "verificar": "nf.homologacao" },
+        { "texto": "Pedidos pagos lidos do Mercado Livre", "verificar": "nf.pedidos" }
+      ],
+      "passos": [
+        { "titulo": "Buscar pedidos pagos", "texto": "gera um rascunho por pacote de pedidos, com os bloqueios nominais por item.", "quem": "consultor" },
+        { "titulo": "Aprovar", "texto": "líder ou consultor aprova com hash do rascunho; comprador sempre mascarado.", "quem": "líder ou consultor" },
+        { "titulo": "Emitir em homologação", "texto": "o provedor devolve por webhook (idempotente) o XML autorizado ou o erro.", "quem": "líder" },
+        { "titulo": "Anexar ao pacote", "texto": "só com envio_ml_ligado o XML vai ao pacote no Mercado Livre.", "quem": "sistema" }
+      ],
+      "concluido_quando": "Nota autorizada com XML guardado e anexo confirmado no pacote.",
+      "doc": "docs/desenho-v3-erp.md",
+      "doc_secao": "§ F8a CONSTRUÍDA",
+      "onde": "/cliente?aba=configurar&sec=secNotas"
+    },
+    "saude_sistema": {
+      "titulo": "Saúde do Place Sprints (vigia, incidentes, coleta)",
+      "sistema": "trinity",
+      "escopo": "global",
+      "chave": "scripts/vigia.sh via launchd (5 min); whatsapp_critico_ligado em config/autogestao.json",
+      "camada": "fora do sistema (launchd, automacao/*.plist) + arquivo config/autogestao.json — mudar = reiniciar",
+      "motivo": "O vigia é externo ao Node e ao banco: avisa só na mudança para crítico, 1 vez por hora por sinal, e fica em dry-run sem VIGIA_ENVIO_LIGADO=1.",
+      "pre_requisitos": [
+        { "texto": "Plists de automacao/ carregados (servidor, vigia, backup)", "verificar": "autogestao.plists" },
+        { "texto": "GET /api/saude respondendo no loopback", "verificar": "autogestao.api_saude" },
+        { "texto": "Disco livre acima do limiar de config/autogestao.json", "verificar": "autogestao.disco" }
+      ],
+      "passos": [
+        { "titulo": "Instalar os plists", "texto": "conforme docs/autogestao-instalar.md; o dev.sh não sobe com menos de 1 GB livre.", "quem": "técnico" },
+        { "titulo": "Ler esta seção", "texto": "estado geral, sinais por sistema com limiar e incidentes abertos e resolvidos (dono: Head de canais, com SLA).", "quem": "líder" },
+        { "titulo": "Resolver o incidente", "texto": "a auto-cura tenta de novo o Notion em timeout; o resto é gente: a linha diz o que falta.", "quem": "técnico" },
+        { "titulo": "Ligar o aviso crítico", "texto": "VIGIA_ENVIO_LIGADO=1 no ambiente do vigia e, se quiser WhatsApp do Head, whatsapp_critico_ligado.", "quem": "David" }
+      ],
+      "concluido_quando": "Zero incidente crítico aberto e coleta com no máximo 24 h em todos os clientes conectados.",
+      "doc": "docs/plano-autogestao.md",
+      "doc_secao": "· docs/autogestao-instalar.md",
+      "onde": "/integracoes?sec=secSaudeSistema"
+    },
+    "sprint90": {
+      "titulo": "Place Sprint 90 (autoatendimento)",
+      "sistema": "trinity",
+      "escopo": "global + por assinante",
+      "chave": "SPRINT90_PUBLIC_HOST, MP_ACCESS_TOKEN, MP_MODO, MP_WEBHOOK_SECRET; números em config/sprint90.json",
+      "camada": ".env + arquivo config/sprint90.json — mudar = reiniciar",
+      "motivo": "Sem SPRINT90_PUBLIC_HOST o bloco diz que está desligado; o assinante é um cliente à parte, nunca a carteira.",
+      "pre_requisitos": [
+        { "texto": "Host público do Sprint 90 configurado", "verificar": "env.sprint90_host" },
+        { "texto": "Mercado Pago com token e modo (teste ou produção)", "verificar": "env.mercado_pago" },
+        { "texto": "Termos (config/termos-sprint90.md) na versão vigente", "verificar": "sprint90.termos" }
+      ],
+      "passos": [
+        { "titulo": "Configurar o .env", "texto": "SPRINT90_PUBLIC_HOST, MP_ACCESS_TOKEN, MP_MODO e MP_WEBHOOK_SECRET; reiniciar.", "quem": "David" },
+        { "titulo": "Criar o assinante", "texto": "nesta seção, com prévia e confirmar; o link de acesso ao painel /c/ é gerado aqui.", "quem": "líder" },
+        { "titulo": "Cliente conecta e aprova", "texto": "landing → pagamento → painel do cliente, aprovando campo a campo.", "quem": "cliente" },
+        { "titulo": "Acompanhar a situação", "texto": "estado por assinante nesta lista; cobrança e nota fiscal seguem config/sprint90.json.", "quem": "líder" }
+      ],
+      "concluido_quando": "1 assinante com conta conectada e primeiro pagamento aprovado.",
+      "doc": "docs/sprint90.md",
+      "doc_secao": "· docs/desenho-place-sprint-90.md",
+      "onde": "/integracoes?sec=secS90"
+    },
+    "backup_frio": {
+      "titulo": "Backup cifrado e arquivamento frio",
+      "sistema": "trinity",
+      "escopo": "global",
+      "chave": "scripts/backup-banco.mjs (launchd) e scripts/arquivar-evidencias.mjs; BACKUP_DIR e FRIO_DIR",
+      "camada": "fora do sistema (launchd + variáveis de ambiente); chave de cifra em ~/.place-sprints/backup.key",
+      "motivo": "Backup só roda com 2× o banco + 1 GB livres; o frio só move evidência com mais de 30 dias cujo sha256 confere no livro de registro.",
+      "pre_requisitos": [
+        { "texto": "Chave de backup existe e tem permissão restrita", "verificar": "backup.chave" },
+        { "texto": "BACKUP_DIR e FRIO_DIR apontam para o destino (Drive em streaming no mesmo volume)", "verificar": "backup.destinos" },
+        { "texto": "Último backup há no máximo 24 h", "verificar": "backup.ultimo_24h" }
+      ],
+      "passos": [
+        { "titulo": "Instalar", "texto": "plist de backup e de arquivamento em automacao/, conforme docs/autogestao-instalar.md.", "quem": "técnico" },
+        { "titulo": "Conferir o backup", "texto": "retenção de 14 cópias cifradas (AES-256-GCM); o log diz o tamanho e a hora.", "quem": "técnico" },
+        { "titulo": "Rodar o frio em prévia", "texto": "arquivar-evidencias.mjs lista o que moveria; só grava frio:<sha256> depois de conferir no destino.", "quem": "técnico" },
+        { "titulo": "Testar a restauração", "texto": "uma vez por mês, restaurar um backup em pasta separada e abrir só leitura.", "quem": "técnico" }
+      ],
+      "concluido_quando": "Backup das últimas 24 h presente e 1 restauração testada no mês.",
+      "doc": "docs/autogestao-instalar.md",
+      "doc_secao": "§ backup e frio",
+      "onde": "/integracoes?sec=secSaudeSistema"
+    },
+    "equipe_papeis": {
+      "titulo": "Equipe e papéis (quem pode decidir o quê)",
+      "sistema": "arquiteto",
+      "escopo": "global",
+      "chave": "config/equipe.json (líderes e consultores) — o servidor valida o cargo em toda escrita",
+      "camada": "arquivo config/equipe.json — mudar = reiniciar; «Quem sou» no topo só preenche o nome, nunca dá permissão",
+      "motivo": "Toda escrita (aprovar, liberar, enviar) exige nome de líder ou consultor da lista; o nome do topo é conveniência de preenchimento.",
+      "pre_requisitos": [
+        { "texto": "Líderes e consultores listados em config/equipe.json", "verificar": "equipe.lista" },
+        { "texto": "Consultor por cliente preenchido na central do Notion", "verificar": "equipe.consultor_por_cliente" }
+      ],
+      "passos": [
+        { "titulo": "Quem sou", "texto": "no topo, escolha o papel e escreva o nome: ele vira o valor padrão de todo campo «Seu nome».", "quem": "qualquer pessoa" },
+        { "titulo": "Entrar na lista", "texto": "para aprovar, liberar ou enviar, o nome precisa estar em config/equipe.json como líder ou consultor.", "quem": "David" },
+        { "titulo": "Conferir a validação", "texto": "um nome fora da lista recebe erro na escrita, sem ecoar o valor.", "quem": "líder" }
+      ],
+      "concluido_quando": "Toda pessoa que decide está na lista e o servidor aceita o nome dela.",
+      "doc": "docs/fonte-equipe-dependencias-cliente.md",
+      "doc_secao": "",
+      "onde": "/planos"
+    },
+    "perfil_relatorio": {
+      "titulo": "Estilo do relatório PDF",
+      "sistema": "morpheus",
+      "escopo": "por cliente",
+      "chave": "perfil do cliente (densidade, provas, tom, linguagem) em banco",
+      "camada": "banco — muda pela tela com o seu nome",
+      "motivo": "O estilo muda a redação, nunca o conteúdo: o brief é a mesma projeção do montarSemanal.",
+      "pre_requisitos": [
+        { "texto": "Cliente com coleta e tarefas sincronizadas", "verificar": "ml.coleta_24h" }
+      ],
+      "passos": [
+        { "titulo": "Escolher o estilo", "texto": "densidade, provas, tom e linguagem do Relatório Semanal.", "quem": "consultor" },
+        { "titulo": "Salvar com o seu nome", "texto": "a mudança fica no histórico.", "quem": "consultor" },
+        { "titulo": "Gerar o PDF", "texto": "/semanal.pdf?cliente= mostra o resultado com o estilo novo.", "quem": "consultor" }
+      ],
+      "concluido_quando": "1 relatório gerado com o estilo salvo.",
+      "doc": "docs/relatorio-semanal-contrato.md",
+      "doc_secao": "",
+      "onde": "/cliente?aba=configurar&sec=secPerfil"
+    },
+    "temas_cliente": {
+      "titulo": "Temas que o cliente pediu (perfil de informação)",
+      "sistema": "morpheus",
+      "escopo": "por cliente",
+      "chave": "perfil de informação (temas, nível, serviço) em banco; base fixa em config/perfil-informacao.json",
+      "camada": "banco — muda pela tela com prévia e confirmar; a base fixa é arquivo",
+      "motivo": "A base fixa vai para todos; os pedidos sobem para o topo. A sugestão pelas respostas no grupo só sugere até alguém salvar.",
+      "pre_requisitos": [
+        { "texto": "Respostas do cliente coletadas (opcional, só sugerem)", "verificar": "feedback.respostas" }
+      ],
+      "passos": [
+        { "titulo": "Ordenar os temas", "texto": "na ordem que o cliente pediu; nível padrão, didático ou completo; serviço.", "quem": "consultor" },
+        { "titulo": "Aceitar ou não a sugestão", "texto": "quando houver resposta no grupo, a sugestão aparece; nada muda sem salvar.", "quem": "consultor" },
+        { "titulo": "Salvar", "texto": "com o seu nome; entra no histórico e no livro de registro.", "quem": "consultor" }
+      ],
+      "concluido_quando": "Perfil salvo e o plano de terça seguinte com os temas no topo.",
+      "doc": "docs/respostas-relatorio.md",
+      "doc_secao": "§ Relatório semanal personalizado",
+      "onde": "/cliente?aba=configurar&sec=secPerfilCliente"
+    },
+    "dossie": {
+      "titulo": "Prestação de contas e dossiê de defesa",
+      "sistema": "morpheus",
+      "escopo": "global + por cliente",
+      "chave": "dossie_mensal_ligado (banco, Estrutura › Comunicação)",
+      "camada": "banco — muda pela tela; nasce desligada; config/dossie.json define o padrão (arquivo)",
+      "desde": "13/10/2026 (nasceu desligada)",
+      "motivo": "A prestação de contas vai ao cliente só com confirmar; o dossiê de defesa nunca sai do sistema. Sem contrato o dossiê fica INCOMPLETO.",
+      "pre_requisitos": [
+        { "texto": "Livro de registro do cliente com cadeia íntegra", "verificar": "livro.cadeia" },
+        { "texto": "Contrato assinado anexado", "verificar": "contrato.anexo" },
+        { "texto": "Fontes do período (tarefas, prints, medições) ingeridas", "verificar": "livro.ingestao" }
+      ],
+      "passos": [
+        { "titulo": "Escolher o período", "texto": "e gerar a prestação de contas (PDF + Word) nesta seção.", "quem": "consultor" },
+        { "titulo": "Ler o status", "texto": "COMPLETO ou INCOMPLETO pela definition of done; o inventário diz o que falta.", "quem": "líder" },
+        { "titulo": "Enviar ao cliente", "texto": "versão cliente auditada pelo relatorio-seguro, ao Notion só com confirmar.", "quem": "líder" },
+        { "titulo": "Mensal para risco aberto", "texto": "ligar dossie_mensal_ligado: dia 1 às 09:00 via n8n para quem está em risco.", "quem": "líder" }
+      ],
+      "concluido_quando": "Prestação de contas COMPLETA gerada para o último período.",
+      "doc": "docs/dossie-prestacao-contas.md",
+      "doc_secao": "",
+      "onde": "/cliente?aba=configurar&sec=secDossie"
+    },
+    "risco": {
+      "titulo": "Cliente em risco",
+      "sistema": "morpheus",
+      "escopo": "por cliente",
+      "chave": "marcação de risco (banco) com motivo: reclamação, reembolso, jurídico, insatisfação, outro",
+      "camada": "banco — muda pela tela com prévia e confirmar; os sinais só sugerem",
+      "motivo": "A marcação é de quem atende; o sistema nunca marca sozinho. Risco aberto entra na Carteira em risco e no dossiê mensal.",
+      "pre_requisitos": [
+        { "texto": "Motivo da lista escolhido", "verificar": "risco.motivo" }
+      ],
+      "passos": [
+        { "titulo": "Marcar", "texto": "com motivo da lista e o seu nome; prévia e confirmar.", "quem": "líder, consultor ou CS" },
+        { "titulo": "Juntar as provas", "texto": "contrato, pagamentos e prints entram pelo livro de registro.", "quem": "consultor" },
+        { "titulo": "Encerrar", "texto": "quando resolvido, com o seu nome; o histórico fica no livro.", "quem": "líder" }
+      ],
+      "concluido_quando": "Risco encerrado com motivo ou dossiê COMPLETO gerado enquanto aberto.",
+      "doc": "docs/dossie-prestacao-contas.md",
+      "doc_secao": "§ Risco",
+      "onde": "/cliente?aba=configurar&sec=secRisco"
+    },
+    "contrato": {
+      "titulo": "Contrato e pagamentos",
+      "sistema": "smith",
+      "escopo": "por cliente",
+      "chave": "sem chave: arquivos em data/dossies/docs/<sha256> (PDF, PNG ou JPG até 5 MB)",
+      "camada": "banco + disco — muda pela tela com prévia e confirmar",
+      "motivo": "É a prova que o dossiê de defesa exige: sem o contrato ele fica INCOMPLETO.",
+      "pre_requisitos": [
+        { "texto": "Contrato assinado em PDF, PNG ou JPG", "verificar": "contrato.anexo" },
+        { "texto": "Comprovantes de pagamento do período", "verificar": "contrato.pagamentos" }
+      ],
+      "passos": [
+        { "titulo": "Anexar o contrato", "texto": "vigência, entregáveis, obrigação de meio e cláusula de reembolso; o arquivo é conferido pelos magic bytes.", "quem": "líder" },
+        { "titulo": "Registrar pagamentos", "texto": "um por comprovante, com data e valor em centavos.", "quem": "CS" },
+        { "titulo": "Confirmar", "texto": "prévia por padrão; confirmar grava e registra no livro.", "quem": "líder" }
+      ],
+      "concluido_quando": "Contrato anexado e pagamentos do período registrados.",
+      "doc": "docs/dossie-prestacao-contas.md",
+      "doc_secao": "§ Contrato e pagamentos",
+      "onde": "/cliente?aba=configurar&sec=secContrato"
+    },
+    "relatorios_ciclo": {
+      "titulo": "Os 8 ciclos do negócio",
+      "sistema": "morpheus",
+      "escopo": "por cliente",
+      "chave": "relatorios_ciclo.blocos_terca_ligado em config/algoritmo.json",
+      "camada": "arquivo config/algoritmo.json — mudar = reiniciar; os relatórios são só leitura",
+      "desde": "15/10/2026 (blocos de terça nasceram desligados)",
+      "motivo": "Uso interno: ao cliente nada muda enquanto blocos_terca_ligado estiver desligada. Sem custo = sem lucro; dado ausente aparece com o motivo.",
+      "pre_requisitos": [
+        { "texto": "Custo informado (para lucro, caixa e reinvestimento)", "verificar": "custos.cobertura_80" },
+        { "texto": "Prazo do fornecedor informado (para compras e logística)", "verificar": "estoque.lead_time" },
+        { "texto": "Calibração disponível (senão a Chance diz «sem calibração ainda»)", "verificar": "oraculo.calibrado" }
+      ],
+      "passos": [
+        { "titulo": "Escolher o relatório", "texto": "ciclo financeiro, compras, estoque, logística, escalabilidade, lucro, caixa, reinvestimento.", "quem": "consultor" },
+        { "titulo": "Ler as três colunas", "texto": "Previsão (faixa do Oráculo), Chance (só calibrada) e Medido; a Observação diz o motivo de cada traço.", "quem": "consultor" },
+        { "titulo": "Exportar", "texto": "CSV, HTML ou PDF pelos links; nenhum envio sai daqui.", "quem": "consultor" }
+      ],
+      "concluido_quando": "Os 8 relatórios abrem sem linha «sem dado» por falta de custo ou prazo.",
+      "doc": "docs/desenho-v3-erp.md",
+      "doc_secao": "§ F9 CONSTRUÍDA",
+      "onde": "/cliente?aba=relatorios"
+    },
+    "alinhamentos": {
+      "titulo": "Combinados com o cliente (alinhamentos)",
+      "sistema": "arquiteto",
+      "escopo": "por cliente, por anúncio ou regra",
+      "chave": "alinhamento registrado (banco), tipos em config/alinhamentos.json",
+      "camada": "banco — muda pela tela com motivo da lista; o predicado único alinhado() é lido por plano, diagnóstico, avisos, pendências e relatório",
+      "motivo": "Descartar uma ação exige motivo da lista e vira alinhamento; revisão padrão em 30 dias, vencido volta ao plano como observar.",
+      "pre_requisitos": [
+        { "texto": "Tipo e motivo da lista", "verificar": "alinhamento.tipo" }
+      ],
+      "passos": [
+        { "titulo": "Registrar", "texto": "tipo (pausado de propósito, campanha de visibilidade, boi de piranha, descontinuado, já informado), escopo e data de revisão.", "quem": "consultor" },
+        { "titulo": "Ou descartar uma ação", "texto": "no plano ou em Distribuir: o descarte pede o motivo e registra aqui.", "quem": "consultor" },
+        { "titulo": "Revisar", "texto": "vencido o prazo, o ponto volta ao plano como observar até alguém renovar ou encerrar.", "quem": "consultor" }
+      ],
+      "concluido_quando": "Nenhum alinhamento vencido sem revisão neste cliente.",
+      "doc": "docs/alinhamentos.md",
+      "doc_secao": "",
+      "onde": "/cliente?aba=resumo&sec=secAlinhamentos"
+    },
+    "distribuicao": {
+      "titulo": "Distribuir ações aprovadas no Notion",
+      "sistema": "arquiteto",
+      "escopo": "carteira (escopo escolhido) ou por cliente",
+      "chave": "sem chave: dry-run por padrão; cria cards só com confirmar",
+      "camada": "banco + Notion — muda pela tela; o card leva o roteiro inteiro do Manual",
+      "motivo": "Sem quadro descoberto o cliente fica de fora com o motivo; ação sem aprovação não é distribuída.",
+      "pre_requisitos": [
+        { "texto": "Ações P0/P1 aprovadas e ainda não distribuídas", "verificar": "plano.aprovadas_paradas" },
+        { "texto": "Quadro «Tarefas - {Cliente}» descoberto", "verificar": "notion.quadro_descoberto" },
+        { "texto": "Responsável na ficha do cliente", "verificar": "ficha.responsaveis" }
+      ],
+      "passos": [
+        { "titulo": "Escolher o escopo", "texto": "total, squad, consultor ou seleção; o veredito diz quantas ações entram.", "quem": "líder" },
+        { "titulo": "Prévia", "texto": "o dry-run lista card a card o que seria criado, com responsável e roteiro.", "quem": "líder" },
+        { "titulo": "Confirmar", "texto": "cria os cards no Notion com o seu nome; cada card vira registro mensurável pelo Merovíngio.", "quem": "líder" },
+        { "titulo": "Acompanhar", "texto": "cards PS- parados há mais de 7 dias aparecem em Analistas e na fila.", "quem": "líder" }
+      ],
+      "concluido_quando": "Zero ação aprovada parada há mais de 2 dias no escopo.",
+      "doc": "docs/acompanhamento-e-retroalimentacao.md",
+      "doc_secao": "§ distribuição",
+      "onde": "/planos"
+    },
+    "promocoes": {
+      "titulo": "Promoções pelo plano (dry-run)",
+      "sistema": "arquiteto",
+      "escopo": "por cliente",
+      "chave": "coleta_promocoes por cliente (banco); execução ao vivo não se liga pela tela (config/promocoes.json)",
+      "camada": "banco (coleta por cliente, plano, aprendizados) — muda pela tela; a execução ao vivo é arquivo e reinício",
+      "motivo": "O plano é sempre dry-run: mostra as chamadas; o sistema nunca sai de campanha sozinho. Sem custo a margem não é confiável.",
+      "pre_requisitos": [
+        { "texto": "Coleta de promoções ligada para o cliente", "verificar": "promocoes.coleta" },
+        { "texto": "Custo por SKU para os elegíveis a rebate", "verificar": "custos.cobertura_80" },
+        { "texto": "Imposto configurado", "verificar": "promocoes.imposto" }
+      ],
+      "passos": [
+        { "titulo": "Marcar elegíveis", "texto": "ou aprovar sugestões em Campanhas candidatas; regras de piso por SKU valem aqui.", "quem": "consultor" },
+        { "titulo": "Gerar o plano", "texto": "dry-run com entradas, hedge, puladas e ignoradas; expira sozinho.", "quem": "consultor" },
+        { "titulo": "Aprovar com o seu nome", "texto": "«Seu nome» no topo é obrigatório; a decisão fica na auditoria.", "quem": "consultor" },
+        { "titulo": "Executar", "texto": "só com a execução ao vivo ligada por arquivo; até lá o resultado mostra as chamadas.", "quem": "líder" }
+      ],
+      "concluido_quando": "Plano aprovado e, com execução ao vivo, participações conferidas na coleta seguinte.",
+      "doc": "docs/promocoes-por-cliente.md",
+      "doc_secao": "",
+      "onde": "/promocoes"
+    },
+    "regras_metodo": {
+      "titulo": "Regras do método (parâmetros do algoritmo)",
+      "sistema": "arquiteto",
+      "escopo": "global",
+      "chave": "config/algoritmo.json (regras, priors, foco, limiares)",
+      "camada": "arquivo config/algoritmo.json — mudar = reiniciar na janela combinada; a tela é só leitura",
+      "motivo": "Regra nova entra com prior declarado e sai pela calibração (Wilson abaixo de 25 %); nenhum módulo cria um segundo motor.",
+      "pre_requisitos": [
+        { "texto": "Calibração com ações medidas (previsto × realizado)", "verificar": "oraculo.calibrado" }
+      ],
+      "passos": [
+        { "titulo": "Ler a saúde das regras", "texto": "em Acerto do algoritmo: acerto, viés e Brier por regra.", "quem": "líder" },
+        { "titulo": "Decidir", "texto": "manter, revisar ou aposentar; a decisão é aplicada em config/algoritmo.json, não na tela.", "quem": "David" },
+        { "titulo": "Reiniciar e testar", "texto": "scripts/teste-algoritmo e a suíte inteira precisam passar antes de subir.", "quem": "técnico" }
+      ],
+      "concluido_quando": "Versão do algoritmo registrada e suíte verde depois da mudança.",
+      "doc": "docs/metodologia-algoritmo.md",
+      "doc_secao": "",
+      "onde": "/metodologia?sec=secParam"
+    }
+  }
+}

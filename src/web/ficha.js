@@ -11,7 +11,7 @@
     if (!r.ok) throw new Error(j.erro || `erro ${r.status}`)
     return j
   }
-  const lerNome = () => { try { return localStorage.getItem('ps_perfil_por') || '' } catch { return '' } }
+  const lerNome = () => { try { return window.PS?.quem?.().nome || localStorage.getItem('ps_perfil_por') || '' } catch { return '' } }   // padrão = «Quem sou» do topo (F2)
   const gravarNome = v => { try { localStorage.setItem('ps_perfil_por', v) } catch { /* sem armazenamento: só não lembra o nome */ } }
 
   async function montar(alvo, cliente, { aoSalvo } = {}) {

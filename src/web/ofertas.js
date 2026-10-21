@@ -51,7 +51,7 @@
   const pct = v => v == null || v === '' ? '—' : Number(v).toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + '%'
   const dt = iso => iso ? String(iso).slice(0, 16).replace('T', ' ').split(' ').map((p, i) => i === 0 ? p.split('-').reverse().join('/') : p).join(' ') : '—'
   const urlOk = u => /^https?:\/\//.test(String(u || '')) ? u : ''
-  const lerNome = () => { try { return localStorage.getItem('ps_perfil_por') || '' } catch { return '' } }
+  const lerNome = () => { try { return window.PS?.quem?.().nome || localStorage.getItem('ps_perfil_por') || '' } catch { return '' } }   // padrão = «Quem sou» do topo (F2)
   const gravarNome = v => { try { localStorage.setItem('ps_perfil_por', v) } catch { /* sem armazenamento */ } }
   const toast = (t, tipo) => window.PS?.toast ? PS.toast(t, tipo) : alert(t)
   const confirmar = o => window.PS?.confirmar ? PS.confirmar(o) : Promise.resolve(confirm(o.titulo))

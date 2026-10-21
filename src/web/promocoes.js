@@ -320,6 +320,7 @@ async function escolher() {
 }
 window.addEventListener('popstate', () => iniciar())
 function iniciar() {
+  const q = $('quem'); if (q && !q.value) q.value = lerPerfil()   // padrão de «Seu nome» = «Quem sou» do topo (F2); aprovar continua exigindo o nome
   const p = new URLSearchParams(location.search), c = p.get('cliente')
   c ? abrir(c, p.get('aba') || 'elegiveis', false) : escolher()
 }
@@ -570,7 +571,8 @@ async function abaCustos() {
   const semC = pag50(d.sem_custo, 'sem_custo'), semSku = pag50(d.skus_sem_custo, 'skus_sem_custo')
   const custosLista = Array.isArray(d.skus_efetivos) ? d.skus_efetivos : d.skus_efetivos?.itens || d.skus || []
   const vinc = v.erro ? `<div class="secao"><h3>Custo ↔ anúncio</h3>${erroBloco(v.erro, 'data-acao="aba" data-k="custos"')}</div>` : secaoVinculos(v, { r: S.resumo, foco, mais: S.mais, custos: custosLista })
-  pintar`${faixaPendCustos(d.custos_pendencias, S.cliente)}
+  pintar`<div class="linha ajuda-tab"><span class="mudo peq">Custos do cliente: planilha, Bling, Tiny e o vínculo com o anúncio</span><button class="btn-icone btn-ajuda" type="button" aria-label="Como fazer: Custos do cliente" data-ajuda="custos_erp"></button></div>
+    ${faixaPendCustos(d.custos_pendencias, S.cliente)}
     ${vinc}
     <div class="secao"><h3>Importar custos por SKU</h3><div class="sub">Cole uma linha por SKU: <code class="pr">SKU;custo</code> (aceita ; vírgula ou tab, e 12,50 ou 12.50). Reimportar atualiza.</div>
     <form class="pr-form" id="formCustos"><label class="v col2">Texto<textarea name="texto" placeholder="SKU-001;12,50&#10;SKU-002;8,90"></textarea></label><label class="v">Fonte<input name="fonte" maxlength="80" placeholder="ex.: planilha do cliente"></label><div><button class="btn" id="btnImportar" type="submit">Importar custos</button></div></form><div id="resImport"></div></div>
@@ -652,7 +654,7 @@ async function abaPlano(idAlvo) {
       ${ex.sync ? `<div class="n-acoes">Sync de ${esc(brHora(ex.sync.em))}: ${esc(ex.sync.entrou)} entrou · ${esc(ex.sync.nao_provado)} não provado(s)${ex.sync.sem_leitura ? ` · <b class="neg">${esc(ex.sync.sem_leitura)} SEM leitura (a leitura falhou: não é veredito, sincronize de novo)</b>` : ''} ${ex.sync.suspeito ? `· <b class="neg">${esc(ex.sync.aviso)}</b>` : ''}</div>` : ''}
       <div class="pr-acoes mt-2"><button class="btn" data-plano="${esc(p.id)}" data-acao="plano-sync">Sincronizar (só leitura; espera ${esc(p.espera_propagacao_min)} min)</button></div></div>`
   }
-  pintar`<div class="pr-filtros"><button class="btn" data-acao="plano-gerar">Gerar plano (dry-run)</button>${planos.length ? `<select id="selPlano" aria-label="Planos">${planos.map(x => `<option value="${esc(x.id)}" ${p && x.id === p.id ? 'selected' : ''}>${esc(brHora(x.criado_em))} · ${esc(x.estado)} · ${esc(x.resumo.entrar ?? 0)} entrada(s)</option>`).join('')}</select>` : ''}</div>
+  pintar`<div class="pr-filtros"><button class="btn" data-acao="plano-gerar">Gerar plano (dry-run)</button><button class="btn-icone btn-ajuda" type="button" aria-label="Como fazer: Promoções pelo plano" data-ajuda="promocoes"></button>${planos.length ? `<select id="selPlano" aria-label="Planos">${planos.map(x => `<option value="${esc(x.id)}" ${p && x.id === p.id ? 'selected' : ''}>${esc(brHora(x.criado_em))} · ${esc(x.estado)} · ${esc(x.resumo.entrar ?? 0)} entrada(s)</option>`).join('')}</select>` : ''}</div>
     ${corpo}
     ${comoFunciona('Como funciona', '<ul><li>Marcar não executa. O plano re-busca cada anúncio AO VIVO e mostra a chamada exata (offer_id vivo).</li><li>Ignora o que já participa; pula relâmpago SMART (só painel), LIGHTNING e campanha sem rebate; MC negativa só com ordem direta ou SKU "Livre".</li><li>Pre-check por margem: candidato vivo abaixo do aprovado não entra; acima entra. Hedge: entra em todas as campanhas equivalentes.</li><li>O plano expira em 24h e <b>nunca</b> contém saída de campanha.</li></ul>')}`
   // troca de plano: S.planoId só muda dentro do abaPlano, depois da leitura. Se ela falhar a tela segue no plano antigo — o select volta a ele e aprovar/executar ficam desabilitados até recarregar a aba
@@ -677,7 +679,7 @@ async function abaAuditoria() {
 
 // ── vínculo custo ↔ anúncio (aba Custos) ───────────────────────────────────────────────────────────
 // "por" = o nome do perfil (ps_perfil_por, o mesmo da tela do cliente e do vínculo de tarefa); sem ele, "Seu nome" do topo; sem os dois, pergunta
-const lerPerfil = () => { try { return localStorage.getItem('ps_perfil_por') || '' } catch { return '' } }
+const lerPerfil = () => { try { return window.PS?.quem?.().nome || localStorage.getItem('ps_perfil_por') || '' } catch { return '' } }   // padrão = «Quem sou» do topo (F2)
 function perguntarNome() {
   let d = document.getElementById('dlgPor')
   if (!d) {

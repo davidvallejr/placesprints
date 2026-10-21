@@ -396,3 +396,17 @@ Regras que valem em todas: ids nunca somem (`teste-shell-ui.mjs:47-59`, `cliente
 4. Resolver as 4 divergências documento × arquivo (decisão 1 acima + nome do fluxo n8n + plist semanal + plist git), porque o (i) e a tela de Estruturas vão expô-las.
 
 Logo depois, **F1 (2 dias)** é o que faz os 5 menus aparecerem no topo: só `src/web/shell.js` + ~15 linhas em `cliente.js`, `relatorios-ciclo.js` e `produtos.js`, sem reescrever nenhum teste existente.
+
+## H) Produto (Performance × Prime) e a jornada Prime — ver `docs/desenho-place-prime.md`
+
+Produto é uma **dimensão** (`config/produtos.json`, decisão de 21/10: `performance` = a equipe executa · `prime` = o cliente executa; carteira 116 · 56 · 5 sem produto), nunca um segundo motor. O que muda nos 5 menus e no stepper, só isso:
+
+- **Todo menu** ganha o filtro `?f=produto` (`CAMPOS_COMUNS.produto`, `src/lib/filtros.js`) e o escopo `tipo:'produto'` em `resolverEscopo` — é o «subdividir todos os pilares».
+- **Assessoria › O que funciona**: `#secPorProduto` (Todos · Performance · Prime · sem produto, ≤ 6 colunas, «sem amostra» honesto) e `#secTimeMelhorar` (o que o nosso time precisa melhorar, 4 linhas). **Acerto do algoritmo**: Brier por produto. **Painel**: contagem por produto em `#kpisSec`; `#secProgresso` com seletor.
+- **Consultor › Resumo**: `#secEncontros` (próximo encontro, realizados ÷ previstos, treinado, «Registrar encontro»); pill de produto ao lado do tier. **Plano**: passos da trilha Prime como ações da regra `trilha_prime` (o consultor aprova = puxa). **Como fazer**: aba «Trilha Prime».
+- **Execução › Pelo cliente**: «o que o cliente executou» (régua 14/30, «marcar feito» pelo consultor/CS). **Analistas** com `?f=produto=prime`: «Consultores: quem treina melhor» + `#secEncontros` por consultor. **Distribuir**: card Prime sem `people`, «Responsável: o cliente · consultor que treina».
+- **Empresa do cliente**: nada muda (a conta não muda de produto).
+- **Estrutura › Estruturas**: linha «Agenda da consultoria: só registro manual». **Configurar cliente**: produto da central, aviso se `perfil_informacao.servico` divergir, pendência `produto_nao_mapeado` (`cadastro:pendencias`), «Gerar acesso ao portal». **Regras do método**: `foco.por_produto`, `produtos.json`, `trilhas.json` só leitura.
+- **Hoje (`/fila`)**: consultor vê puxar trilha, encontro previsto vencido > 24 h («confirmar», nunca «faltou»), card do cliente parado > 14 d.
+- **Stepper (D)**: mesmas 10 etapas; no Prime a prova muda de mão — 5 Plano conta trilha puxada; 8 Executado = tarefas `executor = cliente` no prazo (atrasado > 14/30 d); 10 vira **«Treinado e comunicado»** (encontros realizados ÷ previstos, com ata, com treinado). P.R.O.V.A. = rollup das 10 etapas. Portal do cliente (reuso do `/c/` do S90 por `portal_conta`) mostra 6 rótulos: Começamos · Conectado · Plano · Trilha puxada · Você executando · Medido e comunicado.
+- Encontro continua sendo o card «Reunião de Alinhamento» + sidecar `encontro_info`; nenhum tipo novo no livro; `tarefas.id` nunca troca; fonte `ps` só na rota de saída do Notion.

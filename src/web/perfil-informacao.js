@@ -17,7 +17,7 @@
   }
   const toast = (t, tipo) => window.PS?.toast ? PS.toast(t, tipo) : alert(t)
   const confirmar = o => (window.PS?.confirmar ?? (x => Promise.resolve(confirm(x.titulo + (x.texto ? '\n\n' + x.texto : '')))))(o)
-  const lerNome = () => { try { return localStorage.getItem('ps_perfil_por') || '' } catch { return '' } }
+  const lerNome = () => { try { return window.PS?.quem?.().nome || localStorage.getItem('ps_perfil_por') || '' } catch { return '' } }   // padrão = «Quem sou» do topo (F2)
   const gravarNome = v => { try { localStorage.setItem('ps_perfil_por', v) } catch { /* sem armazenamento: só não lembra o nome */ } }
   const erroBloco = (alvo, e, denovo) => { alvo.innerHTML = `<div class="erro-bloco"><b>Não foi possível carregar</b><div>${esc(e.message)}</div><button class="btn btn-p" type="button" data-denovo>Tentar de novo</button></div>`; alvo.querySelector('[data-denovo]').onclick = denovo }
   const linkCli = c => `<a href="/cliente?cliente=${encodeURIComponent(c)}&amp;aba=configurar">${esc(c)}</a>`

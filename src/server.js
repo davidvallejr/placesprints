@@ -108,6 +108,7 @@ import { rotasHistorico } from './rotas-historico.js'
 import { rotasSaude } from './rotas-saude.js'
 import { criarSaudeSistema } from './lib/saude-sistema-real.js'
 import { criarRotasSaudeSistema } from './rotas-saude-sistema.js'
+import { criarRotasAjuda } from './rotas-ajuda.js'
 import { criarEnvio as criarEnvioSaude } from './lib/gatilhos-envio.js'
 
 configurarLogCustos(log); configurarLogWebhookCustos(log); configurarLogSyncErp(log)   // custos de ERP/planilha logam no mesmo log (nunca corpo/segredo)
@@ -155,6 +156,7 @@ app.use(criarRotasChaveiroExecutor({ exec: execChaveiro, clienteCanonico: c => c
 // autogestão (docs/plano-autogestao.md A2/A3/A5): sinais por sistema + incidentes (dono Head de canais) + data/batimento.json p/ o vigia externo; GET /api/saude só no loopback
 const saudeSis = criarSaudeSistema({ handle: db, getEstado, agora, log, notificar, envio: criarEnvioSaude({ env: process.env, log }) })
 app.use(criarRotasSaudeSistema({ saude: saudeSis }))
+app.use(criarRotasAjuda())   // ícone (i) «Como fazer»: texto de config/ajuda.json, estado 'sem_leitura' até a F3
 app.use(rotasSaude)       // GET /api/cliente/saude + POST /api/cliente/saude/atualizar (saúde da conta gravada: reputação, perguntas, reclamações, atrasos, Full; só leitura no ML)
 // encerramento por dependência do cliente (prévia por padrão; confirmar:true grava "Aguardando Devolutiva do Cliente" no Notion + registro local)
 const dependencias = criarDependencias({ handle: db, notion: { req: notionReq }, agora, hoje: hojeLocal, validarPor: validarLiderOuConsultor, mapeamento,

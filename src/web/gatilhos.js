@@ -18,7 +18,7 @@
   }
   const toast = (t, tipo) => window.PS?.toast ? PS.toast(t, tipo) : alert(t)
   const ui = () => window.PSRelatorio?.ui || null
-  const lerNome = () => { try { return localStorage.getItem('ps_perfil_por') || '' } catch { return '' } }
+  const lerNome = () => { try { return window.PS?.quem?.().nome || localStorage.getItem('ps_perfil_por') || '' } catch { return '' } }   // padrão = «Quem sou» do topo (F2)
   const erroBloco = (alvo, e, denovo) => { alvo.innerHTML = `<div class="erro-bloco"><b>Não foi possível carregar</b><div>${esc(e.message)}</div><button class="btn btn-p" type="button" data-denovo>Tentar de novo</button></div>`; alvo.querySelector('[data-denovo]').onclick = denovo }
   const kp = (rot, v, det) => `<div class="kpi"><div class="rotulo">${rot}</div><div class="valor">${v}</div><div class="detalhe">${det}</div></div>`
 

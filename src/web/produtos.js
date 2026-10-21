@@ -115,7 +115,7 @@
       <div id="prMais"></div>
       <section class="mt-2" id="secDre" data-so="lucro" hidden><div class="bloco-cab"><h3>Resultado do mês (DRE simples)</h3><label class="mini">Mês <input type="month" id="dreMes" value="${esc(String(r.hoje || '').slice(0, 7))}"></label></div><div id="dreCorpo"></div></section>
       <details class="recolhido mt-2"><summary>Premissas</summary><ul class="mini">${[...r.premissas, ...(r.financeiro?.premissas || [])].map(t => `<li>${esc(t)}</li>`).join('')}</ul></details>
-      <details class="recolhido mt-2" id="secSyncEstoque"><summary>Ajuste automático de estoque (prévia, desligado)</summary><p class="sub">Ainda não decide nada — chave desligada, ver Estrutura › Estruturas.</p><div id="syncCorpo"></div></details>
+      <details class="recolhido mt-2" id="secSyncEstoque"><summary>Ajuste automático de estoque (prévia, desligado)<button class="btn-icone btn-ajuda" type="button" aria-label="Como fazer: Ajuste automático de estoque" data-ajuda="estoque_sync"></button></summary><p class="sub">Ainda não decide nada — chave desligada, ver Estrutura › Estruturas.</p><div id="syncCorpo"></div></details>
       <aside class="gaveta" id="gavMapeamento" hidden aria-label="Gerenciar mapeamento"></aside>`
     const corpo = alvo.querySelector('#tabProdutos tbody'), cab = alvo.querySelector('#tabProdutos thead'), mais = alvo.querySelector('#prMais')
     // V3 F6: prévia do sincronismo (só leitura, POST /api/chaveiro/estoque/previa) — carrega ao abrir; sem botão novo; executar é do líder pela rota com confirmar

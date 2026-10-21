@@ -217,7 +217,7 @@ $('btnSyncPrest').onclick = async () => {
 // Notion de todos os clientes (página + filhos + Informações): prévia → confirmar → job com progresso (GET /api/notion/job/:id)
 $('btnNotionTodos').onclick = async () => {
   const b = $('btnNotionTodos'); fecharMenu(b)
-  let por = ''; try { por = localStorage.getItem('ps_perfil_por') || '' } catch { /* sem armazenamento */ }
+  let por = window.PS?.quem?.().nome || ''; try { por = por || localStorage.getItem('ps_perfil_por') || '' } catch { /* sem armazenamento */ }   // padrão = «Quem sou» do topo (F2)
   if (!por) { por = (prompt('Seu nome (líder ou consultor):') || '').trim(); if (!por) return; try { localStorage.setItem('ps_perfil_por', por) } catch { /* só não lembra */ } }
   b.disabled = true
   try {
@@ -336,7 +336,7 @@ const FB_TEMA = { vendas: 'Vendas', estoque_reposicao: 'Estoque e reposição', 
 const FB_STATUS = { novo: ['atencao', 'Nova'], revisado: ['neutro', 'Revisada'], implementar: ['bom', 'Implementar'], descartado: ['neutro', 'Descartada'] }
 const FB_ACAO = [['revisado', 'Marcar como revisada'], ['implementar', 'Marcar para implementar'], ['descartado', 'Descartar']]
 let fbTema = ''
-const fbPor = async titulo => { let n = ''; try { n = localStorage.getItem('ps_perfil_por') || '' } catch { /* sem armazenamento */ } return n || (await window.PSRelatorio?.ui?.pedirPor({ titulo, texto: 'Fica registrado quem decidiu.', rotuloOk: 'Continuar' })) || '' }
+const fbPor = async titulo => { let n = window.PS?.quem?.().nome || ''; try { n = n || localStorage.getItem('ps_perfil_por') || '' } catch { /* sem armazenamento */ } return n || (await window.PSRelatorio?.ui?.pedirPor({ titulo, texto: 'Fica registrado quem decidiu.', rotuloOk: 'Continuar' })) || '' }
 async function montarFeedback() {
   const tb = $('tbFeedback'); if (!tb) return
   let r

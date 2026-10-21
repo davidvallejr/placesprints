@@ -43,12 +43,26 @@
   resumo.addEventListener('click', e => { const q = qDaPagina(); if (q) { e.preventDefault(); q.focus() } })
   busca.addEventListener('toggle', () => { if (busca.open) inp.focus() })
   const slot = el('span', { className: 'ps-sino-slot' })
+  // Quem sou (F2): papel + nome lembrados em localStorage.ps_quem; o nome também vai a ps_perfil_por (o que as telas já liam) — só preenche «Seu nome»,
+  // nunca dá permissão: o cargo continua validado no servidor (config/equipe.json). No lugar do antigo utilitário «Integrações»; Hoje chega na F5.
+  const PAPEIS = [['dono', 'Dono'], ['lider', 'Líder'], ['consultor', 'Consultor'], ['analista', 'Analista'], ['cs', 'CS'], ['tecnico', 'Técnico']]
+  const lerQuem = () => { let q = {}; try { q = JSON.parse(localStorage.getItem('ps_quem') || '{}') || {} } catch { q = {} } let nome = String(q.nome || ''); if (!nome) try { nome = localStorage.getItem('ps_perfil_por') || '' } catch { /* sem armazenamento */ } return { papel: PAPEIS.some(p => p[0] === q.papel) ? q.papel : '', nome: nome.trim().slice(0, 80) } }
+  const gravarQuem = q => { try { localStorage.setItem('ps_quem', JSON.stringify(q)); if (q.nome) localStorage.setItem('ps_perfil_por', q.nome) } catch { /* sem armazenamento: só não lembra */ } }
+  const selPapel = el('select', { id: 'psQuemPapel', name: 'papel' }, el('option', { value: '', textContent: 'Escolha o papel' }), ...PAPEIS.map(([v, t]) => el('option', { value: v, textContent: t })))
+  const inpNome = el('input', { id: 'psQuemNome', name: 'nome', type: 'text', maxLength: 80, autocomplete: 'name', placeholder: 'Nome e sobrenome' })
+  const quemNome = el('span', { className: 'ps-quem-nome' }), quemPapel = el('span', { className: 'ps-quem-papel' })
+  const quemResumo = attr(el('summary', { className: 'ps-quem-botao' }, quemNome, quemPapel), { 'aria-label': 'Quem sou: papel e nome usados como «Seu nome»' })
+  const pintarQuem = () => { const q = lerQuem(); selPapel.value = q.papel; inpNome.value = q.nome; quemNome.textContent = q.nome || 'Quem sou'; quemPapel.textContent = q.papel ? ' · ' + PAPEIS.find(p => p[0] === q.papel)[1] : '' }
+  const quemPainel = el('div', { className: 'ps-quem-painel' }, el('label', { htmlFor: 'psQuemPapel', textContent: 'Papel' }, selPapel), el('label', { htmlFor: 'psQuemNome', textContent: 'Nome (vira o padrão de «Seu nome»)' }, inpNome), el('span', { className: 'mudo', textContent: 'Lembrado neste navegador. Quem pode aprovar, liberar ou enviar continua sendo decidido pelo servidor.' }))
+  const quem = el('details', { className: 'ps-quem' }, quemResumo, quemPainel)
+  for (const c of [selPapel, inpNome]) c.addEventListener('change', () => { gravarQuem({ papel: selPapel.value, nome: inpNome.value.trim().slice(0, 80) }); pintarQuem() })
+  pintarQuem()
   const lista = attr(el('nav', { className: 'ps-menu-lista' }), { 'aria-label': 'Todas as páginas' })
   for (const [nome, abas] of G) lista.append(el('p', { className: 'ps-menu-grupo', textContent: nome }), ...abas.map(a => link(itens.find(i => i.id === a[0]))))
   const menu = el('details', { className: 'ps-menu' }, el('summary', { className: 'ps-menu-botao', textContent: 'Menu' }), lista)
   const pular = el('a', { className: 'ps-pular', href: '#', textContent: 'Pular para o conteúdo' })
   pular.onclick = e => { const m = document.querySelector('main'); if (m) { e.preventDefault(); m.tabIndex = -1; m.focus() } }
-  topo.append(pular, el('div', { className: 'ps-barra' }, marca, grupos, el('div', { className: 'ps-util' }, busca, slot, menu)))
+  topo.append(pular, el('div', { className: 'ps-barra' }, marca, grupos, el('div', { className: 'ps-util' }, quem, busca, slot, menu)))
 
   // linha 2: submenus do menu ativo + contexto do cliente; reconstruída quando o item ativo muda de menu (ex.: ?aba=produtos → Empresa do cliente)
   const ctx = el('span', { className: 'ps-ctx' })
@@ -80,7 +94,7 @@
   if (!moverSino()) { const mo = new MutationObserver(() => { if (moverSino()) mo.disconnect() }); mo.observe(document.body, { childList: true }) }
 
   // menus: clique fora ou Esc fecha qualquer details aberto (vale para os menus de todas as telas)
-  const fechar = alvo => document.querySelectorAll('details.menu[open], details.ps-menu[open], details.ps-busca[open]').forEach(d => { if (!alvo || !d.contains(alvo)) d.open = false })
+  const fechar = alvo => document.querySelectorAll('details.menu[open], details.ps-menu[open], details.ps-busca[open], details.ps-quem[open]').forEach(d => { if (!alvo || !d.contains(alvo)) d.open = false })
   document.addEventListener('click', e => fechar(e.target))
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') { const d = document.activeElement?.closest?.('details[open]'); fechar(null); d?.querySelector('summary')?.focus(); return }
@@ -96,6 +110,8 @@
   for (const n of [topo, abas]) for (const ev of ['mouseenter', 'focus']) n.addEventListener(ev, e => { const a = e.target.closest?.('a[href]'); if (a) prefetch(a) }, true)
 
   window.PS = {
+    // quem está usando: { papel, nome } de «Quem sou» (localStorage.ps_quem; nome cai para ps_perfil_por). Valor padrão de «Seu nome» nas telas; permissão é do servidor
+    quem: lerQuem,
     // a régua: proporção real sob o veredito (valor × marco de referência), em %; sem valor numérico ela some
     regua(alvo, { valor, marco = null, rotulo = '', rotuloMarco = '' } = {}) {
       const r = typeof alvo === 'string' ? document.getElementById(alvo) : alvo; if (!r) return

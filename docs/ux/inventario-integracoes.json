@@ -192,7 +192,8 @@
   "#s90Form (submit → prévia → PS.confirmar → confirmar:true)",
   "#secSaudeSistema (seção Saúde do sistema, autogestão A2)",
   "#saudeSistema (innerHTML das linhas de GET /api/saude, a cada 2 min)",
-  "#saudeSistemaNota (textContent: hora da leitura, incidentes abertos/resolvidos, chave do WhatsApp do crítico)"
+  "#saudeSistemaNota (textContent: hora da leitura, incidentes abertos/resolvidos, chave do WhatsApp do crítico)",
+  "[data-ajuda] (F2, 21/10/2026; ícone (i) «Como fazer» depois do .sis-papel: #secLista (ml), #custosPainel (custos_erp), #secS90 (sprint90), #secSaudeSistema (saude_sistema) e dentro do <summary> de #secConfig (app_ml)) → ajuda.js (window.PSAjuda.abrir) → GET /api/ajuda/:id → dialog.dlg.dlg-ajuda; estado sem_leitura até a F3. #custosQuem e #s90Quem recebem window.PS.quem().nome como valor padrão quando vazios (fim de integracoes.js)"
  ],
  "classes_geradas_por_js": [
   "card",

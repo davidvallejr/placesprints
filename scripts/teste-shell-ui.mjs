@@ -24,7 +24,7 @@ const PAGINAS = [
   ['comercial.html', 'comercial', 'comercial.js', 'comercial'], ['resultados.html', 'o-que-funciona', 'resultados.js', 'resultados'], ['metodologia.html', 'algoritmo', 'metodologia.js', 'metodologia'],
   ['processos.html', 'processos', 'processos.js', 'processos'], ['integracoes.html', 'integracoes', 'integracoes.js', 'integracoes'],
 ]
-const COMPARTILHADOS = ['src/web/ficha.js', 'src/web/acomp.js', 'src/web/relatorio.js', 'src/web/pendencias.js', 'src/web/alertas.js', 'src/web/gatilhos.js', 'src/web/alinhamentos.js', 'src/web/dossie.js', 'src/web/perfil-informacao.js', 'src/web/galeria-anuncio.js', 'src/web/produtos.js', 'src/web/executar.js', 'src/web/relatorios-ciclo.js', 'src/web/custos-upload.js', 'src/web/alerta.js', 'src/web/shell.js'].map(ler).join('\n')
+const COMPARTILHADOS = ['src/web/ficha.js', 'src/web/acomp.js', 'src/web/relatorio.js', 'src/web/pendencias.js', 'src/web/alertas.js', 'src/web/gatilhos.js', 'src/web/alinhamentos.js', 'src/web/dossie.js', 'src/web/perfil-informacao.js', 'src/web/galeria-anuncio.js', 'src/web/produtos.js', 'src/web/executar.js', 'src/web/relatorios-ciclo.js', 'src/web/custos-upload.js', 'src/web/alerta.js', 'src/web/shell.js', 'src/web/ajuda.js'].map(ler).join('\n')
 
 // ═════════ (1) esqueleto do shell nas 11 páginas ═════════════════════════════════════════════════════
 caso('shell: as 11 páginas têm data-pagina, placeholder + /shell.js, /ui.css, /alerta.js defer e nenhum CSS/header antigo', () => {
@@ -461,6 +461,19 @@ caso('shell F1: G tem os 5 menus Assessoria · Consultor · Execução · Empres
   assert.match(cli, /closest\('\[data-painel\]'\)/, 'mostrarAba tolerante a ?sec= de outro painel'); assert.match(cli, /for \(const k of \['aba', 'sec', 'rc', 'visao'\]\) if \(u\.get\(k\)\) q\.set\(k, u\.get\(k\)\)/, 'abrirCliente preserva aba, sec, rc e visao')
   assert.equal((cli.match(/<h3 class="grupo-cfg">/g) || []).length, 5, '5 cabeçalhos de grupo em Configurar')
   assert.match(ler('src/web/relatorios-ciclo.js'), /\.get\('rc'\)/); assert.match(ler('src/web/produtos.js'), /\.get\('visao'\) === 'lucro'/)
+})
+
+// ═════════ (21) F2 dos 5 menus: «Quem sou» no shell (details.ps-quem, localStorage.ps_quem, window.PS.quem) e ajuda.js em todas as páginas ═════════
+caso('shell F2: window.PS expõe quem; details.ps-quem com select de papel + input de nome em .ps-util, lembrado em ps_quem (nome espelhado em ps_perfil_por), sem permissão; /ajuda.js defer no fim das 11 páginas, depois de /alerta.js', () => {
+  const js = ler('src/web/shell.js')
+  assert.match(js, /window\.PS = \{\s*\/\/[^\n]*\n\s*quem: lerQuem,/, 'window.PS expõe quem')
+  assert.match(js, /className: 'ps-quem'/); assert.match(js, /id: 'psQuemPapel'/); assert.match(js, /id: 'psQuemNome'/)
+  assert.match(js, /localStorage\.getItem\('ps_quem'\)/); assert.match(js, /localStorage\.setItem\('ps_quem'/); assert.match(js, /localStorage\.setItem\('ps_perfil_por', q\.nome\)/, 'o nome vai para ps_perfil_por (o que as telas já liam)')
+  assert.deepEqual([...js.matchAll(/\['(dono|lider|consultor|analista|cs|tecnico)', '/g)].map(m => m[1]), ['dono', 'lider', 'consultor', 'analista', 'cs', 'tecnico'], 'os 6 papéis do doc (§ B)')
+  assert.match(js, /details\.ps-quem\[open\]/, 'clique fora e Esc fecham o Quem sou')
+  assert.doesNotMatch(js, /\bfetch\(|XMLHttpRequest/, 'o shell não chama API')   // \b: o prefetch() de links do topo não é chamada de API
+  for (const [html] of PAGINAS) assert.match(ler('src/web/' + html), /<script src="\/alerta\.js" defer><\/script>\s*<script src="\/ajuda\.js" defer><\/script>/, html + ': /ajuda.js depois de /alerta.js')
+  for (const sel of ['.ps-quem', '.ps-quem-botao', '.ps-quem-painel']) assert.ok(UI.includes(sel), 'ui.css sem ' + sel)
 })
 
 const inventarios = readdirSync(RAIZ + 'docs/ux').filter(f => /^inventario-.*\.json$/.test(f)).length

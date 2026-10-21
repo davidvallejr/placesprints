@@ -445,6 +445,7 @@ $('s90Form').addEventListener('submit', async ev => {
   } catch (e) { toast(e.message, 'erro') }
 })
 carregarS90()
+for (const id of ['custosQuem', 's90Quem']) { const c = $(id); if (c && !c.value) c.value = window.PS?.quem?.().nome || '' }   // padrão de «Seu nome» = «Quem sou» do topo (F2); o cargo é validado no servidor
 // </s90>
 
 // <saude-sistema> autogestão (docs/plano-autogestao.md A2): GET /api/saude, a cada 2 min; só leitura

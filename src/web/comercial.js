@@ -252,7 +252,7 @@ function abrirLinkPublico() {
 $('btLinkPublico').onclick = abrirLinkPublico
 
 // ── apagar cadastros de teste: prévia (lista) → confirmar com o nome de quem apaga (líder/dono) ──
-const lerPor = () => { try { return localStorage.getItem('ps_perfil_por') || '' } catch { return '' } }
+const lerPor = () => { try { return window.PS?.quem?.().nome || localStorage.getItem('ps_perfil_por') || '' } catch { return '' } }   // padrão = «Quem sou» do topo (F2)
 async function apagarTestes() {
   const por = (lerPor() || prompt('Seu nome (líder ou dono da Place2u):') || '').trim()
   if (!por) return

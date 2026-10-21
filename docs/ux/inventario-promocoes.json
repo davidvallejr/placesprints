@@ -266,7 +266,8 @@
   "Chaves das abas (URL ?aba=): elegiveis, participando, relampago, regras, custos, interrogatorio, plano, auditoria (ABAS_FORM = custos, regras, interrogatorio)",
   "Marcadores no fonte: // <puro> … // </puro> e // <custos-erp> … // </custos-erp> (os testes extraem e executam esses trechos). O vínculo custo ↔ anúncio mora no <custos-erp> (ROT_ORIGEM, TIT_ORIGEM, normMlb, h*, secaoVinculos): construtores puros, toda interpolação por esc()/fmtR()/h*()",
   "localStorage 'promo_quem' (Seu nome) e 'ps_perfil_por' (quem vincula custo ↔ anúncio: ps_perfil_por, senão #quem, senão pergunta em #dlgPor; sempre com try/catch)",
-  "URL /promocoes?cliente=…&aba=… (pushState/replaceState/popstate)"
+  "URL /promocoes?cliente=…&aba=… (pushState/replaceState/popstate)",
+  "[data-ajuda] (F2, 21/10/2026; ícone (i) «Como fazer» na aba Plano (promocoes, na .pr-filtros ao lado de Gerar plano) e na aba Custo ligado ao anúncio (custos_erp, linha .ajuda-tab antes do conteúdo)) → ajuda.js (window.PSAjuda.abrir) → GET /api/ajuda/:id → dialog.dlg.dlg-ajuda. #quem recebe window.PS.quem().nome (via lerPerfil, que cai para ps_perfil_por) como valor padrão em iniciar(); aprovar continua exigindo o nome"
  ],
  "classes_geradas_por_js": [
   "res-item",

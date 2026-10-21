@@ -100,7 +100,8 @@
   "metodologia.js não usa querySelector, classList nem dataset. O único seletor é document.getElementById, por meio de const $ = id => document.getElementById(id)",
   "Ordem dos scripts: <script src=\"metodologia.js\"> no fim do body (sem defer; depende dos ids já existirem no DOM) + <script src=\"/alerta.js\" defer>",
   "Globais injetados pelo alerta.js que o layout não pode esconder nem colidir: #psSino, #psPainel, #psToasts, button.sino, .cont, .ico, .psItem, .psToast, .mini, .topo, .fechar (fixos em bottom/right, z-index 9998/9999)",
-  "Strings do mapa SIT usadas como chave de selo: 'sem dados ainda'→neutro, 'em observação'→atencao, 'validada pelos dados'→bom, 'candidata à aposentadoria'→ruim (vêm de src/lib/calibracao.js:83-86)"
+  "Strings do mapa SIT usadas como chave de selo: 'sem dados ainda'→neutro, 'em observação'→atencao, 'validada pelos dados'→bom, 'candidata à aposentadoria'→ruim (vêm de src/lib/calibracao.js:83-86)",
+  "[data-ajuda] (F2, 21/10/2026; ícone (i) «Como fazer» dentro do <summary> de #secParam (regras_metodo), com preventDefault/stopPropagation) → ajuda.js (window.PSAjuda.abrir) → GET /api/ajuda/:id → dialog.dlg.dlg-ajuda; a tela continua só leitura"
  ],
  "classes_geradas_por_js": [
   "explica (div, com h4, ul, li, b, p dentro)",

@@ -45,7 +45,7 @@
   // mesma codificação do servidor (lib/filtros.js serializar): base64url do JSON compacto {p,a,t}
   const b64url = s => btoa(unescape(encodeURIComponent(s))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
   const serializar = def => b64url(JSON.stringify({ p: def.painel, a: def.arvore, t: def.periodo ? { c: def.periodo.campo, s: def.periodo.preset, d: def.periodo.de, a: def.periodo.ate, x: def.periodo.comparar } : null }))
-  const lerNome = () => { try { return localStorage.getItem('ps_perfil_por') || '' } catch { return '' } }
+  const lerNome = () => { try { return window.PS?.quem?.().nome || localStorage.getItem('ps_perfil_por') || '' } catch { return '' } }   // padrão = «Quem sou» do topo (F2)
   const gravarNome = v => { try { localStorage.setItem('ps_perfil_por', v) } catch { /* sem armazenamento */ } }
   const fUrl = p => new URLSearchParams(location.search).get(p)
   const desserializarLocal = s => { try { const j = JSON.parse(decodeURIComponent(escape(atob(s.replace(/-/g, '+').replace(/_/g, '/'))))); return { painel: j.p, arvore: j.a || null, periodo: j.t ? { campo: j.t.c, preset: j.t.s, de: j.t.d, ate: j.t.a, comparar: j.t.x } : null } } catch { return null } }

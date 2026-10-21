@@ -17,7 +17,7 @@
   }
   const toast = (t, tipo) => window.PS?.toast ? PS.toast(t, tipo) : alert(t)
   const confirmarPS = o => (window.PS?.confirmar ?? (x => Promise.resolve(confirm(x.titulo + (x.texto ? '\n\n' + x.texto : '')))))(o)
-  const lerNome = () => { try { return localStorage.getItem('ps_perfil_por') || '' } catch { return '' } }
+  const lerNome = () => { try { return window.PS?.quem?.().nome || localStorage.getItem('ps_perfil_por') || '' } catch { return '' } }   // padrão = «Quem sou» do topo (F2)
   const gravarNome = v => { try { localStorage.setItem('ps_perfil_por', v) } catch { /* sem armazenamento: só não lembra o nome */ } }
   const linkSeguro = u => { try { const x = new URL(u); return x.protocol === 'https:' ? x.href : '' } catch { return '' } }
   const espera = ms => new Promise(r => setTimeout(r, ms))

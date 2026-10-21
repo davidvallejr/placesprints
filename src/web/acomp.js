@@ -10,7 +10,7 @@ const seloCatalogo = o => o === 'terceiros' ? '<span class="selo azul" title="Co
 const svgSeguro = svg => typeof svg === 'string' && /^<svg class="micro" [^>]*>[\s\S]*<\/svg>$/.test(svg) && !/<script|<foreignObject|\son\w+\s*=|javascript:|<a[\s>]|<image|<use/i.test(svg) ? svg : ''
 const VEREDITO = { funciona: ['funciona', 'ok'], nao_funciona: ['sem resultado mensurável', 'no'], inconclusivo: ['resultado misto', 'mid'], sem_amostra: ['sem amostra', 'mid'] }
 const ESTADO_ROT = { queda: 'Queda', estagnacao: 'Estagnação', crescimento: 'Crescimento', sem_base: 'Sem base' }
-const nomeQuem = () => { try { return localStorage.getItem('ps_perfil_por') || '' } catch { return '' } }
+const nomeQuem = () => { try { return window.PS?.quem?.().nome || localStorage.getItem('ps_perfil_por') || '' } catch { return '' } }   // padrão = «Quem sou» do topo (F2)
 
 // ── 1. Retroalimentação ─────────────────────────────────────────────────────
 async function carregarRetro(cliente) {

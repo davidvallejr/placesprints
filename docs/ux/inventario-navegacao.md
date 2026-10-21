@@ -28,6 +28,8 @@ Os destinos interinos de Empresa do cliente (Raio-X, Custos, Nota fiscal por `?s
 - **Linha 2** = submenus do menu do item ativo; é reconstruída pelo `sync()` quando o item ativo muda de menu (todo `pushState/replaceState/popstate`). «Cliente: Nome» aparece à direita quando o item ativo carrega `?cliente=`.
 - **`?sec=<id>`:** em página estática o shell abre o `details` e rola até o bloco no `DOMContentLoaded`; no `/cliente`, `desenhar()` faz isso depois de `mostrarAba`, que resolve o painel certo por `closest('[data-painel]')`. `?rc=` pré-seleciona o relatório do ciclo; `?visao=lucro` abre o chip Lucro.
 - **Menu hambúrguer (< 900 px):** os 5 menus como títulos e todos os submenus como linhas; nada além do `G`.
+- **Quem sou (F2, 21/10/2026):** `details.ps-quem` em `.ps-util`, antes da busca — papel (dono · líder · consultor · analista · CS · técnico) + nome, lembrados em `localStorage.ps_quem` (nome também em `ps_perfil_por`); `window.PS.quem()` é o valor padrão de todo «Seu nome». Não dá permissão: o cargo é validado no servidor. O lugar de **Hoje** (`/fila`) chega na F5.
+- **Ícone (i) «Como fazer» (F2):** `button.btn-ajuda[data-ajuda]` ao lado do selo de sistema das estruturas configuráveis (texto em `config/ajuda.json`, `GET /api/ajuda/:id`, diálogo em `src/web/ajuda.js`); estado `sem leitura` até a F3.
 - **Utilitários:** Buscar cliente (`/`), vaga vazia (Hoje na F5, Quem sou na F2) e o sino do `alerta.js`.
 - **Pinos:** `['execucao', 'Painel executivo', '/']` e «nada de Sprint 90 no shell» (`teste-shell-ui.mjs`); o caso (20) confere os 5 nomes e que todo `href` casa um `app.get` de `src/server.js`.
 
