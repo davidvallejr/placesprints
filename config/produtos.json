@@ -1,0 +1,23 @@
+{
+  "$comentario": "Produto de cada cliente, derivado do campo 'tier' da central do Notion (clientes_central.tier). Lista FECHADA, decisão do David em 21/10/2026. Produto é uma DIMENSÃO: corta diagnóstico, plano, medição e aprendizado — nunca um segundo motor. Tier fora da lista = produto '' + pendência 'produto_nao_mapeado' (nunca inferido).",
+  "produtos": {
+    "performance": { "nome": "Place Performance", "tipo": "assessoria", "quem_executa": "equipe", "descricao": "A Place2u executa a operação do cliente nos marketplaces." },
+    "prime": { "nome": "Place Prime", "tipo": "consultoria", "quem_executa": "cliente", "descricao": "A Place2u constrói com o cliente a estrutura lógica (pesquisa, plano de ação) e transborda o conhecimento técnico-estratégico; o cliente executa." }
+  },
+  "subtipos": {
+    "prime_negocio": { "produto": "prime", "nome": "Prime Negócio (Legacy/Full)", "descricao": "Consultoria + implementação + treinamento, mais dentro do negócio do cliente: gestão, processos, cultura e liderança." },
+    "performance_erp": { "produto": "performance", "nome": "Reestruturação (implantação de ERP)", "descricao": "Assessoria com foco na implantação de ERP." }
+  },
+  "tier_para_produto": {
+    "Plano Performance": { "produto": "performance" },
+    "Assessoria Bronze": { "produto": "performance" },
+    "Assessoria Gold": { "produto": "performance" },
+    "Amazon Branding": { "produto": "performance" },
+    "Reestruturação": { "produto": "performance", "subtipo": "performance_erp" },
+    "Place Prime": { "produto": "prime" },
+    "Consultor parceiro": { "produto": "prime" },
+    "Legacy": { "produto": "prime", "subtipo": "prime_negocio" },
+    "Full": { "produto": "prime", "subtipo": "prime_negocio" }
+  },
+  "pendencia_quando_fora_da_lista": "produto_nao_mapeado"
+}
