@@ -441,6 +441,28 @@ caso('perfil de informação: #secPerfilInfo recolhida entre #secFeedback e #sec
   assert.match(ler('src/lib/db.js'), /db\.exec\(SCHEMA_PERFIL_INFO\)/); assert.match(ler('src/lib/db.js'), /ADD COLUMN origem TEXT NOT NULL DEFAULT 'whatsapp'/)
 })
 
+// ═════════ (20) F1 dos 5 menus (docs/ux/arquitetura-5-menus.md § A.0–A.6): nomes, nenhum link para 404, ?sec= só para id que existe ═════════
+caso('shell F1: G tem os 5 menus Assessoria · Consultor · Execução · Empresa do cliente · Estrutura; todo href é / ou casa um app.get(\'<rota>\' de src/server.js; todo ?sec= aponta para um id existente; sem ?m=, sem INT/«Configuração»; sync por new URL; deep link no cliente.js', () => {
+  const js = ler('src/web/shell.js'), srv = ler('src/server.js'), cli = ler('src/web/cliente.js')
+  const ini = js.indexOf('const G = ['), bloco = js.slice(ini, js.indexOf('\n  ]\n', ini) + 4)
+  assert.deepEqual([...bloco.matchAll(/^\s*\['([^']+)', \[/gm)].map(m => m[1]), ['Assessoria', 'Consultor', 'Execução', 'Empresa do cliente', 'Estrutura'])
+  const itens = [...bloco.matchAll(/\['([\w:-]+)', '([^']+)', '(\/[^']*)'\]/g)]
+  assert.ok(itens.length >= 25, 'itens do G: ' + itens.length)
+  const rotas = new Set([...srv.matchAll(/app\.get\('(\/[^']*)'/g)].map(m => m[1]))
+  const web = readdirSync(RAIZ + 'src/web').filter(f => /\.(html|js)$/.test(f)).map(f => ler('src/web/' + f)).join('\n')
+  for (const [, id, , href] of itens) {
+    const u = new URL(href, 'http://x')
+    assert.ok(u.pathname === '/' || rotas.has(u.pathname), `${id}: ${u.pathname} sem app.get em src/server.js`)
+    const sec = u.searchParams.get('sec'); if (sec) assert.ok(web.includes(`id="${sec}"`), `${id}: #${sec} não existe em src/web`)
+    assert.ok(!u.searchParams.has('m'), `${id}: sem ?m=`); assert.equal(id.split(':')[0], PAGINAS.find(p => p[1] === id.split(':')[0])?.[1], `${id}: data-pagina conhecido`)
+  }
+  assert.doesNotMatch(js, /const INT = |'Configuração'|ps-int/, 'INT e «Configuração» saíram'); assert.doesNotMatch(js, /[?&]m=/, 'sem parâmetro ?m=')
+  assert.match(js, /new URL\(a\.dataset\.base, location\.origin\)/, 'sync preserva &aba=&sec= do href'); assert.match(js, /document\.getElementById\(sec\)/, 'abre ?sec= em página estática')
+  assert.match(cli, /closest\('\[data-painel\]'\)/, 'mostrarAba tolerante a ?sec= de outro painel'); assert.match(cli, /for \(const k of \['aba', 'sec', 'rc', 'visao'\]\) if \(u\.get\(k\)\) q\.set\(k, u\.get\(k\)\)/, 'abrirCliente preserva aba, sec, rc e visao')
+  assert.equal((cli.match(/<h3 class="grupo-cfg">/g) || []).length, 5, '5 cabeçalhos de grupo em Configurar')
+  assert.match(ler('src/web/relatorios-ciclo.js'), /\.get\('rc'\)/); assert.match(ler('src/web/produtos.js'), /\.get\('visao'\) === 'lucro'/)
+})
+
 const inventarios = readdirSync(RAIZ + 'docs/ux').filter(f => /^inventario-.*\.json$/.test(f)).length
 caso('prestação de contas e dossiê: #secDossie/#secRisco/#secContrato em Configurar antes de #secAvisos (contêineres vivos), #secRisco recolhida em /planos entre #secFeedback e #secAvisosAuto, botões secundários, primário só dentro do diálogo, sem hex nem emoji', () => {
   const clj = ler('src/web/cliente.js'), dj = ler('src/web/dossie.js'), pl = ler('src/web/planos.html')

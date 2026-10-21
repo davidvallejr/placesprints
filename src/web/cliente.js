@@ -83,7 +83,7 @@ async function abrirCliente(nome, empurrar = true) {
   const main = $('telaCliente')
   main.hidden = false
   main.innerHTML = SK('sk-linha', 'sk-kpi', 'sk-tabela')
-  if (empurrar) history.pushState({ c: nome }, '', '/cliente?cliente=' + encodeURIComponent(nome))
+  if (empurrar) { const u = new URLSearchParams(location.search), q = new URLSearchParams({ cliente: nome }); for (const k of ['aba', 'sec', 'rc', 'visao']) if (u.get(k)) q.set(k, u.get(k)); history.pushState({ c: nome }, '', '/cliente?' + q) }   // aba, sec, rc e visao da URL seguem com o cliente novo (deep link do shell)
   try {
     const r = await api('/api/cliente/painel?cliente=' + encodeURIComponent(nome))
     if (seq !== painelSeq) return                       // chegou atrasada: outro cliente já foi aberto
@@ -205,13 +205,15 @@ function kpisHtml(d) {
 // ── abas da página: só escondem; a URL guarda ?aba= por replaceState (nunca pushState nem hash) ──
 function mostrarAba(aba) {
   if (!ABAS.some(a => a[0] === aba)) aba = 'resumo'
+  const u = new URLSearchParams(location.search), sec = u.get('sec'), painelSec = sec ? $(sec)?.closest('[data-painel]')?.dataset.painel : null
+  // ?sec= de outro painel: vindo da URL vale o painel onde o bloco mora (links com aba= antiga quando um bloco muda de aba); ao trocar de aba na página o sec cai
+  if (painelSec && painelSec !== aba) { if (aba === (u.get('aba') || 'resumo')) aba = painelSec; else u.delete('sec') }
   document.querySelectorAll('[data-aba-cli]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.abaCli === aba)))
   document.querySelectorAll('[data-painel]').forEach(s => { s.hidden = s.dataset.painel !== aba })
   if (aba === 'executar') carregarExecutar()                                   // aba Executar (Chaveiro F4+): console de execução, carregado só quando a aba abre
   if (aba === 'produtos') carregarProdutos()                                   // aba Produtos (V3 F2, sombra): carrega só quando aberta — chama o diagnóstico no servidor
   if (aba === 'relatorios') carregarRelatoriosCiclo()                          // aba Relatórios (V3 F9): os 8 relatórios, carregados só quando a aba abre
-  const u = new URLSearchParams(location.search)
-  if (u.get('aba') !== aba && dados) { u.set('cliente', dados.cliente); u.set('aba', aba); history.replaceState(history.state, '', '/cliente?' + u.toString()) }
+  if ((u.get('aba') !== aba || (sec && !u.has('sec'))) && dados) { u.set('cliente', dados.cliente); u.set('aba', aba); history.replaceState(history.state, '', '/cliente?' + u.toString()) }
 }
 function mostrarPlano(v) {
   planoVisao = v
@@ -451,15 +453,20 @@ function desenhar() {
   </section>
 
   <section data-painel="configurar" hidden>
+    <h3 class="grupo-cfg">Quem é e quem atende</h3>
     <section class="bloco" id="secFicha"><div class="bloco-cab"><h2>Equipe e contas do cliente</h2></div><p class="sub">Quem atende este cliente por canal e papel, e os links das contas. A tarefa aprovada sai delegada no Notion a partir daqui.</p><div id="ficha">${SK('sk-tabela')}</div></section>
+    <h3 class="grupo-cfg">O que o cliente recebe</h3>
     <section class="bloco" id="secRelatorio"><div class="bloco-cab"><h2>Relatório no Notion: frequência e envio</h2><span class="sis" data-sistema="morpheus" title="Sistema de origem: Morpheus">Morpheus</span><small class="sis-papel">· comunicação</small></div><p class="sub">Relatório curto (resultados, atividades, desenvolvimento e próximos passos dos últimos 7 dias), criado na base Informações do cliente com a categoria Relatório de Sprints Place2u. Semanal, quinzenal ou mensal.</p><div id="relatorio">${SK('sk-tabela')}</div></section>
     <section class="bloco" id="secPerfil"><div class="bloco-cab"><h2>Estilo do relatório PDF</h2><span class="sis" data-sistema="morpheus" title="Sistema de origem: Morpheus">Morpheus</span><small class="sis-papel">· comunicação</small></div><p class="sub">Define como o Relatório Semanal é escrito para este cliente: densidade, provas, tom e linguagem.</p><div id="perfil">${SK('sk-tabela')}</div></section>
     <section class="bloco" id="secPerfilCliente"><div class="bloco-cab"><h2>Temas que o cliente pediu</h2><span class="sis" data-sistema="morpheus" title="Sistema de origem: Morpheus">Morpheus</span><small class="sis-papel">· comunicação</small></div><p class="sub">Temas do relatório na ordem que o cliente pediu, nível (padrão, didático para quem está aprendendo, completo) e serviço. A base fixa vem para todos; os pedidos sobem para o topo. Sugestão pelas respostas no grupo só sugere até alguém salvar. Cada mudança entra no histórico e no livro de registro.</p><div id="perfilInfo">${SK('sk-tabela')}</div></section>
+    <h3 class="grupo-cfg">Conta no Mercado Livre</h3>
     <section class="bloco" id="secCatalogo"><div class="bloco-cab"><h2>Anúncios de catálogo</h2><span class="sis" data-sistema="trinity" title="Sistema de origem: Trinity">Trinity</span><small class="sis-papel">· coleta</small></div><p class="sub">Foto, título, descrição e ficha do anúncio de catálogo são controlados pelo catálogo do Mercado Livre: de terceiros, o vendedor não altera; próprio, só por sugestão de correção, com revisão do Mercado Livre. O sistema não recomenda conteúdo nesses anúncios e mostra o selo de catálogo.</p><div id="catalogo">${SK('sk-tabela')}</div></section>
     <section class="bloco" id="cad-sec"><div class="bloco-cab"><h2>Cadastro do CS (health score)</h2></div><p class="sub">Identificação da central (vem do Notion, só leitura) e os campos do CS: responsável, health score com classificação, canais informados e observações. Squad: ${esc(d.squad || 'a definir')}.</p><div id="cad-corpo">${SK('sk-tabela')}</div></section>
+    <h3 class="grupo-cfg">Contrato, risco e defesa</h3>
     <section class="bloco" id="secDossie"><div class="bloco-cab"><h2>Prestação de contas e dossiê</h2><span class="sis" data-sistema="morpheus" title="Sistema de origem: Morpheus">Morpheus</span><small class="sis-papel">· comunicação</small></div><p class="sub">Documento do período escolhido no padrão do relatório do Manoel: execução registrada, solicitações do cliente, anúncios trabalhados, indicadores mês a mês, Ads, rentabilidade e próximos passos, com a fonte de cada número. A prestação de contas vai ao cliente; o dossiê de defesa (obrigação de meio, as 9 perguntas, cronologia do livro, provas) é confidencial e nunca sai do sistema. PDF e Word guardados aqui.</p><div id="dossie">${SK('sk-tabela')}</div></section>
     <section class="bloco" id="secRisco"><div class="bloco-cab"><h2>Cliente em risco</h2></div><p class="sub">Reclamação, pedido de reembolso, ameaça jurídica ou insatisfação declarada: a marcação é de quem atende (líder, consultor ou CS), com motivo; o sistema só sugere pelos sinais que mede. Risco aberto entra no dossiê mensal.</p><div id="risco">${SK('sk-tabela')}</div></section>
     <section class="bloco" id="secContrato"><div class="bloco-cab"><h2>Contrato e pagamentos</h2><span class="sis" data-sistema="smith" title="Sistema de origem: Smith">Smith</span><small class="sis-papel">· financeiro</small></div><p class="sub">Vigência, entregáveis, obrigação de meio, cláusula de reembolso e o arquivo assinado; pagamentos com comprovante. É a prova que o dossiê de defesa exige: sem o contrato ele fica incompleto.</p><div id="contrato">${SK('sk-tabela')}</div></section>
+    <h3 class="grupo-cfg">Fiscal</h3>
     <section class="bloco" id="secCustosUpload"><div class="bloco-cab"><h2>Custos: planilha do cliente</h2><span class="sis" data-sistema="smith" title="Sistema de origem: Smith">Smith</span><small class="sis-papel">· financeiro</small></div><p class="sub">A planilha do cliente vira custo por anúncio: pelo MLB da linha, pelo SKU do anúncio ou da variação no Mercado Livre (igual ou sem espaço e hífen) e pelos anúncios do mesmo produto. Título parecido só sugere. Prévia antes de gravar; custo igual ou acima do preço vai para quarentena.</p><div id="custosUpload">${SK('sk-tabela')}</div></section>
     <section class="bloco" id="secNotaFiscal"><div class="bloco-cab"><h2>Nota fiscal: regras e certificado</h2><span class="sis" data-sistema="smith" title="Sistema de origem: Smith">Smith</span><small class="sis-papel">· financeiro</small></div><p class="sub">Regime, termo de responsabilidade e regras fiscais por SKU declaradas pelo contador do cliente (CSV). O sistema não decide imposto: produto sem regra não tem nota. O certificado A1 fica no provedor fiscal, nunca no banco.</p><div id="notaFiscal">${SK('sk-tabela')}</div></section>
     <section class="bloco" id="secNotas"><div class="bloco-cab"><h2>Notas emitidas (rascunho → emissão)</h2><span class="sis" data-sistema="chaveiro" title="Sistema de origem: Chaveiro">Chaveiro</span><small class="sis-papel">· execução</small></div><p class="sub">Uma nota por pacote de pedidos pagos: rascunho com os bloqueios nominais, aprovação de líder ou consultor, emissão em homologação até a produção ser liberada, anexo ao pacote no Mercado Livre. Comprador sempre mascarado.</p><div id="notas">${SK('sk-tabela')}</div></section>
@@ -556,6 +563,18 @@ function desenhar() {
   desenharVeredito(); desenharProximas(); desenharAcoes()
   mostrarPlano(planoVisao)
   mostrarAba(new URLSearchParams(location.search).get('aba') || 'resumo')
+  // deep link do shell (?sec=<id>): abre o details (e os de fora) e rola até o bloco; só na 1ª pintura do cliente (o redesenho devolve o scroll)
+  const sec = new URLSearchParams(location.search).get('sec'), alvoSec = !reusa && sec ? $(sec) : null
+  if (alvoSec) {
+    for (let d = alvoSec.closest('details'); d; d = d.parentElement?.closest('details')) d.open = true
+    alvoSec.scrollIntoView({ block: 'start' })
+    // os blocos acima ainda carregam e empurram o alvo (o scroll anchoring do navegador não segura): enquanto o main crescer, rola de novo —
+    // até 6 s ou até o primeiro gesto do usuário (roda, toque, tecla, clique)
+    const ro = new ResizeObserver(() => { if ($(sec) === alvoSec) alvoSec.scrollIntoView({ block: 'start' }) })
+    const parar = () => ro.disconnect()
+    for (const ev of ['wheel', 'touchstart', 'keydown', 'pointerdown']) addEventListener(ev, parar, { once: true, passive: true })
+    ro.observe(main); setTimeout(parar, 6000)
+  }
   if (reusa) scrollTo(0, y)
   else { carregarVendas(d.cliente); carregarAnuncios(d.cliente); carregarImpacto(d.cliente); carregarPlanoConta(d.cliente); carregarPerfil(d.cliente); carregarCatalogo(d.cliente); carregarCadastro(d.cliente); window.PSRelatorio?.montarConfig($('relatorio'), d.cliente); carregarFicha(d.cliente); carregarOfertas(d.cliente); carregarRetro(d.cliente); carregarAcomp(d.cliente); carregarFolha(d.cliente); carregarPrecos(d.cliente); carregarDependencias(d.cliente); carregarDoCliente(d.cliente); carregarChaveiro(d.cliente); carregarSaude(d.cliente); carregarNotion(d.cliente); window.PSPendencias?.montar($('pendencias'), d.cliente, { faixa: $('faixaPendencias')}); window.PSAlertas?.montarResumo($('alertasCliente'), d.cliente); window.PSGatilhos?.montarResumo($('gatilhos'), d.cliente); window.PSGatilhos?.montarConfig($('avisos'), d.cliente); window.PSAlinhamentos?.montar($('alinhamentos'), d.cliente); window.PSGuardiao?.montar($('guardiao'), d.cliente); window.PSDossie?.montarCliente({ dossie: $('dossie'), risco: $('risco'), contrato: $('contrato') }, d.cliente); window.PSPerfilInfo?.montarCliente($('perfilInfo'), d.cliente); window.PSNota?.montarCliente({ config: $('notaFiscal'), notas: $('notas') }, d.cliente); window.PSCustosUpload?.montar($('custosUpload'), d.cliente) }
 }

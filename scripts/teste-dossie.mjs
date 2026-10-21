@@ -312,7 +312,9 @@ await ok('versão cliente: histórico em texto de gente (R$, sim/não, status e 
 await ok('render: tokens copiados de ui.css (sem alterar), rodapé "Mercado Livre · cliente · data", .doc com cabeçalhos do Word e sem variável CSS', () => {
   const d = montarDossie('Acme', { de: DE, ate: ATE, versao: 'cliente', cfg: CFG }, mundo())
   const pdf = htmlPdf(d), doc = htmlDoc(d)
-  assert.equal(TOKENS.laranja, '#b34100'); assert.match(pdf, /--laranja:#b34100/)
+  // o valor vem do 1º :root de ui.css (a marca pode mudá-lo; o que não pode mudar é a origem) — F1 dos 5 menus, 21/10/2026, spec § 8.7
+  const larUi = readFileSync(new URL('../src/web/ui.css', import.meta.url), 'utf8').match(/^\s*--laranja\s*:\s*(#[0-9a-fA-F]{6})/m)[1]
+  assert.equal(TOKENS.laranja, larUi); assert.match(pdf, new RegExp(`--laranja:${larUi}`)); assert.match(pdf, /--laranja-escuro:#/)
   assert.match(pdf, /@bottom-left\{content:"Mercado Livre · Acme · 13\/10\/2026"/); assert.match(pdf, /counter\(page\)/)
   assert.match(pdf, /01 · RESUMO EXECUTIVO/); assert.doesNotMatch(pdf, /<img/, 'versão cliente sem print embutido'); assert.doesNotMatch(pdf, /CONFIDENCIAL/)
   assert.match(doc, /xmlns:w="urn:schemas-microsoft-com:office:word"/); assert.match(doc, /<meta name="ProgId" content="Word.Document">/)

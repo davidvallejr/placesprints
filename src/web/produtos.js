@@ -138,6 +138,7 @@
       pintar()
       if (visao === 'lucro' && !dreCx.childElementCount) dre(dreCx, cliente, mesI.value)
     } })
+    if (new URLSearchParams(location.search).get('visao') === 'lucro') alvo.querySelector('[data-visao="lucro"]').click()   // ?visao=lucro abre no chip Lucro (menu Empresa do cliente › Lucro do mês)
     // depois de juntar/separar a aba inteira é redesenhada (a gaveta mora nela) e reabre já com o mapeamento novo
     const reabrir = async () => { await montar(alvo, cliente); gaveta(alvo.querySelector('#gavMapeamento'), cliente, reabrir) }
     alvo.querySelector('#btnMapeamento').onclick = () => gaveta(alvo.querySelector('#gavMapeamento'), cliente, reabrir)

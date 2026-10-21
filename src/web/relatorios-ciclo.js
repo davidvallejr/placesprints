@@ -16,7 +16,7 @@
     if (!alvo) return
     let lista
     try { lista = await api('/api/cliente/relatorios?cliente=' + encodeURIComponent(cliente)) } catch (e) { alvo.innerHTML = `<div class="aviso erro">${esc(e.message)}</div>`; return }
-    let nome = lista.relatorios[0].nome
+    let nome = lista.relatorios.find(r => r.nome === new URLSearchParams(location.search).get('rc'))?.nome || lista.relatorios[0].nome   // ?rc= pré-seleciona (menu Empresa do cliente › Compras)
     alvo.innerHTML = `<div class="seg" id="rcSeletor" role="group" aria-label="Relatório">${lista.relatorios.map(r => `<button type="button" data-rc="${esc(r.nome)}" aria-pressed="${r.nome === nome}">${esc(r.titulo)}</button>`).join('')}</div>
       <div class="mt-2" id="rcExportar"></div><div id="rcCorpo" class="mt-2"></div>`
     const corpo = alvo.querySelector('#rcCorpo'), exp = alvo.querySelector('#rcExportar')

@@ -28,20 +28,26 @@ Spec fechado pelo diretor de design a partir de 3 propostas e 3 juízes. Ele val
 
 ### 2.1 Grupos, ordem e abas
 
-| Ordem | Grupo (linha 1) | O clique no grupo leva a | Abas da linha 2 → URL existente |
+**F1 dos 5 menus (21/10/2026, `docs/ux/arquitetura-5-menus.md` § A).** A linha 1 passou a ser a cadeia da assessoria (cadastrar → conectar → coletar → planejar → aprovar → distribuir → executar → medir → comunicar) e não mais o inventário de telas. Cada submenu é uma URL que já existe (`?aba=`, `?sec=`, `?rc=`, `?visao=`); nenhuma rota, id ou página mudou. O mapa é só o `G` de `src/web/shell.js`.
+
+| Ordem | Menu (linha 1) | Pergunta | Submenus da linha 2 → destino hoje (F1–F5) |
 |---|---|---|---|
-| 1 | **Visão geral** (tela inicial) | `/` | Execução → `/` · GMV → `/gmv` |
-| 2 | **Clientes** | `/cliente` | Cliente → `/cliente` · Promoções → `/promocoes` (as duas e o link do grupo levam o `?cliente=` da URL atual) |
-| 3 | **Time** | `/analistas` | Analistas → `/analistas` · Distribuição → `/planos` |
-| 4 | **Comercial** | `/comercial` | sem linha 2 |
-| 5 | **Método** | `/resultados` | O que funciona → `/resultados` · Algoritmo → `/metodologia` · Processos → `/processos` |
+| 1 | **Assessoria** | Como vai a assessoria inteira? | Painel executivo → `/` · Faturamento → `/gmv` · O que funciona → `/resultados` · Acerto do algoritmo → `/metodologia` · Carteira em risco → `/planos?sec=secRisco` · Comercial → `/comercial` |
+| 2 | **Consultor** | Neste cliente: o quê, por quê, como? | Resumo → `/cliente?aba=resumo` · Plano → `?aba=plano` · Anúncios → `?aba=anuncios` · Estratégia → `?aba=estrategia` · Promoções → `/promocoes` · Como fazer → `/processos` |
+| 3 | **Execução** | Quem faz, e o sistema fez? | Distribuir → `/planos` · Execução no ML → `/cliente?aba=executar` · Pelo cliente → `?aba=do-cliente` · Ofertas → `?aba=anuncios&sec=secOfertas` · Analistas → `/analistas` |
+| 4 | **Empresa do cliente** | O negócio por trás da conta | Produtos e estoque → `/cliente?aba=produtos` · Lucro do mês → `?aba=produtos&visao=lucro` · Compras → `?aba=relatorios&rc=ciclo_compras` · Preços → `?aba=anuncios&sec=secPrecos` · Raio-X e contrato → `?aba=resumo&sec=secFinanceiro` · Custos → `?aba=configurar&sec=secCustosUpload` · Nota fiscal → `?aba=configurar&sec=secNotaFiscal` · Ciclos do negócio → `?aba=relatorios` |
+| 5 | **Estrutura** | Está ligado, configurado, funcionando? | Estruturas → `/integracoes?sec=secSaudeSistema` (até `/estrutura`, F3) · Conexões → `/integracoes` · Comunicação → `/planos?sec=secAvisosAuto` · Configurar cliente → `/cliente?aba=configurar` · Equipe → `/planos` (⋯ Equipe, até F3) · Regras do método → `/metodologia?sec=secParam` |
+
+**Regras do shell (A.0 do doc dos 5 menus):** item = `[id, rótulo, href]`, `id = pagina` ou `pagina:aba`; o item só entra quando a rota existe (`teste-shell-ui` confere todo `href` contra `app.get('<rota>'` de `src/server.js` e todo `?sec=` contra um `id=` de `src/web`). **Item ativo** = `data-pagina` bate **e** todos os parâmetros do `href` (menos `cliente`) estão na URL; empate → mais parâmetros casados → primeiro de `G`; sem casamento completo (`/cliente` sem `?aba=`), o 1º item da página. Sem parâmetro de menu na URL. `sync()` recalcula em todo `pushState/replaceState/popstate`, monta os links com `new URL(base)` + `searchParams.set('cliente')` (preserva `&aba=&sec=`), reconstrói a linha 2 quando o item ativo muda de menu (`?aba=produtos` dentro do cliente acende **Empresa do cliente**) e mostra «Cliente: Nome» quando o item ativo carrega `?cliente=` (`/cliente`, `/promocoes`). O literal `['execucao', 'Painel executivo', '/']` está pinado; nenhum rótulo ou `href` do topo cita o Sprint 90 (assinantes ficam em `/integracoes`).
+
+**`?sec=<id>` (deep link):** em página estática o shell, no `DOMContentLoaded`, abre o `details` do alvo (e os de fora) e faz `scrollIntoView({ block: 'start' })` — DOM puro. No `/cliente` quem faz isso é `desenhar()` depois de `mostrarAba` (render assíncrono); `mostrarAba` é tolerante: `?sec=` de bloco de outro painel abre o painel onde o bloco mora (`closest('[data-painel]')`), e trocar de aba na página derruba o `sec`; `abrirCliente` leva `aba` e `sec` da URL no `pushState` (trocar de cliente pela busca não derruba o consultor da aba). `relatorios-ciclo.js` lê `?rc=` e `produtos.js` lê `?visao=lucro`. Nunca `#hash` no `/cliente`. Configurar ganhou 5 `<h3 class="grupo-cfg">` (Quem é e quem atende · O que o cliente recebe · Conta no Mercado Livre · Contrato, risco e defesa · Fiscal) **sem reordenar** seções — «Canais do cliente» e a calculadora ficam depois de «Fiscal» até a F6 reagrupar.
 
 **Utilitários à direita, nesta ordem:**
 1. **Buscar cliente** (atalho `/`). Em `/cliente` e `/promocoes` foca o `#q` que a página já tem. Nas outras telas abre um painel pequeno com um formulário de busca de verdade (GET para `/cliente?busca=termo`), sem combobox, sem sugestão ao vivo e sem `<datalist>`. Ver 4.4.
-2. **Integrações**: link de texto. É configuração, então não ocupa vaga de grupo.
+2. (vaga vazia desde a F1: o antigo link «Integrações» virou o submenu Estrutura › Conexões; aqui entram **Hoje** na F5 e **Quem sou** na F2.)
 3. **Avisos**: o mesmo `#psSino` do `alerta.js`, só mudado de lugar.
 
-**Tela inicial:** `/` (Visão geral › Execução). A marca "Place Sprints" leva sempre a `/`.
+**Tela inicial:** `/` (Assessoria › Painel executivo). A marca (wordmark Place2u + «Sprints») leva sempre a `/`.
 
 **Sincronizar** não entra no shell. Continua na tela Execução (`#btnSync`), como ação secundária, e o estado do Notion e do ML vira a meta-linha dessa tela. O `app.js` depende disso.
 
@@ -51,7 +57,7 @@ Spec fechado pelo diretor de design a partir de 3 propostas e 3 juízes. Ele val
 - linha do prospect no Comercial;
 - detalhe do analista (Matriz).
 
-**Links profundos que continuam iguais:** `/cliente?cliente=`, `/promocoes?cliente=&aba=`, `/integracoes?custos=` e os links das notificações (`/integracoes`, `/comercial`, `/cliente?cliente=`). O único parâmetro novo é `?aba=` no Cliente, e ele é opcional.
+**Links profundos que continuam iguais:** `/cliente?cliente=`, `/promocoes?cliente=&aba=`, `/integracoes?custos=` e os links das notificações (`/integracoes`, `/comercial`, `/cliente?cliente=`). Parâmetros do shell: `?aba=` (Cliente), `?sec=` (qualquer tela), `?rc=` (Relatórios do cliente), `?visao=` (Produtos) — todos opcionais.
 
 ### 2.2 Nomes canônicos (um nome só por tela)
 
@@ -59,27 +65,27 @@ O rótulo da aba é igual ao início do `h1` e ao `<title>`, sempre no formato "
 
 | URL | `data-pagina` no `<body>` | Grupo › aba | `h1` | `<title>` | Sinônimos que morrem |
 |---|---|---|---|---|---|
-| `/` | `execucao` | Visão geral › Execução | Execução do sprint | Execução · Place Sprints | Painel executivo, Painel, ← Painel |
-| `/gmv` | `gmv` | Visão geral › Faturamento | Faturamento da carteira | Faturamento · Place Sprints | GMV, Receita, GMV e resultado associado |
-| `/cliente` | `cliente` | Clientes › Cliente | "Qual cliente?" na busca; o nome do cliente quando aberto | Cliente · Place Sprints | Visão por cliente, Plano do cliente, Conta, Place2u · Planos |
-| `/promocoes` | `promocoes` | Clientes › Promoções | "Promoções" na escolha; o nome do cliente quando aberto | Promoções · Place Sprints | Promoções por cliente |
-| `/analistas` | `analistas` | Time › Analistas | Analistas | Analistas · Place Sprints | Gestão por Analista |
-| `/planos` | `distribuicao` | Time › Distribuir ao Notion | Distribuir ao Notion | Distribuir ao Notion · Place Sprints | Distribuição, Distribuição de planos, Planos de ação, Distribuição em massa |
-| `/comercial` | `comercial` | Comercial | Comercial | Comercial · Place Sprints | Comercial · Diagnóstico de Conta |
-| `/resultados` | `o-que-funciona` | Método › O que funciona | O que funciona | O que funciona · Place Sprints | Resultados, O que melhor funciona |
-| `/metodologia` | `algoritmo` | Método › Regras do método | Regras do método | Regras do método · Place Sprints | Algoritmo, Algoritmo do plano, Metodologia do algoritmo |
-| `/processos` | `processos` | Método › Como fazer | Como fazer (Manual do Analista) | Como fazer · Place Sprints | Processos, Processos e Tarefas, Como cada tarefa é feita |
-| `/integracoes` | `integracoes` | utilitário | Conexões | Conexões · Place Sprints | Integrações, Central de Integrações |
+| `/` | `execucao` | Assessoria › Painel executivo | Execução do sprint | Execução · Place Sprints | Painel, ← Painel |
+| `/gmv` | `gmv` | Assessoria › Faturamento | Faturamento da carteira | Faturamento · Place Sprints | GMV, Receita, GMV e resultado associado |
+| `/cliente` | `cliente` | Consultor › Resumo/Plano/Anúncios/Estratégia (e os submenus de Execução, Empresa do cliente e Estrutura por `?aba=`) | "Qual cliente?" na busca; o nome do cliente quando aberto | Cliente · Place Sprints | Visão por cliente, Plano do cliente, Conta, Place2u · Planos |
+| `/promocoes` | `promocoes` | Consultor › Promoções | "Promoções" na escolha; o nome do cliente quando aberto | Promoções · Place Sprints | Promoções por cliente |
+| `/analistas` | `analistas` | Execução › Analistas | Analistas | Analistas · Place Sprints | Gestão por Analista |
+| `/planos` | `distribuicao` | Execução › Distribuir (Assessoria › Carteira em risco e Estrutura › Comunicação por `?sec=`) | Distribuir ao Notion | Distribuir ao Notion · Place Sprints | Distribuição, Distribuição de planos, Planos de ação, Distribuição em massa |
+| `/comercial` | `comercial` | Assessoria › Comercial | Comercial | Comercial · Place Sprints | Comercial · Diagnóstico de Conta |
+| `/resultados` | `o-que-funciona` | Assessoria › O que funciona | O que funciona | O que funciona · Place Sprints | Resultados, O que melhor funciona |
+| `/metodologia` | `algoritmo` | Assessoria › Acerto do algoritmo (Estrutura › Regras do método por `?sec=secParam`) | Regras do método | Regras do método · Place Sprints | Algoritmo, Algoritmo do plano, Metodologia do algoritmo |
+| `/processos` | `processos` | Consultor › Como fazer | Como fazer (Manual do Analista) | Como fazer · Place Sprints | Processos, Processos e Tarefas, Como cada tarefa é feita |
+| `/integracoes` | `integracoes` | Estrutura › Conexões (Estruturas por `?sec=secSaudeSistema` até a F3) | Conexões | Conexões · Place Sprints | Integrações, Central de Integrações |
 
 **F0 — Nomes (21/10/2026, `docs/ux/arquitetura-5-menus.md` § E e § G).** Só texto, nenhum id, rota ou assert mudou: rótulos do shell (Faturamento, Distribuir ao Notion, Regras do método, Como fazer, Conexões), `<title>`/`h1` acima, títulos de seção pela tabela E (Raio-X financeiro, Canais do cliente, Relatório no Notion: frequência e envio, Estilo do relatório PDF, Temas que o cliente pediu, Equipe e contas do cliente, Cadastro do CS, Custos: planilha do cliente, Nota fiscal: regras e certificado, Notas emitidas, Estoque por produto, Os 8 ciclos do negócio, Leitura da conta, O que a conta aprendeu, Combinados com o cliente, O que só o cliente faz, Saúde da conta no ML, Saúde do Place Sprints, App do Mercado Livre, abas de Promoções, Reler o Notion / Reler o Mercado Livre). Ficam até a F6 os literais pinados: «Painel executivo», as abas do `/cliente` (`Do cliente`, `Executar`, `Produtos`, `Relatórios`) e seus `h2` espelho, «Motor de decisão», e os `<h2>` de `teste-shell-ui.mjs:553`. Todo selo `.sis` ganhou um irmão `<small class="sis-papel">· papel</small>` (texto e `title` do selo intactos; `papel_curto` em `config/sistemas.json`).
 
-**Como o usuário sabe onde está.** São 4 sinais, sempre os mesmos:
-1. Grupo ativo em tinta 600 com filete inferior de 2px em `--laranja` (`#b34100`, 5,72:1). É o único uso do acento na navegação.
-2. Aba ativa da linha 2 em tinta 600 com filete de 2px em `--tinta`.
-3. O `h1` repete o nome da aba.
+**Como o usuário sabe onde está.** São 4 sinais, sempre os mesmos (marca, 21/10/2026: o topo é navy `--tinta-forte`, a linha 2 um tom acima `--shell-linha2`, texto claro):
+1. Menu ativo em `--shell-texto` 600 com filete inferior de 2px em `--laranja` (`#ff6a19` sobre o navy, 6,8:1).
+2. Submenu ativo da linha 2 em `--shell-texto` 600 com o mesmo filete em `--laranja`. São os dois únicos usos do laranja oficial na navegação.
+3. O `h1` repete o nome da tela (os submenus do cliente repetem a aba).
 4. O `<title>`.
 
-O `aria-current` acompanha os sinais 1 e 2. No grupo Clientes, à direita da linha 2, aparece "Cliente: Nome" (por `textContent`) quando a URL tem `?cliente=`.
+O `aria-current` acompanha os sinais 1 e 2 (`page` no item ativo; `true` no menu quando o item ativo não é o 1º dele). À direita da linha 2 aparece "Cliente: Nome" (por `textContent`) quando o item ativo carrega `?cliente=` e a URL o tem.
 
 ### 2.3 Celular e larguras
 
@@ -87,12 +93,14 @@ O `aria-current` acompanha os sinais 1 e 2. No grupo Clientes, à direita da lin
 |---|---|
 | ≥ 1100px | Shell completo |
 | 900–1099px | "Buscar cliente" vira só ícone (32×32, nome acessível por `aria-label`). O rótulo "Avisos" some e fica o ícone do sino com o contador. |
-| < 900px | Grupos e Integrações somem. Aparece "Menu" (40px), que abre uma lista de largura total sob o topo: grupos como títulos 12/500 cinza, páginas como linhas de 44px, Integrações no fim, rolagem própria. O painel da busca também vira largura total, fixo sob o topo. |
-| Todas | O topo tem sempre 56px. A linha 2 (44px) continua visível e rola dentro dela mesma, nunca na página. A linha 2 não é sticky. Todo sticky de página usa `top: var(--shell-h)`. |
+| < 900px | Os 5 menus somem. Aparece "Menu" (40px), que abre uma lista de largura total sob o topo: menus como títulos 12/500 cinza, submenus como linhas de 44px (os mesmos `href` do `G`), rolagem própria. O painel da busca também vira largura total, fixo sob o topo. |
+| Todas | O topo tem sempre 56px. A linha 2 (44px, submenus do menu ativo; até 8 itens) continua visível e rola dentro dela mesma, nunca na página. A linha 2 não é sticky. Todo sticky de página usa `top: var(--shell-h)`. No `/cliente` existem a linha 2 do shell (o que este menu quer) **e** a barra de abas da página (todas as seções do cliente): são coisas diferentes, custo aceito na F1. |
 
 ---
 
 ## 3. Tokens
+
+**Marca Place2u aplicada (21/10/2026, `docs/ux/marca/marca.md`).** Os valores vigentes são os do 1º `:root` de `src/web/ui.css`; as tabelas 3.2–3.4 abaixo documentam a base anterior à marca e continuam valendo pela estrutura (nomes, pares conferidos, regras). O que mudou: `--tinta-forte #050b21` (azul principal: títulos, valor de KPI, fundo do shell), `--tinta #141a33`, `--cinza #5b627a`, `--cinza-claro #666c84`, `--borda #e4e7ef`, `--borda-forte #cfd4e1`, `--borda-campo #7f849a`, `--fundo #f6f7fb`, `--fundo-suave #eef0f6`, `--laranja #ff6a19` (oficial; 2,9:1 sobre branco → **só destaque grande ou sobre o navy**: filete do menu e do submenu ativos, contador do sino com texto navy, régua e barras com rótulo ao lado), `--laranja-escuro #b8470c` (texto pequeno, rótulo «Próxima ação», anel de foco, botão primário), `--laranja-suave #fff1e9`, `--azul #2f4bd6`, `--veu` e `--sombra*` em tom de navy, e os 4 tokens do shell `--shell-linha2 #0e1530`, `--shell-hover #1a2242`, `--shell-texto #ffffff`, `--shell-texto-suave #b3b8c9` (9,9:1 sobre o navy). Dois tons pedidos pela marca **não** entraram por contraste: `#c24f0e` (4,30:1 sobre `#fff1e8`, reprova o teste 58 de `teste-promocoes-ui.mjs` e 4,44:1 sobre `--fundo`) virou `#b8470c` (4,8–5,3:1); `#7c8299` (3,81:1 em texto pequeno) virou `#666c84` (4,6–5,2:1). Estados (verde/âmbar/vermelho) não mudaram: são semântica, não marca.
 
 ### 3.1 Regras que o teste 58 impõe (não negociáveis)
 
@@ -1603,5 +1611,7 @@ Em **toda** fase rodar:
 2. **KPIs do Analistas só com a lista oficial** ("13 analistas oficiais"): fecham com o ranking, mas mudam os totais de hoje.
 3. **Nome da aba inicial:** "Execução" (recomendado: é o que a tela mede) ou "Painel executivo". A troca custa uma linha no `G` do `shell.js` mais o `h1` e o `<title>`.
 4. **Laranja na interface em `#b34100`** (a marca `#ff6b1a` só na logo). É a única forma de o acento passar em texto, foco e indicador.
+
+**Registro F1 (21/10/2026) — shell com os 5 menus + marca.** Nenhum assert existente foi reescrito; `teste-shell-ui.mjs` ganhou o caso (20) («G tem 5 menus com os nomes de A.1, todo `href` é `/` ou casa `app.get('<rota>'`, todo `?sec=` existe»). A decisão 4 acima («laranja na interface em `#b34100`») foi substituída pela marca: `--laranja` é o oficial `#ff6a19`, restrito a destaque grande/sobre o navy, e o acento de texto é `--laranja-escuro #b8470c` (não o `#c24f0e` da tabela da marca, que reprova o teste 58 de contraste em `teste-promocoes-ui.mjs`); `--cinza-claro` é `#666c84` (o `#7c8299` proposto fica em 3,8:1). O `/logo` (quadrado, `assets/logo.svg`) continua para favicon, páginas do Sprint 90 e PDFs (`marca.js`); o topo usa o wordmark `assets/marca-shell.svg` («Place» branco + «2u» e carrinho laranja), nunca o PNG. Decisão 3 continua: «Painel executivo». **Assert reescrito no mesmo commit:** `scripts/teste-dossie.mjs` pinava `TOKENS.laranja === '#b34100'`; o propósito do caso («tokens copiados de ui.css, sem alterar») fica intacto comparando com o valor lido do 1º `:root` de `ui.css` em vez do literal. Em `render-dossie.js` só o `.sec-num` (8 pt sobre papel branco) passou a `--laranja-escuro`; a capa é navy, onde o laranja oficial tem 6,8:1.
 
 **Registro F0 (21/10/2026).** Nenhum assert de UI mudou. O único teste tocado foi `scripts/teste-meli-renovacao.mjs` (fixture do backup diário, fora do escopo dos nomes): `backupConexoes` guarda só os 14 nomes mais novos em `data/backups` e, com 14 backups reais acumulados, o fixture «2000-01-01» era podado no mesmo instante em que nascia (ENOENT). O fixture passou a «2999-12-31»; o propósito do teste (backup sem prospect, permissão 0600) é o mesmo. O selo ganhou o irmão `.sis-papel` sem mudar texto nem `title` (decisão 7 do doc dos 5 menus: `<small>` ao lado, não o `title`).

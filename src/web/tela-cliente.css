@@ -6,6 +6,9 @@
 /* a barra de abas é sticky abaixo do shell (41px: 40 + borda): o alvo de scrollIntoView/foco (#secFolha, #listaAcoes, #pfPromocoes…) não pode ficar atrás dela */
 #telaCliente [id]{scroll-margin-top:calc(var(--shell-h) + 41px + 12px)}
 .dlg .campo{margin-top:var(--e-3)}
+/* Configurar: 5 cabeçalhos de grupo (F1 dos 5 menus) sobre as seções, sem reordená-las */
+.grupo-cfg{margin:var(--e-6) 0 var(--e-3);padding-bottom:var(--e-2);border-bottom:1px solid var(--borda);font:600 var(--t-13)/1.3 var(--fonte);color:var(--cinza)}
+.grupo-cfg:first-child{margin-top:0}
 /* cartões do motor e das jogadas usam h3 (h2 da seção > h3 do cartão); o ui.css só numera o h4 */
 .cartao h3 .num{flex:none;display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--fundo-suave);color:var(--tinta);font:600 var(--t-12)/1 var(--fonte)}
 .jogada h3 .num{background:var(--tinta);color:var(--superficie)}

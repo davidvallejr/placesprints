@@ -45,7 +45,7 @@ table.capa-dados td{padding:6pt 12pt 6pt 0;vertical-align:top;width:50%}
 .selo{display:inline-block;font:700 8pt var(--fonte);letter-spacing:.14em;text-transform:uppercase;padding:4pt 8pt;border:1px solid currentColor;margin:0 0 16pt}
 .selo.completo{color:var(--verde-suave)} .selo.incompleto{color:var(--verm-suave)}
 .sec{break-before:page;page-break-before:always}
-.sec-num{font:600 8pt var(--fonte);letter-spacing:.2em;text-transform:uppercase;color:var(--laranja);margin:0 0 4pt}
+.sec-num{font:600 8pt var(--fonte);letter-spacing:.2em;text-transform:uppercase;color:var(--laranja-escuro);margin:0 0 4pt}
 .sec h2{font:600 19pt/1.2 var(--fonte-display);color:var(--tinta-forte);margin:0 0 10pt;padding-bottom:6pt;border-bottom:1px solid var(--borda-forte);letter-spacing:-.01em}
 h3{font:600 10.5pt var(--fonte);color:var(--tinta-forte);margin:14pt 0 6pt;break-after:avoid}
 p{margin:6pt 0}
