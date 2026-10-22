@@ -111,6 +111,10 @@ import { criarRotasSaudeSistema } from './rotas-saude-sistema.js'
 import { criarRotasAjuda } from './rotas-ajuda.js'
 import { criarRotasEstrutura } from './rotas-estrutura.js'
 import { contextoReal as contextoEstrutura, estruturaReal, equipeReal } from './lib/estrutura-estado-real.js'
+import { criarRotasProgresso } from './rotas-progresso.js'
+import { criarProgressoReal } from './lib/progresso-real.js'
+import { criarRotasFila } from './rotas-fila.js'
+import { criarFilaReal } from './lib/fila-real.js'
 import { criarEnvio as criarEnvioSaude } from './lib/gatilhos-envio.js'
 
 configurarLogCustos(log); configurarLogWebhookCustos(log); configurarLogSyncErp(log)   // custos de ERP/planilha logam no mesmo log (nunca corpo/segredo)
@@ -174,6 +178,8 @@ const relatorios = criarRelatorioEnvio({ handle: db, notion: { req: notionReq },
   // plano B (tarefa no quadro): quem é «Pamela» = usuário do Notion pelo nome (config/equipe.json → usuarios_notion primeiro, depois os colhidos dos quadros)
   usuarios: () => [...Object.entries(equipeCfg.usuarios_notion || {}).filter(([k]) => k !== '$comentario').map(([nome, id]) => ({ id, nome })), ...db.prepare('SELECT id, nome FROM usuarios_notion').all()] })
 app.use(criarRotasRelatorio({ relatorios, quem: lideresEConsultores, clienteCanonico: clienteDaCentral }))
+app.use(criarRotasProgresso({ progresso: criarProgressoReal({ relatorios }), clienteCanonico: clienteDaCentral }))   // progresso do processo, 10 etapas (F4): só leitura sobre números que já existem
+app.use(criarRotasFila({ fila: criarFilaReal({ estrutura: () => estruturaReal({ saude: saudeSis }), progresso: criarProgressoReal({ relatorios }), aba: criarAbaDoClienteReal({ rotulo: c => gatilhos.rotulo(c) }) }) }))   // Hoje (F5): fila do dia por papel, só leitura; cada botão reusa uma rota de escrita que já existia
 app.use(criarRotasCatalogo({ catalogo: criarCatalogo(db, { agora, validarPor: validarLiderOuConsultor, log }), quem: lideresEConsultores, clienteCanonico: clienteDaCentral }))   // catálogo próprio × terceiros (marcação manual; prévia por padrão)
 // alinhamentos: a central também gerencia (lista, encerra, renova) os da conta do Sprint 90 — chave "[S90] …" válida de uma conta existente (nunca entra em clientes_central)
 const clienteOuS90 = nome => clienteDaCentral(nome) || (ehChaveS90(nome) && db.prepare('SELECT 1 FROM s90_conta WHERE chave = ?').get(String(nome)) ? String(nome) : '')
@@ -374,6 +380,7 @@ app.get('/processos', (req, res) => res.sendFile(join(ROOT, 'src', 'web', 'proce
 app.get('/promocoes', (req, res) => res.sendFile(join(ROOT, 'src', 'web', 'promocoes.html'))) // promoções por cliente (campanhas, MC, analista, plano dry-run)
 app.get('/resultados', (req, res) => res.sendFile(join(ROOT, 'src', 'web', 'resultados.html'))) // o que melhor funciona (padrões de tarefas)
 app.get('/estrutura', (req, res) => res.sendFile(join(ROOT, 'src', 'web', 'estrutura.html'))) // Estrutura › Estruturas e Equipe: estado real de cada chave (F3)
+app.get('/fila', (req, res) => res.sendFile(join(ROOT, 'src', 'web', 'fila.html')))           // Hoje: a fila do dia por papel, ≤ 5 blocos, 1 botão por item (F5)
 
 // ── webhook do Notion (sincronização por evento; agendada segue como reforço)
 let timerWebhook = null

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hoje · Place Sprints</title>
+<link rel="stylesheet" href="/ui.css">
+<link rel="stylesheet" href="/tela-fila.css">
+</head>
+<body data-pagina="fila">
+<header class="ps-shell" id="psShell"></header>
+<script src="/shell.js"></script>
+<main class="pg">
+  <div class="pg-cab">
+    <div class="pg-titulo">
+      <h1>Hoje</h1>
+      <p class="pg-meta"><span id="filaLido">lendo…</span><span id="filaEscopo">fila de quem está usando (Quem sou)</span></p>
+    </div>
+    <div class="pg-acoes">
+      <label class="sr" for="filaPor">Papel</label>
+      <select id="filaPor"><option value="lider">Líder</option><option value="dono">Dono</option><option value="consultor">Consultor</option><option value="analista">Analista</option><option value="cs">CS</option><option value="tecnico">Técnico</option></select>
+      <label class="sr" for="filaQuem">Nome</label>
+      <input type="text" id="filaQuem" maxlength="80" placeholder="Nome (Quem sou)" autocomplete="name">
+      <button class="btn" type="button" id="btnFilaAtualizar">Reler agora</button>
+    </div>
+  </div>
+
+  <section class="veredito" aria-label="Resumo">
+    <p class="veredito-frase" id="veredito">Lendo a fila do dia…</p>
+    <div class="kpis" id="kpis" aria-busy="true"><div class="kpi sk-kpi"></div><div class="kpi sk-kpi"></div><div class="kpi sk-kpi"></div><div class="kpi sk-kpi"></div></div>
+    <p class="kpis-sec" id="kpisSec" hidden></p>
+  </section>
+
+  <p class="aviso" id="filaEtapa" hidden></p>
+
+  <section class="bloco" id="secProgresso">
+    <div class="bloco-cab"><h2>Progresso da carteira</h2></div>
+    <p class="sub">As 10 etapas da cadeia no seu recorte. «N atrasados» abre esta fila filtrada pela etapa. Mesmo cálculo do Painel executivo.</p>
+    <div id="progressoCarteira" aria-busy="true"><div class="sk-tabela"></div></div>
+  </section>
+
+  <div id="blocos" aria-busy="true"><section class="bloco"><div class="sk-tabela"></div></section></div>
+</main>
+<footer class="pg-rodape">Fonte: acoes_plano, tarefas, exec_ordem, gatilho_lote, relatorio_envio, feedback_relatorio, incidente, custos, meli_contas, aprendizado e o avaliador de pendências · só leitura; cada botão usa a rota de escrita que já existia</footer>
+<script src="/progresso.js"></script>
+<script src="relatorio.js"></script>
+<script src="fila.js"></script>
+<script src="/alerta.js" defer></script>
+<script src="/ajuda.js" defer></script>
+</body>
+</html>

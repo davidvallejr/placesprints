@@ -149,6 +149,9 @@
   "Mercado Livre conectados x/total clientes (/api/meli/conexoes vs opções de #fCliente)"
  ],
  "hooks_js": [
+  "#secProgresso / #progressoCarteira (F4 dos 5 menus, 21/10/2026; bloco depois de #proxima; app.js chama PSProgresso.montar(el, { escopo }) em atualizar() — escopo total, ou selecao do #fCliente — → GET /api/progresso?tipo=&cliente= → ol.passos.passos-carteira com as 3 contagens (feito · atrasado · desligado) e «parados nesta etapa» por etapa, «ciclo completo: N de M», tabela 5 colunas Cliente · Etapa · Número · Atraso · Próxima ação ordenada por atraso, linha expansível [data-abrir] (aria-expanded) com ol.passos-compacto, [data-prog-mais] mostra todos; 0 primário)",
+  "#proxima / #proximaTexto / #proximaAcao (F5 dos 5 menus, 21/10/2026: o único .btn-primario da tela é o <a href=\"/fila?por=<papel de PS.quem()>\">Abrir o Hoje</a>; o chip que filtra a tabela (button.btn[data-chip]) continua como secundário; sem tarefa a faixa fica hidden)",
+  "progresso.js (carrega depois de /filtros.js e antes de app.js; «N atrasados» de cada etapa é link para /fila?por=&etapa=, F5)",
   "#estadoSync (textContent)",
   "#estadoMeli (textContent; o texto inclui emoji)",
   "#btnSync (click; disabled; o textContent é SOBRESCRITO para '↻ Sincronizando…'/'↻ Sincronizar', então qualquer ícone/markup interno some)",

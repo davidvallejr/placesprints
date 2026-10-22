@@ -1,0 +1,19 @@
+/* Hoje (/fila): só o que o ui.css não tem. Toda cor vem de var(--token). Item = cliente · o que fazer · prazo · fecha quando · ação (5 colunas em grade, nunca tabela). */
+.fila-lista{margin:0;padding:0;list-style:none;background:var(--superficie);border:1px solid var(--borda);border-radius:var(--raio);overflow:hidden}
+.fila-item{display:grid;grid-template-columns:minmax(120px,1fr) minmax(220px,3fr) minmax(110px,1fr) minmax(130px,1fr) auto;gap:var(--e-3);align-items:center;padding:var(--e-3) var(--e-4);border-top:1px solid var(--borda);font-size:var(--t-13)}
+.fila-item:first-child{border-top:0}
+.fila-item.atrasado .fi-prazo{color:var(--verm);font-weight:600}
+.fi-cliente{font-weight:600;color:var(--tinta);overflow-wrap:anywhere}
+.fi-cliente a{color:inherit;text-decoration:none}
+.fi-cliente a:hover{text-decoration:underline}
+.fi-oque{color:var(--tinta)}
+.fi-prazo,.fi-numero{color:var(--cinza)}
+.fi-acao{display:flex;justify-content:flex-end}
+.pg-acoes #filaQuem{width:180px}
+@media (max-width:899px){
+  .fila-item{grid-template-columns:1fr auto}
+  .fi-oque,.fi-prazo,.fi-numero{grid-column:1/-1}
+  .fi-prazo::before,.fi-numero::before{content:attr(data-rotulo) ": ";color:var(--cinza-claro)}
+  .fi-acao{grid-column:1/-1;justify-content:flex-start}
+  .pg-acoes #filaQuem{width:100%}
+}

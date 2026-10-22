@@ -144,11 +144,12 @@ function desenharClientes() {
   if (!cs.length) { box.innerHTML = avisoDe(AT) + (F ? vazio('Nenhum cliente travado neste filtro.', 'Remova um chip acima ou use "Limpar tudo".') : vazio('Nenhum cliente travado agora.', 'Bloqueadas e paradas há mais de 30 dias aparecem aqui assim que surgirem no Notion.')); pronto(box); return }
   const vis = cs.slice(0, limCli)
   box.innerHTML = `${avisoDe(AT)}<div class="cartao"><div class="tabela-wrap"><table>
-    <thead><tr><th>Cliente</th><th class="n">Bloqueadas</th><th class="n">Paradas 30d+</th><th>Parada mais antiga</th><th>Responsável</th></tr></thead>
+    <thead><tr><th>Cliente</th><th class="n">Bloqueadas</th><th class="n">Paradas 30d+</th><th class="n">Cards PS- parados 7d+</th><th>Parada mais antiga</th><th>Responsável</th></tr></thead>
     <tbody>${vis.map(c => `<tr>
       <td><a href="/cliente?cliente=${encodeURIComponent(c.cliente)}">${esc(c.cliente)}</a><div class="mini">${fmt(c.abertas)} aberta(s)${c.atrasadas.length ? ` · <span class="selo ruim">${fmt(c.atrasadas.length)} prazo vencido</span>` : ''}</div></td>
       <td class="n">${c.bloqueadas ? fmt(c.bloqueadas) : '—'}</td>
       <td class="n">${c.paradas30 ? fmt(c.paradas30) : '—'}</td>
+      <td class="n">${c.ps_parados7 ? fmt(c.ps_parados7) : '—'}</td>
       <td>${brData(c.mais_antiga)}</td>
       <td>${c.analistas.length ? `${c.analistas.slice(0, 3).map(esc).join(', ')}${c.analistas.length > 3 ? ` <span class="mini">+${c.analistas.length - 3}</span>` : ''}` : '<span class="selo ruim">Sem responsável</span>'}</td>
     </tr>`).join('')}</tbody></table></div>

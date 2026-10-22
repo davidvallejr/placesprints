@@ -164,9 +164,11 @@ async function resumo(pK, pG, q) {
     : k.atrasadas ? ['atrasadas', 'Prazos estourados', `Ver as ${fmt(k.atrasadas)} atrasadas`]
     : semDono ? ['sem_responsavel', 'Tarefas sem dono', `Ver as ${fmt(semDono)} sem responsável`]
     : k.dependencia_14d ? ['dependencia_cliente', 'Cobrar o cliente: aguardam retorno há 14+ dias', `Ver as ${fmt(k.dependencia_cliente)} que dependem do cliente`] : null   // 4ª prioridade: só quando as três acima são zero
+  // F5 (21/10/2026): o primário abre o Hoje (/fila) de quem está usando; o chip que filtra a tabela abaixo fica como secundário
+  const porFila = (() => { try { return window.PS?.quem?.().papel || 'lider' } catch { return 'lider' } })()
   $('#proximaTexto').textContent = alvo ? alvo[1] : 'Nada pede ação agora.'
-  $('#proximaAcao').innerHTML = alvo ? `<button type="button" class="btn btn-primario" data-chip="${alvo[0]}">${alvo[2]}</button>`
-    : `<a class="btn btn-primario" href="/relatorio?${q}" target="_blank" rel="noopener">Relatório do sprint</a>`
+  $('#proximaAcao').innerHTML = `<a class="btn btn-primario" href="/fila?por=${encodeURIComponent(porFila)}">Abrir o Hoje</a>` + (alvo ? ` <button type="button" class="btn" data-chip="${alvo[0]}">${alvo[2]}</button>`
+    : ` <a class="btn" href="/relatorio?${q}" target="_blank" rel="noopener">Relatório do sprint</a>`)
   prox.hidden = false
 }
 
@@ -403,12 +405,14 @@ async function dialogoDependencia() {
 $('#btnDependencia').addEventListener('click', dialogoDependencia)
 
 // ---- cada bloco carrega e falha sozinho (um fetch por API, compartilhado por promessa)
+// progresso da carteira (F4): carteira inteira, ou só o cliente escolhido no filtro; os demais filtros são do Notion e não recortam a cadeia
+const progressoCarteira = () => { const cli = $('#fCliente').value; return window.PSProgresso?.montar($('#progressoCarteira'), { escopo: cli ? { tipo: 'selecao', clientes: [cli] } : { tipo: 'total' } }) }
 async function atualizar() {
   const q = qs()
   cabecalho(q)
   const pK = getJson('/api/kpis?' + q), pG = getJson('/api/graficos?' + q), pT = getJson('/api/tarefas?' + q)
   for (const p of [pK, pG, pT]) p.catch(() => {})   // cada bloco trata o próprio erro; aqui só evita unhandled rejection
-  await Promise.allSettled([estado(), resumo(pK, pG, q), riscos(pG, pK), ritmo(pG), processos(pG), semanas(pG), distribuicao(pK, pG), tarefas(pT)])
+  await Promise.allSettled([estado(), resumo(pK, pG, q), progressoCarteira(), riscos(pG, pK), ritmo(pG), processos(pG), semanas(pG), distribuicao(pK, pG), tarefas(pT)])
 }
 
 $('#btnSync').addEventListener('click', async () => {

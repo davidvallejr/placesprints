@@ -114,7 +114,17 @@ async function carregarClientes() {
   catch (e) { if (s !== seq.clientes) return; $('tbClientes').innerHTML = `<tr><td colspan="6">${erroBloco(e, 'clientes')}</td></tr>`; $('veredito').textContent = 'Não foi possível ler os clientes do escopo.'; $('kpis').innerHTML = ''; return }
   if (s !== seq.clientes) return
   clientesAtuais = Array.isArray(r) ? r : r.clientes          // com ?f= a rota devolve { clientes, filtro }
-  desenharResumo(); renderClientes()
+  desenharResumo(); renderClientes(); carregarProgressoKpis()
+}
+// 3 KPIs do progresso (F4 dos 5 menus): P0/P1 sem decisão há mais de 2 dias úteis · aprovadas não distribuídas · cobertura PS- (cards «· PS-» ÷ tarefas) —
+// a MESMA rota do stepper da carteira, no escopo da tela (o ?f= é ignorado por ela); linha secundária, não um 5º KPI
+async function carregarProgressoKpis() {
+  const el = $('kpisProgresso'); if (!el) return
+  try {
+    const p = (await api('/api/progresso?' + qs())).totais, cob = p.cobertura_ps
+    el.innerHTML = `Progresso do escopo · P0/P1 sem decisão há mais de 2 dias úteis <b>${fmt(p.p01_sem_decisao_2du)}</b> · aprovadas não distribuídas <b>${fmt(p.aprovadas_nao_distribuidas)}</b> · cobertura PS- <b>${cob.pct == null ? '—' : cob.pct.toLocaleString('pt-BR') + ' %'}</b> (${fmt(cob.cards)} de ${fmt(cob.tarefas)} tarefas)`
+  } catch { el.textContent = 'Progresso do escopo: não lido agora.' }
+  el.hidden = false
 }
 const seloRel = cliente => { const h = window.PSRelatorio?.selo(cliente); return h ? `<div class="mini">${h}</div>` : '' }   // programação do relatório (relatorio.js), só leitura
 // health score do cadastro (planilha do CS / edição manual): o número nunca é colorido; a classificação usa o selo existente

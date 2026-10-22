@@ -389,6 +389,8 @@ function desenhar() {
     <div class="kpis" id="kpis">${kpisHtml(d)}</div>
   </section>
 
+  <ol class="passos passos-estatico" id="progresso" aria-label="Progresso do processo: as 10 etapas da cadeia" aria-busy="true"></ol>
+
   <nav class="abas abas-fixas" aria-label="Seções do cliente">${ABAS.map(([k, r]) => `<button type="button" data-aba-cli="${k}" aria-pressed="false">${r}${k === 'plano' ? ` <span class="n">${nAbertas}</span>`
     : k === 'do-cliente' ? ' <span class="n" id="nDoCliente" title="pontos abertos que dependem do cliente"></span>'
     : k === 'resumo' ? ' <span class="estado e-piorou" id="nPiorou" title="tarefas que pioraram (ajustado pelo controle), em Resultado das tarefas" hidden></span>'
@@ -453,6 +455,7 @@ function desenhar() {
   </section>
 
   <section data-painel="configurar" hidden>
+    <p class="pronto-operar" id="prontoOperar">Pronto para operar: <b>—</b> de 8 <span class="mini">lendo o progresso…</span></p>
     <h3 class="grupo-cfg">Quem é e quem atende</h3>
     <section class="bloco" id="secFicha"><div class="bloco-cab"><h2>Equipe e contas do cliente</h2><button class="btn-icone btn-ajuda" type="button" aria-label="Como fazer: Equipe e contas do cliente" data-ajuda="ficha"></button></div><p class="sub">Quem atende este cliente por canal e papel, e os links das contas. A tarefa aprovada sai delegada no Notion a partir daqui.</p><div id="ficha">${SK('sk-tabela')}</div></section>
     <h3 class="grupo-cfg">O que o cliente recebe</h3>
@@ -499,6 +502,20 @@ function desenhar() {
   document.querySelectorAll('[data-plano]').forEach(b => b.onclick = () => mostrarPlano(b.dataset.plano))
   document.querySelectorAll('[data-quem]').forEach(b => b.onclick = () => { planoQuem = b.dataset.quem; document.querySelectorAll('[data-quem]').forEach(x => x.setAttribute('aria-pressed', String(x === b))); limiteAcoes = PAGINA; desenharAcoes() })
   $('btnRevisar').onclick = () => { ativos = new Set(['p01']); limiteAcoes = PAGINA; desenharFiltros(); desenharAcoes(); mostrarPlano('cliente'); mostrarAba('plano'); const l = $('listaAcoes'); l.tabIndex = -1; l.focus(); l.scrollIntoView() }
+  // progresso do processo (F4 dos 5 menus): stepper no cabeçalho; #btnRevisar vira o botão da 1ª etapa atrasada (senão da 1ª pendente) — único primário —
+  // e Configurar mostra «Pronto para operar: N de 8». Etapa 6 (Aprovado) é o Revisar plano de sempre (P0/P1 a decidir).
+  window.PSProgresso?.montar($('progresso'), { cliente: d.cliente }).then(p => {
+    if (!p || main.dataset.cliente !== p.cliente) return
+    const po = $('prontoOperar'); if (po) po.innerHTML = `Pronto para operar: <b>${p.pronto.n}</b> de ${p.pronto.de} <span class="mini">${p.pronto.itens.filter(i => !i.ok).map(i => 'falta ' + esc(i.texto)).join(' · ') || 'tudo pronto (etapas 1–4 do progresso)'}</span>`
+    const alvo = p.etapas.find(e => e.estado === 'atrasado') || p.etapas.find(e => e.estado === 'pendente'), b = $('btnRevisar')
+    if (!alvo || alvo.n === 6 || !b || !alvo.ir) return
+    b.textContent = alvo.acao || alvo.nome; b.title = `Etapa ${alvo.n} · ${alvo.nome}: ${alvo.motivo || alvo.numero}`
+    b.onclick = () => {
+      const u = new URL(alvo.ir, location.origin), aba = u.searchParams.get('aba'), sec = u.searchParams.get('sec')
+      if (u.pathname !== '/cliente' || !aba) { location.href = alvo.ir; return }
+      mostrarAba(aba); const s = sec && $(sec); if (s) { s.tabIndex = -1; s.focus(); s.scrollIntoView() }
+    }
+  })
   // "ver na Folha do anúncio" (aba Anúncios → Resumo): só troca a aba e leva o foco ao bloco; o href é o fallback sem JS (nunca hash nem pushState)
   document.querySelector('[data-ir-folha]')?.addEventListener('click', e => { e.preventDefault(); mostrarAba('resumo'); const s = $('secFolha'); if (s) { s.tabIndex = -1; s.focus(); s.scrollIntoView() } })
   const fa = $('fAnuncio')

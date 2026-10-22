@@ -187,9 +187,14 @@ export function clientesAtrasados({ hoje = hojeLocal() } = {}) {
   const corteParada = new Date(hoje + 'T12:00:00'); corteParada.setDate(corteParada.getDate() - playbook.limiares.dias_parada)
   const corteP = corteParada.toISOString().slice(0, 10)
   const abertas = db.prepare(`SELECT cliente, titulo, responsavel, status, prazo, DATE(last_edited, 'localtime') ed, url FROM tarefas WHERE ${BASE} AND ${ABERTA}`).all()
+  // cards «· PS-» (fora de BASE) abertos sem movimento há mais de 7 dias — etapa 8 do progresso (F4); contam na gravidade para o cliente aparecer
+  const corteCard = new Date(hoje + 'T12:00:00'); corteCard.setDate(corteCard.getDate() - 7)
+  const psParados = new Map(db.prepare(`SELECT cliente, COUNT(*) n FROM tarefas WHERE arquivada = 0 AND fonte != 'demo' AND titulo LIKE '%· PS-%' AND ${ABERTA} AND DATE(last_edited, 'localtime') < ? GROUP BY cliente`).all(corteCard.toISOString().slice(0, 10)).map(r => [r.cliente, r.n]))
   const C = new Map()
+  const novo = cliente => ({ cliente, abertas: 0, atrasadas: [], bloqueadas: 0, paradas30: 0, ps_parados7: psParados.get(cliente) || 0, mais_antiga: null, analistas: new Set() })
+  for (const cliente of psParados.keys()) C.set(cliente, novo(cliente))
   for (const t of abertas) {
-    if (!C.has(t.cliente)) C.set(t.cliente, { cliente: t.cliente, abertas: 0, atrasadas: [], bloqueadas: 0, paradas30: 0, mais_antiga: null, analistas: new Set() })
+    if (!C.has(t.cliente)) C.set(t.cliente, novo(t.cliente))
     const c = C.get(t.cliente)
     c.abertas++
     explodir(t.responsavel, canon).forEach(n => c.analistas.add(n))
@@ -198,7 +203,7 @@ export function clientesAtrasados({ hoje = hojeLocal() } = {}) {
     else if (t.ed && t.ed < corteP) { c.paradas30++; if (!c.mais_antiga || t.ed < c.mais_antiga) c.mais_antiga = t.ed }
   }
   const lista = [...C.values()]
-    .map(c => ({ ...c, analistas: [...c.analistas].sort(), gravidade: c.atrasadas.length * 3 + c.bloqueadas * 2 + c.paradas30 }))
+    .map(c => ({ ...c, analistas: [...c.analistas].sort(), gravidade: c.atrasadas.length * 3 + c.bloqueadas * 2 + c.paradas30 + c.ps_parados7 }))
     .filter(c => c.gravidade > 0)
     .sort((x, y) => y.gravidade - x.gravidade)
   return {

@@ -2,8 +2,8 @@
 (() => {
   const topo = document.getElementById('psShell'); if (!topo) return   // documentos e páginas públicas não têm o placeholder
   // Os 5 menus (docs/ux/arquitetura-5-menus.md § A). Item = [id, rótulo, href]; id = pagina ou pagina:aba; href só de rota que já existe
-  // (teste-shell-ui). Estruturas e Equipe vivem em /estrutura (F3); o lugar do antigo utilitário «Integrações» tem Quem sou (F2) e
-  // recebe Hoje na F5. Assinantes do autoatendimento ficam em /integracoes, nunca no topo.
+  // (teste-shell-ui). Estruturas e Equipe vivem em /estrutura (F3); o lugar do antigo utilitário «Integrações» tem Hoje (F5, /fila por papel)
+  // e Quem sou (F2). Assinantes do autoatendimento ficam em /integracoes, nunca no topo.
   const G = [
     ['Assessoria', [['execucao', 'Painel executivo', '/'], ['gmv', 'Faturamento', '/gmv'], ['o-que-funciona', 'O que funciona', '/resultados'], ['algoritmo', 'Acerto do algoritmo', '/metodologia'], ['distribuicao:risco', 'Carteira em risco', '/planos?sec=secRisco'], ['comercial', 'Comercial', '/comercial']]],   // "Painel executivo": decisão do CEO (spec 8.7)
     ['Consultor', [['cliente:resumo', 'Resumo', '/cliente?aba=resumo'], ['cliente:plano', 'Plano', '/cliente?aba=plano'], ['cliente:anuncios', 'Anúncios', '/cliente?aba=anuncios'], ['cliente:estrategia', 'Estratégia', '/cliente?aba=estrategia'], ['promocoes', 'Promoções', '/promocoes'], ['processos', 'Como fazer', '/processos']]],
@@ -48,11 +48,15 @@
   const PAPEIS = [['dono', 'Dono'], ['lider', 'Líder'], ['consultor', 'Consultor'], ['analista', 'Analista'], ['cs', 'CS'], ['tecnico', 'Técnico']]
   const lerQuem = () => { let q = {}; try { q = JSON.parse(localStorage.getItem('ps_quem') || '{}') || {} } catch { q = {} } let nome = String(q.nome || ''); if (!nome) try { nome = localStorage.getItem('ps_perfil_por') || '' } catch { /* sem armazenamento */ } return { papel: PAPEIS.some(p => p[0] === q.papel) ? q.papel : '', nome: nome.trim().slice(0, 80) } }
   const gravarQuem = q => { try { localStorage.setItem('ps_quem', JSON.stringify(q)); if (q.nome) localStorage.setItem('ps_perfil_por', q.nome) } catch { /* sem armazenamento: só não lembra */ } }
+  // Hoje (F5): botão único no lugar do antigo utilitário «Integrações» → /fila?por=<papel>&quem=<nome> de «Quem sou»; sem papel a fila mostra o Líder (mesa de exceções)
+  const hrefHoje = () => { const q = lerQuem(), u = new URLSearchParams(); if (q.papel) u.set('por', q.papel); if (q.nome) u.set('quem', q.nome); const s = u.toString(); return '/fila' + (s ? '?' + s : '') }
+  const hoje = el('a', { className: 'ps-hoje', href: hrefHoje(), textContent: 'Hoje' })
+  if (pag === 'fila') hoje.setAttribute('aria-current', 'page')
   const selPapel = el('select', { id: 'psQuemPapel', name: 'papel' }, el('option', { value: '', textContent: 'Escolha o papel' }), ...PAPEIS.map(([v, t]) => el('option', { value: v, textContent: t })))
   const inpNome = el('input', { id: 'psQuemNome', name: 'nome', type: 'text', maxLength: 80, autocomplete: 'name', placeholder: 'Nome e sobrenome' })
   const quemNome = el('span', { className: 'ps-quem-nome' }), quemPapel = el('span', { className: 'ps-quem-papel' })
   const quemResumo = attr(el('summary', { className: 'ps-quem-botao' }, quemNome, quemPapel), { 'aria-label': 'Quem sou: papel e nome usados como «Seu nome»' })
-  const pintarQuem = () => { const q = lerQuem(); selPapel.value = q.papel; inpNome.value = q.nome; quemNome.textContent = q.nome || 'Quem sou'; quemPapel.textContent = q.papel ? ' · ' + PAPEIS.find(p => p[0] === q.papel)[1] : '' }
+  const pintarQuem = () => { const q = lerQuem(); selPapel.value = q.papel; inpNome.value = q.nome; quemNome.textContent = q.nome || 'Quem sou'; quemPapel.textContent = q.papel ? ' · ' + PAPEIS.find(p => p[0] === q.papel)[1] : ''; hoje.href = hrefHoje() }
   const quemPainel = el('div', { className: 'ps-quem-painel' }, el('label', { htmlFor: 'psQuemPapel', textContent: 'Papel' }, selPapel), el('label', { htmlFor: 'psQuemNome', textContent: 'Nome (vira o padrão de «Seu nome»)' }, inpNome), el('span', { className: 'mudo', textContent: 'Lembrado neste navegador. Quem pode aprovar, liberar ou enviar continua sendo decidido pelo servidor.' }))
   const quem = el('details', { className: 'ps-quem' }, quemResumo, quemPainel)
   for (const c of [selPapel, inpNome]) c.addEventListener('change', () => { gravarQuem({ papel: selPapel.value, nome: inpNome.value.trim().slice(0, 80) }); pintarQuem() })
@@ -62,7 +66,7 @@
   const menu = el('details', { className: 'ps-menu' }, el('summary', { className: 'ps-menu-botao', textContent: 'Menu' }), lista)
   const pular = el('a', { className: 'ps-pular', href: '#', textContent: 'Pular para o conteúdo' })
   pular.onclick = e => { const m = document.querySelector('main'); if (m) { e.preventDefault(); m.tabIndex = -1; m.focus() } }
-  topo.append(pular, el('div', { className: 'ps-barra' }, marca, grupos, el('div', { className: 'ps-util' }, quem, busca, slot, menu)))
+  topo.append(pular, el('div', { className: 'ps-barra' }, marca, grupos, el('div', { className: 'ps-util' }, hoje, quem, busca, slot, menu)))
 
   // linha 2: submenus do menu ativo + contexto do cliente; reconstruída quando o item ativo muda de menu (ex.: ?aba=produtos → Empresa do cliente)
   const ctx = el('span', { className: 'ps-ctx' })

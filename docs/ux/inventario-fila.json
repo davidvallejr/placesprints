@@ -1,0 +1,61 @@
+{
+ "id": "fila",
+ "pergunta": "O que eu faço agora? — a fila do dia de quem está usando (dono, líder, consultor, analista, CS, técnico): só exceções, no máximo 5 blocos, 1 botão por item, 4 números fixos em cima e o stepper da carteira.",
+ "usuarios": [
+  "Líder / Head (padrão, a mesa de exceções do androide): para o sistema andar, para decidir, para desconfiar, para falar com gente, terça e sexta",
+  "Dono (David): números, decisões só dele (veto do Neo, reinícios pendentes), carteira por etapa, risco, incidentes críticos",
+  "Consultor (escopo = clientes dele, pelo mesmo resolverEscopo de /planos): aprovar P0/P1, regras que exigem briefing, pendências 14/30, terça, resultados e preço",
+  "Analista (escopo = tarefas com responsável = nome): cards de hoje na ordem Eisenhower, parados > 7 d, aguardando o cliente, o que rendeu, resumo do Discord",
+  "CS (escopo = clientes_central.cs_responsavel = nome): risco, pendências, sem custo/prazo/grupo, contrato vencendo, recibos",
+  "Técnico: incidentes, chaves de arquivo pendentes de reinício, .env faltando, backup/frio (não lido: «—» com motivo)"
+ ],
+ "acao_principal": "O botão do 1º item da fila (único .btn-primario, gerado por fila.js). Toda ação reusa uma rota de escrita que já existia: /api/planos/acoes/status, /api/planos/distribuir, /api/chaveiro/exec/aprovar|vetar, /api/cliente/preco/decisao, /api/cliente/do-cliente/lembrete, /api/gatilhos/preparar-lote, /api/integracoes/meli/link, /api/meli/restaurar. Item sem rota de escrita ganha link «Abrir» (nunca botão que finge).",
+ "acoes_secundarias": [
+  "Trocar o papel (#filaPor) e o nome (#filaQuem): reescrevem ?por=&quem= e releem (padrão vem de «Quem sou», PS.quem)",
+  "Reler agora (#btnFilaAtualizar → GET /api/fila)",
+  "Limpar o filtro de etapa ([data-limpar-etapa] em #filaEtapa; o filtro entra por ?etapa= quando se chega pelo stepper da carteira)",
+  "Botão por item ([data-acao] → pedirPor quando a rota exige `por`, PS.confirmar quando a escrita é irreversível, POST na rota existente; «Copiar link» e «Preparar lembrete» copiam para a área de transferência; «Preparar lote (prévia)» só mostra a prévia)",
+  "Link «Abrir» por item (a tela onde a exceção se resolve) e link do cliente (/cliente?cliente=)"
+ ],
+ "secoes": [
+  { "titulo": "Cabeçalho", "conteudo": "h1 Hoje; meta-linha com a hora da leitura (#filaLido) e o recorte (#filaEscopo); select de papel + nome + Reler agora.", "ids_container": ["filaLido", "filaEscopo", "filaPor", "filaQuem", "btnFilaAtualizar"], "importancia": "media" },
+  { "titulo": "Veredito + 4 números fixos", "conteudo": "Frase: N itens em B de 5 blocos para <papel> · nome · N clientes no recorte. KPIs sem cor: Autonomia % (ordens executadas e conferidas pelo Chaveiro ÷ ações encerradas em 28 d), Cobertura PS- % (cards · PS- ÷ tarefas do Notion), Exceções ÷ teto (itens dos blocos de exceção ÷ famílias × 10), Contas por pessoa (clientes elegíveis ÷ consultores). Linha secundária com o teto por família e o link para Regras do método. Ausente = «—» com motivo.", "ids_container": ["veredito", "kpis", "kpisSec"], "importancia": "alta" },
+  { "titulo": "Filtro de etapa", "conteudo": "p.aviso #filaEtapa (hidden sem ?etapa=): «Mostrando só o que fecha a etapa N» + Ver a fila inteira.", "ids_container": ["filaEtapa"], "importancia": "baixa" },
+  { "titulo": "Progresso da carteira", "conteudo": "Stepper da carteira (progresso.js, mesmo GET /api/progresso do Painel executivo; escopo consultor quando papel = consultor com nome). «N atrasados» abre /fila?por=&etapa=.", "ids_container": ["secProgresso", "progressoCarteira"], "importancia": "media" },
+  { "titulo": "Blocos da fila (≤ 5)", "conteudo": "section.bloco[data-bloco] por bloco do papel (src/lib/fila.js → BLOCOS): h2 + badge com o total, sistemas de origem em .sis-papel (texto), sub; ol.fila-lista de li.fila-item com cliente · o que fazer · prazo · fecha quando · ação (grade de 5 colunas, nunca tabela). Família acima do teto (10/semana) vira p.aviso «limiar errado: N itens; ajuste em Estrutura › Regras do método» e some da lista. Bloco sem fonte lida mostra «— sem leitura de <fonte>». Vazio = .vazio-box.", "ids_container": ["blocos"], "importancia": "alta" }
+ ],
+ "kpis": ["Autonomia % (n ÷ de em 28 d)", "Cobertura PS- % (cards ÷ tarefas)", "Exceções ÷ teto (famílias × 10)", "Contas por pessoa (clientes ÷ consultores)"],
+ "hooks_js": [
+  "#filaLido (textContent: hora da leitura)",
+  "#filaEscopo (textContent: recorte do papel)",
+  "#filaPor (select; change → ?por= + carregar)",
+  "#filaQuem (input; change → ?quem= + carregar; padrão PS.quem().nome)",
+  "#btnFilaAtualizar (onclick → carregar)",
+  "#veredito (innerHTML da frase)",
+  "#kpis (innerHTML dos 4 .kpi; aria-busy)",
+  "#kpisSec (innerHTML; hidden até a 1ª leitura)",
+  "#filaEtapa (p.aviso; hidden sem ?etapa=; [data-limpar-etapa])",
+  "#secProgresso / #progressoCarteira (F4: fila.js chama PSProgresso.montar(el, { escopo }) em carregar(); progresso.js carrega antes de relatorio.js)",
+  "#blocos (innerHTML das section.bloco[data-bloco]; aria-busy; [data-denovo] no erro)",
+  "[data-bloco] (id do bloco de src/lib/fila.js → BLOCOS[papel])",
+  ".fila-item[data-id] (li por item; classe de gravidade atrasado quando há)",
+  "[data-acao] (botão do item; o 1º da fila é o único .btn-primario; nome vem de PSRelatorio.ui.pedirPor quando a rota exige por, padrão window.PS.quem().nome)",
+  "relatorio.js (carregado antes de fila.js só pelo PSRelatorio.ui.pedirPor)",
+  "shell.js (.ps-hoje: botão Hoje do topo → /fila?por=&quem= de PS.quem(); aria-current=page nesta tela)"
+ ],
+ "classes_geradas_por_js": ["kpi", "rotulo", "valor", "detalhe", "bloco", "bloco-cab", "badge", "sis-papel", "sub", "aviso", "mini", "vazio-box", "erro-bloco", "fila-lista", "fila-item (+ atrasado)", "fi-cliente", "fi-oque", "fi-prazo", "fi-numero", "fi-acao", "btn btn-primario (1 só)", "btn btn-p", "btn-fantasma"],
+ "css_origem": "ui.css (+ .ps-hoje no shell) + src/web/tela-fila.css (só tokens: .fila-lista, .fila-item, .fi-*).",
+ "links_navegacao": ["Topo › Hoje → /fila?por=<papel>&quem=<nome>", "Painel executivo › Próxima ação → /fila?por=<papel>", "Stepper da carteira › N atrasados → /fila?por=&etapa=<n>", "Dono › Carteira por etapa → /fila?por=lider&etapa=<n>", "Cada item → a tela onde se resolve (/cliente?aba=&sec=, /planos?sec=, /integracoes?sec=, /estrutura, /metodologia?sec=secParam)"],
+ "dependencias_externas": ["GET /api/fila?por=&quem=&etapa= (src/rotas-fila.js → src/lib/fila-real.js → src/lib/fila.js puro)", "GET /api/progresso (progresso.js)", "POST das rotas de escrita já existentes listadas em acao_principal", "/alerta.js, /ajuda.js, relatorio.js (ui.pedirPor), shell.js (PS.toast, PS.confirmar, PS.quem)"],
+ "testes_que_leem_esta_tela": [
+  "scripts/teste-fila.mjs — src/lib/fila.js puro: ≤ 5 blocos por papel (6 papéis), sem papel = líder, teto 10 por família → «limiar errado: N itens; ajuste em Estrutura › Regras do método», isolamento por cliente (escopo), filtro ?etapa=, 1 só primário (1º item), fontes ausentes = «—» com motivo, 4 números; fila.html/fila.js/tela-fila.css sem hex/emoji/style, 1 .btn-primario no JS, rotas só GET; shell com .ps-hoje → /fila; app.js com o primário para /fila; server com app.get('/fila') e criarRotasFila depois do guardaLocal",
+  "scripts/teste-shell-ui.mjs — PAGINAS inclui ['fila.html', 'fila', 'fila.js', 'fila']: esqueleto do shell, ids de hooks_js, /ajuda.js depois de /alerta.js; caso (6) confere que o primário do Painel abre /fila"
+ ],
+ "problemas_ux": ["Brier por família, faturamento 28 d e backup/frio não são lidos nesta fila (dizem «—» com motivo e apontam a tela certa)", "O lembrete e a prévia do lote só preparam/mostram: o envio real continua no pipeline dos gatilhos", "Reclamação ligada a ordem e regra candidata à aposentadoria não têm fonte gravada ainda (fora da fila até existir)"],
+ "estados": ["Carregando: skeleton nos KPIs e em #blocos (aria-busy)", "Erro: .erro-bloco em #blocos com Tentar de novo; veredito honesto", "Bloco vazio: .vazio-box", "Bloco sem fonte: «— sem leitura de <fonte>»", "Família acima do teto: p.aviso «limiar errado»", "Item: gravidade atrasado (prazo em vermelho)"],
+ "recomendacao": "F6/F7 não mudam a fila. Quando o Neo gravar reversões e reclamação ligada a ordem, entram em «Para desconfiar» sem tela nova.",
+ "selos_sistema": {
+  "regra": "Nenhum selo .sis nesta tela: os sistemas de origem aparecem como texto em .sis-papel no cabeçalho de cada bloco (vêm de src/lib/fila.js → BLOCOS[].sistemas).",
+  "secoes": {}
+ }
+}

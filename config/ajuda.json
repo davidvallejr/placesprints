@@ -762,6 +762,28 @@
       "doc": "docs/metodologia-algoritmo.md",
       "doc_secao": "",
       "onde": "/metodologia?sec=secParam"
+    },
+    "medicao": {
+      "titulo": "Medição do resultado das tarefas (Merovíngio)",
+      "sistema": "merovingio",
+      "escopo": "por cliente, por tarefa e anúncio",
+      "chave": "aprendizado (banco) · sync_estado.medicao_em (tick diário)",
+      "camada": "banco — a medição diária roda sozinha; o que a equipe faz é vincular a tarefa ao anúncio e concluir o card no Notion",
+      "motivo": "Sem vínculo entre a tarefa e o anúncio ou com o card aberto não há antes × depois; o resultado só entra no aprendizado depois de 3 dias de carência e 14 dias de janela.",
+      "pre_requisitos": [
+        { "texto": "Ação distribuída com card concluído no Notion (sync em dia)", "verificar": "notion.sync_3h" },
+        { "texto": "Medição diária rodando (agentes do servidor instalados)", "verificar": "autogestao.plists" }
+      ],
+      "passos": [
+        { "titulo": "Concluir o card", "texto": "o analista conclui o card «· PS-» no Notion com a data de conclusão; a ação do plano vira distribuída concluída.", "quem": "analista" },
+        { "titulo": "Vincular o anúncio", "texto": "em Resumo › Resultado das tarefas, confirme o anúncio da tarefa quando o vínculo estiver ambíguo (sem vínculo = sem medida, nunca inventada).", "quem": "consultor" },
+        { "titulo": "Esperar a janela", "texto": "3 dias de carência + 14 dias de janela; a medição diária compara antes × depois descontando os anúncios sem tarefa (controle).", "quem": "sistema" },
+        { "titulo": "Ler o veredito", "texto": "melhorou, piorou ou sem efeito, com confiança; associação temporal ajustada, nunca causa confirmada. O fator volta à prioridade da regra.", "quem": "consultor" }
+      ],
+      "concluido_quando": "Toda ação distribuída concluída há mais de 17 dias tem medida e a medição diária rodou nas últimas 26 horas.",
+      "doc": "docs/acompanhamento-e-retroalimentacao.md",
+      "doc_secao": "",
+      "onde": "/cliente?aba=resumo&sec=secAcomp"
     }
   }
 }

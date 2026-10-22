@@ -27,6 +27,12 @@
     <p class="kpis-sec" id="kpisSec" hidden></p>
   </section>
 
+  <section class="bloco" id="secProgresso">
+    <div class="bloco-cab"><h2>Progresso da carteira</h2></div>
+    <p class="sub">Onde a cadeia trava, cliente a cliente: as 10 etapas com quantos já passaram, quantos atrasam e quantos esperam uma chave desligada desta tela. Mesmo cálculo do Painel executivo e do cabeçalho de cada cliente.</p>
+    <div id="progressoCarteira" aria-busy="true"><div class="sk-tabela"></div></div>
+  </section>
+
   <section class="bloco" id="secEstruturas">
     <div class="bloco-cab"><h2>Uma linha por estrutura</h2></div>
     <p class="sub">Estado lido agora: chave de banco muda por esta tela; chave de arquivo ou .env mostra o valor carregado pelo servidor e pede reinício. Ausente aparece como «—» com o motivo. Botão só onde a rota de escrita existe.</p>
@@ -52,6 +58,7 @@
   </section>
 </main>
 <footer class="pg-rodape">Fonte: config/*.json carregados pelo servidor, sync_estado, presença das variáveis do .env (nunca o valor) e Saúde do sistema · só leitura</footer>
+<script src="/progresso.js"></script>
 <script src="relatorio.js"></script>
 <script src="estrutura.js"></script>
 <script src="/alerta.js" defer></script>

@@ -104,6 +104,7 @@
   "Indicador de contexto no aviso: time.pct_mesmo_dia_time (83%)"
  ],
  "hooks_js": [
+  "coluna «Cards PS- parados 7d+» na tabela de #clientes (F4 dos 5 menus, 21/10/2026): clientesAtrasados().clientes[].ps_parados7 em src/lib/analistas.js (cards «· PS-» abertos sem edição há 7+ dias, fora de BASE; entram na gravidade para o cliente aparecer); a tabela passa a 6 colunas",
   "#conteudo: getElementById('conteudo'). Recebe o innerHTML da tela inteira e também a mensagem de erro geral. Começa com <div class=\"skeleton\">",
   "#btnSync: getElementById('btnSync'). Usa onclick, disabled e textContent ('sincronizando…' / '↻ Atualizar lista do Notion')",
   "#drill-<nome do analista>: getElementById('drill-' + nome). É um <tr> com o atributo hidden alternado pelo JS. O CSS não pode forçar display em tr[hidden]",

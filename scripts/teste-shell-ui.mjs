@@ -24,8 +24,9 @@ const PAGINAS = [
   ['comercial.html', 'comercial', 'comercial.js', 'comercial'], ['resultados.html', 'o-que-funciona', 'resultados.js', 'resultados'], ['metodologia.html', 'algoritmo', 'metodologia.js', 'metodologia'],
   ['processos.html', 'processos', 'processos.js', 'processos'], ['integracoes.html', 'integracoes', 'integracoes.js', 'integracoes'],
   ['estrutura.html', 'estrutura', 'estrutura.js', 'estrutura'],   // 12ª tela (F3, 21/10/2026): Estrutura › Estruturas e Equipe
+  ['fila.html', 'fila', 'fila.js', 'fila'],                       // 13ª tela (F5, 21/10/2026): Hoje — a fila do dia por papel
 ]
-const COMPARTILHADOS = ['src/web/ficha.js', 'src/web/acomp.js', 'src/web/relatorio.js', 'src/web/pendencias.js', 'src/web/alertas.js', 'src/web/gatilhos.js', 'src/web/alinhamentos.js', 'src/web/dossie.js', 'src/web/perfil-informacao.js', 'src/web/galeria-anuncio.js', 'src/web/produtos.js', 'src/web/executar.js', 'src/web/relatorios-ciclo.js', 'src/web/custos-upload.js', 'src/web/alerta.js', 'src/web/shell.js', 'src/web/ajuda.js'].map(ler).join('\n')
+const COMPARTILHADOS = ['src/web/ficha.js', 'src/web/acomp.js', 'src/web/relatorio.js', 'src/web/pendencias.js', 'src/web/alertas.js', 'src/web/gatilhos.js', 'src/web/alinhamentos.js', 'src/web/dossie.js', 'src/web/perfil-informacao.js', 'src/web/galeria-anuncio.js', 'src/web/produtos.js', 'src/web/executar.js', 'src/web/relatorios-ciclo.js', 'src/web/custos-upload.js', 'src/web/alerta.js', 'src/web/shell.js', 'src/web/ajuda.js', 'src/web/progresso.js'].map(ler).join('\n')
 
 // ═════════ (1) esqueleto do shell nas 11 páginas ═════════════════════════════════════════════════════
 caso('shell: as 11 páginas têm data-pagina, placeholder + /shell.js, /ui.css, /alerta.js defer e nenhum CSS/header antigo', () => {
@@ -119,7 +120,8 @@ caso('dependência do cliente: painel executivo tem #selTodas, #btnDependencia, 
   assert.match(app, /colspan="10"/, 'linha vazia cobre as 10 colunas')
   assert.match(app, /aberta\(t\) \|\| t\.status === 'dependencia_cliente' \? `<input type="checkbox" class="sel"/, 'tarefa já em dependência também recebe checkbox (registrar o motivo das marcadas direto no Notion)')
   assert.match(ler('src/web/tela-execucao.css'), /td:first-child:not\(\[colspan\]\)/, 'a linha vazia (colspan) não herda a largura da coluna de seleção')
-  assert.ok((html.match(/btn-primario/g) || []).length === 0 && (app.match(/class="btn btn-primario" data-chip/g) || []).length === 1, 'o único .btn-primario da tela é o da Próxima ação')
+  // F5 (21/10/2026, spec § 8.7): o primário da Próxima ação passou a abrir o Hoje (/fila); o chip que filtra a tabela continua, como secundário
+  assert.ok((html.match(/btn-primario/g) || []).length === 0 && (app.match(/class="btn btn-primario"/g) || []).length === 1 && /class="btn btn-primario" href="\/fila\?por=/.test(app) && /class="btn" data-chip="\$\{alvo\[0\]\}"/.test(app), 'o único .btn-primario da tela é o da Próxima ação, que abre o Hoje; o chip da tabela é secundário')
   assert.match(app, /confirmar: true/, 'escrita no Notion só com confirmar:true')
   assert.match(cli, /VIVOS = \[[^\]]*'dependencias'/); assert.match(cli, /id="secDependeCliente"/); assert.match(cli, /carregarDependencias\(d\.cliente\)/)
   assert.ok(cli.indexOf('id="secProximas"') < cli.indexOf('id="secDependeCliente"'), 'o bloco vem depois de Próximas ações')

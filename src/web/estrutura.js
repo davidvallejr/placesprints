@@ -100,6 +100,7 @@
   }
 
   async function carregar() {
+    window.PSProgresso?.montar($('progressoCarteira'), { escopo: { tipo: 'total' } })   // stepper global da carteira (F4): mesma rota do Painel executivo
     try { st.dados = await api('/api/estrutura'); desenhar() } catch (e) {
       $('tbEstruturas').innerHTML = `<tr><td colspan="6"><div class="erro-bloco"><b>Não foi possível carregar</b><div>${esc(e.message)}</div><button class="btn btn-p" type="button" data-denovo>Tentar de novo</button></div></td></tr>`
       $('tbEstruturas').querySelector('[data-denovo]').onclick = carregar

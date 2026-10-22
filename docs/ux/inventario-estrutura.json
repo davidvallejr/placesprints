@@ -24,6 +24,7 @@
  ],
  "kpis": ["Ligadas (de N)", "Desligadas (prontas no detalhe)", "Pedem ação (pendentes · erros)", "Incidentes abertos (críticos)"],
  "hooks_js": [
+  "#secProgresso / #progressoCarteira (F4 dos 5 menus, 21/10/2026; stepper global da carteira no topo, depois do veredito e antes de #secEstruturas; estrutura.js chama PSProgresso.montar(el, { escopo: { tipo: 'total' } }) em carregar(); progresso.js carrega antes de relatorio.js; mesma rota GET /api/progresso do Painel executivo)",
   "#estLido (textContent: hora da leitura)",
   "#btnEstAtualizar (onclick → carregar)",
   "#veredito (innerHTML da frase)",

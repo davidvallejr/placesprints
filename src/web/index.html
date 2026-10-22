@@ -79,6 +79,12 @@
     <span id="proximaAcao" class="proxima-acao"></span>
   </div>
 
+  <section class="bloco" id="secProgresso">
+    <div class="bloco-cab"><h2>Progresso da carteira</h2></div>
+    <p class="sub">As 10 etapas da cadeia (Cadastrado → Comunicado) calculadas sobre números que já existem: quantos clientes já passaram por cada etapa, quantos estão atrasados nela, quantos esperam uma chave desligada e quantos estão parados nela agora. A tabela ordena por atraso; cada linha abre o passo a passo do cliente.</p>
+    <div id="progressoCarteira" aria-busy="true"><div class="sk-tabela"></div></div>
+  </section>
+
   <section class="bloco" id="cartaoRiscos">
     <div class="bloco-cab"><h2>O que pede ação</h2><button type="button" class="btn btn-fantasma btn-p" data-chip="todas">Ver todas</button></div>
     <p class="sub">Bloqueadas, atrasadas, sem responsável e o que depende do cliente. Cada tarefa abre no Notion.</p>
@@ -161,6 +167,7 @@
 </main>
 <footer class="pg-rodape">Fonte: Notion · indicadores calculados por código</footer>
 <script src="/filtros.js"></script>
+<script src="/progresso.js"></script>
 <script src="app.js"></script>
 <script src="/alerta.js" defer></script>
 <script src="/ajuda.js" defer></script>

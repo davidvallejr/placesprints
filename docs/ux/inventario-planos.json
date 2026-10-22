@@ -143,6 +143,7 @@
     "Dados disponíveis e NÃO usados: insights.por_status, por_regra (31 regras com score médio) e por_squad, todos estratégicos para o sócio"
   ],
   "hooks_js": [
+    "#kpisProgresso (p.kpis-sec depois de #kpis, hidden até a 1ª leitura; F4 dos 5 menus: 3 KPIs do progresso do escopo — P0/P1 sem decisão há mais de 2 dias úteis · aprovadas não distribuídas · cobertura PS- (cards «· PS-» ÷ tarefas) — GET /api/progresso?<qs() do escopo> em carregarClientes → carregarProgressoKpis; linha secundária, não um 5º .kpi)",
     "#selSquad (value, innerHTML, change, disabled em travar)",
     "#selConsultor (value, innerHTML, change, disabled)",
     "#scoreMin (value, change, disabled; entra na assinatura da prévia)",

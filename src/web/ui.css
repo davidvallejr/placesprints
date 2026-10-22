@@ -98,6 +98,10 @@ summary{cursor:pointer}
 .ps-grupos a:hover{color:var(--shell-texto)}
 .ps-grupos a[aria-current]{color:var(--shell-texto);font-weight:600;border-bottom-color:var(--laranja)}
 .ps-util{margin-left:auto;display:flex;align-items:center;align-self:stretch;gap:var(--e-1)}
+/* Hoje (F5, 21/10/2026): botão único para /fila (a fila do dia de quem está usando); ativo na própria tela com o sublinhado laranja das abas */
+.ps-hoje{display:flex;align-items:center;height:32px;padding:0 var(--e-3);border:1px solid var(--shell-hover);border-radius:var(--raio-p);color:var(--shell-texto);font:600 var(--t-14)/1 var(--fonte);text-decoration:none;white-space:nowrap}
+.ps-hoje:hover{background:var(--shell-hover)}
+.ps-hoje[aria-current]{background:var(--shell-hover);box-shadow:inset 0 -2px 0 var(--laranja)}
 .ps-busca,.ps-quem{position:relative}
 .ps-busca-botao,.ps-menu-botao,.ps-quem-botao{list-style:none;display:flex;align-items:center;gap:var(--e-2);height:32px;padding:0 var(--e-3);border-radius:var(--raio-p);color:var(--shell-texto-suave);font:500 var(--t-14)/1 var(--fonte);cursor:pointer}
 .ps-busca-botao::-webkit-details-marker,.ps-menu-botao::-webkit-details-marker,.ps-quem-botao::-webkit-details-marker{display:none}
@@ -459,6 +463,24 @@ ol.passos>li.atual{color:var(--tinta);font-weight:600}
 ol.passos>li.atual::before{background:var(--tinta);border-color:var(--tinta);color:var(--superficie)}
 ol.passos>li.feito{color:var(--verde)}
 ol.passos>li.feito::before{background:var(--verde);border-color:var(--verde);color:var(--superficie)}
+/* F4 (progresso do processo): atrasado = gente; desligado = chave global fechada (estrutura, não atraso); aguardando = carência/janela/horário (não é atraso) */
+ol.passos>li.atrasado{color:var(--verm)}
+ol.passos>li.atrasado::before{background:var(--verm);border-color:var(--verm);color:var(--superficie)}
+ol.passos>li.desligado{color:var(--cinza-claro)}
+ol.passos>li.desligado::before{background:var(--superficie);border-style:dashed;border-color:var(--borda-forte);color:var(--cinza-claro)}
+ol.passos>li.aguardando{color:var(--cinza)}
+ol.passos>li.aguardando::before{background:var(--superficie);border-style:dotted;border-color:var(--borda-forte);color:var(--cinza)}
+ol.passos>li>a{color:inherit;text-decoration:none}
+ol.passos>li>a:hover{text-decoration:underline}
+ol.passos>li .num{font-weight:400;color:var(--cinza)}   /* o número que prova é neutro (KPI nunca colorido) */
+ol.passos>li .atraso{font-weight:500}
+ol.passos>li .btn-ajuda{width:28px;height:28px}
+ol.passos.passos-estatico{position:static}   /* no /cliente a barra de abas já é sticky em top:var(--shell-h) */
+ol.passos.passos-carteira{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:var(--e-3)}
+ol.passos.passos-carteira>li{display:grid;grid-template-columns:20px 1fr;column-gap:var(--e-2);row-gap:2px;align-items:start}
+ol.passos.passos-carteira>li>b{font-weight:600}
+ol.passos.passos-carteira>li>small{grid-column:2}
+ol.passos.passos-compacto{margin:0;padding:var(--e-2) 0;gap:var(--e-3)}
 @media (min-width:900px){ol.passos{position:sticky;top:var(--shell-h);z-index:10;background:var(--fundo)}}
 .barra-massa{display:none;position:sticky;bottom:16px;z-index:10;align-items:center;gap:var(--e-2);flex-wrap:wrap;margin-top:var(--e-3);padding:var(--e-3) var(--e-4);background:var(--superficie);border:1px solid var(--borda);border-radius:var(--raio);box-shadow:var(--sombra-alta)}
 body:has(.sel:checked) .barra-massa{display:flex}
