@@ -448,7 +448,7 @@ caso('perfil de informação: #secPerfilInfo recolhida entre #secFeedback e #sec
 caso('shell F1: G tem os 5 menus Assessoria · Consultor · Execução · Empresa do cliente · Estrutura; todo href é / ou casa um app.get(\'<rota>\' de src/server.js; todo ?sec= aponta para um id existente; sem ?m=, sem INT/«Configuração»; sync por new URL; deep link no cliente.js', () => {
   const js = ler('src/web/shell.js'), srv = ler('src/server.js'), cli = ler('src/web/cliente.js')
   const ini = js.indexOf('const G = ['), bloco = js.slice(ini, js.indexOf('\n  ]\n', ini) + 4)
-  assert.deepEqual([...bloco.matchAll(/^\s*\['([^']+)', \[/gm)].map(m => m[1]), ['Assessoria', 'Consultor', 'Execução', 'Empresa do cliente', 'Estrutura'])
+  assert.deepEqual([...bloco.matchAll(/^\s*\['([^']+)', \[/gm)].map(m => m[1]), ['Visão geral', 'Consultor', 'Execução', 'Empresa do cliente', 'Estrutura'])
   const itens = [...bloco.matchAll(/\['([\w:-]+)', '([^']+)', '(\/[^']*)'\]/g)]
   assert.ok(itens.length >= 25, 'itens do G: ' + itens.length)
   const rotas = new Set([...srv.matchAll(/app\.get\('(\/[^']*)'/g)].map(m => m[1]))

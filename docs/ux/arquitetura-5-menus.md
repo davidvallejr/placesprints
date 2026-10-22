@@ -4,7 +4,7 @@ Documento final para o David (sem precisar ler código) e para quem for implemen
 
 ## Resumo em 10 linhas
 
-1. Cinco menus na linha 1 do topo: **Assessoria · Consultor · Execução · Empresa do cliente · Estrutura**. Cada menu é um pedaço da cadeia (cadastrar → conectar → coletar → planejar → aprovar → distribuir → executar → medir → comunicar); o quinto é a infraestrutura que faz a cadeia andar.
+1. Cinco menus na linha 1 do topo: **Visão geral (antes «Assessoria», renomeado em 22/10 para não confundir com o serviço Place Performance) · Consultor · Execução · Empresa do cliente · Estrutura**. Cada menu é um pedaço da cadeia (cadastrar → conectar → coletar → planejar → aprovar → distribuir → executar → medir → comunicar); o quinto é a infraestrutura que faz a cadeia andar.
 2. Nenhuma rota some, nenhum id some, nenhuma página é fundida: os submenus (linha 2) apontam para URLs que já existem, com `?aba=` e um parâmetro novo `?sec=` que rola até a seção. O primeiro passo visível é só o mapa `G` de `src/web/shell.js:4-11`.
 3. **Hoje** é um botão único no topo (tela nova `/fila`): a fila do dia de quem está usando (Quem sou: dono, líder, consultor, analista, CS, técnico) — no máximo 5 blocos, só exceções, 1 botão por item, 4 números fixos em cima.
 4. Toda estrutura que precisa de configuração ganha um ícone **(i)** ao lado do selo do sistema: estado agora (ligado/desligado · desde · por quem · camada), pré-requisitos com estado, passo a passo numerado, «concluído quando» e o documento. Texto em `config/ajuda.json`, estado real em `src/lib/estrutura-estado.js`.

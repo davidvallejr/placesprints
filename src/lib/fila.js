@@ -90,7 +90,7 @@ function textosBarrados({ F, dentro }) {
   const it = []
   for (const l of Lt || []) if (barrado(l) && dentro(l.cliente)) it.push(item({ id: 'lote-barrado:' + l.cliente + ':' + l.dia, cliente: l.cliente, familia: 'auditor', etapa: ETAPA.comunicar, o_que: `Plano de ${l.tipo} de ${br(l.dia)} barrado pelo auditor (${l.motivo})`, prazo: 'antes do próximo envio', numero: 'texto aprovado pelo auditor', link: { rotulo: 'Abrir', href: cli(l.cliente, 'resumo', 'secGatilhos') } }))
   for (const r of R || []) if (barrado(r) && dentro(r.cliente)) it.push(item({ id: 'rel-barrado:' + r.cliente + ':' + r.em, cliente: r.cliente, familia: 'auditor', etapa: ETAPA.comunicar, o_que: `Relatório ao Notion barrado (${r.motivo})`, prazo: 'antes do próximo envio', numero: 'texto aprovado pelo auditor', link: { rotulo: 'Abrir', href: '/planos?sec=secRelatorios' } }))
-  return { itens: it, ...(F.brier === undefined ? { nota: 'Brier por família: não lido nesta fila (ver Assessoria › Acerto do algoritmo)' } : {}) }
+  return { itens: it, ...(F.brier === undefined ? { nota: 'Brier por família: não lido nesta fila (ver Visão geral › Acerto do algoritmo)' } : {}) }
 }
 function pendenciasVencidas({ F, dentro, minimo = L.pendencia_dias }) {
   const D = lista(F.dependencias); if (!D) return semLeitura('pendências do cliente')
