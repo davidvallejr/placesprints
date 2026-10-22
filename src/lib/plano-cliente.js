@@ -19,6 +19,9 @@ import { criarDependencias } from './dependencia-cliente.js'
 import { ehAberta } from './status-tarefa.js'
 import { pendenciasReal } from './pendencias-cliente-real.js'
 import { alinhamentosReal } from './alinhamentos-real.js'
+import { produtoDoCliente } from './produto.js'
+import { descritoresTrilha, descritoresCombinados } from './trilhas.js'
+import { criarEncontros } from './encontros.js'
 
 export const playbook = JSON.parse(readFileSync(join(ROOT, 'config', 'playbook.json'), 'utf-8'))
 const DESDE = JSON.parse(readFileSync(join(ROOT, 'config', 'fontes.json'), 'utf-8')).sync_inicial_desde || '2026-06-01'
@@ -28,6 +31,8 @@ const PB = playbook, L = PB.limiares
 // (mesma fábrica do server.js, que monta a rota de escrita). Usado pelo contexto do plano, pelo Merovíngio e pelo aprendizado.
 const nucleoDependencias = criarDependencias({ handle: db, notion: { req: notionReq }, agora, hoje: hojeLocal, validarPor: validarLiderOuConsultor, mapeamento,
   limiares: { atencao: L.dependencia_atencao_dias, revisar: L.dias_parada } })
+// encontros da consultoria (cards + sidecar encontro_info): só LEITURA aqui, para as regras trilha_prime e combinado_ata do Prime (src/lib/trilhas.js)
+const nucleoEncontros = criarEncontros({ handle: db, agora, hoje: hojeLocal })
 export function dependenciasDe(cliente, hoje) {
   const todas = nucleoDependencias.listar({ cliente, hoje })
   return { todas, vencidas: todas.filter(d => d.dias >= L.dependencia_atencao_dias) }   // vencida = aguarda o cliente há 14+ dias (régua do playbook)
@@ -100,6 +105,7 @@ function acao(cli, hoje, d) {
       criterio_aceite: d.aceite, impacto: d.impacto, confianca, urgencia: d.urgencia, esforco: d.esforco,
       logica: `Impacto ${d.impacto}/5 × confiança ${confianca}/5 (${d.tipo}) × urgência ${d.urgencia}/5 ÷ esforço ${d.esforco}/5 = ${score}/100`,
       demanda_notion: d.demanda || '', refs: d.refs || [],
+      ...(d.extra || {}),          // trilha_prime / combinado_ata (Prime): trilha_id, passo_n, executor, encontro_id, processo_id, como (check do passo), prova
     },
   }
 }
@@ -340,6 +346,8 @@ function regras(cli, ctx, hoje, extra) {
         fonte: FONTE_ML, periodo: per, dependencia: 'Motivo de cancelamento por pedido', indicador: `${n.vendas_canceladas} cancelamentos/28 dias`,
         meta: 'Motivo principal identificado e corrigido', aceite: 'Cancelamentos classificados por motivo e ação corretiva registrada', impacto: 4, urgencia: 4, esforco: 2 })
   }
+  // 9. Place Prime (docs/desenho-place-prime.md § D): passos da trilha datados pelo encontro e combinados da reunião do lado do cliente — mesmas regras de score/idAcao/descarte
+  for (const d of extra.prime || []) A(d)
   return out
 }
 
@@ -401,7 +409,16 @@ export function gerarPlanoCliente(cli, { hoje = hojeLocal(), ml = null, planoSta
   // omitidas.alinhado); vencida nasce com "observar: alinhado em dd/mm, revisar"; descartada no banco não ocupa vaga no top 5
   const alinhado = alinhamentosReal().predicado(cli.cliente, { hoje }), omitidas = {}
   const descartadas = new Set(db.prepare("SELECT id FROM acoes_plano WHERE cliente = ? AND status = 'descartada'").all(cli.cliente).map(r => r.id))
-  const acoes = regras(cli, ctx, hoje, { ml, planoStatus, pendCliente }).filter(a => {
+  // Prime: trilha + combinados (só leitura local); falha não derruba o plano e vira pendência declarada. Performance não passa por aqui (byte a byte igual).
+  const produto = produtoDoCliente(cli).produto
+  let prime = [], falhaPrime = false
+  if (produto === 'prime') {
+    try {
+      const encontros = nucleoEncontros.listar(cli.cliente, { hojeRef: hoje })
+      prime = [...descritoresTrilha({ produto, canais: cli.canais, encontros, hoje }), ...descritoresCombinados({ produto, encontros, titulosTarefas: ctx.tarefas.map(t => t.titulo), hoje })]
+    } catch { falhaPrime = true }
+  }
+  const acoes = regras(cli, ctx, hoje, { ml, planoStatus, pendCliente, prime }).filter(a => {
     if (descartadas.has(a.id)) { omitidas.descartada = (omitidas.descartada || 0) + 1; return false }
     const al = alinhado({ regra: a.regra, acao: a.id })
     if (al.sim) { omitidas.alinhado = (omitidas.alinhado || 0) + 1; return false }
@@ -415,6 +432,7 @@ export function gerarPlanoCliente(cli, { hoje = hojeLocal(), ml = null, planoSta
   const top5 = acoes.filter(a => ['72h', '7d'].includes(a.horizonte)).slice(0, 5).map(a => a.id)
   const por = h => acoes.filter(a => a.horizonte === h).length
   const pend = pendencias(cli, ctx, ml)
+  if (falhaPrime) pend.push({ item: 'Trilha Prime e combinados de reunião (não avaliados nesta geração)', muda_decisao: 'Sem a leitura dos encontros, os passos da trilha e os combinados não viram ação neste plano', como_obter: 'Gerar o plano de novo; se persistir, conferir config/trilhas.json' })
   if (falhaPendCliente) pend.push({ item: 'Pendências do cliente por canal (não avaliadas nesta geração)', muda_decisao: 'Sem a avaliação, estoque baixo, custos ausentes e acesso à conta não viram ação neste plano', como_obter: 'Gerar o plano de novo; se persistir, conferir config/dependencias-cliente.json' })
 
   const faltaML = !ml?.atual
@@ -479,7 +497,7 @@ export function salvarPlano(plano, acoes, { pularObsoletas = [] } = {}) {
     }
     // ações 'anuncio_*' (plano por anúncio e jobs de Ofertas) têm dono próprio (plano-anuncios.salvarAcoesAnuncio): a evidência delas não é deste plano
     for (const [id, r] of existentes)
-      if (!vistos.has(id) && ['proposta', 'aprovada'].includes(r.status) && !pularObsoletas.includes(r.regra) && !r.regra.startsWith('anuncio_')) obsoleta.run(t, id)
+      if (!vistos.has(id) && ['proposta', 'aprovada'].includes(r.status) && !pularObsoletas.includes(r.regra) && !r.regra.startsWith('anuncio_') && r.regra !== 'encontro') obsoleta.run(t, id)   // 'encontro' nasce do «Registrar encontro» (encontros.js), não deste plano
     db.prepare(`INSERT INTO planos_cliente (cliente, gerado_em, plano_json) VALUES (?,?,?)
       ON CONFLICT(cliente) DO UPDATE SET gerado_em = excluded.gerado_em, plano_json = excluded.plano_json`).run(plano.cliente, t, JSON.stringify(plano))
   })()

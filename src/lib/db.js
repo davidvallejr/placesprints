@@ -29,6 +29,7 @@ import { SCHEMA_CONCORRENCIA } from './concorrencia.js'
 import { SCHEMA_NOTA } from './nota-fiscal.js'
 import { SCHEMA_ERP } from './relatorios-ciclo.js'
 import { SCHEMA_GUARDIAO } from './guardiao.js'
+import { SCHEMA_ENCONTROS } from './encontros.js'
 import { semChaveS90 } from './s90-chave.js'
 import { join } from 'node:path'
 import { mkdirSync } from 'node:fs'
@@ -313,6 +314,7 @@ db.exec(SCHEMA_EXECUTOR)          // Chaveiro F4+: exec_liberacao (cliente × op
 db.exec(SCHEMA_NOTA)              // V3 F8: nota fiscal (cliente_fiscal, termo_fiscal, regra_fiscal_produto, nota_fiscal, nota_item, nota_evento append-only); aditivo, idempotente — src/lib/nota-fiscal.js
 db.exec(SCHEMA_ERP)               // V3 F9: razão de estoque (estoque_mov, append-only por TRIGGER) e pedidos ao fornecedor (compra_fornecedor); aditivo, idempotente — src/lib/relatorios-ciclo.js
 db.exec(SCHEMA_GUARDIAO)          // Agente Smith G0: lojas do mesmo dono (conta_canal) e quem decidiu cada mudança de preço (preco_decisao, 1 clique); aditivo, idempotente — src/lib/guardiao.js
+db.exec(SCHEMA_ENCONTROS)         // Place Prime: sidecar do card de encontro (encontro_info: tipo, quem conduziu, gravação sem query, transcrição por sha256, treinado da lista fechada, consentimento); aditivo, idempotente — src/lib/encontros.js
 // configuração de avisos ao cliente (canais, ritmo, silêncio, liberação; lista fechada em gatilhos.js): coluna que o sincronizarEquipe NÃO escreve, logo o sync nunca a zera
 if (!colunasCentral.has('notificacao_json')) db.exec("ALTER TABLE clientes_central ADD COLUMN notificacao_json TEXT NOT NULL DEFAULT '{}'")
 for (const [t, col, def] of [['s90_sessao', 'origem', "TEXT NOT NULL DEFAULT ''"], ['s90_oauth', 'volta', "TEXT NOT NULL DEFAULT ''"], ['s90_conta', 'piloto', 'INTEGER NOT NULL DEFAULT 0'],

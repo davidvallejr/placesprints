@@ -326,7 +326,7 @@ rotasPlanos.get('/api/cliente/painel', trata((req, res) => {
   probabilidade.gmv_aguardando_canal = Number(metas.gmv) > 0 && !vendas.disponivel
 
   res.json({
-    cliente: reg.cliente, tier: reg.tier, nicho: reg.nicho, canais: reg.canais, cnpj: reg.cnpj, cpf: reg.cpf,
+    cliente: reg.cliente, tier: reg.tier, produto: reg.produto || '', nicho: reg.nicho, canais: reg.canais, cnpj: reg.cnpj, cpf: reg.cpf,
     contato: reg.contato, consultor: reg.principal, squad: reg.squadPrincipal, elegivel, motivo_inelegivel, hoje,
     plano_gerado_em: plano?._gerado_em || null, resumo: plano?.resumo?.texto || '',
     pendencias: plano?.pendencias || [], execucao, vendas,

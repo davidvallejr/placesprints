@@ -1,0 +1,45 @@
+{
+  "$comentario": "Trilhas pré-moldadas e pré-datadas do Place Prime (docs/desenho-place-prime.md § D.1/D.2). Lista FECHADA, lida só por src/lib/trilhas.js. A trilha é REGRA do plano (regra trilha_prime em plano-cliente.js), nunca um segundo motor: cada passo vira uma ação proposta com prazo contado a partir do ENCONTRO que o dispara (encontro_gatilho = tipo do encontro registrado em Encontros); o consultor «puxa» aprovando; a distribuição é o distribuir() de sempre (dry-run, confirmar:true). Passo 'apos: anterior' encadeia no prazo do passo anterior do MESMO encontro. processo = id de config/processos-base.json (138, Manual do Analista); faixa_prazo = tipo de processos-curadoria.regras_gerais.prazos; prova.metrica só da lista metricas_medidas (o que o sistema mede), senão 'pendente'. Curadoria: fases da consultoria (Onboarding → Diagnóstico 360 → Plano P1/P2/P3 → Execução guiada → Reforço) + Manual (sequência saúde → disponibilidade → cadastro → otimização). STATUS: PROPOSTA do sistema, a validar pelo David e pelos consultores (decisão 9 do desenho) — padrao fica false até ele marcar.",
+  "versao": 1,
+  "encontros": [
+    { "id": "kickoff", "nome": "Abertura (kickoff)" },
+    { "id": "diagnostico", "nome": "Diagnóstico 360" },
+    { "id": "plano", "nome": "Plano P1/P2/P3" },
+    { "id": "execucao", "nome": "Execução guiada (treinamento)" },
+    { "id": "reforco", "nome": "Reforço e próximo ciclo" },
+    { "id": "alinhamento", "nome": "Alinhamento avulso", "ancora": false }
+  ],
+  "metricas_medidas": ["vendas_28d", "visitas_28d", "conversao_28d", "anuncios_ativos", "custo_sobre_receita", "pendencias_resolvidas"],
+  "regras": {
+    "$comentario": "priors declarados das duas regras novas (impacto/urgência/esforço 1–5, mesma fórmula de score de plano-cliente.acao); tipo = evidência",
+    "trilha_prime": { "impacto": 3, "urgencia": 3, "esforco": 2, "tipo": "fato", "dimensao": "Qualidade operacional" },
+    "combinado_ata": { "impacto": 3, "urgencia": 3, "esforco": 1, "tipo": "hipotese", "dimensao": "Qualidade operacional", "janela_dias": 30, "max_por_cliente": 5 }
+  },
+  "trilhas": [
+    {
+      "id": "prime_ml_base",
+      "nome": "Trilha Prime · Mercado Livre (base)",
+      "produto": ["prime"],
+      "canal": "ML",
+      "padrao": false,
+      "passos": [
+        { "n": 1, "encontro_gatilho": "kickoff", "processo": "3.2", "titulo": "Liberar os acessos da conta do Mercado Livre e do ERP", "executor": "cliente", "apos": "encontro", "dias": 3, "faixa_prazo": "acao_imediata", "demanda": "Coleta de acessos",
+          "check": ["Convite de colaborador aceito na conta do Mercado Livre", "Acesso ao ERP (Bling/Tiny) liberado ou informado que não há ERP"], "prova": { "metrica": "pendencias_resolvidas", "criterio": "pendência de acesso resolvida" } },
+        { "n": 2, "encontro_gatilho": "kickoff", "processo": "2.4", "titulo": "Enviar a planilha de custos por SKU", "executor": "cliente", "apos": "anterior", "dias": 4, "faixa_prazo": "acao_imediata", "demanda": "Planilha de custos",
+          "check": ["Custo por SKU (produto, embalagem, imposto) preenchido para os curva A"], "prova": { "metrica": "custo_sobre_receita", "criterio": "custo informado para os anúncios curva A" } },
+        { "n": 3, "encontro_gatilho": "diagnostico", "processo": "2.3", "titulo": "Revisar com o consultor o diagnóstico 360 da conta", "executor": "consultor", "apos": "encontro", "dias": 2, "faixa_prazo": "problema_critico", "demanda": "Reunião de Alinhamento",
+          "check": ["Diagnóstico apresentado e dúvidas do cliente registradas no card"], "prova": { "metrica": "pendente", "criterio": "diagnóstico registrado" } },
+        { "n": 4, "encontro_gatilho": "plano", "processo": "5.1", "titulo": "Fechar o plano P1/P2/P3 com o consultor", "executor": "consultor", "apos": "encontro", "dias": 3, "faixa_prazo": "acao_imediata", "demanda": "Montar Plano de Ação",
+          "check": ["Plano com P1/P2/P3, responsável (o cliente) e prazo por ação"], "prova": { "metrica": "pendente", "criterio": "plano registrado na base Informações" } },
+        { "n": 5, "encontro_gatilho": "execucao", "processo": "6.12", "titulo": "Completar a ficha técnica dos anúncios curva A", "executor": "cliente", "apos": "encontro", "dias": 7, "faixa_prazo": "otimizacao", "demanda": "Ficha Técnica",
+          "check": ["Ficha técnica completa nos anúncios curva A (print antes e depois)"], "prova": { "metrica": "conversao_28d", "criterio": "conversão dos curva A em 28 dias contra o período anterior" } },
+        { "n": 6, "encontro_gatilho": "execucao", "processo": "8.2", "titulo": "Reescrever os títulos dos anúncios curva A pelo método treinado", "executor": "cliente", "apos": "anterior", "dias": 7, "faixa_prazo": "otimizacao", "demanda": "Otimizar Anúncios",
+          "check": ["Título novo com a palavra-chave principal no começo (print antes e depois)"], "prova": { "metrica": "visitas_28d", "criterio": "visitas dos curva A em 28 dias contra o período anterior" } },
+        { "n": 7, "encontro_gatilho": "execucao", "processo": "7.6", "titulo": "Otimizar imagens e oferta dos anúncios curva A", "executor": "cliente", "apos": "anterior", "dias": 7, "faixa_prazo": "otimizacao", "demanda": "Otimizar Anúncios",
+          "check": ["Capa e galeria revisadas pelo método IMA (print antes e depois)"], "prova": { "metrica": "conversao_28d", "criterio": "conversão dos curva A em 28 dias contra o período anterior" } },
+        { "n": 8, "encontro_gatilho": "reforco", "processo": "3.13", "titulo": "Revisar os resultados e o próximo ciclo com o consultor", "executor": "consultor", "apos": "encontro", "dias": 2, "faixa_prazo": "problema_critico", "demanda": "Reunião de Alinhamento",
+          "check": ["Antes × depois dos passos do cliente apresentado com o que foi medido"], "prova": { "metrica": "vendas_28d", "criterio": "vendas em 28 dias contra o período anterior" } }
+      ]
+    }
+  ]
+}
