@@ -171,7 +171,7 @@
       <div id="exPreviaRes" class="mt-2"></div>
       <h3 class="mt-4">3. Ordens</h3><div id="exOrdensBox"></div><div class="mt-2"><button class="btn btn-fantasma" type="button" id="exConferir">Conferir agora</button></div>
       <details class="recolhido mt-4" id="exLiberacoes"><summary>Liberações, estreia e Neo</summary><div id="exLibBox"></div></details>
-      <div class="mt-4"><button class="btn" type="button" id="exParar"></button> <span class="mini">Estoque segue o ajuste automático próprio na aba Produtos.</span></div>`
+      <div class="mt-4"><button class="btn" type="button" id="exParar"></button> <span class="mini">Estoque segue o ajuste automático próprio na aba Produtos e estoque: <a href="/cliente?cliente=${encodeURIComponent(cliente)}&amp;aba=produtos&amp;sec=secSyncEstoque">ver o ajuste</a>.</span></div>`
     pintarCabecalho(alvo); pintarAnuncios(alvo); pintarOrdens(alvo); pintarLiberacoes(alvo)
     if (preset?.operacao && preset.operacao !== 'estoque') { alvo.querySelector('#exOque').value = `o:${preset.operacao}` }
     pintarParams(alvo)

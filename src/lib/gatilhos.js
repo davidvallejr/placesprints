@@ -877,7 +877,7 @@ export function criarGatilhos({ handle, fontes = {}, agora = () => new Date().to
       }
       if (algumEntregue) for (const p of selLoteProduto.all(l.id)) insAvisado.run(l.cliente, 'estoque', p.item_id, p.snap_json, em, l.id)   // micro de compras: produtos ditos
       log(/^n8n_(5\d\d|timeout|rede)$/.test(r.motivo || '') ? 'erro' : 'info', `gatilhos ${l.cliente}: lote ${l.tipo} ${r.estado}${r.motivo ? ` (${r.motivo})` : ''} · ${canais.length} canal(is)`)
-      if (['falhou', 'parcial'].includes(r.estado)) notificar({ tipo: 'gatilho_falhou', nivel: 'alerta', titulo: `Aviso ao cliente não entregue${r.estado === 'parcial' ? ' em todos os canais' : ''}: ${l.cliente}`, corpo: textoMotivo(r.motivo) || 'A entrega falhou; veja o log.', cliente: l.cliente, link: `/cliente?cliente=${encodeURIComponent(l.cliente)}&aba=resumo`, dedupeMin: 120 })
+      if (['falhou', 'parcial'].includes(r.estado)) notificar({ tipo: 'gatilho_falhou', nivel: 'alerta', titulo: `Aviso ao cliente não entregue${r.estado === 'parcial' ? ' em todos os canais' : ''}: ${l.cliente}`, corpo: textoMotivo(r.motivo) || 'A entrega falhou; veja o log.', cliente: l.cliente, link: `/cliente?cliente=${encodeURIComponent(l.cliente)}&aba=do-cliente&sec=secGatilhos`, dedupeMin: 120 })
       fecharLote(l.id)
       return { ok: saiu, estado: r.estado, motivo: r.motivo || '', mensagem: textoMotivo(r.motivo), lote_id: l.id }   // pendente (n8n não configurado) e parcial NÃO são sucesso
     } finally { emVoo.delete(l.id) }
@@ -893,7 +893,7 @@ export function criarGatilhos({ handle, fontes = {}, agora = () => new Date().to
     atualizarLote(l.id, { recibos_json: JSON.stringify(recibos) })
     fecharLote(l.id)
     // o provedor recusou: o lote NÃO é reenviado sozinho (reenviar mandaria de novo aos canais que entregaram); a equipe decide pelo «Reenviar», que só vai aos canais sem entrega
-    if (est === 'falhou') notificar({ tipo: 'gatilho_falhou', nivel: 'alerta', titulo: `Aviso ao cliente não entregue (${canal}): ${l.cliente}`, corpo: 'O provedor recusou a mensagem (recibo do n8n). Nada é reenviado sozinho: confira o destino e use «Reenviar» (só vai aos canais sem entrega).', cliente: l.cliente, link: `/cliente?cliente=${encodeURIComponent(l.cliente)}&aba=resumo`, dedupeMin: 120 })
+    if (est === 'falhou') notificar({ tipo: 'gatilho_falhou', nivel: 'alerta', titulo: `Aviso ao cliente não entregue (${canal}): ${l.cliente}`, corpo: 'O provedor recusou a mensagem (recibo do n8n). Nada é reenviado sozinho: confira o destino e use «Reenviar» (só vai aos canais sem entrega).', cliente: l.cliente, link: `/cliente?cliente=${encodeURIComponent(l.cliente)}&aba=do-cliente&sec=secGatilhos`, dedupeMin: 120 })
     return { ok: true, duplicado: false }
   }
   function fecharLote(id) {
@@ -1023,7 +1023,7 @@ export function criarGatilhos({ handle, fontes = {}, agora = () => new Date().to
           if (e.ok && (forcarSemanal || janelaSemanal(c)) && estado.get(chaveSemana) !== semana) {
             const l = montarLote(c, 'semanal', { origem })
             // sem diagnóstico agora: tenta de novo no próximo tick (até 20:00); bloqueado pelo auditor: a equipe é avisada e o tick tenta de novo (nunca marca a semana em silêncio)
-            if (l.bloqueado) notificar({ tipo: 'gatilho_falhou', nivel: 'alerta', titulo: `Plano da semana não saiu: ${c}`, corpo: textoMotivo(l.motivo), cliente: c, link: `/cliente?cliente=${encodeURIComponent(c)}&aba=resumo`, dedupeMin: 24 * 60 })
+            if (l.bloqueado) notificar({ tipo: 'gatilho_falhou', nivel: 'alerta', titulo: `Plano da semana não saiu: ${c}`, corpo: textoMotivo(l.motivo), cliente: c, link: `/cliente?cliente=${encodeURIComponent(c)}&aba=do-cliente&sec=secGatilhos`, dedupeMin: 24 * 60 })
             else if (!(l.vazio && l.motivo === 'sem_dados')) estado.set(chaveSemana, semana)
             if (l.id && !l.vazio && !l.teto && !l.bloqueado && !l.ja_existia) { const r = await enviarLote(l.id, { origem }); res.semanais++; res.lotes.push({ cliente: c, id: l.id, tipo: 'semanal', estado: r.estado }) }
           }

@@ -49,7 +49,7 @@ function coletaGlobal({ F, agora }) {
 function semCusto({ F, hoje, dentro }) {
   const E = lista(F.empresa); if (!E) return semLeitura('custos')
   return { itens: E.filter(e => dentro(e.cliente) && (e.custo_pct == null || e.custo_pct < L.custo_pct) && (dias(e.conectado_em, hoje) ?? 0) > L.custo_dias).map(e => item({ id: 'custo:' + e.cliente, cliente: e.cliente, familia: 'custos', etapa: ETAPA.empresa,
-    o_que: e.custo_pct == null ? 'Custo não informado (conta conectada há mais de 14 d)' : `Custo informado para ${e.custo_pct}% da receita (meta ${L.custo_pct}%)${e.lead_time ? '' : ' · prazo do fornecedor não informado'}`, prazo: 'esta semana', numero: `custo ≥ ${L.custo_pct}% da receita de 28 d`, link: { rotulo: 'Abrir', href: cli(e.cliente, 'configurar', 'secCustosUpload') } })) }
+    o_que: e.custo_pct == null ? 'Custo não informado (conta conectada há mais de 14 d)' : `Custo informado para ${e.custo_pct}% da receita (meta ${L.custo_pct}%)${e.lead_time ? '' : ' · prazo do fornecedor não informado'}`, prazo: 'esta semana', numero: `custo ≥ ${L.custo_pct}% da receita de 28 d`, link: { rotulo: 'Abrir', href: cli(e.cliente, 'empresa', 'secCustosUpload') } })) }
 }
 function propostasP01({ F, hoje, dentro }) {
   const A = lista(F.acoes); if (!A) return semLeitura('acoes_plano')
@@ -88,7 +88,7 @@ const barrado = x => /audit|conteudo|bloquead|inseguro/i.test(String(x.motivo ||
 function textosBarrados({ F, dentro }) {
   const Lt = lista(F.lotes), R = lista(F.relatorios); if (!Lt && !R) return semLeitura('gatilho_lote e relatorio_envio')
   const it = []
-  for (const l of Lt || []) if (barrado(l) && dentro(l.cliente)) it.push(item({ id: 'lote-barrado:' + l.cliente + ':' + l.dia, cliente: l.cliente, familia: 'auditor', etapa: ETAPA.comunicar, o_que: `Plano de ${l.tipo} de ${br(l.dia)} barrado pelo auditor (${l.motivo})`, prazo: 'antes do próximo envio', numero: 'texto aprovado pelo auditor', link: { rotulo: 'Abrir', href: cli(l.cliente, 'resumo', 'secGatilhos') } }))
+  for (const l of Lt || []) if (barrado(l) && dentro(l.cliente)) it.push(item({ id: 'lote-barrado:' + l.cliente + ':' + l.dia, cliente: l.cliente, familia: 'auditor', etapa: ETAPA.comunicar, o_que: `Plano de ${l.tipo} de ${br(l.dia)} barrado pelo auditor (${l.motivo})`, prazo: 'antes do próximo envio', numero: 'texto aprovado pelo auditor', link: { rotulo: 'Abrir', href: cli(l.cliente, 'do-cliente', 'secGatilhos') } }))
   for (const r of R || []) if (barrado(r) && dentro(r.cliente)) it.push(item({ id: 'rel-barrado:' + r.cliente + ':' + r.em, cliente: r.cliente, familia: 'auditor', etapa: ETAPA.comunicar, o_que: `Relatório ao Notion barrado (${r.motivo})`, prazo: 'antes do próximo envio', numero: 'texto aprovado pelo auditor', link: { rotulo: 'Abrir', href: '/planos?sec=secRelatorios' } }))
   return { itens: it, ...(F.brier === undefined ? { nota: 'Brier por família: não lido nesta fila (ver Visão geral › Acerto do algoritmo)' } : {}) }
 }
@@ -107,7 +107,7 @@ function respostasNovas({ F, dentro }) {
 }
 function riscoAberto({ F, hoje, dentro }) {
   const R = lista(F.riscos); if (!R) return semLeitura('risco_cliente')
-  return { itens: R.filter(r => dentro(r.cliente)).map(r => item({ id: 'risco:' + r.cliente + ':' + r.motivo, cliente: r.cliente, familia: 'risco', etapa: ETAPA.comunicar, o_que: `Cliente em risco (${r.motivo}) desde ${br(r.desde)}`, prazo: haDias(dias(r.desde, hoje)), numero: 'risco encerrado com nota', gravidade: 'atrasado', link: { rotulo: 'Abrir', href: cli(r.cliente, 'configurar', 'secRisco') } })) }
+  return { itens: R.filter(r => dentro(r.cliente)).map(r => item({ id: 'risco:' + r.cliente + ':' + r.motivo, cliente: r.cliente, familia: 'risco', etapa: ETAPA.comunicar, o_que: `Cliente em risco (${r.motivo}) desde ${br(r.desde)}`, prazo: haDias(dias(r.desde, hoje)), numero: 'risco encerrado com nota', gravidade: 'atrasado', link: { rotulo: 'Abrir', href: cli(r.cliente, 'empresa', 'secRisco') } })) }
 }
 function elegiveisNaoLiberados({ F }) {
   const N = lista(F.nao_liberados); if (!N) return semLeitura('liberação dos avisos')
@@ -116,7 +116,7 @@ function elegiveisNaoLiberados({ F }) {
 }
 function recibosFalhados({ F, dentro }) {
   const Lt = lista(F.lotes); if (!Lt) return semLeitura('gatilho_lote')
-  return { itens: Lt.filter(l => ['falhou', 'parcial'].includes(l.estado) && !barrado(l) && dentro(l.cliente)).map(l => item({ id: 'lote:' + l.cliente + ':' + l.dia + ':' + l.tipo, cliente: l.cliente, familia: 'recibos', etapa: ETAPA.comunicar, o_que: `Aviso ${l.tipo} de ${br(l.dia)} ${l.estado}${l.motivo ? ' (' + l.motivo + ')' : ''}`, prazo: 'hoje', numero: 'recibo entregue', gravidade: 'atrasado', link: { rotulo: 'Abrir', href: cli(l.cliente, 'resumo', 'secGatilhos') } })) }
+  return { itens: Lt.filter(l => ['falhou', 'parcial'].includes(l.estado) && !barrado(l) && dentro(l.cliente)).map(l => item({ id: 'lote:' + l.cliente + ':' + l.dia + ':' + l.tipo, cliente: l.cliente, familia: 'recibos', etapa: ETAPA.comunicar, o_que: `Aviso ${l.tipo} de ${br(l.dia)} ${l.estado}${l.motivo ? ' (' + l.motivo + ')' : ''}`, prazo: 'hoje', numero: 'recibo entregue', gravidade: 'atrasado', link: { rotulo: 'Abrir', href: cli(l.cliente, 'do-cliente', 'secGatilhos') } })) }
 }
 function relatoriosFalhados({ F, dentro }) {
   const R = lista(F.relatorios); if (!R) return semLeitura('relatorio_envio')
@@ -156,7 +156,7 @@ function aguardandoCliente({ F, dentro }) {
 }
 function discordDaSemana({ F, dentro }) {
   const A = lista(F.avisos_discord); if (!A) return semLeitura('consultor_aviso')
-  return { itens: A.filter(a => dentro(a.cliente)).map(a => item({ id: 'disc:' + a.cliente + ':' + a.dia, cliente: a.cliente, familia: 'discord', etapa: ETAPA.comunicar, o_que: `Resumo de terça no Discord: ${a.estado}`, prazo: br(a.dia), numero: 'lido', link: { rotulo: 'Abrir', href: cli(a.cliente, 'resumo', 'secGatilhos') } })) }
+  return { itens: A.filter(a => dentro(a.cliente)).map(a => item({ id: 'disc:' + a.cliente + ':' + a.dia, cliente: a.cliente, familia: 'discord', etapa: ETAPA.comunicar, o_que: `Resumo de terça no Discord: ${a.estado}`, prazo: br(a.dia), numero: 'lido', link: { rotulo: 'Abrir', href: cli(a.cliente, 'do-cliente', 'secGatilhos') } })) }
 }
 function semGrupoOuContrato({ F, hoje, dentro }) {
   const C = lista(F.clientes); if (!C) return semLeitura('clientes_central')
@@ -164,7 +164,7 @@ function semGrupoOuContrato({ F, hoje, dentro }) {
   for (const c of C) {
     if (!dentro(c.cliente)) continue
     if (c.whatsapp === false) it.push(item({ id: 'grupo:' + c.cliente, cliente: c.cliente, familia: 'canais', etapa: ETAPA.comunicar, o_que: 'Sem grupo de WhatsApp do Mercado Livre na central', prazo: 'antes de terça', numero: 'grupo preenchido', link: { rotulo: 'Abrir', href: cli(c.cliente, 'configurar', 'secAvisos') } }))
-    for (const [canal, data] of Object.entries(c.vencimentos || {})) { const d = dataOk(data) ? Math.round((ms(data) - ms(hoje)) / 864e5) : null; if (d != null && d <= L.contrato_dias) it.push(item({ id: 'venc:' + c.cliente + ':' + canal, cliente: c.cliente, familia: 'contrato', etapa: ETAPA.cadastro, o_que: `${canal}: contrato vence em ${br(data)}${d < 0 ? ' (vencido)' : ''}`, prazo: d < 0 ? 'vencido' : `em ${d} d`, numero: 'renovação registrada', gravidade: d < 0 ? 'atrasado' : '', link: { rotulo: 'Abrir', href: cli(c.cliente, 'configurar', 'secContrato') } })) }
+    for (const [canal, data] of Object.entries(c.vencimentos || {})) { const d = dataOk(data) ? Math.round((ms(data) - ms(hoje)) / 864e5) : null; if (d != null && d <= L.contrato_dias) it.push(item({ id: 'venc:' + c.cliente + ':' + canal, cliente: c.cliente, familia: 'contrato', etapa: ETAPA.cadastro, o_que: `${canal}: contrato vence em ${br(data)}${d < 0 ? ' (vencido)' : ''}`, prazo: d < 0 ? 'vencido' : `em ${d} d`, numero: 'renovação registrada', gravidade: d < 0 ? 'atrasado' : '', link: { rotulo: 'Abrir', href: cli(c.cliente, 'empresa', 'secContrato') } })) }
   }
   return { itens: it }
 }

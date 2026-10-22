@@ -55,7 +55,7 @@ export function progressoCliente(ctx = {}) {
     const atr = conhecido != null && conhecido > L.cadastro_dias
     et(1, { ...(atr ? atraso(conhecido, `${L.cadastro_dias} d`) : {}), numero: falta,
       motivo: conhecido == null ? 'sem data conhecida de entrada: o atraso não é medido' : `conhecido há ${conhecido} d`,
-      ir: !cs ? cli('configurar', 'cad-sec') : cli('resumo', 'secNotion'), acao: !cs ? 'Registrar o CS responsável' : 'Localizar o quadro no Notion' })
+      ir: !cs ? cli('configurar', 'cad-sec') : cli('configurar', 'secNotion'), acao: !cs ? 'Registrar o CS responsável' : 'Localizar o quadro no Notion' })
   }
 
   // 2 · Conectado — conta ML viva (meli_contas sem erro)
@@ -81,7 +81,7 @@ export function progressoCliente(ctx = {}) {
   // 4 · Dados da empresa — custo informado ÷ receita (custos-db.resumoCustos: fat30 do anúncio) · prazo do fornecedor · catálogo marcado
   const em = ctx.empresa || {}, pct = Number.isFinite(Number(em.custo_pct)) && em.custo_pct != null ? Number(em.custo_pct) : null, lead = !!em.lead_time, cat = !!em.catalogo
   {
-    const o = { numero: `custo ${pct == null ? '—' : pct + ' %'} da receita 30 d · prazo do fornecedor ${lead ? 'informado' : 'não informado'} · catálogo ${cat ? 'marcado' : 'não marcado'}`, ir: cli('configurar', 'secCustosUpload'), acao: pct == null || pct < L.custo_pct_min ? 'Subir a planilha de custos' : 'Informar o prazo do fornecedor' }
+    const o = { numero: `custo ${pct == null ? '—' : pct + ' %'} da receita 30 d · prazo do fornecedor ${lead ? 'informado' : 'não informado'} · catálogo ${cat ? 'marcado' : 'não marcado'}`, ir: cli('empresa', 'secCustosUpload'), acao: pct == null || pct < L.custo_pct_min ? 'Subir a planilha de custos' : 'Informar o prazo do fornecedor' }
     if (pct != null && pct >= L.custo_pct_min && lead) o.estado = 'feito'
     else if (!ml.conectado) o.motivo = 'sem conexão ML: custo ÷ receita não é medido'
     else {

@@ -873,7 +873,7 @@ export function criarDossies({ handle: h, livro, coletar, render, raiz, agora = 
         h.prepare(`INSERT INTO dossie_mensal (cliente, competencia, estado, motivo, tentativas, criado_em, tentado_em) VALUES (?,?,'falhou','geracao',1,?,?)
           ON CONFLICT(cliente, competencia) DO UPDATE SET estado = 'falhou', motivo = 'geracao', tentativas = tentativas + 1, tentado_em = excluded.tentado_em`).run(cliente, competencia, agora(), agora())
         log('erro', `dossiê mensal ${cliente}: ${String(e?.message ?? e).replace(/["'`][\s\S]*$/, '…').slice(0, 120)}`)
-        notificar({ tipo: 'dossie_mensal', nivel: 'erro', titulo: 'Dossiê mensal não foi gerado', corpo: `${cliente} · ${competencia}: falha na geração (detalhe no log).`, cliente, link: `/cliente?cliente=${encodeURIComponent(cliente)}&aba=configurar`, dedupeMin: 24 * 60 })
+        notificar({ tipo: 'dossie_mensal', nivel: 'erro', titulo: 'Dossiê mensal não foi gerado', corpo: `${cliente} · ${competencia}: falha na geração (detalhe no log).`, cliente, link: `/cliente?cliente=${encodeURIComponent(cliente)}&aba=empresa&sec=secDossie`, dedupeMin: 24 * 60 })
         out.push({ cliente, estado: 'falhou', motivo: 'geracao' })
       }
     }
@@ -895,7 +895,7 @@ export function criarDossies({ handle: h, livro, coletar, render, raiz, agora = 
     const em = agora()
     if (!envio?.configurado?.()) {
       h.prepare("UPDATE dossie_mensal SET estado = 'pendente', motivo = 'n8n_nao_configurado', tentado_em = ? WHERE cliente = ? AND competencia = ?").run(em, linha.cliente, linha.competencia)
-      notificar({ tipo: 'dossie_mensal', nivel: 'alerta', titulo: 'Dossiê mensal gerado, mas não entregue ao #growth', corpo: `${linha.cliente} · ${linha.competencia}: ${MOTIVO.n8n_nao_configurado}.`, cliente: linha.cliente, link: `/cliente?cliente=${encodeURIComponent(linha.cliente)}&aba=configurar`, dedupeMin: 24 * 60 })
+      notificar({ tipo: 'dossie_mensal', nivel: 'alerta', titulo: 'Dossiê mensal gerado, mas não entregue ao #growth', corpo: `${linha.cliente} · ${linha.competencia}: ${MOTIVO.n8n_nao_configurado}.`, cliente: linha.cliente, link: `/cliente?cliente=${encodeURIComponent(linha.cliente)}&aba=empresa&sec=secDossie`, dedupeMin: 24 * 60 })
       return { estado: 'pendente', motivo: 'n8n_nao_configurado' }
     }
     // id: chave de idempotência para o n8n descartar a repetição (timeout depois de o n8n já ter postado vira nova tentativa aqui)
@@ -910,7 +910,7 @@ export function criarDossies({ handle: h, livro, coletar, render, raiz, agora = 
     }
     const motivo = `n8n_${r?.status ?? r?.erro ?? 'erro'}`
     h.prepare("UPDATE dossie_mensal SET estado = 'falhou', motivo = ?, tentativas = tentativas + 1, tentado_em = ? WHERE cliente = ? AND competencia = ?").run(motivo, em, linha.cliente, linha.competencia)
-    notificar({ tipo: 'dossie_mensal', nivel: 'erro', titulo: 'Dossiê mensal não foi entregue ao #growth', corpo: `${linha.cliente} · ${linha.competencia}: o n8n recusou a entrega (${motivo}); nova tentativa no próximo ciclo, até ${M.max_tentativas}.`, cliente: linha.cliente, link: `/cliente?cliente=${encodeURIComponent(linha.cliente)}&aba=configurar`, dedupeMin: 24 * 60 })
+    notificar({ tipo: 'dossie_mensal', nivel: 'erro', titulo: 'Dossiê mensal não foi entregue ao #growth', corpo: `${linha.cliente} · ${linha.competencia}: o n8n recusou a entrega (${motivo}); nova tentativa no próximo ciclo, até ${M.max_tentativas}.`, cliente: linha.cliente, link: `/cliente?cliente=${encodeURIComponent(linha.cliente)}&aba=empresa&sec=secDossie`, dedupeMin: 24 * 60 })
     return { estado: 'falhou', motivo }
   }
   const tickMensal = () => emCurso ||= passadaMensal().finally(() => { emCurso = null })

@@ -1,4 +1,4 @@
-// Nota fiscal (V3 F8, src/lib/nota-fiscal-real.js) na aba /cliente › Configurar:
+// Nota fiscal (V3 F8, src/lib/nota-fiscal-real.js) na aba /cliente › Empresa (F6; dados fiscais, termo, contador e senha num formulário no dialog.dlg):
 //   window.PSNota.montarCliente({ config, notas }, cliente) → #secNotaFiscal (regime, termo, certificado, regras por SKU com CSV do contador) e #secNotas (lista ≤ 6 colunas)
 // O servidor decide tudo; aqui só mostra e pede. Tudo que vem do servidor passa por esc(). Sem primário na tela: o único primário mora DENTRO do diálogo
 // (PSRelatorio.ui, mesmo padrão de dossie.js); sem cor nova, sem emoji. Gravações: prévia → confirmar:true. Comprador sempre mascarado (vem assim do servidor).
@@ -21,14 +21,35 @@
   const SELO = { rascunho: 'neutro', aprovada: 'azul', enviada: 'azul', autorizada: 'bom', anexada: 'bom', rejeitada: 'ruim', erro: 'ruim', cancelada: 'neutro' }
   const CERT = { ausente: 'não cadastrado', referenciado_sem_validade: 'referenciado, sem validade conferida', vencido: 'vencido', vence_em_30_dias: 'vence em até 30 dias', valido: 'válido' }
   // fluxo padrão: nome → prévia (servidor) → confirmar:true
-  async function gravar(url, corpo, { titulo, texto, ok }) {
-    const por = await pedirPor(titulo, texto); if (!por) return null
+  async function gravar(url, corpo, { titulo, texto, ok }, porDado = null) {
+    const por = porDado || await pedirPor(titulo, texto); if (!por) return null
     const pv = await api(url, { ...corpo, por })
     if (pv.pendente) { toast(`Pendente: ${pv.pendente}`, 'erro'); return null }
     if (pv.previa && pv.gravavel === false) { toast(`CSV com ${pv.erros.length} erro(s): ${pv.erros.slice(0, 3).map(e => `linha ${e.linha} (${e.campo})`).join(', ')}`, 'erro'); return null }
     const r = await api(url, { ...corpo, por, confirmar: true })
     if (r.pendente) { toast(`Pendente: ${r.pendente}`, 'erro'); return null }
     toast(ok(r)); return r
+  }
+
+  // formulário no dialog.dlg (PSRelatorio.ui.dialogo): campos + «Seu nome»; devolve { valores, por } ou null — nenhuma caixa nativa do navegador.
+  // campos: [chave, rótulo, { valor, tipo, opcoes:[[v, rótulo]], obrigatorio }]
+  function formulario({ titulo, texto, campos, rotuloOk }) {
+    const u = ui(); if (!u) { toast('Diálogo indisponível: recarregue a página.', 'erro'); return Promise.resolve(null) }
+    return new Promise(resolver => {
+      const { d, corpo, rodape, fechar } = u.dialogo(titulo)
+      corpo.innerHTML = `${texto ? `<p>${esc(texto)}</p>` : ''}<div class="form-grade">${campos.map(([k, rot, o = {}]) => `<div class="campo"><label for="nfc_${esc(k)}">${esc(rot)}</label>${o.opcoes
+        ? `<select id="nfc_${esc(k)}">${o.opcoes.map(([v, r]) => `<option value="${esc(v)}"${String(o.valor ?? '') === v ? ' selected' : ''}>${esc(r)}</option>`).join('')}</select>`
+        : `<input id="nfc_${esc(k)}" type="${o.tipo || 'text'}" value="${esc(o.valor ?? '')}" maxlength="200" autocomplete="${o.tipo === 'password' ? 'off' : 'on'}">`}</div>`).join('')}</div>${u.campoPor('nfPor')}<div class="aviso erro" id="nfErro" hidden></div>`
+      let ok = null
+      rodape.append(u.botao('Cancelar', { aoClicar: fechar }), u.botao(rotuloOk || titulo, { primario: true, aoClicar: () => {
+        const valores = Object.fromEntries(campos.map(([k]) => [k, corpo.querySelector('#nfc_' + k).value.trim()])), por = u.lerPor(corpo, 'nfPor'), err = corpo.querySelector('#nfErro')
+        const falta = campos.filter(([k, , o = {}]) => o.obrigatorio && !valores[k]).map(([, r]) => r)
+        if (!por) falta.push('seu nome')
+        if (falta.length) { err.textContent = 'Preencha: ' + falta.join(', ') + '.'; err.hidden = false; return }
+        u.gravarNome(por); ok = { valores, por }; fechar()
+      } }))
+      d.addEventListener('close', () => resolver(ok), { once: true })
+    })
   }
 
   async function montarConfig(alvo, cliente, aoMudar) {
@@ -55,29 +76,35 @@
     const recarregar = () => { montarConfig(alvo, cliente, aoMudar); aoMudar?.() }
     const tenta = fn => async () => { try { if (await fn()) recarregar() } catch (e) { toast(e.message, 'erro') } }
     alvo.querySelector('#btnNfDados').onclick = tenta(async () => {
-      const campos = ['cnpj', 'razao_social', 'ie', 'uf', 'regime', 'modalidade_frete', 'vendedor_apelido', 'cert_ref', 'contador'], dados = {}
-      for (const k of campos) { const v = prompt(`${k} (deixe vazio para manter)`, c?.[k] ?? ''); if (v === null) return null; if (v.trim()) dados[k] = v.trim() }
-      return gravar('/api/cliente/nf/config', { cliente, dados }, { titulo: 'Gravar dados fiscais', texto: 'Regime, UF, IE e CNPJ como o contador do cliente declarou. Mudança remonta as notas em rascunho.', ok: r => `Dados fiscais gravados (${r.remontadas} nota(s) remontada(s)).` })
+      const v = k => ({ valor: c?.[k] ?? '' })
+      const f = await formulario({ titulo: 'Dados fiscais', rotuloOk: 'Gravar dados fiscais', texto: 'Regime, UF, IE e CNPJ como o contador do cliente declarou (campo vazio mantém o que está gravado). Mudança remonta as notas em rascunho.', campos: [
+        ['cnpj', 'CNPJ', v('cnpj')], ['razao_social', 'Razão social', v('razao_social')], ['ie', 'Inscrição estadual', v('ie')], ['uf', 'UF', v('uf')],
+        ['regime', 'Regime', { valor: c?.regime ?? '', opcoes: [['', 'manter'], ['simples', 'Simples Nacional (CSOSN)'], ['normal', 'Regime normal (CST)'], ['mei', 'MEI']] }],
+        ['modalidade_frete', 'Modalidade do frete', v('modalidade_frete')], ['vendedor_apelido', 'Apelido do vendedor no ML', v('vendedor_apelido')], ['cert_ref', 'Referência do certificado no provedor', v('cert_ref')], ['contador', 'Contador (nome/CRC)', v('contador')]] })
+      if (!f) return null
+      const dados = Object.fromEntries(Object.entries(f.valores).filter(([, x]) => x))
+      return gravar('/api/cliente/nf/config', { cliente, dados }, { titulo: 'Gravar dados fiscais', texto: '', ok: r => `Dados fiscais gravados (${r.remontadas} nota(s) remontada(s)).` }, f.por)
     })
     alvo.querySelector('#btnNfTermo').onclick = tenta(async () => {
-      const rep = prompt('Representante do cliente que aceitou o termo'); if (!rep) return null
-      const dia = prompt('Data do aceite (AAAA-MM-DD)', new Date().toISOString().slice(0, 10)); if (!dia) return null
-      return gravar('/api/cliente/nf/termo', { cliente, aceito_por: rep, aceito_em: dia }, { titulo: 'Registrar termo fiscal', texto: 'O cliente aceitou que as regras fiscais são declaradas pelo contador dele e a Place2u só executa a emissão.', ok: () => 'Termo registrado.' })
+      const f = await formulario({ titulo: 'Registrar termo fiscal', texto: 'O cliente aceitou que as regras fiscais são declaradas pelo contador dele e a Place2u só executa a emissão.', campos: [['rep', 'Representante do cliente que aceitou', { obrigatorio: true }], ['dia', 'Data do aceite', { tipo: 'date', valor: new Date().toISOString().slice(0, 10), obrigatorio: true }]] })
+      if (!f) return null
+      return gravar('/api/cliente/nf/termo', { cliente, aceito_por: f.valores.rep, aceito_em: f.valores.dia }, { titulo: 'Registrar termo fiscal', texto: '', ok: () => 'Termo registrado.' }, f.por)
     })
     alvo.querySelector('#nfCsv').onchange = async ev => {
       const arq = ev.target.files?.[0]; ev.target.value = ''; if (!arq) return
       if (arq.size > 2 * 1024 * 1024) { toast('CSV passa de 2 MB', 'erro'); return }
-      const contador = prompt('Contador que declarou estas regras (nome/CRC)'); if (!contador) return
-      tenta(async () => gravar('/api/cliente/nf/regras', { cliente, csv: await arq.text(), contador }, { titulo: 'Importar regras fiscais', texto: 'Primeiro conferimos o arquivo linha a linha; com erro, nada é gravado.', ok: r => `${r.gravadas} regra(s) gravada(s); ${r.remontadas} nota(s) remontada(s).` }))()
+      const f = await formulario({ titulo: 'Importar regras fiscais', texto: 'Primeiro conferimos o arquivo linha a linha; com erro, nada é gravado.', campos: [['contador', 'Contador que declarou estas regras (nome/CRC)', { valor: c?.contador ?? '', obrigatorio: true }]] }); if (!f) return
+      tenta(async () => gravar('/api/cliente/nf/regras', { cliente, csv: await arq.text(), contador: f.valores.contador }, { titulo: 'Importar regras fiscais', texto: '', ok: r => `${r.gravadas} regra(s) gravada(s); ${r.remontadas} nota(s) remontada(s).` }, f.por))()
     }
     alvo.querySelector('#btnNfCert').onclick = () => {
       const inp = document.createElement('input'); inp.type = 'file'; inp.accept = '.pfx,.p12'
       inp.onchange = tenta(async () => {
         const arq = inp.files?.[0]; if (!arq) return null
         if (arq.size > 5 * 1024 * 1024) { toast('arquivo passa de 5 MB', 'erro'); return null }
-        const senha = prompt('Senha do certificado (vai só nesta requisição ao provedor)'); if (!senha) return null
+        const f = await formulario({ titulo: 'Enviar certificado A1', texto: 'O certificado vai cifrado ao provedor fiscal (Focus NFe). Nada é gravado no banco do Place Sprints; a senha vai só nesta requisição.', campos: [['senha', 'Senha do certificado', { tipo: 'password', obrigatorio: true }]] }); if (!f) return null
+        const senha = f.valores.senha
         const base64 = await new Promise((ok, falha) => { const r = new FileReader(); r.onload = () => ok(String(r.result).replace(/^data:[^,]*,/, '')); r.onerror = () => falha(new Error('não foi possível ler o arquivo')); r.readAsDataURL(arq) })
-        return gravar('/api/cliente/nf/certificado', { cliente, base64, senha }, { titulo: 'Enviar certificado A1', texto: 'O certificado vai cifrado ao provedor fiscal (Focus NFe). Nada é gravado no banco do Place Sprints.', ok: r => `Certificado válido até ${brData(r.cert_valido_ate)}.` })
+        return gravar('/api/cliente/nf/certificado', { cliente, base64, senha }, { titulo: 'Enviar certificado A1', texto: '', ok: r => `Certificado válido até ${brData(r.cert_valido_ate)}.` }, f.por)
       })
       inp.click()
     }

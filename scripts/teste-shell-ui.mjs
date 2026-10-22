@@ -165,7 +165,7 @@ caso('cliente: Resultado das tarefas no Resumo após Próximas ações, #nPiorou
 caso('cliente: Folha do anúncio entre Resultado das tarefas e Depende do cliente; caixas lembradas por cliente e em ?folha=; apresentação na 1ª abertura; CSV pela rota; toggle de coleta de promoções em Configurar; aviso em Promoções', () => {
   const cli = ler('src/web/cliente.js'), css = ler('src/web/tela-cliente.css'), inv = ler('docs/ux/inventario-cliente.json'), flt = ler('src/web/filtros.js'), pr = ler('src/web/promocoes.js')
   const pos = s => { const i = cli.indexOf(s); assert.ok(i >= 0, s); return i }
-  assert.ok(pos('id="secAcomp"') < pos('id="secFolha"') && pos('id="secFolha"') < pos('id="secDependeCliente"'), '#secFolha entre #secAcomp e #secDependeCliente (decisão 4)')
+  assert.ok(pos('data-painel="anuncios"') < pos('id="secVendas"') && pos('id="secVendas"') < pos('id="secFolha"') && pos('id="secFolha"') < pos('id="secImpacto"') && pos('id="secImpacto"') < pos('data-painel="produtos"'), '#secFolha na aba Anúncios, entre #secVendas e #secImpacto (F6, spec 8.7; antes: Resumo entre #secAcomp e #secDependeCliente)')
   assert.match(cli, /<h2>Folha do anúncio <span class="badge" id="nFolha">/)
   for (const id of ['folha', 'folhaCaixas', 'btnFolhaTudo', 'fltFolha', 'folhaOrdem', 'btnFolhaCsv', 'folhaResumo', 'folhaCorpo', 'pfPromocoes']) assert.ok(cli.includes(`id="${id}"`), '#' + id)
   assert.match(cli, /<input type="checkbox" data-topico="\$\{k\}"/, '4 caixas nativas'); assert.match(cli, /FOLHA_BLOCOS = \[\['anuncios', 'Anúncios — ofertas e promoções'\], \['ads', 'Ads'\], \['full', 'Full'\], \['metricas', 'Métricas'\]\]/)
@@ -218,7 +218,8 @@ caso('cliente: pendências do cliente por canal no Resumo (#pendencias dentro de
   execFileSync(process.execPath, ['--check', RAIZ + 'src/web/pendencias.js'])
   assert.match(cl, /<script src="relatorio\.js"><\/script>\s*<script src="pendencias\.js"><\/script>\s*(<script src="alertas\.js"><\/script>\s*)?(<script src="dossie\.js"><\/script>\s*)?(<script src="perfil-informacao\.js"><\/script>\s*)?<script src="cliente\.js"><\/script>/, 'pendencias.js depois de relatorio.js (que exporta PSRelatorio.ui) e antes de cliente.js')
   assert.ok(clj.indexOf('id="faixaPendencias"') < clj.indexOf('id="secProximas"'), 'a faixa de alerta vem antes de Próximas ações')
-  const sec = clj.slice(clj.indexOf('id="secDependeCliente"'), clj.indexOf('Motor de decisão'))
+  const sec = clj.slice(clj.indexOf('id="secDependeCliente"'), clj.indexOf('id="secAlinhamentos"'))   // F6: o Motor virou «Previsão do mês» na aba Estratégia; a fatia fecha no bloco seguinte do Resumo
+  assert.ok(sec.length > 200 && !clj.includes('Motor de decisão') && clj.indexOf('data-painel="estrategia"') < clj.indexOf('<h2>Previsão do mês</h2>') && clj.indexOf('<h2>Previsão do mês</h2>') < clj.indexOf('data-painel="empresa"'), 'Previsão do mês (ex-Motor de decisão) na aba Estratégia')
   assert.ok(sec.indexOf('id="pendencias"') > 0 && sec.indexOf('id="pendencias"') < sec.indexOf('id="dependencias"'), '#pendencias acima da lista de tarefas, dentro da mesma seção')
   assert.match(clj, /VIVOS = \[[^\]]*'pendencias', 'faixaPendencias'/)
   assert.match(clj, /PSPendencias\?\.montar\(\$\('pendencias'\), d\.cliente, \{ faixa: \$\('faixaPendencias'\)\}\)/)
@@ -316,7 +317,7 @@ caso('chaveiro F1: #secChaveiro logo depois de #secProximas com #chvVeredito e #
   assert.equal((bloco.match(/<th scope="col">/g) || []).length, 6, 'tabela com 6 colunas')
   assert.equal((bloco.match(/\$\{kp\('/g) || []).length, 4, 'no máximo 4 KPIs'); assert.match(bloco, /<div class="kpi"><div class="rotulo">/, 'KPI nunca colorido')
   assert.match(bloco, /erroBloco\(alvo, e, \(\) => carregarChaveiro\(cliente\)\)/, 'erro com Tentar de novo')
-  assert.match(cli, /A execução fica na aba Executar: «Executar pelo Chaveiro» abre o console já preenchido\./, 'sub honesto (F4+: a escrita mora na aba Executar)')
+  assert.match(cli, /A execução fica na aba Execução no ML: «Executar pelo Chaveiro» abre o console já preenchido\./, 'sub honesto (F4+: a escrita mora na aba Execução no ML — rótulo da F6)')
   assert.doesNotMatch(bloco, /btn-primario|#[0-9a-fA-F]{3,8}(?![\w-])|style=/, 'sem primário, hex ou style inline'); assert.ok(!/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/u.test(bloco), 'sem emoji')
   assert.equal((cli + ler('src/web/acomp.js')).match(/btn-primario/g).length, 1, 'um só .btn-primario na tela (Revisar plano)')
   for (const cls of ['bom', 'azul', 'atencao', 'neutro']) assert.match(ler('src/web/ui.css'), new RegExp('\\.selo\\.' + cls), 'selo existente: ' + cls)
@@ -462,7 +463,8 @@ caso('shell F1: G tem os 5 menus Assessoria · Consultor · Execução · Empres
   assert.doesNotMatch(js, /const INT = |'Configuração'|ps-int/, 'INT e «Configuração» saíram'); assert.doesNotMatch(js, /[?&]m=/, 'sem parâmetro ?m=')
   assert.match(js, /new URL\(a\.dataset\.base, location\.origin\)/, 'sync preserva &aba=&sec= do href'); assert.match(js, /document\.getElementById\(sec\)/, 'abre ?sec= em página estática')
   assert.match(cli, /closest\('\[data-painel\]'\)/, 'mostrarAba tolerante a ?sec= de outro painel'); assert.match(cli, /for \(const k of \['aba', 'sec', 'rc', 'visao'\]\) if \(u\.get\(k\)\) q\.set\(k, u\.get\(k\)\)/, 'abrirCliente preserva aba, sec, rc e visao')
-  assert.equal((cli.match(/<h3 class="grupo-cfg">/g) || []).length, 5, '5 cabeçalhos de grupo em Configurar')
+  const fatia = (a, b) => cli.slice(cli.indexOf(`data-painel="${a}"`), b ? cli.indexOf(`data-painel="${b}"`) : undefined)
+  assert.equal((fatia('configurar').match(/<h3 class="grupo-cfg">/g) || []).length, 4, 'F6: 4 cabeçalhos de grupo em Configurar cliente'); assert.equal((fatia('empresa', 'configurar').match(/<h3 class="grupo-cfg">/g) || []).length, 3, 'F6: 3 em Empresa (Raio-X e contrato · Custos · Nota fiscal)')
   assert.match(ler('src/web/relatorios-ciclo.js'), /\.get\('rc'\)/); assert.match(ler('src/web/produtos.js'), /\.get\('visao'\) === 'lucro'/)
 })
 
@@ -484,7 +486,8 @@ caso('prestação de contas e dossiê: #secDossie/#secRisco/#secContrato em Conf
   const clj = ler('src/web/cliente.js'), dj = ler('src/web/dossie.js'), pl = ler('src/web/planos.html')
   execFileSync(process.execPath, ['--check', RAIZ + 'src/web/dossie.js'])
   const cfg = clj.slice(clj.indexOf('data-painel="configurar"'))
-  for (const id of ['secDossie', 'secRisco', 'secContrato']) assert.ok(cfg.indexOf(`id="${id}"`) > 0 && cfg.indexOf(`id="${id}"`) < cfg.indexOf('id="secAvisos"'), `#${id} em Configurar antes de #secAvisos`)
+  const emp = clj.slice(clj.indexOf('data-painel="empresa"'), clj.indexOf('data-painel="configurar"'))   // F6: contrato, risco e dossiê saem de Configurar para a aba Empresa (decisão do David, spec 8.7)
+  for (const id of ['secDossie', 'secRisco', 'secContrato']) assert.ok(emp.indexOf(`id="${id}"`) > 0 && emp.indexOf(`id="${id}"`) < emp.indexOf('id="secCustosUpload"') && !cfg.includes(`id="${id}"`), `#${id} na aba Empresa, antes de Custos (e fora de Configurar)`)
   assert.match(clj, /'dossie', 'risco', 'contrato'\]\s+\/\/ contêineres preservados/)
   assert.match(clj, /PSDossie\?\.montarCliente\(\{ dossie: \$\('dossie'\), risco: \$\('risco'\), contrato: \$\('contrato'\) \}/)
   assert.ok(pl.indexOf('id="secFeedback"') < pl.indexOf('id="secRisco"') && pl.indexOf('id="secRisco"') < pl.indexOf('id="secAvisosAuto"'), '#secRisco entre #secFeedback e #secAvisosAuto')
@@ -520,7 +523,7 @@ caso('cliente: galeria do anúncio — galeria-anuncio.js antes de cliente.js, m
 caso('cliente: aba Produtos (V3 F2, sombra; F4 visão Lucro + DRE) — entre Anúncios e Estratégia, contêiner vivo, carga só ao abrir, produtos.js antes de cliente.js, tabela de 6 colunas, 2 secundárias e nenhum primário novo, sem hex, style nem emoji; inventário; rotas montadas', () => {
   const ch = ler('src/web/cliente.html'), clj = ler('src/web/cliente.js'), pj = ler('src/web/produtos.js'), inv = ler('docs/ux/inventario-cliente.json'), sv = ler('src/server.js')
   execFileSync(process.execPath, ['--check', RAIZ + 'src/web/produtos.js'])
-  assert.match(clj, /\['anuncios', 'Anúncios'\], \['produtos', 'Produtos'\], \['relatorios', 'Relatórios'\], \['estrategia', 'Estratégia'\]/, 'aba entre Anúncios e Estratégia (V3 F9: Relatórios logo depois)')
+  assert.match(clj, /\['anuncios', 'Anúncios'\], \['produtos', 'Produtos e estoque'\], \['relatorios', 'Ciclos do negócio'\], \['estrategia', 'Estratégia'\], \['empresa', 'Empresa'\], \['configurar', 'Configurar cliente'\]/, 'aba entre Anúncios e Estratégia (V3 F9: Relatórios logo depois; F6: rótulos «Produtos e estoque» e «Ciclos do negócio», Empresa entre Estratégia e Configurar cliente)')
   assert.match(clj, /const VIVOS = \[[^\]]*'produtos'/, 'contêiner vivo'); assert.match(clj, /if \(aba === 'produtos'\) carregarProdutos\(\)/, 'carrega só quando a aba abre')
   assert.match(clj, /<section data-painel="produtos" hidden>\s*<section class="bloco" id="secProdutos">/); assert.ok(clj.indexOf('data-painel="produtos"') > clj.indexOf('data-painel="anuncios"') && clj.indexOf('data-painel="produtos"') < clj.indexOf('data-painel="estrategia"'))
   assert.ok(ch.includes('<script src="produtos.js"></script>') && ch.indexOf('src="produtos.js"') < ch.indexOf('src="cliente.js"'), 'produtos.js antes de cliente.js')
@@ -560,7 +563,7 @@ caso('cliente: aba Relatórios (V3 F9) — entre Produtos e Estratégia, contêi
 caso('cliente: aba Executar (Chaveiro F4+) — logo depois de Plano, contêiner vivo, carga só ao abrir, executar.js antes de cliente.js, tabelas de 6 colunas, nenhum primário fixo (só no diálogo), sem hex, style nem emoji; botão «Executar pelo Chaveiro» no Resumo; inventário; rotas montadas', () => {
   const ch = ler('src/web/cliente.html'), clj = ler('src/web/cliente.js'), ej = ler('src/web/executar.js'), inv = JSON.parse(ler('docs/ux/inventario-cliente.json')), sv = ler('src/server.js')
   execFileSync(process.execPath, ['--check', RAIZ + 'src/web/executar.js'])
-  assert.match(clj, /\['plano', 'Plano'\], \['executar', 'Executar'\], \['anuncios', 'Anúncios'\]/, 'aba logo depois de Plano')
+  assert.match(clj, /\['resumo', 'Resumo'\], \['do-cliente', 'Pelo cliente'\], \['plano', 'Plano'\], \['executar', 'Execução no ML'\], \['anuncios', 'Anúncios'\]/, 'aba logo depois de Plano (F6: rótulos «Pelo cliente» e «Execução no ML»)')
   assert.match(clj, /const VIVOS = \[[^\]]*'executar'/, 'contêiner vivo'); assert.match(clj, /if \(aba === 'executar'\) carregarExecutar\(\)/, 'carrega só quando a aba abre')
   assert.match(clj, /<section data-painel="executar" hidden>\s*<section class="bloco" id="secExecutar">/)
   assert.ok(ch.indexOf('src="executar.js"') > ch.indexOf('src="produtos.js"') && ch.indexOf('src="executar.js"') < ch.indexOf('src="cliente.js"'), 'executar.js antes de cliente.js')

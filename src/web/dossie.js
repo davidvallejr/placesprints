@@ -217,7 +217,7 @@
     let r
     try { r = await api('/api/risco') } catch (e) { erroBloco(alvo, e, () => montarPlanos(alvo)); return }
     const n = document.getElementById('nRisco'); if (n) n.textContent = String(r.abertos.length)
-    const m = r.mensal || {}, link = c => `<a href="/cliente?cliente=${encodeURIComponent(c)}&amp;aba=configurar">${esc(c)}</a>`
+    const m = r.mensal || {}, link = c => `<a href="/cliente?cliente=${encodeURIComponent(c)}&amp;aba=empresa&amp;sec=secDossie">${esc(c)}</a>`
     const sugestoes = (r.sugestoes || []).filter(s => !s.risco_aberto)
     alvo.innerHTML = `
       <p class="mini" id="rkMensal">Dossiê mensal: <b>${m.ligado ? 'ligado' : 'desligado'}</b>${m.por ? ` (${esc(String(m.por).replace(/\d{4}-\d{2}-\d{2}T[\d:.]+Z/, x => brHora(x)))})` : ''} · dia ${esc(String(m.agenda?.dia ?? 1))} às ${esc(m.agenda?.hora || '09:00')}, mês anterior, as duas versões de cada cliente em risco aberto ao canal #growth do Discord (só equipe)${m.n8n && !m.n8n.configurado ? ' · <b>entrega n8n não configurada</b>' : ''}.</p>

@@ -390,7 +390,13 @@
     "produtos.js (window.PSProdutos.montar(alvo, cliente); carrega depois de galeria-anuncio.js e antes de cliente.js) → aba Produtos (V3 F2, SOMBRA; carrega só quando a aba abre: carregarProdutos em mostrarAba, guarda data-cliente) #secProdutos / #produtos (contêiner vivo) → GET /api/cliente/produtos?cliente=; #prSombra (faixa «somando por anúncio × contado uma vez»), #tabProdutos (6 colunas: Produto · Estoque · Vende/dia · Cobertura · Pedir · Situação; folha do produto numa linha de detalhe (tr.det#pdet-N, colspan 6) aberta por [data-pr-det] com aria-expanded/aria-controls), #prMais (Mostrar mais, 50 por vez), #btnMapeamento (secundário → gaveta), #gavMapeamento (aside.gaveta: Sugestões | Mapeados | Não mapeados por [data-aba-map]; [data-juntar] / [data-recusar] / [data-separar] → prévia POST /api/cliente/produtos/juntar|separar → nome → confirmar:true no diálogo do PSRelatorio.ui), #btnAtualizarEstoque (secundário: prévia POST /api/cliente/produtos/estoque/atualizar → PS.confirmar → confirmar:true; só GET no ML, teto por dia)",
     "#secNotaFiscal / #notaFiscal e #secNotas / #notas (aba Configurar, depois de #secContrato e antes de #secAvisos; contêineres vivos) — nota-fiscal.js (window.PSNota.montarCliente; carrega depois de produtos.js e antes de alinhamentos.js; PSRelatorio.ui é lido só no clique) → GET /api/cliente/nf (regime, termo, certificado, regras por SKU, importação CSV do contador) e GET /api/cliente/nf/notas (6 colunas: Pedido · Comprador mascarado · Total · Estado · Emitida em · Anexo ML); botões secundários, primário só dentro do diálogo (PSRelatorio.ui); prévia → confirmar:true",
     "#secCustosUpload / #custosUpload (aba Configurar, depois de #secContrato e antes de #secNotaFiscal; contêiner vivo) — custos-upload.js (window.PSCustosUpload.montar(alvo, cliente); carrega depois de nota-fiscal.js e antes de cliente.js; PSRelatorio.ui só no clique) → POST /api/cliente/custos/upload (multipart: cliente + arquivo .csv/.xlsx ≤ 5 MB; PRÉVIA = gravação desfeita) e POST /api/cliente/custos/upload/confirmar {upload_id, por, confirmar:true}; #cuArquivo, #btnCuPrevia (secundário), #cuPrevia, #cuVeredito, #cuTabAnuncios (6 colunas: MLB · Título · Preço · Custo · Margem bruta · Critério), #btnCuAplicar (secundário) → diálogo com o ÚNICO primário (Confirmar)",
-    "[data-ajuda] (F2 dos 5 menus, 21/10/2026; ícone (i) «Como fazer»: <button class=\"btn-icone btn-ajuda\" type=\"button\" aria-label=\"Como fazer: …\" data-ajuda=\"<id>\"> depois do .sis-papel no .bloco-cab — nunca dentro do h2 — em #secFicha (ficha), #secRelatorio (relatorio_notion), #secPerfil (perfil_relatorio), #secPerfilCliente (temas_cliente), #secCatalogo (catalogo), #cad-sec (cadastro_cs), #secDossie (dossie), #secRisco (risco), #secContrato (contrato), #secCustosUpload (custos_erp), #secNotaFiscal (nf), #secNotas (notas), #secAvisos (avisos_whatsapp), #secExecutar (executor_chaveiro), #secProdutos (produto), #secRelatoriosCiclo (relatorios_ciclo), #secAlinhamentos (alinhamentos), #secGatilhos (canais_cliente); produtos.js: dentro do <summary> de #secSyncEstoque (estoque_sync) com preventDefault/stopPropagation) → ajuda.js (window.PSAjuda.abrir(id, { cliente }), delegação click [data-ajuda] no document, DOM puro) → GET /api/ajuda/:id?cliente= (src/rotas-ajuda.js sobre config/ajuda.json) → dialog.dlg.dlg-ajuda: h2 «Como fazer: …» + selo + escopo, Estado agora (sem_leitura com motivo até a F3), pré-requisitos (ponto .s-neutro até a F3), ol.passos-ajuda (titulo + texto + quem), Concluído quando (.aviso.ok), rodapé Onde configurar · Documento. Padrão de «Seu nome» = window.PS.quem().nome (lerNome em cliente.js, ficha.js, gatilhos.js, relatorio.js, perfil-informacao.js, filtros.js, ofertas.js, acomp.js); o cargo continua validado no servidor"
+    "[data-ajuda] (F2 dos 5 menus, 21/10/2026; ícone (i) «Como fazer»: <button class=\"btn-icone btn-ajuda\" type=\"button\" aria-label=\"Como fazer: …\" data-ajuda=\"<id>\"> depois do .sis-papel no .bloco-cab — nunca dentro do h2 — em #secFicha (ficha), #secRelatorio (relatorio_notion), #secPerfil (perfil_relatorio), #secPerfilCliente (temas_cliente), #secCatalogo (catalogo), #cad-sec (cadastro_cs), #secDossie (dossie), #secRisco (risco), #secContrato (contrato), #secCustosUpload (custos_erp), #secNotaFiscal (nf), #secNotas (notas), #secAvisos (avisos_whatsapp), #secExecutar (executor_chaveiro), #secProdutos (produto), #secRelatoriosCiclo (relatorios_ciclo), #secAlinhamentos (alinhamentos), #secGatilhos (canais_cliente); produtos.js: dentro do <summary> de #secSyncEstoque (estoque_sync) com preventDefault/stopPropagation) → ajuda.js (window.PSAjuda.abrir(id, { cliente }), delegação click [data-ajuda] no document, DOM puro) → GET /api/ajuda/:id?cliente= (src/rotas-ajuda.js sobre config/ajuda.json) → dialog.dlg.dlg-ajuda: h2 «Como fazer: …» + selo + escopo, Estado agora (sem_leitura com motivo até a F3), pré-requisitos (ponto .s-neutro até a F3), ol.passos-ajuda (titulo + texto + quem), Concluído quando (.aviso.ok), rodapé Onde configurar · Documento. Padrão de «Seu nome» = window.PS.quem().nome (lerNome em cliente.js, ficha.js, gatilhos.js, relatorio.js, perfil-informacao.js, filtros.js, ofertas.js, acomp.js); o cargo continua validado no servidor",
+    "data-painel=\"empresa\" (F6, 22/10/2026; aba «Empresa» entre Estratégia e Configurar cliente): #secFinanceiro, #secContrato, #secRisco, #secDossie (Raio-X e contrato) · #secCustosUpload (Custos) · #secNotaFiscal + #secNotas (Nota fiscal), com 3 h3.grupo-cfg; ordem secContrato < secCustosUpload < secNotaFiscal pinada em teste-shell-ui",
+    "#custosEstado (F6; contêiner vivo dentro de #secCustosUpload, antes de #custosUpload) → carregarCustosEstado(cliente): GET /api/custos/resumo + GET /api/cliente/custos → #custosLinhas (3 linhas de estado: planilha subida = por_fonte.upload · fonte automática Bling/Tiny/planilha Google = fontes[f].estado + SKUs · vínculo custo ↔ anúncio = «custo informado para X % da receita de 30 d» de efetivo.cobertura_receita_pct (promo_anuncio.fat30) ou «—» com o motivo; 3 colunas) + details com #formCustos (% CMV/imposto/comissão…, POST /api/cliente/custos; saiu de #planoConta, onde ficou só o aviso com [data-ir-custos] → aba Empresa)",
+    "#secMetas (F6; Configurar cliente › Conta, Notion e metas) com #formMetas #mEntregas #mGmv (saíram do Motor; POST /api/cliente/metas com merge das metas já registradas)",
+    "#secPrevisao (F6; ex-«Motor de decisão» do Resumo, agora «Previsão do mês» na aba Estratégia, depois de #secRetro; motorHtml(d) sem o formulário de metas)",
+    "nota-fiscal.js formulario() (F6): dados fiscais (9 campos, ids nfc_<campo>: cnpj … contador), termo (nfc_rep, nfc_dia), contador do CSV e senha do certificado (nfc_senha, type=password) num dialog.dlg com o campo de nome nfPor e o erro nfErro; o primário mora só no diálogo; nenhum prompt()",
+    "[data-ir-folha] (F6): «ver na Folha do anúncio» agora fica na mesma aba Anúncios (mostrarAba('anuncios') + foco em #secFolha; href ?aba=anuncios&sec=secFolha)"
   ],
   "classes_geradas_por_js": [
     "res-item",
@@ -735,39 +741,39 @@
     ]
   },
   "selos_sistema": {
-    "regra": "Selo discreto do sistema de origem (config/sistemas.json, 15/10/2026) ao lado do título da seção: span.sis[data-sistema], classe .sis em ui.css. Só tela interna; não muda id nem nº de colunas. Teste: scripts/teste-sistemas.mjs. F0 (21/10/2026): logo depois do selo vem <small class=\"sis-papel\">· papel</small> com o papel_curto de config/sistemas.json; texto e title do selo não mudam.",
+    "regra": "Selo discreto do sistema de origem (config/sistemas.json, 15/10/2026) ao lado do título da seção: span.sis[data-sistema], classe .sis em ui.css. Só tela interna; não muda id nem nº de colunas. Teste: scripts/teste-sistemas.mjs. F0 (21/10/2026): logo depois do selo vem <small class=\"sis-papel\">· papel</small> com o papel_curto de config/sistemas.json; texto e title do selo não mudam. F6 (22/10/2026): ordem reagrupada com as abas (Folha em Anúncios; Gatilhos em Pelo cliente; «Motor de decisão» vira #secPrevisao «Previsão do mês» em Estratégia; Financeiro, Contrato, Risco, Dossiê, Custos e Nota fiscal na aba Empresa; Notion em Configurar cliente).",
     "secoes": {
       "#secProximas": "arquiteto",
       "#secChaveiro": "chaveiro",
       "#secSaude": "trinity",
       "#secAcomp": "merovingio",
-      "#secFolha": "trinity",
       "#secDependeCliente": "arquiteto",
       "#secAlinhamentos": "arquiteto",
-      "#secFinanceiro": "smith",
-      "Motor de decisão": "oraculo",
-      "#secGatilhos": "morpheus",
-      "#secNotion": "trinity",
       "#secDoCliente": "arquiteto",
+      "#secGatilhos": "morpheus",
       "#secPlanoConta": "arquiteto",
       "#secExecutar": "chaveiro",
       "#secOfertas": "arquiteto",
       "#secAnuncios": "trinity",
       "#secPrecos": "smith",
       "#secVendas": "trinity",
+      "#secFolha": "trinity",
       "#secImpacto": "merovingio",
       "#secRelatoriosCiclo": "morpheus",
       "Leitura estratégica": "merovingio",
       "#secRetro": "oraculo",
+      "#secPrevisao": "oraculo",
+      "#secFinanceiro": "smith",
+      "#secContrato": "smith",
+      "#secDossie": "morpheus",
+      "#secCustosUpload": "smith",
+      "#secNotaFiscal": "smith",
+      "#secNotas": "chaveiro",
       "#secRelatorio": "morpheus",
       "#secPerfil": "morpheus",
       "#secPerfilCliente": "morpheus",
       "#secCatalogo": "trinity",
-      "#secDossie": "morpheus",
-      "#secContrato": "smith",
-      "#secCustosUpload": "smith",
-      "#secNotaFiscal": "smith",
-      "#secNotas": "chaveiro",
+      "#secNotion": "trinity",
       "#secAvisos": "morpheus"
     }
   },
@@ -848,5 +854,22 @@
       "POST /api/cliente/custos/upload",
       "POST /api/cliente/custos/upload/confirmar"
     ]
+  },
+  "f6_reagrupamento": {
+    "data": "22/10/2026",
+    "abas": "resumo · do-cliente «Pelo cliente» · plano · executar «Execução no ML» · anuncios · produtos «Produtos e estoque» · relatorios «Ciclos do negócio» · estrategia · empresa «Empresa» (nova) · configurar «Configurar cliente»",
+    "resumo": "faixa + 6 blocos: #secProximas #secChaveiro #secSaude #secAcomp #secDependeCliente #secAlinhamentos",
+    "movidos": {
+      "#secFolha": "resumo → anuncios (entre #secVendas e #secImpacto)",
+      "Motor de decisão": "resumo → estrategia como #secPrevisao «Previsão do mês»",
+      "#formMetas": "Motor → #secMetas (configurar)",
+      "#secFinanceiro": "resumo → empresa",
+      "#secGatilhos": "resumo → do-cliente",
+      "#secNotion": "resumo → configurar",
+      "#secContrato #secRisco #secDossie #secCustosUpload #secNotaFiscal #secNotas": "configurar → empresa",
+      "#formCustos": "#planoConta → #secCustosUpload",
+      "Calculadora #fAnuncio #resAnuncio": "configurar → fim de anuncios"
+    },
+    "configurar": "#prontoOperar · Quem é e quem atende (#secFicha) · O que o cliente recebe (#secRelatorio #secPerfil #secPerfilCliente) · Conta, Notion e metas (#secCatalogo #cad-sec #secNotion #secMetas) · Canais do cliente (#secAvisos); a chave «Coletar promoções» continua dentro de desenharPerfil (teste-semanal-rotas.mjs:255)"
   }
 }

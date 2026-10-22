@@ -177,7 +177,8 @@ await ok('rotas: GET com cliente canônico, prospect 400, fora da central 404 se
   } finally { srv.close() }
   const srvJs = readFileSync(new URL('../src/server.js', import.meta.url), 'utf-8'), cli = readFileSync(new URL('../src/web/cliente.js', import.meta.url), 'utf-8'), html = readFileSync(new URL('../src/web/cliente.html', import.meta.url), 'utf-8')
   assert.match(srvJs, /app\.use\(criarRotasAbaDoCliente\(\{ aba: criarAbaDoClienteReal\(/)
-  assert.match(cli, /\['resumo', 'Resumo'\], \['do-cliente', 'Do cliente'\], \['plano', 'Plano'\]/, 'aba entre Resumo e Plano')
+  assert.match(cli, /\['resumo', 'Resumo'\], \['do-cliente', 'Pelo cliente'\], \['plano', 'Plano'\]/, 'aba entre Resumo e Plano (F6: rótulo «Pelo cliente»)')
+  assert.ok(cli.indexOf('data-painel="do-cliente"') < cli.indexOf('id="secGatilhos"') && cli.indexOf('id="secGatilhos"') < cli.indexOf('data-painel="plano"'), 'F6: avisos ao cliente (fila e recibos) na aba Pelo cliente')
   assert.match(cli, /id="nDoCliente"/); assert.match(cli, /data-painel="do-cliente"/); assert.match(cli, /VIVOS = \[[^\]]*'doCliente'/)
   assert.match(cli, /\['equipe', 'Equipe'\], \['cliente', 'Cliente'\], \['tudo', 'Tudo'\]/); assert.match(cli, /planoQuem = 'equipe'/, 'padrão Equipe')
   assert.match(html, /<script src="do-cliente\.js"><\/script>[\s\S]*<script src="cliente\.js"><\/script>/)

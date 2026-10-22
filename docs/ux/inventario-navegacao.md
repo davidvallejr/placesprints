@@ -17,10 +17,10 @@ Substitui o mapa de 09/2026 (que descrevia os 11 menus diferentes, os três sist
 | **Assessoria** | Como vai a assessoria inteira? | Painel executivo `/` · Faturamento `/gmv` · O que funciona `/resultados` · Acerto do algoritmo `/metodologia` · Carteira em risco `/planos?sec=secRisco` · Comercial `/comercial` |
 | **Consultor** | Neste cliente: o quê, por quê, como? | Resumo `/cliente?aba=resumo` · Plano `?aba=plano` · Anúncios `?aba=anuncios` · Estratégia `?aba=estrategia` · Promoções `/promocoes` · Como fazer `/processos` |
 | **Execução** | Quem faz, e o sistema fez? | Distribuir `/planos` · Execução no ML `/cliente?aba=executar` · Pelo cliente `?aba=do-cliente` · Ofertas `?aba=anuncios&sec=secOfertas` · Analistas `/analistas` |
-| **Empresa do cliente** | O negócio por trás da conta | Produtos e estoque `/cliente?aba=produtos` · Lucro do mês `?aba=produtos&visao=lucro` · Compras `?aba=relatorios&rc=ciclo_compras` · Preços `?aba=anuncios&sec=secPrecos` · Raio-X e contrato `?aba=resumo&sec=secFinanceiro` · Custos `?aba=configurar&sec=secCustosUpload` · Nota fiscal `?aba=configurar&sec=secNotaFiscal` · Ciclos do negócio `?aba=relatorios` |
+| **Empresa do cliente** | O negócio por trás da conta | Produtos e estoque `/cliente?aba=produtos` · Lucro do mês `?aba=produtos&visao=lucro` · Compras `?aba=relatorios&rc=ciclo_compras` · Preços `?aba=anuncios&sec=secPrecos` · Raio-X e contrato `?aba=empresa` · Custos `?aba=empresa&sec=secCustosUpload` · Nota fiscal `?aba=empresa&sec=secNotaFiscal` · Ciclos do negócio `?aba=relatorios` |
 | **Estrutura** | Está ligado, configurado, funcionando? | Estruturas `/estrutura` · Conexões `/integracoes` · Comunicação `/planos?sec=secAvisosAuto` · Configurar cliente `/cliente?aba=configurar` · Equipe `/estrutura?sec=secEquipe` · Regras do método `/metodologia?sec=secParam` |
 
-Os destinos interinos de Empresa do cliente (Raio-X, Custos, Nota fiscal por `?sec=` dentro de Resumo/Configurar) mudam na F6, quando a aba `empresa` nasce no `/cliente`. Os links do cliente levam o `?cliente=` da URL atual.
+Desde a F6 (22/10/2026) Raio-X, Custos e Nota fiscal moram na aba `empresa` do `/cliente` (antes: `?sec=` dentro de Resumo/Configurar). Os links do cliente levam o `?cliente=` da URL atual.
 
 ## 3. Como o topo decide o que está aceso
 
