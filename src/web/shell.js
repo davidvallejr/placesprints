@@ -87,7 +87,11 @@
 
   // ?cliente= é lido da URL ATUAL sempre que ela muda (cliente.js e promocoes.js usam pushState); new URL preserva &aba=&sec= do href
   const sync = () => {
-    const c = new URLSearchParams(location.search).get('cliente'), at = ativo()
+    // último cliente aberto fica lembrado (ponytail: localStorage só como conveniência; sem ele os menus pedem o cliente de novo)
+    const cUrl = new URLSearchParams(location.search).get('cliente')
+    if (cUrl) { try { localStorage.setItem('ps_cliente', cUrl) } catch {} }
+    let c = cUrl; if (!c) { try { c = localStorage.getItem('ps_cliente') || '' } catch { c = '' } }
+    const at = ativo()
     if (abasIn.dataset.grupo !== (at?.grupo || '')) {
       abasIn.dataset.grupo = at?.grupo || ''
       abasIn.replaceChildren(...(at ? grupoDe(at.grupo)[1].map(a => link(itens.find(i => i.id === a[0]))) : []), ctx)
@@ -100,7 +104,7 @@
       const cur = a.dataset.item ? (a.dataset.item === at?.id ? 'page' : '') : a.dataset.grupo === at?.grupo ? (grupoDe(at.grupo)[1][0][0] === at.id ? 'page' : 'true') : ''
       if (cur) a.setAttribute('aria-current', cur); else a.removeAttribute('aria-current')
     }
-    ctx.textContent = at && c && CLI.has(new URL(at.href, location.origin).pathname) ? 'Cliente: ' + c : ''
+    ctx.textContent = at && cUrl && CLI.has(new URL(at.href, location.origin).pathname) ? 'Cliente: ' + c : ''
   }
   for (const m of ['pushState', 'replaceState']) { const f = history[m]; history[m] = function (...a) { const r = f.apply(this, a); sync(); return r } }
   addEventListener('popstate', sync); sync()

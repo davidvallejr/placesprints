@@ -101,6 +101,7 @@ async function abrirCliente(nome, empurrar = true) {
 }
 function voltar(empurrar = true) {
   $('telaCliente').hidden = true; $('telaBusca').hidden = false
+  try { localStorage.removeItem('ps_cliente') } catch {}   // «trocar de cliente» esquece o último
   if (empurrar) history.pushState({}, '', '/cliente')
   $('q').focus()
 }
@@ -668,7 +669,11 @@ function desenharAcoes() {
 
 // deep-link: /cliente?cliente=Nome
 const inicial = new URLSearchParams(location.search).get('cliente')
+// sem ?cliente=: reabre o último cliente (Consultor e Empresa do cliente levam ao MESMO cliente, cada um na sua aba); sem lembrança, a busca diz para onde vai
+let lembrado = ''; try { lembrado = localStorage.getItem('ps_cliente') || '' } catch {}
 if (inicial) abrirCliente(inicial, false)
+else if (lembrado) abrirCliente(lembrado, true)
+else { const dest = document.querySelector('.ps-abas a[aria-current="page"]')?.textContent, g = document.querySelector('.ps-grupos a[aria-current]')?.textContent; if (dest && g) $('telaBusca').querySelector('.pg-pergunta').textContent = `Para abrir ${g} › ${dest} · nome ou CNPJ · atalho / em qualquer tela` }
 
 
 // ── mais vendidos (visão do comprador) e resultado das tarefas ──────────────
