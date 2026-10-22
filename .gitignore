@@ -9,3 +9,4 @@ nohup.out
 scratchpad/
 scripts/bin/
 .claude/settings.local.json
+.claude/worktrees/
