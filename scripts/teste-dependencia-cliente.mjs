@@ -324,7 +324,7 @@ await ok('equipe.lideresEConsultores: consultores ∪ líderes de TODA a central
   const pr = db.prepare("INSERT INTO prestadores (nome, nome_norm, cargo, area, atuacao_json, atualizado_em) VALUES (?,?,?,?,'[]','x')")
   pr.run('Marcelo Silva', 'marcelo silva', 'CEO', ''); pr.run('Dani Nunes', 'dani nunes', 'Analista de E-commerce', ''); pr.run('Bruna Lima', 'bruna lima', 'Coordenadora de projetos', ''); pr.run('Pedro Alves', 'pedro alves', 'Líder de squad', '')
   // 15/10/2026: o dono (config/equipe.json → donos) passa em toda validação e entra na lista
-  assert.deepEqual(lideresEConsultores(), ['Bruna Lima', 'Carla Souza', 'David do Valle', 'Giovanna Torres', 'Marcelo Silva', 'Pedro Alves'])
+  assert.deepEqual(lideresEConsultores(), ['Bruna Lima', 'Carla Souza', 'David do Valle', 'David Do Valle Jr', 'Giovanna Torres', 'Marcelo Silva', 'Pedro Alves'])
   assert.equal(validarLiderOuConsultor('  GIOVANNA torres '), 'Giovanna Torres')
   assert.equal(validarLiderOuConsultor('Dani Nunes'), '', 'analista não encerra')
   assert.equal(validarLiderOuConsultor(''), ''); assert.equal(validarLiderOuConsultor('<img src=x onerror=1>'), '')

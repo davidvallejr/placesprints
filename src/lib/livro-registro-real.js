@@ -4,7 +4,7 @@
 import { join } from 'node:path'
 import { db, agora, hojeLocal, log } from './db.js'
 import { ROOT } from './env.js'
-import { lideresEConsultores, carregarClientes, normNome, equipeCfg } from './equipe.js'
+import { lideresEConsultores, carregarClientes, normNome, equipeCfg, ehDono } from './equipe.js'
 import { criarLivro } from './livro-registro.js'
 import { criarRisco } from './risco-cliente.js'
 import { criarContratos } from './contrato-cliente.js'
@@ -19,6 +19,7 @@ export function quemDossie() {
 export const validarDossie = (nome, cliente) => {
   const n = normNome(nome).trim()
   if (!n) return ''
+  const dono = ehDono(nome); if (dono) return dono
   const lc = lideresEConsultores().find(x => normNome(x).trim() === n)
   if (lc || !cliente) return lc || ''
   const cs = db.prepare('SELECT cs_responsavel FROM clientes_central WHERE cliente = ?').get(cliente)?.cs_responsavel || ''

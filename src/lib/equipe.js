@@ -130,7 +130,22 @@ export function carregarClientes() {
 const RX_CARGO_LIDER = /consultor|l[ií]der|coordena|gerente|diretor|ceo/i
 // dono(s) da Place2u (config/equipe.json → donos): passam em toda validação de «quem pode» (15/10/2026)
 export const donos = () => (equipeCfg.donos || []).filter(Boolean)
-export const ehDono = nome => { const n = normNome(nome); return n ? donos().find(d => normNome(d) === n) || '' : '' }
+// dono: nome completo, ou o começo do nome por palavras inteiras («David») quando ninguém de fora dos donos começa igual (22/10/2026)
+export const ehDono = nome => {
+  const n = normNome(nome).trim(); if (!n) return ''
+  const exato = donos().find(d => normNome(d).trim() === n); if (exato) return exato
+  const comeca = x => { const t = normNome(x).trim(); return t === n || t.startsWith(n + ' ') }
+  const ds = donos().filter(comeca); if (!ds.length) return ''
+  const ehD = new Set(donos().map(d => normNome(d).trim()))
+  const outros = [...lideresSemDono()].filter(x => !ehD.has(normNome(x).trim()) && comeca(x))
+  return outros.length ? '' : ds[0]
+}
+function lideresSemDono() {
+  const nomes = new Set()
+  for (const c of carregarClientes()) for (const n of [...Object.values(c.consultores), ...Object.values(c.lideres)]) if (n) nomes.add(n)
+  for (const p of db.prepare('SELECT nome FROM prestadores').all()) if (p.nome) nomes.add(p.nome)
+  return nomes
+}
 export function lideresEConsultores() {
   const nomes = new Set(donos())
   for (const c of carregarClientes()) for (const n of [...Object.values(c.consultores), ...Object.values(c.lideres)]) if (n) nomes.add(n)
@@ -139,8 +154,9 @@ export function lideresEConsultores() {
   return [...nomes].filter(Boolean).sort((a, b) => a.localeCompare(b, 'pt-BR'))
 }
 export const validarLiderOuConsultor = nome => {               // nome canônico ou '' (sem acento/caixa, como ficha-nucleo.nomeOficial)
-  const n = normNome(nome)
-  return n ? lideresEConsultores().find(x => normNome(x) === n) || '' : ''
+  const n = normNome(nome); if (!n) return ''
+  const d = ehDono(nome); if (d) return d                       // o dono aprova tudo sem depender de ninguém
+  return lideresEConsultores().find(x => normNome(x) === n) || ''
 }
 
 // clientes que podem receber plano: central ativa (fora dos excluídos) E com base de tarefas já sincronizada
