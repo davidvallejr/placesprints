@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Estruturas · Place Sprints</title>
+<link rel="stylesheet" href="/ui.css">
+<link rel="stylesheet" href="/tela-estrutura.css">
+</head>
+<body data-pagina="estrutura">
+<header class="ps-shell" id="psShell"></header>
+<script src="/shell.js"></script>
+<main class="pg">
+  <div class="pg-cab">
+    <div class="pg-titulo">
+      <h1>Estruturas</h1>
+      <p class="pg-meta"><span id="estLido">lendo…</span><span>chave de arquivo ou .env só muda com reinício na janela combinada</span></p>
+    </div>
+    <div class="pg-acoes">
+      <button class="btn" type="button" id="btnEstAtualizar">Reler agora</button>
+    </div>
+  </div>
+
+  <section class="veredito" aria-label="Resumo">
+    <p class="veredito-frase" id="veredito">Lendo o estado de cada estrutura…</p>
+    <div class="kpis" id="kpis" aria-busy="true"><div class="kpi sk-kpi"></div><div class="kpi sk-kpi"></div><div class="kpi sk-kpi"></div><div class="kpi sk-kpi"></div></div>
+    <p class="kpis-sec" id="kpisSec" hidden></p>
+  </section>
+
+  <section class="bloco" id="secEstruturas">
+    <div class="bloco-cab"><h2>Uma linha por estrutura</h2></div>
+    <p class="sub">Estado lido agora: chave de banco muda por esta tela; chave de arquivo ou .env mostra o valor carregado pelo servidor e pede reinício. Ausente aparece como «—» com o motivo. Botão só onde a rota de escrita existe.</p>
+    <div class="filtros">
+      <button class="f-chip on" type="button" data-f="todas" aria-pressed="true">Todas <span class="n"></span></button>
+      <button class="f-chip" type="button" data-f="acao" aria-pressed="false">Pedem ação <span class="n"></span></button>
+      <button class="f-chip" type="button" data-f="ligado" aria-pressed="false">Ligadas <span class="n"></span></button>
+      <button class="f-chip" type="button" data-f="desligado" aria-pressed="false">Desligadas <span class="n"></span></button>
+      <label class="sr" for="fSistema">Filtrar por sistema</label>
+      <select id="fSistema"><option value="">Todos os sistemas</option></select>
+    </div>
+    <div class="tabela-wrap"><table class="t empilha">
+      <thead><tr><th>Estrutura</th><th>Sistema</th><th>Estado</th><th>Desde / por</th><th>Falta</th><th>Ação</th></tr></thead>
+      <tbody id="tbEstruturas"><tr><td colspan="6"><div class="sk-tabela"></div></td></tr></tbody>
+    </table></div>
+    <p class="mini" id="estNota" role="status" aria-live="polite"></p>
+  </section>
+
+  <section class="bloco" id="secEquipe">
+    <div class="bloco-cab"><h2>Equipe e papéis</h2><span class="sis" data-sistema="arquiteto" title="Sistema de origem: Arquiteto">Arquiteto</span><small class="sis-papel">· algoritmo</small><button class="btn-icone btn-ajuda" type="button" aria-label="Como fazer: Equipe e papéis (quem pode aprovar o quê)" data-ajuda="equipe_papeis"></button></div>
+    <p class="sub">Só leitura de config/equipe.json e config/discord-time.json. «Quem sou» no topo só preenche o nome: quem pode aprovar, liberar ou enviar é decidido pelo servidor com esta lista.</p>
+    <div id="eqCorpo" aria-busy="true"><div class="sk-tabela"></div></div>
+  </section>
+</main>
+<footer class="pg-rodape">Fonte: config/*.json carregados pelo servidor, sync_estado, presença das variáveis do .env (nunca o valor) e Saúde do sistema · só leitura</footer>
+<script src="relatorio.js"></script>
+<script src="estrutura.js"></script>
+<script src="/alerta.js" defer></script>
+<script src="/ajuda.js" defer></script>
+</body>
+</html>

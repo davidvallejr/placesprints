@@ -1,0 +1,69 @@
+{
+ "id": "estrutura",
+ "pergunta": "Cada estrutura do Place Sprints está ligada, pronta, desligada, pendente ou com erro — desde quando, por quem, o que falta, e o que eu posso mudar daqui?",
+ "usuarios": [
+  "Dono (David): vê de uma vez as ~30 chaves e integrações, o que pede reinício na janela combinada e o que ainda está desligado de fábrica",
+  "Líder: liga/desliga as chaves de banco (plano de terça, Discord, relatório, alerta, dossiê mensal) e aciona/solta os freios do Chaveiro com o próprio nome",
+  "Técnico: variáveis do .env presentes ou ausentes (nunca o valor), agentes launchd instalados, relógio dos ticks, incidentes abertos",
+  "Qualquer pessoa: (i) por linha abre «Como fazer» com o estado real e os pré-requisitos globais resolvidos"
+ ],
+ "acao_principal": "Nenhuma primária: a tela é de leitura. As únicas escritas são Ligar/Desligar das chaves de banco e Parar/Retomar dos freios, pelas rotas que já existiam.",
+ "acoes_secundarias": [
+  "Reler agora (#btnEstAtualizar → GET /api/estrutura)",
+  "Filtrar por estado (.f-chip[data-f]: todas, acao, ligado, desligado) e por sistema (#fSistema)",
+  "Ligar/Desligar chave de banco ([data-acao] → PSRelatorio.ui.pedirPor → POST /api/gatilhos/chave | /api/consultor-discord/chave | /api/relatorio/agendador | /api/alertas/agendador | /api/dossie/mensal { ligado, por })",
+  "Parar/Retomar freios ([data-acao] nas linhas freio_executor e freio_estoque → POST /api/chaveiro/exec/parar|retomar e /api/chaveiro/estoque/parar|retomar { por, confirmar:true })",
+  "Abrir o (i) «Como fazer» da linha ([data-ajuda] preenchido a partir de data-ajuda-id → ajuda.js → GET /api/ajuda/:id com estado real)",
+  "Ir para onde a estrutura se configura (link «Onde» nas linhas sem botão)"
+ ],
+ "secoes": [
+  { "titulo": "Cabeçalho", "conteudo": "h1 Estruturas; meta-linha com a hora da leitura (#estLido) e a frase única «chave de arquivo ou .env só muda com reinício»; botão secundário Reler agora.", "ids_container": ["estLido", "btnEstAtualizar"], "importancia": "media" },
+  { "titulo": "Veredito + 4 KPIs", "conteudo": "Frase: N de M ligadas · K pedem ação · I incidentes abertos (ou «saúde não lida»). KPIs sem cor: Ligadas, Desligadas (com prontas no detalhe), Pedem ação (pendentes + erros), Incidentes abertos (críticos no detalhe). Linha secundária com a contagem por camada e reinícios pendentes.", "ids_container": ["veredito", "kpis", "kpisSec"], "importancia": "alta" },
+  { "titulo": "Uma linha por estrutura", "conteudo": "Tabela de 6 colunas (Estrutura · Sistema · Estado · Desde / por · Falta · Ação), ordenada por gravidade (erro → pendente → desligado → pronto → ligado). Estrutura = nome claro + escopo + id técnico em <code>; Sistema = selo .sis + papel; Estado = selo (freio: Acionado/Solto) + detalhe; Desde/por = data e nome de quem ligou, senão «nasceu desligada em …»; Falta = lista do que impede + como mudar (arquivo/.env: «reinicie na janela combinada»); Ação = botão só nas chaves de banco, link «Onde» nas outras, e o (i).", "ids_container": ["secEstruturas", "fSistema", "tbEstruturas", "estNota"], "importancia": "alta" },
+  { "titulo": "Equipe e papéis", "conteudo": "Só leitura de config/equipe.json (donos, aliases, squads, analistas oficiais, status excluídos) + config/discord-time.json (cargos, canal) + a lista que o servidor aceita como líder/consultor (lideresEConsultores). (i) «Quem pode aprovar o quê» (verbete equipe_papeis). Alvo do deep link /estrutura?sec=secEquipe (Estrutura › Equipe).", "ids_container": ["secEquipe", "eqCorpo"], "importancia": "media" }
+ ],
+ "kpis": ["Ligadas (de N)", "Desligadas (prontas no detalhe)", "Pedem ação (pendentes · erros)", "Incidentes abertos (críticos)"],
+ "hooks_js": [
+  "#estLido (textContent: hora da leitura)",
+  "#btnEstAtualizar (onclick → carregar)",
+  "#veredito (innerHTML da frase)",
+  "#kpis (innerHTML dos 4 .kpi; aria-busy)",
+  "#kpisSec (innerHTML; hidden até a 1ª leitura)",
+  "#secEstruturas (seção da tabela; sem selo no título — cada linha leva o selo do próprio sistema)",
+  ".f-chip[data-f] (todas | acao | ligado | desligado; .n com a contagem; classe on + aria-pressed)",
+  "#fSistema (select; options geradas dos sistemas presentes; change)",
+  "#tbEstruturas (innerHTML das linhas; tr[data-id][data-estado][data-sistema]; delegação em [data-acao]; [data-ajuda-id] vira dataset.ajuda depois do render; [data-denovo] no erro)",
+  "#estNota (textContent: N de M · incidentes abertos)",
+  "#secEquipe (alvo de /estrutura?sec=secEquipe; bloco-cab com .sis arquiteto + .sis-papel + [data-ajuda=equipe_papeis])",
+  "#eqCorpo (innerHTML da grade .est-grade de .cartao; aria-busy)",
+  "[data-acao] (botão Ligar/Desligar ou Parar/Retomar; o nome vem de PSRelatorio.ui.pedirPor, padrão window.PS.quem().nome)",
+  "[data-ajuda] (F2/F3: (i) por linha e em #secEquipe → ajuda.js → GET /api/ajuda/:id?cliente= com estado real de src/lib/estrutura-estado.js)",
+  "relatorio.js (carregado antes de estrutura.js só pelo PSRelatorio.ui.pedirPor)"
+ ],
+ "classes_geradas_por_js": ["kpi", "rotulo", "valor", "detalhe", "selo (bom | azul | neutro | atencao | ruim)", "sis + sis-papel (SELO literal por sistema)", "est-sub", "est-chave", "est-falta", "est-acoes", "est-grade", "cartao", "btn btn-p", "btn-fantasma", "btn-icone btn-ajuda", "vazio-box", "erro-bloco", "mini"],
+ "css_origem": "ui.css + src/web/tela-estrutura.css (só tokens: .est-chave, .est-sub, td.est-falta, .est-acoes, .est-grade).",
+ "links_navegacao": ["Estrutura › Estruturas → /estrutura", "Estrutura › Equipe → /estrutura?sec=secEquipe", "«Onde» de cada linha → a tela onde a estrutura se configura (/cliente?aba=…&sec=…, /planos?sec=…, /integracoes?sec=…, /metodologia?sec=secParam)", "Atalhos que ainda moram em /integracoes (#secSaudeSistema, #secConfig, #secS90) e em /planos (#btnEquipe, #btnSyncPrest) até a F7"],
+ "dependencias_externas": ["GET /api/estrutura (src/rotas-estrutura.js → src/lib/estrutura-estado-real.js → src/lib/estrutura-estado.js puro)", "POST das rotas de banco já existentes (gatilhos, consultor-discord, relatorio, alertas, dossie, chaveiro exec/estoque parar|retomar)", "GET /api/ajuda/:id (estado real pelo mesmo contexto)", "/alerta.js, /ajuda.js, relatorio.js (ui.pedirPor), shell.js (PS.toast, PS.quem)"],
+ "testes_que_leem_esta_tela": [
+  "scripts/teste-estrutura.mjs — fixtures de config → estados; chave de arquivo desligada → camada arquivo + reinicia + «reinicie na janela combinada»; chave de banco → acao com a rota existente; freio acionado → erro; HTML/JS sem hex/emoji, exatamente 6 <th>, 0 .btn-primario; todo ajuda do catálogo existe em config/ajuda.json; rota montada; G do shell aponta Estruturas e Equipe para /estrutura",
+  "scripts/teste-shell-ui.mjs — PAGINAS inclui ['estrutura.html', 'estrutura', 'estrutura.js', 'estrutura']: esqueleto do shell, ids de hooks_js, /ajuda.js depois de /alerta.js; caso (20) confere que /estrutura tem app.get e que #secEquipe existe",
+  "scripts/teste-sistemas.mjs — TELAS.estrutura = src/web/estrutura.js: os 8 selos literais de SELO, na ordem do catálogo, batem com selos_sistema abaixo",
+  "scripts/teste-ajuda.mjs — data-ajuda=\"equipe_papeis\" em #secEquipe tem verbete; /ajuda.js defer; montarVerbete com contexto lê o estado real"
+ ],
+ "problemas_ux": ["O túnel público não é verificado pelo servidor: a linha «Endereços públicos» diz «não verificado» e só confere presença das variáveis e do agente launchd", "Último backup e última restauração não são lidos (só presença de BACKUP_DIR/FRIO_DIR e dos plists)", "Pré-requisitos por cliente nos (i) continuam «sem leitura» (a tela lê só o global)"],
+ "estados": ["Carregando: skeleton nos KPIs e na tabela (aria-busy)", "Erro: .erro-bloco na tabela com Tentar de novo; veredito honesto", "Vazio por filtro: .vazio-box", "Linha: ligado | pronto | desligado | pendente | erro (freio: acionado | solto); reinicio_pendente quando o arquivo mudou depois do início do servidor"],
+ "recomendacao": "F4 põe o stepper global «Conectar: N de M…» no topo; F7 traz #secSaudeSistema, #secConfig e a Comunicação de /planos para cá.",
+ "selos_sistema": {
+  "regra": "Selo discreto do sistema de origem (config/sistemas.json) por LINHA da tabela, pelo mapa literal SELO de src/web/estrutura.js (8 entradas, ordem do catálogo; scripts/teste-sistemas.mjs lê o JS). O bloco #secEquipe leva o selo do Arquiteto no HTML estático.",
+  "secoes": {
+   "SELO.trinity": "trinity",
+   "SELO.arquiteto": "arquiteto",
+   "SELO.oraculo": "oraculo",
+   "SELO.merovingio": "merovingio",
+   "SELO.chaveiro": "chaveiro",
+   "SELO.morpheus": "morpheus",
+   "SELO.smith": "smith",
+   "SELO.neo": "neo"
+  }
+ }
+}

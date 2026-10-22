@@ -85,7 +85,7 @@ await ok('textos ao CLIENTE byte a byte iguais (plano semanal, relatório focado
 })
 
 await ok('telas internas: todo data-sistema existe no catálogo e bate com o inventário; /metodologia lista os 8; /diagnostico-motor do cliente sem selo', () => {
-  const TELAS = { cliente: 'src/web/cliente.js', planos: 'src/web/planos.html', resultados: 'src/web/resultados.html', integracoes: 'src/web/integracoes.html', metodologia: 'src/web/metodologia.html' }
+  const TELAS = { cliente: 'src/web/cliente.js', planos: 'src/web/planos.html', resultados: 'src/web/resultados.html', integracoes: 'src/web/integracoes.html', metodologia: 'src/web/metodologia.html', estrutura: 'src/web/estrutura.js' }   // estrutura (F3): os 8 selos literais de SELO, na ordem do catálogo
   for (const [inv, arq] of Object.entries(TELAS)) {
     const fonte = ler(arq), selos = [...fonte.matchAll(/class="sis" data-sistema="(\w+)" title="Sistema de origem: ([^"]+)">([^<]+)</g)]
     assert.ok(selos.length >= 4, `${arq}: selos`)

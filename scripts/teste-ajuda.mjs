@@ -23,7 +23,7 @@ const AJUDA = JSON.parse(ler('config/ajuda.json')), V = AJUDA.verbetes
 const SIS = JSON.parse(ler('config/sistemas.json')).sistemas.map(s => s.id)
 const WEB = readdirSync(RAIZ + 'src/web').filter(f => /\.(html|js)$/.test(f) && f !== 'alerta.js')
 const fontes = Object.fromEntries(WEB.map(f => [f, ler('src/web/' + f)]))
-const PAGINAS = ['index', 'gmv', 'cliente', 'promocoes', 'analistas', 'planos', 'comercial', 'resultados', 'metodologia', 'processos', 'integracoes'].map(p => p + '.html')
+const PAGINAS = ['index', 'gmv', 'cliente', 'promocoes', 'analistas', 'planos', 'comercial', 'resultados', 'metodologia', 'processos', 'integracoes', 'estrutura'].map(p => p + '.html')
 
 await caso('config/ajuda.json: >= 20 verbetes com os campos do doc, >= 3 passos, concluído quando, doc existente, sem hex nem emoji; os 3 exemplos do doc estão lá', () => {
   const ids = Object.keys(V)
@@ -82,16 +82,23 @@ await caso('ajuda.js: node --check, DOM puro (sem innerHTML), delegação [data-
   assert.doesNotMatch(fontes['shell.js'], /\bfetch\(|data-ajuda/, 'o shell não chama API nem desenha o (i)')   // \b: o prefetch() de links do topo não é chamada de API
 })
 
-await caso('rotas-ajuda.js: montarVerbete puro com estado sem_leitura (nunca ligado fingido), selo do sistema, id inválido = null; rota montada em server.js após guardaLocal', async () => {
+await caso('rotas-ajuda.js: montarVerbete puro — sem contexto o estado é sem_leitura (nunca ligado fingido); com o contexto da F3 lê o estado real da estrutura e resolve só os pré-requisitos globais; selo do sistema; id inválido = null; rota montada em server.js após guardaLocal com o contexto', async () => {
   execFileSync(process.execPath, ['--check', RAIZ + 'src/rotas-ajuda.js'])
   const { montarVerbete, VERBETES } = await import('../src/rotas-ajuda.js')
   assert.equal(Object.keys(VERBETES).length, Object.keys(V).length)
   const v = montarVerbete('nf', { cliente: 'Loja X' })
   assert.equal(v.estado.estado, 'sem_leitura'); assert.ok(v.estado.motivo.includes('F3')); assert.equal(v.sistema_nome, 'Smith'); assert.equal(v.sistema_papel, 'financeiro')
   assert.ok(v.pre_requisitos.every(p => p.estado === 'sem_leitura')); assert.equal(v.cliente, 'Loja X'); assert.equal(v.passos.length, 8)
+  // F3 (21/10/2026): com contexto, a linha da estrutura dá o estado; pré-requisito global resolve (env.meli_app), o por cliente continua sem_leitura com motivo
+  const ctx = { configs: { nf: { nf: { ligado: false }, intermediador: { cnpj: '' } }, chaveiro: {}, algoritmo: {}, gatilhos: {}, discord_time: {}, autogestao: {}, alerta: {}, relatorio_envio: {}, sprint90: {}, equipe: {} }, estado: {}, env: { MELI_CLIENT_ID: true, MELI_CLIENT_SECRET: true }, plists: {}, agora: '2026-10-21T12:00:00.000Z' }
+  const w = montarVerbete('nf', { ctx }), a = montarVerbete('app_ml', { ctx })
+  assert.equal(w.estado.estado, 'desligado'); assert.match(w.estado.camada, /reiniciar( o servidor)? na janela combinada/); assert.ok(w.estado.falta.some(f => /intermediador/.test(f)))
+  assert.ok(w.pre_requisitos.every(p => p.estado === 'sem_leitura' && /por cliente/.test(p.motivo)), 'pré-requisitos por cliente seguem sem_leitura')
+  assert.equal(a.pre_requisitos.find(p => p.verificar === 'env.meli_app').estado, 'ok'); assert.equal(a.pre_requisitos.find(p => p.verificar === 'env.meli_token_key').estado, 'pendente')
+  assert.equal(a.estado.estado, 'pendente', 'App do ML com variável faltando é pendente, nunca ligado')
   for (const id of ['', 'x'.repeat(41), '../etc', 'NF', 'nao_existe']) assert.equal(montarVerbete(id), null, 'null para ' + JSON.stringify(id))
   const sv = ler('src/server.js'), r = ler('src/rotas-ajuda.js')
-  assert.match(sv, /app\.use\(criarRotasAjuda\(\)\)/); assert.ok(sv.indexOf('app.use(guardaLocal)') < sv.indexOf('app.use(criarRotasAjuda()'), 'montada depois do guardaLocal')
+  assert.match(sv, /app\.use\(criarRotasAjuda\(\{ contexto: \(\) => contextoEstrutura\(/); assert.ok(sv.indexOf('app.use(guardaLocal)') < sv.indexOf('app.use(criarRotasAjuda('), 'montada depois do guardaLocal')
   assert.match(r, /res\.status\(404\)\.json\(\{ erro: 'verbete desconhecido' \}\)/, 'erro fixo, sem ecoar o id')
 })
 

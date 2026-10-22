@@ -1,11 +1,11 @@
 // /ajuda.js · ícone (i) «Como fazer» das estruturas (docs/ux/arquitetura-5-menus.md § C; F2, 21/10/2026). Compartilhado pelas 11 telas.
 // Delegação de click em [data-ajuda] no document (o botão fica depois do selo .sis ou dentro do <summary>: preventDefault + stopPropagation
 // para não abrir/fechar o details). GET /api/ajuda/:id?cliente= e dialog.dlg em DOM puro (createElement/textContent, nunca HTML em string).
-// Fica fora do shell.js porque o shell não chama API (spec § 4.1). Estado «sem leitura» até a F3: o texto diz onde a chave mora.
+// Fica fora do shell.js porque o shell não chama API (spec § 4.1). Estado real desde a F3 (src/lib/estrutura-estado.js); «sem leitura» quando não há leitura.
 (() => {
   const el = (tag, props = {}, ...filhos) => { const e = document.createElement(tag); Object.assign(e, props); e.append(...filhos); return e }
   const clienteDaUrl = () => new URLSearchParams(location.search).get('cliente') || ''
-  const ESTADO = { sem_leitura: 'sem leitura', ligado: 'ligado', desligado: 'desligado', pronto: 'pronto (configurado, não ligado)', pendente: 'pendente', erro: 'erro' }
+  const ESTADO = { sem_leitura: 'sem leitura', ligado: 'ligado', desligado: 'desligado', pronto: 'pronto (configurado, não ligado)', pendente: 'pendente', erro: 'erro', ok: 'ok' }
   const PONTO = { ok: 's-ok', pendente: 's-pend', erro: 's-erro' }
   const linha = (rotulo, texto) => texto ? el('p', { className: 'ajuda-linha' }, el('b', { textContent: rotulo + ': ' }), document.createTextNode(texto)) : null
 
@@ -15,10 +15,10 @@
     cab.append(sis, el('small', { className: 'sis-papel', textContent: '· ' + v.sistema_papel }), el('span', { className: 'mudo peq', textContent: v.escopo }))
     const e = v.estado || {}
     const estado = el('div', { className: 'aviso info ajuda-estado' }, el('b', { textContent: 'Estado agora: ' + (ESTADO[e.estado] || e.estado || '—') }))
-    for (const n of [linha('chave', e.chave), linha('camada', e.camada), linha('desde', e.desde), linha('por quem', e.por), linha('motivo', e.motivo_chave), linha('leitura', e.motivo)]) if (n) estado.append(n)
+    for (const n of [linha('chave', e.chave), linha('camada', e.camada), linha('desde', e.desde), linha('por quem', e.por), linha('motivo', e.motivo_chave), linha('falta', (e.falta || []).join(' · ')), linha('agora', e.detalhe), linha('leitura', e.motivo)]) if (n) estado.append(n)
     const pre = el('ul', { className: 'ajuda-pre' }, ...(v.pre_requisitos || []).map(p => {
       const li = el('li', {}, el('i', { className: 'ponto ' + (PONTO[p.estado] || 's-neutro'), title: ESTADO[p.estado] || p.estado || '' }), document.createTextNode(' ' + p.texto))
-      if (p.estado && ESTADO[p.estado]) li.append(el('small', { className: 'mudo', textContent: ' — ' + ESTADO[p.estado] }))
+      if (p.estado && ESTADO[p.estado]) li.append(el('small', { className: 'mudo', textContent: ' — ' + ESTADO[p.estado] + (p.motivo ? ': ' + p.motivo : '') }))
       return li
     }))
     const passos = el('ol', { className: 'passos-ajuda' }, ...(v.passos || []).map(p => el('li', {}, el('b', { textContent: p.titulo }), el('small', { textContent: ' ' + p.texto + (p.quem ? ' (' + p.quem + ')' : '') }))))

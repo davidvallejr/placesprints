@@ -109,6 +109,8 @@ import { rotasSaude } from './rotas-saude.js'
 import { criarSaudeSistema } from './lib/saude-sistema-real.js'
 import { criarRotasSaudeSistema } from './rotas-saude-sistema.js'
 import { criarRotasAjuda } from './rotas-ajuda.js'
+import { criarRotasEstrutura } from './rotas-estrutura.js'
+import { contextoReal as contextoEstrutura, estruturaReal, equipeReal } from './lib/estrutura-estado-real.js'
 import { criarEnvio as criarEnvioSaude } from './lib/gatilhos-envio.js'
 
 configurarLogCustos(log); configurarLogWebhookCustos(log); configurarLogSyncErp(log)   // custos de ERP/planilha logam no mesmo log (nunca corpo/segredo)
@@ -156,7 +158,8 @@ app.use(criarRotasChaveiroExecutor({ exec: execChaveiro, clienteCanonico: c => c
 // autogestão (docs/plano-autogestao.md A2/A3/A5): sinais por sistema + incidentes (dono Head de canais) + data/batimento.json p/ o vigia externo; GET /api/saude só no loopback
 const saudeSis = criarSaudeSistema({ handle: db, getEstado, agora, log, notificar, envio: criarEnvioSaude({ env: process.env, log }) })
 app.use(criarRotasSaudeSistema({ saude: saudeSis }))
-app.use(criarRotasAjuda())   // ícone (i) «Como fazer»: texto de config/ajuda.json, estado 'sem_leitura' até a F3
+app.use(criarRotasAjuda({ contexto: () => contextoEstrutura({ saude: saudeSis }) }))   // ícone (i) «Como fazer»: texto de config/ajuda.json + estado real (F3)
+app.use(criarRotasEstrutura({ estrutura: () => estruturaReal({ saude: saudeSis }), equipe: equipeReal }))   // tela de Estruturas (F3): só leitura; Ligar/Desligar reusa as rotas de banco que já existem
 app.use(rotasSaude)       // GET /api/cliente/saude + POST /api/cliente/saude/atualizar (saúde da conta gravada: reputação, perguntas, reclamações, atrasos, Full; só leitura no ML)
 // encerramento por dependência do cliente (prévia por padrão; confirmar:true grava "Aguardando Devolutiva do Cliente" no Notion + registro local)
 const dependencias = criarDependencias({ handle: db, notion: { req: notionReq }, agora, hoje: hojeLocal, validarPor: validarLiderOuConsultor, mapeamento,
@@ -370,6 +373,7 @@ app.get('/gmv', (req, res) => res.sendFile(join(ROOT, 'src', 'web', 'gmv.html'))
 app.get('/processos', (req, res) => res.sendFile(join(ROOT, 'src', 'web', 'processos.html')))   // como cada tarefa é feita em cada canal (Manual do Analista) + duplicação estratégica
 app.get('/promocoes', (req, res) => res.sendFile(join(ROOT, 'src', 'web', 'promocoes.html'))) // promoções por cliente (campanhas, MC, analista, plano dry-run)
 app.get('/resultados', (req, res) => res.sendFile(join(ROOT, 'src', 'web', 'resultados.html'))) // o que melhor funciona (padrões de tarefas)
+app.get('/estrutura', (req, res) => res.sendFile(join(ROOT, 'src', 'web', 'estrutura.html'))) // Estrutura › Estruturas e Equipe: estado real de cada chave (F3)
 
 // ── webhook do Notion (sincronização por evento; agendada segue como reforço)
 let timerWebhook = null

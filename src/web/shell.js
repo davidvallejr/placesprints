@@ -2,14 +2,14 @@
 (() => {
   const topo = document.getElementById('psShell'); if (!topo) return   // documentos e páginas públicas não têm o placeholder
   // Os 5 menus (docs/ux/arquitetura-5-menus.md § A). Item = [id, rótulo, href]; id = pagina ou pagina:aba; href só de rota que já existe
-  // (teste-shell-ui). Estruturas e Equipe apontam para /integracoes e /planos até /estrutura nascer (F3); o lugar do antigo utilitário
-  // «Integrações» fica vazio até Hoje (F5) e Quem sou (F2). Assinantes do autoatendimento ficam em /integracoes, nunca no topo.
+  // (teste-shell-ui). Estruturas e Equipe vivem em /estrutura (F3); o lugar do antigo utilitário «Integrações» tem Quem sou (F2) e
+  // recebe Hoje na F5. Assinantes do autoatendimento ficam em /integracoes, nunca no topo.
   const G = [
     ['Assessoria', [['execucao', 'Painel executivo', '/'], ['gmv', 'Faturamento', '/gmv'], ['o-que-funciona', 'O que funciona', '/resultados'], ['algoritmo', 'Acerto do algoritmo', '/metodologia'], ['distribuicao:risco', 'Carteira em risco', '/planos?sec=secRisco'], ['comercial', 'Comercial', '/comercial']]],   // "Painel executivo": decisão do CEO (spec 8.7)
     ['Consultor', [['cliente:resumo', 'Resumo', '/cliente?aba=resumo'], ['cliente:plano', 'Plano', '/cliente?aba=plano'], ['cliente:anuncios', 'Anúncios', '/cliente?aba=anuncios'], ['cliente:estrategia', 'Estratégia', '/cliente?aba=estrategia'], ['promocoes', 'Promoções', '/promocoes'], ['processos', 'Como fazer', '/processos']]],
     ['Execução', [['distribuicao', 'Distribuir', '/planos'], ['cliente:executar', 'Execução no ML', '/cliente?aba=executar'], ['cliente:do-cliente', 'Pelo cliente', '/cliente?aba=do-cliente'], ['cliente:ofertas', 'Ofertas', '/cliente?aba=anuncios&sec=secOfertas'], ['analistas', 'Analistas', '/analistas']]],
     ['Empresa do cliente', [['cliente:produtos', 'Produtos e estoque', '/cliente?aba=produtos'], ['cliente:lucro', 'Lucro do mês', '/cliente?aba=produtos&visao=lucro'], ['cliente:compras', 'Compras', '/cliente?aba=relatorios&rc=ciclo_compras'], ['cliente:precos', 'Preços', '/cliente?aba=anuncios&sec=secPrecos'], ['cliente:financeiro', 'Raio-X e contrato', '/cliente?aba=resumo&sec=secFinanceiro'], ['cliente:custos', 'Custos', '/cliente?aba=configurar&sec=secCustosUpload'], ['cliente:nf', 'Nota fiscal', '/cliente?aba=configurar&sec=secNotaFiscal'], ['cliente:relatorios', 'Ciclos do negócio', '/cliente?aba=relatorios']]],
-    ['Estrutura', [['integracoes:estruturas', 'Estruturas', '/integracoes?sec=secSaudeSistema'], ['integracoes', 'Conexões', '/integracoes'], ['distribuicao:comunicacao', 'Comunicação', '/planos?sec=secAvisosAuto'], ['cliente:configurar', 'Configurar cliente', '/cliente?aba=configurar'], ['distribuicao:equipe', 'Equipe', '/planos'], ['algoritmo:param', 'Regras do método', '/metodologia?sec=secParam']]],
+    ['Estrutura', [['estrutura', 'Estruturas', '/estrutura'], ['integracoes', 'Conexões', '/integracoes'], ['distribuicao:comunicacao', 'Comunicação', '/planos?sec=secAvisosAuto'], ['cliente:configurar', 'Configurar cliente', '/cliente?aba=configurar'], ['estrutura:equipe', 'Equipe', '/estrutura?sec=secEquipe'], ['algoritmo:param', 'Regras do método', '/metodologia?sec=secParam']]],
   ]
   const CLI = new Set(['/cliente', '/promocoes'])                      // rotas que carregam ?cliente=
   const pag = document.body.dataset.pagina

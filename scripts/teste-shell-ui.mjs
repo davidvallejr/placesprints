@@ -23,6 +23,7 @@ const PAGINAS = [
   ['promocoes.html', 'promocoes', 'promocoes.js', 'promocoes'], ['analistas.html', 'analistas', 'analistas.js', 'analistas'], ['planos.html', 'distribuicao', 'planos.js', 'planos'],
   ['comercial.html', 'comercial', 'comercial.js', 'comercial'], ['resultados.html', 'o-que-funciona', 'resultados.js', 'resultados'], ['metodologia.html', 'algoritmo', 'metodologia.js', 'metodologia'],
   ['processos.html', 'processos', 'processos.js', 'processos'], ['integracoes.html', 'integracoes', 'integracoes.js', 'integracoes'],
+  ['estrutura.html', 'estrutura', 'estrutura.js', 'estrutura'],   // 12ª tela (F3, 21/10/2026): Estrutura › Estruturas e Equipe
 ]
 const COMPARTILHADOS = ['src/web/ficha.js', 'src/web/acomp.js', 'src/web/relatorio.js', 'src/web/pendencias.js', 'src/web/alertas.js', 'src/web/gatilhos.js', 'src/web/alinhamentos.js', 'src/web/dossie.js', 'src/web/perfil-informacao.js', 'src/web/galeria-anuncio.js', 'src/web/produtos.js', 'src/web/executar.js', 'src/web/relatorios-ciclo.js', 'src/web/custos-upload.js', 'src/web/alerta.js', 'src/web/shell.js', 'src/web/ajuda.js'].map(ler).join('\n')
 

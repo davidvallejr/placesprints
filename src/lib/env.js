@@ -55,4 +55,10 @@ export const env = {
   // sem os dois, todo lote com canal WhatsApp/e-mail/Discord fica 'pendente' com motivo n8n_nao_configurado (o Notion não passa pelo n8n)
   PLACE_GATILHOS_URL: (process.env.PLACE_GATILHOS_URL || '').replace(/\/$/, ''),
   PLACE_GATILHOS_SECRET: process.env.PLACE_GATILHOS_SECRET || '',
+
+  // ── Autogestão (lidas pelos scripts externos; aqui só para a tela de Estruturas dizer presente/ausente — nunca o valor) ──
+  HEAD_CANAIS_WHATSAPP: process.env.HEAD_CANAIS_WHATSAPP || '',   // WhatsApp do Head de canais (só incidente crítico, atrás de autogestao.whatsapp_critico_ligado)
+  BACKUP_DIR: process.env.BACKUP_DIR || '',                       // scripts/backup-banco.mjs
+  FRIO_DIR: process.env.FRIO_DIR || '',                           // scripts/arquivar-evidencias.mjs
+  VIGIA_ENVIO_LIGADO: process.env.VIGIA_ENVIO_LIGADO === '1' ? '1' : '',   // scripts/vigia.sh sai do dry-run só com 1
 }
