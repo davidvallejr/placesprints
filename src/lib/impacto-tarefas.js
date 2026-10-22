@@ -459,7 +459,7 @@ export function execucoesOfertas(cliente) {
 export const analistasDe = txt => [...new Map(String(txt || '').split(/[,;/]|\s+e\s+/i).map(x => x.replace(/\s+/g, ' ').trim()).filter(Boolean).map(x => [normNome(x), x])).values()]
 const diaBR = iso => { const d = new Date(iso); return iso && !isNaN(d) ? d.toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' }) : '' }
 // contexto do cliente para medir QUALQUER marco (tarefa concluída, execução de Ofertas ou mudança do anúncio): séries, tarefas, eventos de preço/estado
-function contextoCliente(cliente, { hoje = hojeLocal(), params = cfgAtrib } = {}) {
+export function contextoCliente(cliente, { hoje = hojeLocal(), params = cfgAtrib } = {}) {
   const cob = coberturaPedidos(cliente)
   const itens = db.prepare('SELECT item_id, vis_de, vis_ate FROM meli_item WHERE cliente = ?').all(cliente)
   const conhecidos = new Set(itens.map(i => i.item_id))
@@ -505,9 +505,9 @@ function contextoCliente(cliente, { hoje = hojeLocal(), params = cfgAtrib } = {}
 }
 // medida de UM marco t ({ tipo, data, itens, data_estimada, intervencao_preco }) no contexto: janela adaptativa, controle, placebo, preço e estado como confundidores.
 // t pode estar fora de ctx.lista (marco de snapshot): a própria data entra nos placebos e as tarefas da lista continuam contando como concorrentes/tocadas.
-function medirMarcoNoContexto(ctx, t) {
+export function medirMarcoNoContexto(ctx, t) {
   const { cliente, hoje, params, cob, porItem, vis, lista, N, lagDe, eventosCal, evPreco, evEstado, grandes } = ctx
-  const lag = lagDe(t.tipo), escopo = t.itens.length ? 'anuncios' : 'conta'
+  const lag = lagDe(t.tipo) + (t.lag_extra || 0), escopo = t.itens.length ? 'anuncios' : 'conta'   // lag_extra: episódio de várias mudanças (atribuicao.js) cobre o intervalo até a última
   const idsAlvo = escopo === 'anuncios' ? t.itens : [...porItem.keys()]
   const montar = (ids, comVis) => ({ unidades: somarSeries(ids.map(i => porItem.get(i)?.unidades || {})), receita: somarSeries(ids.map(i => porItem.get(i)?.receita || {})), visitas: comVis ? somarSeries(ids.map(i => porItem.get(i)?.visitas || {})) : null })
   // eventos placebo = datas de tarefas do mesmo alvo + datas de mudança de preço (≥ limiar) dos anúncios do alvo
@@ -554,8 +554,8 @@ export function medirMarco(cliente, item_id, data, { tipo = 'Mudança no anúnci
   if (['melhorou', 'piorou'].includes(m.estado)) m.confianca = confiancaEfeito({ m, dataEstimada: false, concorrentes: m.concorrentes, eventos: m.eventos, taxaHistorica: null, params })
   return m
 }
-export function analisarCliente(cliente, { hoje = hojeLocal(), params = cfgAtrib } = {}) {
-  const ctx = contextoCliente(cliente, { hoje, params })
+export function analisarCliente(cliente, { hoje = hojeLocal(), params = cfgAtrib, ctx: ctx0 = null } = {}) {
+  const ctx = ctx0 || contextoCliente(cliente, { hoje, params })   // ctx0: quem já montou o contexto (foco-real.js) não lê o banco duas vezes
   const { cob, lista, nao, N } = ctx
   const medidas = lista.map(t => medirMarcoNoContexto(ctx, t))
 

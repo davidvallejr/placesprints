@@ -88,5 +88,31 @@
     "c_dias": 7,
     "max_itens_por_coleta": 150,
     "teto_ms": 120000
+  },
+  "episodio": {
+    "$nota": "Atribuição por anúncio (docs/desenho-merovingio-foco-8020.md § 8; src/lib/atribuicao.js). Marco = mudança observada no anúncio (change-log, execução do sistema) ou tarefa que cita o anúncio. Episódio = marcos do mesmo anúncio com no máximo janela_episodio_dias entre consecutivos (o mesmo de retroalimentacao.json → combos). ≥ 2 intervenções com min_dias_etapa ou mais entre elas = sequencial (efeito por etapa); menos = conjunto (crédito compartilhado, nunca dividido). Card sem anúncio casa com a mudança só quando a família prevê o campo (familias_campos), a mudança caiu em ± janela_casamento_dias da conclusão e há UM anúncio candidato. Campo de estado/preço observado sem tarefa nem execução do sistema = co-fator (confundidor), não intervenção.",
+    "min_dias_etapa": 7,
+    "janela_casamento_dias": 3,
+    "fontes_execucao": ["promo", "ofertas", "chaveiro"],
+    "campos_conteudo": ["titulo", "fotos", "thumb", "descricao", "atributos", "categoria", "tipo_anuncio", "frete_gratis"],
+    "familias_campos": {
+      "imagens": ["fotos", "thumb"],
+      "otimizar": ["titulo", "fotos", "thumb", "descricao", "atributos"],
+      "corrigir": ["titulo", "descricao", "atributos", "categoria"],
+      "precos": ["preco", "preco_original"],
+      "campanhas_desconto": ["promocao", "preco"],
+      "oferta_relampago": ["promocao", "preco"],
+      "cupom": ["promocao", "preco"],
+      "ads": ["ads"],
+      "full": ["logistica", "estoque_zero"],
+      "status": ["status"],
+      "ficha": ["atributos"],
+      "variacoes": ["tipo_anuncio", "atributos"]
+    },
+    "campo_familia": {
+      "fotos": "imagens", "thumb": "imagens", "titulo": "otimizar", "descricao": "otimizar", "atributos": "ficha", "categoria": "corrigir",
+      "tipo_anuncio": "variacoes", "preco": "precos", "preco_original": "precos", "promocao": "campanhas_desconto", "ads": "ads",
+      "logistica": "full", "estoque_zero": "full", "status": "status", "frete_gratis": "otimizar"
+    }
   }
 }

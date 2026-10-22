@@ -112,6 +112,8 @@ import { criarRotasAjuda } from './rotas-ajuda.js'
 import { criarRotasEstrutura } from './rotas-estrutura.js'
 import { contextoReal as contextoEstrutura, estruturaReal, equipeReal } from './lib/estrutura-estado-real.js'
 import { criarRotasProgresso } from './rotas-progresso.js'
+import { criarRotasFoco } from './rotas-foco.js'
+import { focoDoCliente } from './lib/foco-real.js'
 import { criarProgressoReal } from './lib/progresso-real.js'
 import { criarRotasFila } from './rotas-fila.js'
 import { criarFilaReal } from './lib/fila-real.js'
@@ -179,6 +181,7 @@ const relatorios = criarRelatorioEnvio({ handle: db, notion: { req: notionReq },
   usuarios: () => [...Object.entries(equipeCfg.usuarios_notion || {}).filter(([k]) => k !== '$comentario').map(([nome, id]) => ({ id, nome })), ...db.prepare('SELECT id, nome FROM usuarios_notion').all()] })
 app.use(criarRotasRelatorio({ relatorios, quem: lideresEConsultores, clienteCanonico: clienteDaCentral }))
 app.use(criarRotasProgresso({ progresso: criarProgressoReal({ relatorios }), clienteCanonico: clienteDaCentral }))   // progresso do processo, 10 etapas (F4): só leitura sobre números que já existem
+app.use(criarRotasFoco({ foco: focoDoCliente, clienteCanonico: clienteDaCentral }))   // Foco 80/20 + atribuição por anúncio (F1): só leitura, GET /api/cliente/foco?cliente=&janela=
 app.use(criarRotasFila({ fila: criarFilaReal({ estrutura: () => estruturaReal({ saude: saudeSis }), progresso: criarProgressoReal({ relatorios }), aba: criarAbaDoClienteReal({ rotulo: c => gatilhos.rotulo(c) }) }) }))   // Hoje (F5): fila do dia por papel, só leitura; cada botão reusa uma rota de escrita que já existia
 app.use(criarRotasCatalogo({ catalogo: criarCatalogo(db, { agora, validarPor: validarLiderOuConsultor, log }), quem: lideresEConsultores, clienteCanonico: clienteDaCentral }))   // catálogo próprio × terceiros (marcação manual; prévia por padrão)
 // alinhamentos: a central também gerencia (lista, encerra, renova) os da conta do Sprint 90 — chave "[S90] …" válida de uma conta existente (nunca entra em clientes_central)
