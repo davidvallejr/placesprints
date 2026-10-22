@@ -262,13 +262,18 @@ const filtrosDe = q => ({
   processo: q.processo || '', responsavel: q.responsavel || '', status: q.status || '',
   de: q.de || '', ate: q.ate || '', interno: q.interno === '1',
   // filtro avançado (E/OU, operadores, período com data explícita): ?f=<base64url>; "consultor" vira a lista de clientes dele
-  ...(q.f ? { sql: compilarSQL(expandir(desserializar(String([].concat(q.f)[0]), { painel: 'execucao', hoje: hojeLocal() }), { clientes_do_consultor: clientesDoConsultor })) } : {}),
+  ...(q.f ? { sql: compilarSQL(expandir(desserializar(String([].concat(q.f)[0]), { painel: 'execucao', hoje: hojeLocal() }), { clientes_do_consultor: clientesDoConsultor, clientes_do_produto: clientesDoProduto })) } : {}),
 })
 // nome do consultor (igual/contém) → clientes da central em que ele responde por algum canal
 function clientesDoConsultor(n) {
   const alvo = normNome(n.valor), lista = carregarClientes()
   const bate = x => n.operador === 'contem' ? normNome(x).includes(alvo) : normNome(x) === alvo
   return lista.filter(c => Object.values(c.consultores).some(bate) || bate(c.principal)).map(c => c.cliente)
+}
+// produto (igual/é um de/contém) → clientes da central com aquele produto (config/produtos.json pelo tier); 'sem_produto' = tier fora da lista
+function clientesDoProduto(n) {
+  const alvos = [].concat(n.valor).map(String)
+  return carregarClientes().filter(c => alvos.includes(c.produto || 'sem_produto')).map(c => c.cliente)
 }
 
 // ── APIs do dashboard (tudo determinístico) ─────────────────────────────

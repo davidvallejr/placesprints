@@ -11,9 +11,9 @@ const plural = (n, um, varios) => `${int(n)} ${n === 1 ? um : varios}`
 const urlOk = u => /^https?:\/\//i.test(String(u || '')) ? String(u) : ''
 const neg = v => v < 0 ? ' neg' : ''
 
-const BLOCOS = ['veredito', 'mensura', 'tipos', 'nichos', 'regioes', 'lanc', 'nichoTipo', 'analistas', 'palavras']
+const BLOCOS = ['veredito', 'mensura', 'tipos', 'nichos', 'regioes', 'porProduto', 'lanc', 'nichoTipo', 'analistas', 'palavras']
 const TAB = '<div class="sk-tabela"></div>'
-const SK = { veredito: '<div class="sk-kpi"></div>'.repeat(3), mensura: '<div class="sk-linha"></div><div class="sk-linha"></div>', tipos: TAB, nichos: TAB, regioes: TAB, lanc: '<div class="sk-kpi"></div>', nichoTipo: TAB, analistas: TAB, palavras: TAB }
+const SK = { veredito: '<div class="sk-kpi"></div>'.repeat(3), mensura: '<div class="sk-linha"></div><div class="sk-linha"></div>', tipos: TAB, nichos: TAB, regioes: TAB, porProduto: TAB, lanc: '<div class="sk-kpi"></div>', nichoTipo: TAB, analistas: TAB, palavras: TAB }
 const poe = (id, html, ocupado = false) => { const el = $(id); el.innerHTML = html; ocupado ? el.setAttribute('aria-busy', 'true') : el.removeAttribute('aria-busy') }
 const vazio = (titulo, instrucao, extra = '') => `<div class="vazio-box"><b>${esc(titulo)}</b>${esc(instrucao)}${extra}</div>`
 const erro = (msg, detalhe, tentar = 'data-tentar') => `<div class="erro-bloco"><b>Não foi possível carregar</b><p>${esc(msg)}</p><button class="btn btn-p" type="button" ${tentar}>Tentar de novo</button><details><summary>Detalhe técnico</summary><pre>${esc(detalhe)}</pre></details></div>`
@@ -115,6 +115,23 @@ function lancamentos(d) {
 // recortes novos da API (no fim da resposta): servidor ainda na versão anterior não os manda — o bloco diz isso em vez de quebrar
 const semRecorte = () => vazio('O servidor ainda não entrega este recorte.', 'Ele aparece depois que o servidor for reiniciado com a versão nova.')
 
+// Por produto (Performance × Prime): ≤ 6 colunas, linhas fixas da API (carteira_produto) + o resultado medido de por_produto; ausente = «—», nunca zero
+const ROI_FIXO = '— a mensalidade do cliente ainda não está no sistema (contrato_cliente vazio): sem ela não há ROI'
+function porProduto(d) {
+  if (!d.carteira_produto) return semRecorte()
+  const med = new Map((d.por_produto || []).map(g => [g.chave, g]))
+  const resultado = g => !g ? '<span class="mudo">— sem tarefa medida</span>'
+    : g.amostra_pequena ? `<span class="mudo">sem amostra (n = ${int(g.n)})</span>`
+      : `${plural(g.melhorou, 'melhorou', 'melhoraram')} de ${int(g.n)} · ≥ ${pc(g.taxa_baixo)} · <span class="${neg(g.receita_incremental).trim()}">${brl(g.receita_incremental)}</span> associados`
+  const lin = d.carteira_produto.map(l => {
+    const g = med.get(l.produto)
+    return `<tr><td>${g ? `<button class="lnk" type="button" data-drill="${esc('produto|' + l.produto)}" data-conf="${g.confundidas || 0}" aria-expanded="false">${esc(l.rotulo)}</button>` : esc(l.rotulo)}</td>`
+      + `<td class="n">${int(l.clientes)}</td><td class="n">${int(l.conectados)}</td><td>${resultado(g)}</td><td class="mudo peq">${esc(ROI_FIXO)}</td></tr>`
+  }).join('')
+  return `<div class="tab-grupo"><div class="tabela-wrap"><table class="t"><thead><tr><th scope="col">Produto</th><th scope="col" class="n">Clientes</th><th scope="col" class="n">Conectados</th><th scope="col">Resultado medido (n)</th><th scope="col">ROI</th></tr></thead><tbody>${lin}</tbody></table></div></div>`
+    + '<p class="mudo peq mt-2">Consultor parceiro e Legacy/Full entram no Prime por decisão de 21/10/2026 (config/produtos.json). Tier fora da lista fica em «Sem produto mapeado» e vira pendência de cadastro.</p>'
+}
+
 function cabecalho(d) {
   const cobs = d.mensurabilidade.map(m => m.cobertura).filter(Boolean)
   const de = cobs.map(c => c.de).filter(Boolean).sort()[0], ate = cobs.map(c => c.ate).filter(Boolean).sort().at(-1), per = d.filtro?.periodo
@@ -170,7 +187,7 @@ function abrirDrill(b) {
   if (!abrir) return
   const novo = document.createElement('tr')
   novo.className = 'det' + (tr.classList.contains('pequena') ? ' pequena' : '')
-  novo.innerHTML = '<td colspan="8"><div class="drill"></div></td>'
+  novo.innerHTML = `<td colspan="${tr.children.length}"><div class="drill"></div></td>`   // 8 nas tabelas de grupo, 5 em Por produto
   const box = novo.querySelector('.drill')
   box.dataset.alvo = b.dataset.drill; box.dataset.conf = b.dataset.conf   // conf: as confundidas (preço ou estado) que a linha da tabela não conta
   tr.after(novo)
@@ -201,6 +218,7 @@ async function carregar(f = fAtual) {
     mensura: () => cobertura(d, cob),
     tipos: () => tabela(d.por_tipo, { grupo: 'tipo' }),
     nichos: () => avisoCanal(d) + (d.por_nicho ? tabela(d.por_nicho, { col1: 'Nicho', rotulo: 'nichos', grupo: 'nicho' }) : semRecorte()),
+    porProduto: () => porProduto(d),
     regioes: () => d.por_regiao ? tabela(d.por_regiao, { col1: 'Região', rotulo: 'regiões', um: 'região', grupo: 'regiao' }) : semRecorte(),
     lanc: () => lancamentos(d),
     nichoTipo: () => {

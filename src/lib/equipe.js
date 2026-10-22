@@ -7,6 +7,8 @@ import { join } from 'node:path'
 import { db, agora } from './db.js'
 import { ROOT } from './env.js'
 import { clientesAtivos } from './descobrir.js'
+import { produtoDoCliente, PRODUTOS, SEM_PRODUTO } from './produto.js'
+const PRODUTOS_ESCOPO = [...PRODUTOS, SEM_PRODUTO]
 
 export const equipeCfg = JSON.parse(readFileSync(join(ROOT, 'config', 'equipe.json'), 'utf-8'))
 export const CANAIS = { ML: 'Mercado Livre', SHO: 'Shopee', AMZ: 'Amazon', TTK: 'TikTok Shop', Legacy: 'Legacy' }
@@ -112,6 +114,7 @@ export function carregarClientes() {
     const lidPrincipal = Object.entries(lids).sort((a, b) => ORDEM_CANAIS.indexOf(a[0]) - ORDEM_CANAIS.indexOf(b[0]))[0]?.[1] || ''
     return {
       cliente: r.cliente, status: r.status_cs, tier: r.tier, nicho: r.nicho, canais,
+      ...(p => ({ produto: p.produto, subtipo: p.subtipo }))(produtoDoCliente(r.tier)),   // produto como dimensão (config/produtos.json); '' = tier fora da lista
       cnpj: r.cnpj || '', cpf: r.cpf || '', contato: r.responsavel || '', vencimentos: JSON.parse(r.vencimentos_json || '{}'),
       consultores: cons, lideres: lids, principal, squads,
       cs_responsavel: r.cs_responsavel || '', health_score: r.health_score ?? null, hs_classificacao: r.hs_classificacao || '',   // cadastro (planilha/manual) — só leitura aqui
@@ -168,7 +171,7 @@ export function listarEquipe() {
 }
 
 // ── escopo: seleção | consultor | squad | total ────────────────────────────
-export function resolverEscopo({ tipo = 'total', clientes = [], consultor = '', squad = '' } = {}) {
+export function resolverEscopo({ tipo = 'total', clientes = [], consultor = '', squad = '', produto = '' } = {}) {
   const { elegiveis, ignorados } = clientesElegiveis()
   let alvo = elegiveis, erro = ''
   if (tipo === 'selecao') {
@@ -184,6 +187,9 @@ export function resolverEscopo({ tipo = 'total', clientes = [], consultor = '', 
   } else if (tipo === 'squad') {
     if (!squad) { erro = 'informe o squad'; alvo = [] }
     else alvo = elegiveis.filter(c => c.squads.includes(squad))
+  } else if (tipo === 'produto') {
+    if (!PRODUTOS_ESCOPO.includes(produto)) { erro = 'informe o produto (performance, prime ou sem_produto)'; alvo = [] }
+    else alvo = elegiveis.filter(c => (c.produto || SEM_PRODUTO) === produto)
   } else if (tipo !== 'total') erro = `tipo de escopo inválido: ${tipo}`
-  return { tipo, consultor, squad, clientes: alvo.map(c => c.cliente), registros: alvo, erro, ignorados }
+  return { tipo, consultor, squad, ...(tipo === 'produto' ? { produto } : {}), clientes: alvo.map(c => c.cliente), registros: alvo, erro, ignorados }
 }

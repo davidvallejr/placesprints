@@ -180,7 +180,7 @@ try {
   await ok('resultados: sem f a resposta tem as chaves de sempre na mesma ordem; com f as medidas recortam e os agrupamentos são recalculados', async () => {
     const semF = await get('/api/resultados/padroes'); assert.equal(semF.status, 200)
     // contrato que muda de propósito (plano §5): nicho, região e nicho × tipo entram NO FIM; o resto segue na mesma ordem
-    assert.deepEqual(Object.keys(semF.json), ['clientes', 'n_clientes', 'lancamentos', 'n_medidas', 'por_tipo', 'por_analista', 'por_palavra', 'por_analista_tipo', 'mensurabilidade', 'medidas', 'por_nicho', 'por_regiao', 'por_nicho_tipo'])
+    assert.deepEqual(Object.keys(semF.json), ['clientes', 'n_clientes', 'lancamentos', 'n_medidas', 'por_tipo', 'por_analista', 'por_palavra', 'por_analista_tipo', 'mensurabilidade', 'medidas', 'por_nicho', 'por_regiao', 'por_nicho_tipo', 'por_produto', 'carteira_produto'])   // produto no fim (21/10/2026, § 8.7)
     const vazio = await get(`/api/resultados/padroes?f=${q(URL_F('resultados', { campo: 'cliente', operador: 'igual', valor: '__ninguem__' }))}`)
     assert.deepEqual([vazio.json.n_medidas, vazio.json.por_tipo, vazio.json.mensurabilidade, vazio.json.medidas], [0, [], [], []]); assert.equal(vazio.json.n_clientes, semF.json.n_clientes)
     assert.match(vazio.json.filtro.aviso, /Mercado Livre/)

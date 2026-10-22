@@ -10,6 +10,8 @@ import { serieDiaria, tendencia, projecaoMes, causalidadeVendas, causalidadeOper
 import { hojeLocal, agora } from './lib/db.js'
 import { analisarCliente, padroesGlobais, agruparPadroes, agruparDimensoes, medidasDoGrupo, fraseEstado } from './lib/impacto-tarefas.js'
 import { normalizarNicho, regiaoDe, UFS, SEM_NICHO, SEM_UF } from './lib/dimensoes.js'
+import { carteiraPorProduto, PRODUTOS, SEM_PRODUTO, ROTULO_PRODUTO } from './lib/produto.js'
+import { registrarPendenciasProduto } from './lib/cadastro-clientes.js'
 import { gmvPortfolio, maisVendidos } from './lib/gmv.js'
 import { coletarCliente, coberturaPedidos, cfgAtrib, addDias, diasEntre } from './lib/meli-serie.js'
 import { historico } from './lib/preco-historico.js'
@@ -101,19 +103,20 @@ const ACESSOR_ACAO = (a, c) => c === 'consultor' ? a.responsavel : c === 'priori
 export const aplicarFiltroAcoes = (acoes, f) => aplicarFiltro(acoes, f, ACESSOR_ACAO, { prazo: a => a.prazo, criado_em: a => a.criado_em })
 
 const escopoDe = o => {
-  const e = resolverEscopo({ tipo: o.tipo || 'total', clientes: o.clientes || [], consultor: o.consultor || '', squad: o.squad || '' })
+  const e = resolverEscopo({ tipo: o.tipo || 'total', clientes: o.clientes || [], consultor: o.consultor || '', squad: o.squad || '', produto: o.produto || '' })
   if (e.erro) { const x = new Error(e.erro); x.status = 400; throw x }
   return e
 }
 // GET aceita ?tipo=&consultor=&squad=&cliente=A&cliente=B
-const escopoDaQuery = q => escopoDe({ tipo: q.tipo || (q.cliente ? 'selecao' : 'total'), consultor: q.consultor, squad: q.squad, clientes: [].concat(q.cliente || []) })
+const escopoDaQuery = q => escopoDe({ tipo: q.tipo || (q.cliente ? 'selecao' : 'total'), consultor: q.consultor, squad: q.squad, produto: typeof q.produto === 'string' ? q.produto : '', clientes: [].concat(q.cliente || []) })
 
 // ── equipe e escopo ──────────────────────────────────────────────────────────
 rotasPlanos.get('/api/planos/equipe', trata((req, res) => res.json({ ...listarEquipe(), ignorados: resolverEscopo({}).ignorados })))
 rotasPlanos.post('/api/planos/equipe/sincronizar', trata(async (req, res) => {
   const clientes = await sincronizarEquipe()
   cacheBusca = { em: 0, lista: null }          // a busca não pode servir lista velha logo após sincronizar
-  res.json({ ok: true, clientes })
+  const pend = registrarPendenciasProduto(carregarClientes())   // tier fora de config/produtos.json → cadastro:pendencias (produto_nao_mapeado)
+  res.json({ ok: true, clientes, produto_nao_mapeado: pend })
 }))
 rotasPlanos.post('/api/planos/escopo', trata((req, res) => {
   const e = escopoDe(req.body || {})
@@ -652,6 +655,7 @@ rotasPlanos.get('/api/resultados/padroes', trata((req, res) => {
     mensurabilidade: analises.map(a => ({ cliente: a.cliente, ...a.resumo, nao_mensuraveis: a.nao_mensuraveis, cobertura: a.cobertura })),
     medidas: analises.flatMap(a => a.medidas.map(m => ({ ...m, cliente: a.cliente }))).filter(m => ['melhorou', 'piorou', 'lancamento'].includes(m.estado)).slice(0, 80),
     ...agruparDimensoes(analises.flatMap(a => a.medidas.map(m => ({ ...m, cliente: a.cliente })))),
+    carteira_produto: carteiraProduto(p.clientes),
   })
   // com filtro: as MEDIDAS são recortadas (cliente, analista — lista de nomes —, tipo, canal, data de conclusão) e os agrupamentos são recalculados pelo mesmo
   // agruparPadroes (mesma ordem). Toda medição é do Mercado Livre (único canal conectado): canal ≠ ML esvazia. A cobertura por cliente não é recalculada.
@@ -664,8 +668,14 @@ rotasPlanos.get('/api/resultados/padroes', trata((req, res) => {
     medidas: medidas.filter(m => ['melhorou', 'piorou', 'lancamento'].includes(m.estado)).slice(0, 80),
     filtro: filtroNaResposta(f, { aviso: 'O filtro recorta as tarefas medidas; os totais de contas conectadas e a cobertura de medição continuam da base inteira (não são recalculados pelo recorte). Toda medição é do Mercado Livre.' }),
     ...agruparDimensoes(medidas),
+    carteira_produto: carteiraProduto(p.clientes),
   })
 }))
+// clientes Ativos da central (fora dos status excluídos, com ou sem quadro) × contas conectadas, por produto: base inteira, o filtro não recalcula
+function carteiraProduto(conectados) {
+  const { elegiveis, ignorados } = clientesElegiveis(), ativos = new Set([...elegiveis.map(c => c.cliente), ...ignorados.filter(i => !/^status/.test(i.motivo)).map(i => i.cliente)])
+  return carteiraPorProduto(carregarClientes().filter(c => ativos.has(c.cliente)), conectados)
+}
 
 // ── paginação no servidor (50 por linha de página): página que não é inteiro ≥ 1 ou passa da última → 400 (a mensagem não repete o valor) ──
 const POR_PAGINA = 50
@@ -680,10 +690,10 @@ const um1 = (q, k) => String([].concat(q[k] ?? '')[0] ?? '').trim()
 
 // drill-down de uma linha das tabelas de /resultados: as tarefas medidas daquele grupo, PIOROU PRIMEIRO, 50 por página (análise em cache de 5 min).
 // Mesma regra de grupo de agruparPadroes/agruparDimensoes (medidasDoGrupo); as confundidas pelo preço aparecem com o aviso (estão fora do padrão).
-const GRUPOS_DRILL = ['tipo', 'analista', 'nicho', 'regiao', 'uf', 'nicho_tipo'], ESTADOS_DRILL = ['piorou', 'melhorou', 'sem_efeito']
+const GRUPOS_DRILL = ['tipo', 'analista', 'nicho', 'regiao', 'uf', 'nicho_tipo', 'produto'], ESTADOS_DRILL = ['piorou', 'melhorou', 'sem_efeito']
 rotasPlanos.get('/api/resultados/tarefas', trata((req, res) => {
   const grupo = um1(req.query, 'grupo'), chave = um1(req.query, 'chave').slice(0, 200), estado = um1(req.query, 'estado')
-  if (!GRUPOS_DRILL.includes(grupo)) return res.status(400).json({ erro: 'grupo inválido (tipo, analista, nicho, regiao, uf ou nicho_tipo)' })
+  if (!GRUPOS_DRILL.includes(grupo)) return res.status(400).json({ erro: 'grupo inválido (tipo, analista, nicho, regiao, uf, nicho_tipo ou produto)' })
   if (!chave) return res.status(400).json({ erro: 'informe "chave"' })
   if (estado && !ESTADOS_DRILL.includes(estado)) return res.status(400).json({ erro: 'estado inválido (piorou, melhorou ou sem_efeito)' })
   const f = lerF(req, 'resultados')
@@ -780,6 +790,7 @@ const opcoesDe = (painel, nome) => {
     case 'sim_nao': return [{ id: '1', rotulo: 'Sim' }, { id: '0', rotulo: 'Não' }]            // campos bool do painel 'folha'
     case 'logistica': return ['fulfillment', 'cross_docking', 'drop_off', 'xd_drop_off', 'self_service', 'not_specified'].map(id => ({ id, rotulo: ROTULOS_FILTRO.logistica[id] || id }))
     case 'nichos': return [...new Set([...db.prepare('SELECT nicho FROM clientes_central').all().map(r => normalizarNicho(r.nicho)), SEM_NICHO])].sort((a, b) => a.localeCompare(b, 'pt-BR'))
+    case 'produtos': return [...PRODUTOS, SEM_PRODUTO].map(id => ({ id, rotulo: ROTULO_PRODUTO[id] }))
     case 'ufs': return [...UFS, SEM_UF]
     case 'regioes': return [...new Set(UFS.map(regiaoDe)), SEM_UF]
     case 'etapas_comercial': return ['aguardando', 'erro', 'conectado', 'pronto', 'pediu_contato'].map(id => ({ id, rotulo: ROTULOS_FILTRO.etapas_comercial[id] || id }))   // = etapaProspecto ("coletando" é estado de job, não do prospect)

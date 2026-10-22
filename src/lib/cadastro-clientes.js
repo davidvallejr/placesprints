@@ -9,6 +9,7 @@ import { join } from 'node:path'
 import { db, agora, hojeLocal, getEstado, setEstado } from './db.js'
 import { ROOT } from './env.js'
 import { validarLiderOuConsultor } from './equipe.js'
+import { pendenciasProduto, produtoDoCliente, PENDENCIA_PRODUTO } from './produto.js'
 
 const erro = (msg, status = 400) => Object.assign(new Error(msg), { status })
 const str = v => typeof v === 'string' ? v.trim() : ''
@@ -106,7 +107,8 @@ export function lerCadastro(cliente) {
   return {
     cliente: r.cliente,
     central: { status: r.status_cs, tier: r.tier, nicho: r.nicho, canais: parseJson(r.canais_json, []), consultores: parseJson(r.consultores_json, {}), lideres: parseJson(r.lideres_json, {}),
-      cnpj: r.cnpj || '', cpf: r.cpf || '', responsavel: r.responsavel || '', vencimentos: parseJson(r.vencimentos_json, {}), atualizado_em: r.atualizado_em },
+      cnpj: r.cnpj || '', cpf: r.cpf || '', responsavel: r.responsavel || '', vencimentos: parseJson(r.vencimentos_json, {}), atualizado_em: r.atualizado_em,
+      produto: produtoDoCliente(r.tier) },   // { produto, subtipo, nome } de config/produtos.json; produto '' = tier fora da lista (pendência)
     cadastro: { cs_responsavel: r.cs_responsavel || '', health_score: r.health_score ?? null, hs_classificacao: r.hs_classificacao || '', hs_em: r.hs_em || '',
       canais_cs: parseJson(r.canais_cs_json, []), cadastro_fonte: r.cadastro_fonte || '', observacoes: r.observacoes || '' },
     relatorio: prog,
@@ -189,9 +191,16 @@ export function importarPlanilha(caminho, { confirmar = false, aliases = lerAlia
   if (confirmar !== true) return { ...resumo, itens: casados, lista_pendencias: pendencias }
   db.transaction(() => {
     for (const x of casados) if (Object.keys(x.mudancas).length) gravar(x.cliente, Object.fromEntries(Object.entries(x.mudancas).map(([k, v]) => [k, v.para])), fonte, hoje)
-    setEstado(CHAVE_PEND, JSON.stringify({ em: agora(), fonte, pendencias }))
+    setEstado(CHAVE_PEND, JSON.stringify({ em: agora(), fonte, pendencias: [...pendencias, ...pendenciasImportacao().pendencias.filter(p => p.motivo === PENDENCIA_PRODUTO)] }))   // a importação não apaga as de produto
   })()
   return { ...resumo, aplicado: true, itens: casados, lista_pendencias: pendencias }
 }
 
 export const pendenciasImportacao = () => parseJson(getEstado(CHAVE_PEND), { em: '', fonte: '', pendencias: [] })
+// produto_nao_mapeado (tier fora de config/produtos.json): pendência interna de cadastro (dono CS), mesma chave da importação — troca só as de produto,
+// preserva as da planilha. Nunca vai para config/dependencias-cliente.json (catálogo do que só o cliente faz). clientes = equipe.carregarClientes()
+export function registrarPendenciasProduto(clientes) {
+  const atual = pendenciasImportacao(), novas = pendenciasProduto(clientes)
+  setEstado(CHAVE_PEND, JSON.stringify({ ...atual, pendencias: [...atual.pendencias.filter(p => p.motivo !== PENDENCIA_PRODUTO), ...novas] }))
+  return novas.length
+}

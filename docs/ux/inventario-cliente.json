@@ -310,6 +310,7 @@
     "Ficha: nada numérico; Perfil: regras em vigor (densidade, provas, tom, linguagem)"
   ],
   "hooks_js": [
+    "#cadProduto (li da ficha em Configurar › Cadastro do cliente, 21/10/2026: «Produto: Place Performance (Plano Performance)» de GET /api/cliente/cadastro → central.produto; tier fora de config/produtos.json = «—» + selo «produto não mapeado»; botão (i) data-ajuda=\"produto_contratado\")",
     "#progresso (F4 dos 5 menus, 21/10/2026; <ol class=\"passos passos-estatico\"> entre #kpis e nav.abas, redesenhado a cada desenhar(), fora de VIVOS) → progresso.js: window.PSProgresso.montar($('progresso'), { cliente }) → GET /api/cliente/progresso?cliente= (src/rotas-progresso.js sobre src/lib/progresso-cliente.js puro + progresso-real.js) → 10 <li data-etapa> com classe de estado feito|atual|pendente|atrasado|desligado|aguardando, link para a tela que resolve (?aba=&sec=), .num (número que prova, neutro), .atraso («há N d · limiar X»), (i) por dataset.ajuda (nunca data-ajuda dinâmico); o resultado muda o #btnRevisar (textContent, title, onclick = 1ª etapa atrasada, senão 1ª pendente; etapa 6 mantém Revisar plano; único primário) e preenche #prontoOperar",
     "#prontoOperar (p.pronto-operar, 1º filho do painel Configurar: «Pronto para operar: N de 8» = etapas 1–4 do progresso; innerHTML depois do GET /api/cliente/progresso)",
     "progresso.js (carrega depois de /filtros.js e antes de ficha.js; compartilhado com index.html e estrutura.html)",

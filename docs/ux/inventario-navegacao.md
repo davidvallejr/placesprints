@@ -37,3 +37,4 @@ Os destinos interinos de Empresa do cliente (Raio-X, Custos, Nota fiscal por `?s
 ## 4. O que ainda não existe (fases seguintes do doc dos 5 menus)
 
 F4 stepper · F5 `/fila` (botão Hoje) · F6 reagrupar as abas do `/cliente` (aba `empresa`; os `?sec=` interinos trocam) · F7 mudanças de casa fora do `/cliente` (`#secSaudeSistema`, `#secConfig`, Comunicação de `/planos` para `/estrutura`). Feitas: F0 nomes · F1 shell · F2 Quem sou + (i) · F3 `/estrutura`.
+- **Produto (21/10/2026):** `select#psProduto` («Todos · Performance · Prime») no começo de `.ps-util`, lembrado em `localStorage.ps_produto`; quando ≠ Todos acrescenta `?f=` (produto é igual a X) só nos links de `/` e `/resultados`, cujos painéis de filtro já leem `?f=` e têm o campo produto. Nenhuma API. Desenho: `docs/desenho-place-prime.md` § A.

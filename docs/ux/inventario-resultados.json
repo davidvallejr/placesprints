@@ -141,7 +141,9 @@
   "Classes geradas pelo resultados.js que o CSS precisa estilizar: .secao, .sub (dentro de .secao), .kpis, .kpi, .rotulo, .valor, .detalhe, .aviso-faixa, .vazio-box, .tabela-wrap, table.t, th.n/td.n, .pos, .neg, .mudo, .selo, .selo.neutro",
   "Elementos e classes estáticos estilizados: header, .marca (img + b), .header-links, main, footer, .explica (h4, ul, li)",
   "alerta.js (carregado em todas as telas): cria #psSino, #psPainel, #psToasts e as classes .sino, .ico, .cont, .topo, .mini, .psItem, .psToast, .fechar, .nova, .sucesso, .alerta, .erro (com estilo próprio injetado num <style>; position fixed right/bottom 18px). Também reescreve document.title com o prefixo '(n) '. O redesenho não pode cobrir o canto inferior direito nem depender do <title> fixo.",
-  "Endpoints: GET /api/resultados/padroes e GET /api/resultados/tarefas?grupo=&chave=&f=&pagina= (resultados.js); GET /api/notificacoes?limite=100&desde=… e POST /api/notificacoes/lidas (alerta.js); GET /logo (img da marca, com onerror que esconde)"
+  "Endpoints: GET /api/resultados/padroes e GET /api/resultados/tarefas?grupo=&chave=&f=&pagina= (resultados.js); GET /api/notificacoes?limite=100&desde=… e POST /api/notificacoes/lidas (alerta.js); GET /logo (img da marca, com onerror que esconde)",
+  "#secPorProduto (section.bloco «Por produto», 21/10/2026: Place Performance × Place Prime; botão (i) data-ajuda=\"produto_contratado\")",
+  "#porProduto ($('porProduto'): tabela de 5 colunas Produto · Clientes · Conectados · Resultado medido (n) · ROI sobre d.carteira_produto + d.por_produto de GET /api/resultados/padroes; ausente = «—»; ROI «—» com texto fixo (mensalidade fora do sistema); a 1ª célula abre o drill grupo=produto)"
  ],
  "classes_geradas_por_js": [
   "secao",
@@ -257,6 +259,7 @@
    "Por tipo de tarefa": "merovingio",
    "Por nicho": "merovingio",
    "Por região": "merovingio",
+   "Por produto": "merovingio",
    "Lançamentos e reativações": "merovingio",
    "#secNichoTipo": "merovingio",
    "Histórico por analista": "merovingio",

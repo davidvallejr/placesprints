@@ -1297,6 +1297,7 @@ function desenharCadastro(alvo, cliente, r, msg = null) {
     <h3>Da central (Notion)</h3>
     <ul>
       <li><b>Status:</b> ${esc(c.status || '—')} · <b>Tier:</b> ${esc(c.tier || '—')} · <b>Nicho:</b> ${esc(c.nicho || '—')}</li>
+      <li id="cadProduto"><b>Produto:</b> ${c.produto?.produto ? `${esc(c.produto.nome)} (${esc(c.tier)})` : c.produto ? `— <span class="selo atencao">produto não mapeado</span> <span class="mini">tier «${esc(c.tier || 'vazio')}» fora de config/produtos.json: pendência de cadastro do CS</span>` : '—'} <button class="btn-icone btn-ajuda" type="button" aria-label="Como fazer: Produto do cliente (Performance × Prime)" data-ajuda="produto_contratado"></button></li>
       <li><b>Canais:</b> ${(c.canais || []).map(x => esc(NOME_CANAL[x] || x)).join(', ') || '—'}</li>
       <li><b>Consultores:</b> ${pessoas(c.consultores)}</li>
       <li><b>Líderes:</b> ${pessoas(c.lideres)}</li>

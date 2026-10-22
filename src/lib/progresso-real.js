@@ -88,7 +88,7 @@ export function criarProgressoReal({ relatorios = null } = {}) {
     // escopo = { tipo, clientes, consultor, squad } de equipe.resolverEscopo; no 'total' entram também os Ativos ainda sem quadro (ignorados «sem tarefa sincronizada»):
     // é exatamente a população parada na etapa 1, que o escopo dos planos esconde
     carteira(escopo = {}) {
-      const e = resolverEscopo({ tipo: escopo.tipo || 'total', clientes: escopo.clientes || [], consultor: escopo.consultor || '', squad: escopo.squad || '' })
+      const e = resolverEscopo({ tipo: escopo.tipo || 'total', clientes: escopo.clientes || [], consultor: escopo.consultor || '', squad: escopo.squad || '', produto: escopo.produto || '' })
       if (e.erro) throw Object.assign(new Error(e.erro), { status: 400 })
       const nomes = [...e.clientes]
       if ((escopo.tipo || 'total') === 'total') for (const i of e.ignorados) if (!/^status/.test(i.motivo)) nomes.push(i.cliente)

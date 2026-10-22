@@ -784,6 +784,29 @@
       "doc": "docs/acompanhamento-e-retroalimentacao.md",
       "doc_secao": "",
       "onde": "/cliente?aba=resumo&sec=secAcomp"
+    },
+    "produto_contratado": {
+      "titulo": "Produto do cliente (Place Performance × Place Prime)",
+      "sistema": "arquiteto",
+      "escopo": "por cliente (pelo tier da central do Notion)",
+      "chave": "tier_para_produto em config/produtos.json (lista fechada, decisão do David em 21/10/2026)",
+      "camada": "arquivo config/produtos.json — mudar = reiniciar o servidor na janela combinada; o tier vem do Notion pelo sync da equipe",
+      "desde": "21/10/2026",
+      "motivo": "Produto é uma dimensão (como nicho e região): recorta o que se vê em O que funciona, no Painel executivo e nos escopos de /planos; nunca muda o que o algoritmo vê.",
+      "pre_requisitos": [
+        { "texto": "Tier do cliente preenchido na central do Notion", "verificar": "produto.tier_central" },
+        { "texto": "Tier dentro da lista de config/produtos.json (fora dela = pendência produto_nao_mapeado)", "verificar": "produto.tier_mapeado" }
+      ],
+      "passos": [
+        { "titulo": "Conferir o tier", "texto": "Em Configurar cliente, a linha Produto mostra o produto e o tier lido da central.", "quem": "CS" },
+        { "titulo": "Resolver produto não mapeado", "texto": "Tier fora da lista vira pendência de cadastro (produto_nao_mapeado): corrigir o tier no Notion ou pedir ao David a inclusão do tier no config.", "quem": "CS" },
+        { "titulo": "Sincronizar a equipe", "texto": "Em Distribuir, sincronizar a equipe relê a central e refaz as pendências de produto.", "quem": "líder" },
+        { "titulo": "Ler por produto", "texto": "O que funciona › Por produto e o seletor Todos · Performance · Prime do topo recortam o resultado medido; o ROI fica em branco até a mensalidade entrar no sistema.", "quem": "líder" }
+      ],
+      "concluido_quando": "Nenhum cliente Ativo com pendência produto_nao_mapeado.",
+      "doc": "docs/desenho-place-prime.md",
+      "doc_secao": "A) Produto como dimensão",
+      "onde": "/resultados?sec=secPorProduto"
     }
   }
 }

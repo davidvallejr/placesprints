@@ -19,7 +19,7 @@ export function criarRotasProgresso({ progresso, clienteCanonico }) {
   }))
   r.get('/api/progresso', trata((req, res) => {
     const qq = req.query || {}, clientes = [].concat(qq.cliente || []).map(texto).filter(Boolean)
-    const escopo = { tipo: texto(qq.tipo) || (clientes.length ? 'selecao' : 'total'), consultor: texto(qq.consultor), squad: texto(qq.squad), clientes }
+    const escopo = { tipo: texto(qq.tipo) || (clientes.length ? 'selecao' : 'total'), consultor: texto(qq.consultor), squad: texto(qq.squad), ...(texto(qq.produto) ? { produto: texto(qq.produto) } : {}), clientes }
     res.set('Cache-Control', 'no-store').json(progresso.carteira(escopo))
   }))
   return r

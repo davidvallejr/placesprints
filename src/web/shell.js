@@ -61,12 +61,23 @@
   const quem = el('details', { className: 'ps-quem' }, quemResumo, quemPainel)
   for (const c of [selPapel, inpNome]) c.addEventListener('change', () => { gravarQuem({ papel: selPapel.value, nome: inpNome.value.trim().slice(0, 80) }); pintarQuem() })
   pintarQuem()
+  // Produto (Performance × Prime, docs/desenho-place-prime.md § A): lembrado em localStorage.ps_produto; só acrescenta ?f=<produto> nos links das
+  // telas cujo painel de filtro já lê ?f= E tem o campo produto (FP: rota → painel). Nenhuma API; recorta o que se vê, nunca o que o algoritmo vê.
+  const FP = { '/': 'execucao', '/resultados': 'resultados' }
+  const PRODUTOS = [['', 'Todos'], ['performance', 'Performance'], ['prime', 'Prime']]
+  const lerProduto = () => { let v = ''; try { v = localStorage.getItem('ps_produto') || '' } catch { /* sem armazenamento */ } return PRODUTOS.some(p => p[0] === v) ? v : '' }
+  const b64url = t => btoa(unescape(encodeURIComponent(t))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')   // = filtros.js (serializar {p,a,t})
+  const fProduto = (painel, p) => b64url(JSON.stringify({ p: painel, a: { op: 'E', itens: [{ campo: 'produto', operador: 'igual', valor: p }] }, t: null }))
+  const selProduto = attr(el('select', { id: 'psProduto', name: 'produto', className: 'ps-produto' }, ...PRODUTOS.map(([v, t]) => el('option', { value: v, textContent: t }))), { 'aria-label': 'Produto: Todos, Performance ou Prime (vale para os links do Painel executivo e de O que funciona)' })
+  selProduto.value = lerProduto()
+  selProduto.addEventListener('change', () => { try { localStorage.setItem('ps_produto', selProduto.value) } catch { /* sem armazenamento: só não lembra */ } sync() })
   const lista = attr(el('nav', { className: 'ps-menu-lista' }), { 'aria-label': 'Todas as páginas' })
   for (const [nome, abas] of G) lista.append(el('p', { className: 'ps-menu-grupo', textContent: nome }), ...abas.map(a => link(itens.find(i => i.id === a[0]))))
   const menu = el('details', { className: 'ps-menu' }, el('summary', { className: 'ps-menu-botao', textContent: 'Menu' }), lista)
   const pular = el('a', { className: 'ps-pular', href: '#', textContent: 'Pular para o conteúdo' })
   pular.onclick = e => { const m = document.querySelector('main'); if (m) { e.preventDefault(); m.tabIndex = -1; m.focus() } }
   topo.append(pular, el('div', { className: 'ps-barra' }, marca, grupos, el('div', { className: 'ps-util' }, hoje, quem, busca, slot, menu)))
+  topo.querySelector('.ps-util').prepend(selProduto)   // produto antes de Hoje
 
   // linha 2: submenus do menu ativo + contexto do cliente; reconstruída quando o item ativo muda de menu (ex.: ?aba=produtos → Empresa do cliente)
   const ctx = el('span', { className: 'ps-ctx' })
@@ -85,6 +96,7 @@
     for (const a of document.querySelectorAll('.ps-shell a[data-base], .ps-abas a[data-base]')) {
       const h = new URL(a.dataset.base, location.origin)
       if (CLI.has(h.pathname)) { if (c) h.searchParams.set('cliente', c); else h.searchParams.delete('cliente'); a.href = h.pathname + h.search }
+      if (FP[h.pathname]) { const p = lerProduto(); if (p) h.searchParams.set('f', fProduto(FP[h.pathname], p)); a.href = h.pathname + h.search }
       const cur = a.dataset.item ? (a.dataset.item === at?.id ? 'page' : '') : a.dataset.grupo === at?.grupo ? (grupoDe(at.grupo)[1][0][0] === at.id ? 'page' : 'true') : ''
       if (cur) a.setAttribute('aria-current', cur); else a.removeAttribute('aria-current')
     }

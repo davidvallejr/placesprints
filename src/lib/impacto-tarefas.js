@@ -27,6 +27,7 @@ import { criarVinculos } from './vinculos.js'
 import { historico, precoRealizado } from './preco-historico.js'
 import { familiaDeDemanda } from './processos.js'
 import { nichoDe, ufDe, regiaoDe, SEM_NICHO, SEM_UF } from './dimensoes.js'
+import { chaveProduto, SEM_PRODUTO } from './produto.js'
 import { cruzaFronteira, SEM_PROMOCAO } from './estado-anuncio.js'
 
 const r1 = n => Math.round(n * 10) / 10
@@ -387,6 +388,7 @@ export const CHAVES_GRUPO = {
   tipo: m => m.tipo, analista: m => analistasDe(m.analista),
   nicho: m => m.nicho || SEM_NICHO, regiao: m => m.regiao || SEM_UF, uf: m => m.uf || SEM_UF,
   nicho_tipo: m => m.tipo ? `${m.nicho || SEM_NICHO} · ${m.tipo}` : null,
+  produto: m => m.produto || SEM_PRODUTO,
 }
 export const OUTROS = 'Outros'
 // ponytail: um nicho chamado literalmente "Outros" se misturaria com a linha de soma — não existe na central hoje; renomear OUTROS se aparecer
@@ -402,7 +404,9 @@ export function agruparDimensoes(medidas, minN = cfgAtrib.min_n_padrao) {
     return [...grandes, { ...o, outros: true, grupos: new Set(vP.flatMap(m => [].concat(fn(m)))).size }]
   }
   // nicho × tipo: só os cruzamentos com amostra (o resto não soma numa linha: "outros × outros" não diz nada)
-  return { por_nicho: comOutros('nicho'), por_regiao: comOutros('regiao'), por_nicho_tipo: agrupar(validas, confundidas, CHAVES_GRUPO.nicho_tipo, minN).filter(g => g.n >= minN) }
+  // produto: agrupar direto (nunca comOutros) — produto com amostra pequena aparece «sem amostra» na própria linha, nunca somado em Outros
+  return { por_nicho: comOutros('nicho'), por_regiao: comOutros('regiao'), por_nicho_tipo: agrupar(validas, confundidas, CHAVES_GRUPO.nicho_tipo, minN).filter(g => g.n >= minN),
+    por_produto: agrupar(validas, confundidas, CHAVES_GRUPO.produto, minN) }
 }
 // as medidas (melhorou/piorou/sem efeito, inclusive as confundidas por preço ou estado) de UMA linha das tabelas: a mesma regra de agruparPadroes/agruparDimensoes
 export function medidasDoGrupo(medidas, grupo, chave, minN = cfgAtrib.min_n_padrao) {
@@ -589,7 +593,9 @@ export function analisarCliente(cliente, { hoje = hojeLocal(), params = cfgAtrib
 
 // padrões entre TODOS os clientes conectados
 // nicho (central, curado em config/nichos.json), UF e região (meli_contas.uf) da conta: recortes de /resultados, da retroalimentação e do melhor profissional
-export const dimensoesDe = cliente => { const uf = ufDe(cliente); return { nicho: nichoDe(cliente), uf, regiao: regiaoDe(uf) } }
+// + produto (Performance × Prime, config/produtos.json pelo tier da central): carimbado em toda medida — o recorte nasce aqui, nenhum motor novo
+const tierDe = cliente => db.prepare('SELECT tier FROM clientes_central WHERE cliente = ?').get(cliente)?.tier
+export const dimensoesDe = cliente => { const uf = ufDe(cliente); return { nicho: nichoDe(cliente), uf, regiao: regiaoDe(uf), produto: chaveProduto(tierDe(cliente)) } }
 export function padroesGlobais(opts = {}) {
   const conectados = db.prepare("SELECT DISTINCT cliente FROM meli_serie_item WHERE cliente NOT LIKE '[Comercial] %' AND cliente NOT LIKE '[S90] %'").all().map(r => r.cliente)
   // cada medida já sai com nicho/uf/regiao da conta (quem usa as análises do cache recorta sem nova consulta)

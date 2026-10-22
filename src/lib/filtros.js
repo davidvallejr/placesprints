@@ -5,6 +5,7 @@
 // compilador para predicado em memória. O banco entra só pela fábrica criarFiltrosSalvos(handle) — testável sem data/db.sqlite.
 
 import { ROTULOS as ROTULOS_STATUS } from './status-tarefa.js'   // constantes puras: o núcleo continua sem banco
+import { ROTULO_PRODUTO } from './produto.js'                    // idem (só lê config/produtos.json)
 
 export const OPERADORES = {
   igual: { rotulo: 'é igual a', tipos: ['texto', 'enum', 'numero', 'data', 'bool'], arid: 1 },
@@ -30,7 +31,8 @@ export const ROTULOS = {
   etapas_comercial: { aguardando: 'Aguardando conexão', erro: 'Com erro', conectado: 'Conectado sem dados', pronto: 'Pronto para apresentar', pediu_contato: 'Pediu contato' },
   logistica: { fulfillment: 'Full', cross_docking: 'Coleta (cross docking)', drop_off: 'Postagem (drop off)', xd_drop_off: 'Postagem (cross docking)', self_service: 'Flex', not_specified: 'Não informada' },
   canais: { ML: 'Mercado Livre', SHO: 'Shopee', AMZ: 'Amazon', TTK: 'TikTok Shop' },
-  sim_nao: { 1: 'Sim', 0: 'Não' },                        // campos bool: o chip diz "é igual a Sim", nunca "é igual a 1"
+  sim_nao: { 1: 'Sim', 0: 'Não' },
+  produtos: ROTULO_PRODUTO,                               // Performance × Prime (config/produtos.json) + sem produto mapeado                        // campos bool: o chip diz "é igual a Sim", nunca "é igual a 1"
 }
 export const rotuloValor = (campo, v) => (campo?.opcoes && ROTULOS[campo.opcoes]?.[v]) || String(v)
 
@@ -42,6 +44,7 @@ const CAMPOS_COMUNS = {
   canal: { rotulo: 'Canal / marketplace', tipo: 'enum', opcoes: 'canais' },
   consultor: { rotulo: 'Consultor responsável', tipo: 'enum', opcoes: 'consultores' },
   analista: { rotulo: 'Analista responsável', tipo: 'enum', opcoes: 'analistas' },
+  produto: { rotulo: 'Produto (Performance × Prime)', tipo: 'enum', opcoes: 'produtos' },   // dimensão do tier da central; recorta o que se vê, nunca o que o algoritmo vê
 }
 export const PAINEIS = {
   execucao: {
@@ -50,6 +53,7 @@ export const PAINEIS = {
       cliente: { ...CAMPOS_COMUNS.cliente, coluna: 'cliente' },
       canal: { ...CAMPOS_COMUNS.canal, coluna: 'processo', opcoes: 'processos' },      // no Notion o canal vive em "Processo"
       consultor: { ...CAMPOS_COMUNS.consultor, expande: 'clientes_do_consultor' },      // vira "cliente é um de [clientes do consultor]"
+      produto: { ...CAMPOS_COMUNS.produto, expande: 'clientes_do_produto' },            // idem: "cliente é um de [clientes do produto]"
       analista: { ...CAMPOS_COMUNS.analista, coluna: 'responsavel', opcoes: 'responsaveis' },
       projeto: { rotulo: 'Projeto', tipo: 'enum', coluna: 'projeto', opcoes: 'projetos' },
       sprint: { rotulo: 'Sprint', tipo: 'enum', coluna: 'sprint', opcoes: 'sprints' },
@@ -146,7 +150,7 @@ export const PAINEIS = {
   },
   comercial: { rotulo: 'Comercial', tabela: null, campos: { etapa: { rotulo: 'Etapa', tipo: 'enum', opcoes: 'etapas_comercial' }, origem: { rotulo: 'Origem', tipo: 'texto' }, nome: { rotulo: 'Prospect', tipo: 'texto' } }, datas: { criado_em: { rotulo: 'Cadastro do prospect', curto: 'Cadastro' } }, data_padrao: 'criado_em' },
   resultados: { rotulo: 'O que funciona', tabela: null, campos: { canal: CAMPOS_COMUNS.canal, cliente: CAMPOS_COMUNS.cliente, analista: CAMPOS_COMUNS.analista, tipo: { rotulo: 'Tipo de tarefa', tipo: 'texto' },
-    nicho: { rotulo: 'Nicho do cliente', tipo: 'enum', opcoes: 'nichos' }, uf: { rotulo: 'UF do vendedor (Mercado Livre)', tipo: 'enum', opcoes: 'ufs' }, regiao: { rotulo: 'Região do vendedor', tipo: 'enum', opcoes: 'regioes' } },
+    produto: CAMPOS_COMUNS.produto, nicho: { rotulo: 'Nicho do cliente', tipo: 'enum', opcoes: 'nichos' }, uf: { rotulo: 'UF do vendedor (Mercado Livre)', tipo: 'enum', opcoes: 'ufs' }, regiao: { rotulo: 'Região do vendedor', tipo: 'enum', opcoes: 'regioes' } },
     datas: { data_conclusao: { rotulo: 'Data de conclusão da tarefa', curto: 'Conclusão' } }, data_padrao: 'data_conclusao' },
 }
 

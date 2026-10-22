@@ -37,7 +37,7 @@ await ok('dimensões: nicho e região com n ≥ 5 viram linha; o resto soma em "
   assert.equal(medidasDoGrupo(ms, 'nicho', 'Pet').length, 9); assert.equal(medidasDoGrupo(ms, 'nicho', OUTROS).length, 4); assert.equal(medidasDoGrupo(ms, 'regiao', OUTROS).length, 3)
   assert.equal(medidasDoGrupo(ms, 'nicho_tipo', 'Moda · Otimizar Anúncios').length, 5); assert.equal(medidasDoGrupo(ms, 'uf', SEM_UF).length, 18, 'sem UF gravada: todas as medidas (16 válidas + 2 confundidas)')
   assert.equal(medidasDoGrupo(ms, 'analista', 'Ana').length, 18); assert.equal(medidasDoGrupo([{ ...ms[0], nicho: undefined }], 'nicho', SEM_NICHO).length, 1, 'medida sem nicho anotado = "Sem nicho registrado"')
-  assert.deepEqual(agruparDimensoes([]), { por_nicho: [], por_regiao: [], por_nicho_tipo: [] })
+  assert.deepEqual(agruparDimensoes([]), { por_nicho: [], por_regiao: [], por_nicho_tipo: [], por_produto: [] })   // por_produto: 21/10/2026 (§ 8.7)
 })
 
 const app = express(); app.use(rotasPlanos); app.use(rotasProfissionais)
@@ -53,7 +53,7 @@ try {
   const pad = await get('/api/resultados/padroes')
   await ok('padroes: chaves de sempre na mesma ordem e nicho/região/nicho × tipo NO FIM; grupos trazem "clientes"; só grupos com n ≥ 5 (o resto na linha "Outros")', async () => {
     assert.equal(pad.status, 200)
-    assert.deepEqual(Object.keys(pad.json).slice(-3), ['por_nicho', 'por_regiao', 'por_nicho_tipo'])
+    assert.deepEqual(Object.keys(pad.json).slice(-5), ['por_nicho', 'por_regiao', 'por_nicho_tipo', 'por_produto', 'carteira_produto'])   // produto no fim (21/10/2026, § 8.7)
     for (const k of ['por_tipo', 'por_analista', 'por_nicho', 'por_regiao']) for (const g of pad.json[k]) assert.ok(Number.isInteger(g.clientes) && g.clientes >= 1, k)
     for (const k of ['por_nicho', 'por_regiao']) {
       const outros = pad.json[k].filter(g => g.outros)
@@ -63,7 +63,7 @@ try {
     }
     assert.ok(pad.json.por_nicho_tipo.every(g => g.n >= 5))
     const comF = await get(`/api/resultados/padroes?f=${q(URL_F('resultados', { campo: 'canal', operador: 'igual', valor: 'ML' }))}`)
-    assert.deepEqual(Object.keys(comF.json).slice(-4), ['filtro', 'por_nicho', 'por_regiao', 'por_nicho_tipo'], 'com filtro: depois do filtro, no fim')
+    assert.deepEqual(Object.keys(comF.json).slice(-6), ['filtro', 'por_nicho', 'por_regiao', 'por_nicho_tipo', 'por_produto', 'carteira_produto'], 'com filtro: depois do filtro, no fim')
     assert.deepEqual(comF.json.por_nicho, pad.json.por_nicho, 'canal = ML não muda nada')
     const sho = await get(`/api/resultados/padroes?f=${q(URL_F('resultados', { campo: 'canal', operador: 'igual', valor: 'SHO' }))}`)
     assert.deepEqual([sho.json.por_nicho, sho.json.por_regiao, sho.json.por_nicho_tipo], [[], [], []], 'toda medição é do ML')
