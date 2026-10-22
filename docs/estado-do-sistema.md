@@ -59,7 +59,7 @@ Números conferidos no banco (somente leitura) e na tela Estrutura (`/estrutura`
 | Perguntas e Faturamento do ML | escopos marcados no app em 21/10; **falta reautorizar cada cliente** (União Dog ainda no token de 05/10) | reconectar a conta em Estrutura › Conexões |
 | Medição de resultado (Merovíngio) | 0 medidas gravadas: poucas ações distribuídas e concluídas há mais de 17 dias | distribuir as 66 aprovadas; a medição nasce sozinha |
 | ROI por produto | mensalidade por cliente não está no sistema (`contrato_cliente` vazio) | importar a planilha do CS |
-| Produto não mapeado | 4 clientes: «Assessoria antiga», «Implantação», «Marketplace 10X», «Não informado» | você diz Performance ou Prime |
+| Produto não mapeado | 2 clientes com tier «Não informado» na central | o CS preenche o tier no Notion |
 | Shopee, Amazon, TikTok | sem API: só tarefas do Notion | — |
 | Ads (escrita) e estoque antigo do Full | endpoints do ML nunca verificados | teste supervisionado |
 | Agenda e transcrições do Prime | sem porta no servidor | desenho pronto (`docs/desenho-place-prime.md`) |

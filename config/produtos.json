@@ -17,7 +17,10 @@
     "Place Prime": { "produto": "prime" },
     "Consultor parceiro": { "produto": "prime" },
     "Legacy": { "produto": "prime", "subtipo": "prime_negocio" },
-    "Full": { "produto": "prime", "subtipo": "prime_negocio" }
+    "Full": { "produto": "prime", "subtipo": "prime_negocio" },
+    "Marketplace 10X": { "produto": "prime" },
+    "Assessoria antiga": { "produto": "performance" },
+    "Implantação": { "produto": "performance" }
   },
   "pendencia_quando_fora_da_lista": "produto_nao_mapeado"
 }

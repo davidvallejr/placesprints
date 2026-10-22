@@ -1,5 +1,5 @@
 // Autoteste de «Produto como dimensão» (Place Performance × Place Prime; docs/desenho-place-prime.md § A). Banco em memória, sem rede.
-//  (1) mapa FECHADO: os 9 tiers de config/produtos.json → performance|prime (+ subtipo); tier desconhecido/vazio = produto '' + pendência produto_nao_mapeado;
+//  (1) mapa FECHADO: os 12 tiers de config/produtos.json → performance|prime (+ subtipo); tier desconhecido/vazio = produto '' + pendência produto_nao_mapeado;
 //  (2) pendência vai para cadastro:pendencias (sync_estado), preserva as da importação, nunca para config/dependencias-cliente.json;
 //  (3) recorte isola por produto: dimensoesDe carimba, filtro do painel resultados (predicado) e execucao (expansão), agruparDimensoes.por_produto, drill, resolverEscopo.
 // Rodar: node scripts/teste-produto.mjs
@@ -18,10 +18,10 @@ let n = 0
 const caso = async (nome, fn) => { try { await fn(); n++; console.log('✔', nome) } catch (e) { console.error('✘ FALHOU:', nome); throw e } }
 const RAIZ = new URL('..', import.meta.url).pathname, ler = p => readFileSync(RAIZ + p, 'utf8')
 
-await caso('mapa fechado: os 9 tiers do config caem em performance/prime com subtipo; nada é inferido', () => {
+await caso('mapa fechado: os 12 tiers do config caem em performance/prime com subtipo; nada é inferido', () => {
   const cfg = JSON.parse(ler('config/produtos.json'))
   assert.deepEqual(P.PRODUTOS, ['performance', 'prime'])
-  assert.equal(Object.keys(cfg.tier_para_produto).length, 9)
+  assert.equal(Object.keys(cfg.tier_para_produto).length, 12)
   for (const [tier, m] of Object.entries(cfg.tier_para_produto)) {
     const r = P.produtoDeTier(tier)
     assert.equal(r.produto, m.produto, tier); assert.equal(r.subtipo, m.subtipo || '', tier); assert.equal(r.nome, cfg.produtos[m.produto].nome)
@@ -32,25 +32,25 @@ await caso('mapa fechado: os 9 tiers do config caem em performance/prime com sub
 })
 
 await caso('tier desconhecido, vazio ou só parecido = produto \'\' + pendência produto_nao_mapeado (nunca chute)', () => {
-  for (const t of ['Marketplace 10X', 'Não informado', '', null, undefined, 'plano performance', 'Prime']) {
+  for (const t of ['Tier Inventado', 'Não informado', '', null, undefined, 'plano performance', 'Prime']) {
     const r = P.produtoDeTier(t)
     assert.equal(r.produto, '', String(t)); assert.equal(r.pendencia, 'produto_nao_mapeado', String(t))
   }
-  assert.equal(P.chaveProduto('Implantação'), P.SEM_PRODUTO)
+  assert.equal(P.chaveProduto('Tier Inventado'), P.SEM_PRODUTO)
   assert.ok(!/produto_nao_mapeado/.test(ler('config/dependencias-cliente.json')), 'pendência de cadastro nunca entra no catálogo do cliente')
   assert.ok(!/export (const|function) produtoDe\b/.test(ler('src/lib/produto.js')), 'produtoDe é do grafo de anúncios (duplicacao.js)')
 })
 
 // central de mentira: 2 Performance, 2 Prime (um Legacy), 1 fora da lista
 const ins = db.prepare("INSERT INTO clientes_central (cliente, status_cs, tier, canais_json, consultores_json, lideres_json, atualizado_em) VALUES (?, 'Ativo', ?, '[\"ML\"]', '{}', '{}', 'x')")
-const CENTRAL = [['Alfa', 'Plano Performance'], ['Beta', 'Assessoria Gold'], ['Gama', 'Place Prime'], ['Delta', 'Legacy'], ['Epsilon', 'Marketplace 10X']]
+const CENTRAL = [['Alfa', 'Plano Performance'], ['Beta', 'Assessoria Gold'], ['Gama', 'Place Prime'], ['Delta', 'Legacy'], ['Epsilon', 'Tier Inventado']]
 for (const [c, t] of CENTRAL) ins.run(c, t)
 for (const [c] of CENTRAL) db.prepare("INSERT INTO tarefas (id, cliente, titulo, arquivada, fonte) VALUES (?, ?, 't', 0, 'demo')").run('t-' + c, c)
 
 await caso('carregarClientes ganha produto/subtipo; tier continua', () => {
   const m = Object.fromEntries(carregarClientes().map(c => [c.cliente, c]))
   assert.equal(m.Alfa.produto, 'performance'); assert.equal(m.Delta.produto, 'prime'); assert.equal(m.Delta.subtipo, 'prime_negocio'); assert.equal(m.Epsilon.produto, '')
-  assert.equal(m.Epsilon.tier, 'Marketplace 10X')
+  assert.equal(m.Epsilon.tier, 'Tier Inventado')
   const cart = P.carteiraPorProduto(carregarClientes(), ['Alfa', 'Gama'])
   assert.deepEqual(cart.map(l => [l.produto, l.clientes, l.conectados]), [['performance', 2, 1], ['prime', 2, 1], ['sem_produto', 1, 0]])
 })
@@ -62,7 +62,7 @@ await caso('pendência produto_nao_mapeado vai para cadastro:pendencias e preser
   const p = JSON.parse(getEstado('cadastro:pendencias'))
   assert.equal(p.fonte, 'planilha')
   assert.deepEqual(p.pendencias.map(x => [x.nome, x.motivo]), [['Fulano', 'nao_encontrado'], ['Epsilon', 'produto_nao_mapeado']])
-  assert.equal(p.pendencias[1].tier, 'Marketplace 10X')
+  assert.equal(p.pendencias[1].tier, 'Tier Inventado')
   assert.equal(C.lerCadastro('Alfa').central.produto.nome, 'Place Performance')
   assert.equal(C.lerCadastro('Epsilon').central.produto.produto, '')
 })
