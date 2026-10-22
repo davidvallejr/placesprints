@@ -396,7 +396,10 @@
     "#secMetas (F6; Configurar cliente › Conta, Notion e metas) com #formMetas #mEntregas #mGmv (saíram do Motor; POST /api/cliente/metas com merge das metas já registradas)",
     "#secPrevisao (F6; ex-«Motor de decisão» do Resumo, agora «Previsão do mês» na aba Estratégia, depois de #secRetro; motorHtml(d) sem o formulário de metas)",
     "nota-fiscal.js formulario() (F6): dados fiscais (9 campos, ids nfc_<campo>: cnpj … contador), termo (nfc_rep, nfc_dia), contador do CSV e senha do certificado (nfc_senha, type=password) num dialog.dlg com o campo de nome nfPor e o erro nfErro; o primário mora só no diálogo; nenhum prompt()",
-    "[data-ir-folha] (F6): «ver na Folha do anúncio» agora fica na mesma aba Anúncios (mostrarAba('anuncios') + foco em #secFolha; href ?aba=anuncios&sec=secFolha)"
+    "[data-ir-folha] (F6): «ver na Folha do anúncio» agora fica na mesma aba Anúncios (mostrarAba('anuncios') + foco em #secFolha; href ?aba=anuncios&sec=secFolha)",
+    "#secEncontros #encontros #encTabela #btnEncRegistrar [data-enc] [data-enc-marcar] [data-enc-transcricao] (Place Prime, 22/10/2026; Resumo, logo depois de #secAcomp; seção hidden fora do Prime) → encontros.js: window.PSEncontros.montar({ encontros, trilha, naoExecuta }, cliente) → GET /api/cliente/encontros; diálogos (PSRelatorio.ui) com ids #encData #encTipo #encCons #encGrav #encTreino #encArq #encConsent #encPor #encSaida → POST /api/cliente/encontros/registrar | /api/cliente/encontros/:tarefa_id | /:tarefa_id/transcricao (prévia → confirmar:true)",
+    "#secTrilha #trilha #trilhaTabela [data-passo] [data-puxar] [data-descartar] (Place Prime; topo da aba Plano; hidden fora do Prime) → puxar = POST /api/planos/acoes/status {status:aprovada}; descartar = PSAlinhamentos.descartar; evento ps:acao-status atualiza dados.acoes em cliente.js",
+    "#secNaoExecuta #naoExecuta #naoExecTabela (Place Prime; aba Pelo cliente, depois de #secDoCliente; hidden fora do Prime) → GET /api/cliente/nao-executa"
   ],
   "classes_geradas_por_js": [
     "res-item",
@@ -747,10 +750,13 @@
       "#secChaveiro": "chaveiro",
       "#secSaude": "trinity",
       "#secAcomp": "merovingio",
+      "#secEncontros": "morpheus",
       "#secDependeCliente": "arquiteto",
       "#secAlinhamentos": "arquiteto",
       "#secDoCliente": "arquiteto",
+      "#secNaoExecuta": "arquiteto",
       "#secGatilhos": "morpheus",
+      "#secTrilha": "arquiteto",
       "#secPlanoConta": "arquiteto",
       "#secExecutar": "chaveiro",
       "#secOfertas": "arquiteto",
@@ -871,5 +877,31 @@
       "Calculadora #fAnuncio #resAnuncio": "configurar → fim de anuncios"
     },
     "configurar": "#prontoOperar · Quem é e quem atende (#secFicha) · O que o cliente recebe (#secRelatorio #secPerfil #secPerfilCliente) · Conta, Notion e metas (#secCatalogo #cad-sec #secNotion #secMetas) · Canais do cliente (#secAvisos); a chave «Coletar promoções» continua dentro de desenharPerfil (teste-semanal-rotas.mjs:255)"
+  },
+  "place_prime": {
+    "data": "22/10/2026",
+    "desenho": "docs/desenho-place-prime.md § D (P2 + P3 + parte da P4 + upload da P8)",
+    "modulo": "src/web/encontros.js (window.PSEncontros) + src/lib/encontros.js + src/lib/trilhas.js + src/rotas-encontros.js + config/trilhas.json",
+    "secoes": {
+      "#secEncontros": "resumo (depois de #secAcomp)",
+      "#secTrilha": "plano (topo)",
+      "#secNaoExecuta": "do-cliente (depois de #secDoCliente)"
+    },
+    "visibilidade": "as três seções existem sempre no DOM (VIVOS) e só aparecem quando GET /api/cliente/painel → produto = prime; o Resumo do Performance continua com os 6 blocos da F6",
+    "primario": "nenhum novo: o único primário é o Confirmar dos diálogos (PSRelatorio.ui)",
+    "colunas": {
+      "encTabela": 6,
+      "trilhaTabela": 6,
+      "naoExecTabela": 4
+    },
+    "rotas": [
+      "GET /api/cliente/encontros?cliente=",
+      "POST /api/cliente/encontros/registrar",
+      "POST /api/cliente/encontros/:tarefa_id",
+      "POST /api/cliente/encontros/:tarefa_id/transcricao",
+      "GET /api/cliente/nao-executa?cliente=",
+      "GET /api/agenda?por=&tipo=…",
+      "GET /api/encontros/quem-treina?tipo=…"
+    ]
   }
 }

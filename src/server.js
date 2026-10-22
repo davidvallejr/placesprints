@@ -113,6 +113,14 @@ import { criarRotasEstrutura } from './rotas-estrutura.js'
 import { contextoReal as contextoEstrutura, estruturaReal, equipeReal } from './lib/estrutura-estado-real.js'
 import { criarRotasProgresso } from './rotas-progresso.js'
 import { criarRotasFoco } from './rotas-foco.js'
+import { criarRotasEncontros } from './rotas-encontros.js'
+import { criarEncontros } from './lib/encontros.js'
+import { idAcao } from './lib/plano-cliente.js'
+import { distribuir as distribuirNotion } from './lib/distribuir-notion.js'
+import { redigir } from './lib/ia.js'
+import { resolverEscopo } from './lib/equipe.js'
+import { wilson } from './lib/impacto-tarefas.js'
+import { padroesGlobaisCache } from './lib/calibracao.js'
 import { focoDoCliente } from './lib/foco-real.js'
 import { criarProgressoReal } from './lib/progresso-real.js'
 import { criarRotasFila } from './rotas-fila.js'
@@ -182,6 +190,12 @@ const relatorios = criarRelatorioEnvio({ handle: db, notion: { req: notionReq },
 app.use(criarRotasRelatorio({ relatorios, quem: lideresEConsultores, clienteCanonico: clienteDaCentral }))
 app.use(criarRotasProgresso({ progresso: criarProgressoReal({ relatorios }), clienteCanonico: clienteDaCentral }))   // progresso do processo, 10 etapas (F4): só leitura sobre números que já existem
 app.use(criarRotasFoco({ foco: focoDoCliente, clienteCanonico: clienteDaCentral }))   // Foco 80/20 + atribuição por anúncio (F1): só leitura, GET /api/cliente/foco?cliente=&janela=
+// Encontros da consultoria + jornada Place Prime (docs/desenho-place-prime.md § D): card + sidecar encontro_info; «Registrar encontro» pelo distribuir() de sempre (prévia → confirmar:true);
+// transcrição .txt fora do banco (data/encontros/) com consentimento; agenda = projeção (Google Calendar NÃO ligado ao servidor); o portal do cliente (/c/ Prime) é a fase seguinte
+const encontros = criarEncontros({ handle: db, agora, hoje: hojeLocal, validarPor: validarLiderOuConsultor, idAcao, distribuir: distribuirNotion, redigir, temChaveIA: () => !!env.ANTHROPIC_API_KEY, raiz: ROOT,
+  centralDe: c => { const r = carregarClientes().find(x => x.cliente === c); return r ? { produto: r.produto || '', consultor: r.principal || '', squad: r.squadPrincipal || '', canais: r.canais } : null } })
+app.use(criarRotasEncontros({ encontros, clienteCanonico: clienteDaCentral, escopo: resolverEscopo, wilson,
+  medidas: () => (padroesGlobaisCache().analises || []).flatMap(a => a.medidas.map(m => ({ ...m, cliente: a.cliente }))) }))
 app.use(criarRotasFila({ fila: criarFilaReal({ estrutura: () => estruturaReal({ saude: saudeSis }), progresso: criarProgressoReal({ relatorios }), aba: criarAbaDoClienteReal({ rotulo: c => gatilhos.rotulo(c) }) }) }))   // Hoje (F5): fila do dia por papel, só leitura; cada botão reusa uma rota de escrita que já existia
 app.use(criarRotasCatalogo({ catalogo: criarCatalogo(db, { agora, validarPor: validarLiderOuConsultor, log }), quem: lideresEConsultores, clienteCanonico: clienteDaCentral }))   // catálogo próprio × terceiros (marcação manual; prévia por padrão)
 // alinhamentos: a central também gerencia (lista, encerra, renova) os da conta do Sprint 90 — chave "[S90] …" válida de uma conta existente (nunca entra em clientes_central)

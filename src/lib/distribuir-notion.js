@@ -72,7 +72,7 @@ function blocosDaAcao(a, planoCanal, extra = {}) {
     h3('Por que isso importa'), par(d.problema),
     ...(d.como?.length ? [h3('O que faremos (passo a passo)'), ...d.como.map(p => ({ object: 'block', type: 'to_do', to_do: { checked: false, rich_text: trechos(p) } }))] : [h3('O que faremos'), par(d.acao)]),
     ...(d.hipotese ? [h3('Hipótese a testar'), par(d.hipotese)] : []),
-    h3('Quem e até quando'), par(`Responsável: ${a.responsavel || 'a definir'}${a.squad ? ` · ${a.squad}` : ''} · prazo: ${brData(a.prazo)}${d.dependencia && d.dependencia !== '—' ? ` · depende de: ${d.dependencia}` : ''}`),
+    h3('Quem e até quando'), par(`Responsável: ${d.executor === 'cliente' ? `o cliente${a.responsavel ? ` (consultor que acompanha: ${a.responsavel})` : ''}` : a.responsavel || 'a definir'}${a.squad ? ` · ${a.squad}` : ''} · prazo: ${brData(a.prazo)}${d.dependencia && d.dependencia !== '—' ? ` · depende de: ${d.dependencia}` : ''}`),
     h3('Como saberemos se funcionou'), par(`Indicador inicial: ${d.indicador_inicial} · meta: ${d.meta}`),
     { object: 'block', type: 'to_do', to_do: { checked: false, rich_text: trechos(`Critério de aceite: ${d.criterio_aceite}`) } },
     ...(d.previsao?.cenarios ? [h3('Resultado esperado (hipótese, não promessa)'), par(blocoPrevisao(d.previsao))] : []),
@@ -124,7 +124,7 @@ function blocosDaAcao(a, planoCanal, extra = {}) {
   return blocos
 }
 
-function montarPagina(a, schema, pm, atribuir, extra = {}) {
+export function montarPagina(a, schema, pm, atribuir, extra = {}) {   // exportada só para o autoteste da trilha Prime (card do cliente sem people)
   const d = a.dados, avisos = []
   // o ID estável vai no título: é a única coluna que todo quadro tem (30% dos quadros não têm coluna de texto) e é onde o dedupe consulta
   const properties = { [pm.titulo]: { title: [{ type: 'text', text: { content: `${a.titulo.slice(0, 170)} · ${a.id}` } }] } }
@@ -156,7 +156,9 @@ function montarPagina(a, schema, pm, atribuir, extra = {}) {
       if (r.recomendado && ficha.ehAtivo(r.recomendado.nome)) melhor = { nome: r.recomendado.nome, notion: ficha.notionDoPrestador(r.recomendado.nome), origem: `melhor desempenho medido nesta tarefa (${r.recomendado.motivo})` }
     } catch { /* sem medição disponível: segue o critério por volume */ }
   }
-  const exec = delegado || (daFicha ? { nome: daFicha.nome, notion: daFicha.notion, origem: 'ficha do cliente' } : null) || melhor
+  // Place Prime (passo da trilha / combinado do lado do cliente): quem executa é o CLIENTE — card sem people, consultor citado na descrição
+  const doCliente = d.executor === 'cliente'
+  const exec = doCliente ? null : delegado || (daFicha ? { nome: daFicha.nome, notion: daFicha.notion, origem: 'ficha do cliente' } : null) || melhor
     || (analista ? { nome: analista.nome_notion, notion: analista.notion_id ? { id: analista.notion_id } : (idDoUsuario(analista.nome_notion) ? { id: idDoUsuario(analista.nome_notion) } : null), origem: 'analista da conta' } : null)
     || (a.responsavel ? { nome: a.responsavel, notion: idDoUsuario(a.responsavel) ? { id: idDoUsuario(a.responsavel) } : null, origem: 'consultor do canal' } : null)
   const nomeExec = exec?.nome || ''
@@ -165,9 +167,9 @@ function montarPagina(a, schema, pm, atribuir, extra = {}) {
   const cons = precisaConsultor ? ficha.prestadorDaFicha(a.cliente, canalK, 'consultor') : null
   const pessoas = [...new Set([respId, atribuir ? cons?.notion?.id : null].filter(Boolean))]
   if (pm.resp && pessoas.length) properties[pm.resp.nome] = { people: pessoas.map(id => ({ id })) }
-  else if (atribuir) avisos.push(nomeExec ? `Responsável "${nomeExec}" sem usuário Notion identificado — citado na descrição` : 'Responsável a definir')
+  else if (atribuir && !doCliente) avisos.push(nomeExec ? `Responsável "${nomeExec}" sem usuário Notion identificado — citado na descrição` : 'Responsável a definir')
   if (atribuir && cons && !cons.notion) avisos.push(`Consultor "${cons.nome}" sem usuário Notion identificado — citado na descrição`)
-  const notaResp = [
+  const notaResp = doCliente ? ` — Responsável: o cliente${a.responsavel ? ` · consultor que acompanha: ${a.responsavel}` : ''}` : [
     respId || !nomeExec ? '' : ` — Responsável proposto: ${nomeExec}`,
     nomeExec ? ` — Delegada a ${nomeExec} (${exec.origem})` : '',
     cons ? ` — Consultor da tarefa: ${cons.nome}` : (a.responsavel && normNome(a.responsavel) !== normNome(nomeExec) ? ` — Consultor: ${a.responsavel}` : ''),

@@ -26,7 +26,7 @@ const PAGINAS = [
   ['estrutura.html', 'estrutura', 'estrutura.js', 'estrutura'],   // 12ª tela (F3, 21/10/2026): Estrutura › Estruturas e Equipe
   ['fila.html', 'fila', 'fila.js', 'fila'],                       // 13ª tela (F5, 21/10/2026): Hoje — a fila do dia por papel
 ]
-const COMPARTILHADOS = ['src/web/ficha.js', 'src/web/acomp.js', 'src/web/relatorio.js', 'src/web/pendencias.js', 'src/web/alertas.js', 'src/web/gatilhos.js', 'src/web/alinhamentos.js', 'src/web/dossie.js', 'src/web/perfil-informacao.js', 'src/web/galeria-anuncio.js', 'src/web/produtos.js', 'src/web/executar.js', 'src/web/relatorios-ciclo.js', 'src/web/custos-upload.js', 'src/web/alerta.js', 'src/web/shell.js', 'src/web/ajuda.js', 'src/web/progresso.js'].map(ler).join('\n')
+const COMPARTILHADOS = ['src/web/ficha.js', 'src/web/acomp.js', 'src/web/relatorio.js', 'src/web/pendencias.js', 'src/web/alertas.js', 'src/web/gatilhos.js', 'src/web/alinhamentos.js', 'src/web/dossie.js', 'src/web/perfil-informacao.js', 'src/web/galeria-anuncio.js', 'src/web/produtos.js', 'src/web/executar.js', 'src/web/relatorios-ciclo.js', 'src/web/custos-upload.js', 'src/web/alerta.js', 'src/web/shell.js', 'src/web/ajuda.js', 'src/web/encontros.js', 'src/web/progresso.js'].map(ler).join('\n')
 
 // ═════════ (1) esqueleto do shell nas 11 páginas ═════════════════════════════════════════════════════
 caso('shell: as 11 páginas têm data-pagina, placeholder + /shell.js, /ui.css, /alerta.js defer e nenhum CSS/header antigo', () => {
