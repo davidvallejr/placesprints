@@ -1,0 +1,23 @@
+/* Comunicação (/comunicacao): só o que o ui.css não tem. Toda cor vem de var(--token). */
+#comFaixa,#comEstados,#comModo{margin-bottom:var(--e-2)}
+.com-sub{display:block;font-size:var(--t-12);color:var(--cinza)}
+.com-est{display:inline-flex;gap:3px;vertical-align:middle;margin-right:var(--e-2)}
+.com-est i{display:inline-block;width:9px;height:9px;border-radius:50%;border:1px solid var(--borda-forte);background:var(--superficie)}
+.com-est i.feito{background:var(--verde);border-color:var(--verde)}
+.com-est i.barrado{background:var(--verm);border-color:var(--verm)}
+.com-est i.na{border-style:dashed;opacity:.5}
+.com-cli{border:1px solid var(--borda);border-radius:var(--raio);background:var(--superficie);margin-bottom:var(--e-2)}
+.com-cli>summary{display:flex;flex-wrap:wrap;gap:var(--e-2);align-items:baseline;padding:var(--e-3) var(--e-4);cursor:pointer;list-style:none}
+.com-cli>summary b{font-weight:600}
+.com-cli[open]>summary{border-bottom:1px solid var(--borda)}
+.com-msg{padding:var(--e-3) var(--e-4);border-bottom:1px solid var(--borda)}
+.com-msg:last-child{border-bottom:0}
+.com-msg h3{margin:0 0 var(--e-1);font:600 var(--t-14)/1.3 var(--fonte)}
+.com-passos{display:flex;flex-wrap:wrap;gap:var(--e-1) var(--e-3);margin:var(--e-1) 0;padding:0;list-style:none;font-size:var(--t-12);color:var(--cinza)}
+.com-passos li.feito{color:var(--tinta)}
+.com-passos li.barrado{color:var(--verm);font-weight:600}
+.com-passos li.na{opacity:.6}
+.com-falta{margin:var(--e-1) 0 0;font-size:var(--t-13)}
+.com-previa{margin:var(--e-1) 0 0;font-size:var(--t-12);color:var(--cinza);max-width:var(--largura-texto)}
+.com-acoes{display:flex;gap:var(--e-2);align-items:center;flex-wrap:wrap;margin-top:var(--e-2)}
+@media (max-width:639px){table.t.empilha{min-width:0}}

@@ -1,0 +1,49 @@
+{
+ "id": "comunicacao",
+ "pergunta": "O que está saindo (ou deveria sair) ao cliente e ao time, em que estágio cada mensagem está, o que falta para sair — e os interruptores de envio estão de acordo entre banco e arquivo?",
+ "usuarios": [
+  "Dono (David): vê no topo o estado real de cada interruptor (banco × arquivo) e os conflitos, antes de decidir a seção 9 do desenho",
+  "Líder: vê quem espera liberação, o que falhou e por quê; libera ou reenvia com prévia pelas rotas que já existem",
+  "Consultor/CS: acompanha a faixa Time (avisos só para a equipe, resumo de terça no Discord, incidentes, ordens do Chaveiro)"
+ ],
+ "acao_principal": "Preparar lote (prévia) — #btnComPreparar → POST /api/gatilhos/preparar-lote { por, confirmar:false }. Nunca confirma: para gravar, Planos › Avisos automáticos.",
+ "acoes_secundarias": [
+  "Reler agora (#btnComAtualizar → GET /api/comunicacao/fila); sem atualização automática (decisão 9 do desenho)",
+  "Faixa Cliente/Time (#comFaixa .f-chip[data-faixa]); estado (#comEstados .f-chip[data-e]: aguardando, processando, falhou, prontos, todos, historico); modo (#comModo .f-chip[data-modo]: lote, assistida)",
+  "Ação por item ([data-acao] → item.acao do servidor): Liberar cliente (POST /api/gatilhos/liberar, confirmação), Liberar relatório (POST /api/relatorio/liberar, prévia → confirmar), Reenviar (POST /api/relatorio/enviar | /api/alertas/enviar | /api/gatilhos/enviar, prévia → confirmar com previa_id/hash)",
+  "Onde não há rota de escrita (consultor_aviso, exec_ordem, incidente, aviso só para a equipe), o «Falta» diz o que fazer em texto"
+ ],
+ "secoes": [
+  { "titulo": "Cabeçalho", "conteudo": "h1 Comunicação; meta com «atualizado às HH:MM» (#comLido) e a frase «só leitura: nada sai sem prévia e confirmação»; Reler agora e o único primário Preparar lote (prévia).", "ids_container": ["comLido", "btnComAtualizar", "btnComPreparar"], "importancia": "alta" },
+  { "titulo": "Interruptores: banco × arquivo (Gate, § 0)", "conteudo": "Tabela de 5 colunas (Interruptor · Banco · Arquivo · Efeito hoje · Situação): gatilhos_ligado, urgente.na_hora_ligado, relatorio_agendador, alerta_auto, consultor_discord_ligado, consultor.urgente_ligado, dossie_mensal_ligado, whatsapp_critico_ligado. «Conflito» quando banco e arquivo existem e divergem; só mostra.", "ids_container": ["secGate", "tbGate"], "importancia": "alta" },
+  { "titulo": "Prévia do lote", "conteudo": "Linha de status com o resultado da prévia de preparar-lote (liberaria N · sem grupo do ML · sem integração · não lidos).", "ids_container": ["comPrevia"], "importancia": "media" },
+  { "titulo": "Fila da comunicação", "conteudo": "Chips de faixa (contagem na fila), de estado (contadores do servidor) e de modo. Lote: tabela de 6 colunas (Cliente · Mensagem · Estágio · Estado · Espera desde · Próxima ação), 6 pontos por estágio. Assistida: um details por cliente com os estágios, motivo, «Falta», prévia do texto ao cliente e a ação. Histórico = enviado, pausado e não elegível dos últimos 30 dias.", "ids_container": ["secFila", "comFaixa", "comEstados", "comModo", "comCorpo", "comNota"], "importancia": "alta" }
+ ],
+ "kpis": [],
+ "hooks_js": [
+  "#comLido (textContent: «atualizado às HH:MM» de lido_em)",
+  "#btnComAtualizar (onclick → carregar)",
+  "#btnComPreparar (onclick → preparar: pedirPor → POST /api/gatilhos/preparar-lote confirmar:false)",
+  "#secGate / #tbGate (innerHTML das linhas do gate; tr[data-id])",
+  "#comPrevia (textContent; hidden até a 1ª prévia)",
+  "#secFila (seção da fila)",
+  "#comFaixa (.f-chip[data-faixa] cliente | time; .n = contadores.todos)",
+  "#comEstados (.f-chip[data-e]; .n = contadores do servidor)",
+  "#comModo (.f-chip[data-modo] lote | assistida)",
+  "#comCorpo (innerHTML: tabela do modo Lote ou details.com-cli do modo Assistida; delegação em [data-acao]; [data-denovo] no erro; aria-busy)",
+  "#comNota (textContent: N itens · na fila por faixa · não lidas)",
+  "[data-acao] (botão do item; a rota e o corpo vêm de item.acao do servidor; nome por PSRelatorio.ui.pedirPor)",
+  "relatorio.js (carregado antes de comunicacao.js só pelo PSRelatorio.ui.pedirPor)"
+ ],
+ "classes_geradas_por_js": ["selo (azul | atencao | bom | ruim | neutro)", "com-sub", "com-est (i.feito | i.falta | i.barrado | i.na)", "com-cli", "com-msg", "com-passos (li.feito | li.falta | li.barrado | li.na)", "com-falta", "com-previa", "com-acoes", "btn btn-p", "vazio-box", "erro-bloco", "tabela-wrap", "t empilha"],
+ "css_origem": "ui.css + src/web/tela-comunicacao.css (só tokens).",
+ "links_navegacao": ["Execução › Comunicação → /comunicacao", "A configuração (canais, interruptores) segue em Estrutura › Comunicação (/planos?sec=secAvisosAuto) e Estrutura › Estruturas (/estrutura)"],
+ "dependencias_externas": ["GET /api/comunicacao/fila (src/rotas-comunicacao.js → src/lib/comunicacao-fila-real.js → src/lib/comunicacao-fila.js puro)", "POST que já existiam: /api/gatilhos/preparar-lote, /api/gatilhos/liberar, /api/gatilhos/enviar, /api/relatorio/liberar, /api/relatorio/enviar, /api/alertas/enviar", "/alerta.js, /ajuda.js, relatorio.js (ui.pedirPor), shell.js (PS.toast, PS.confirmar)"],
+ "testes_que_leem_esta_tela": [
+  "scripts/teste-comunicacao.mjs — mapeamento § 1.4 por fonte, estados e estágios fechados, faixa Cliente sem campo interno nem item interno, prospect fora, gate com conflito, ação só em rota POST existente, rota 400/faixa, HTML/JS sem hex/emoji, 1 .btn-primario, ≤ 6 <th>, rota e item do shell",
+  "scripts/teste-shell-ui.mjs — PAGINAS inclui ['comunicacao.html', 'comunicacao', 'comunicacao.js', 'comunicacao']"
+ ],
+ "problemas_ux": ["Enviado ainda é o recibo que cada tabela grava; «sem recibo no prazo» vira Falhou só depois da decisão 8", "Pontos pendentes sem motivo gravado mostram «o motivo da espera ainda não é gravado» (F2)", "Sem Pausar/Retomar nem «Marcar feito»: não há rota (F4)"],
+ "estados": ["Carregando: skeleton (aria-busy)", "Erro: .erro-bloco com Tentar de novo e «leitura falhou» no cabeçalho", "Vazio por filtro: .vazio-box", "Item: processando | aguardando | prontos | enviado | falhou | pausado | nao_elegivel"],
+ "recomendacao": "Depois das decisões da § 9: F2 (motivo_espera, tentar_apos), F4 (pausar/retomar/feito), F5 («Enviar prontos (N)» com prévia), F6 (recibo honesto)."
+}

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Comunicação · Place Sprints</title>
+<link rel="stylesheet" href="/ui.css">
+<link rel="stylesheet" href="/tela-comunicacao.css">
+</head>
+<body data-pagina="comunicacao">
+<header class="ps-shell" id="psShell"></header>
+<script src="/shell.js"></script>
+<main class="pg">
+  <div class="pg-cab">
+    <div class="pg-titulo">
+      <h1>Comunicação</h1>
+      <p class="pg-meta"><span id="comLido">lendo…</span><span>só leitura: nada sai por esta tela sem prévia e confirmação</span></p>
+    </div>
+    <div class="pg-acoes">
+      <button class="btn" type="button" id="btnComAtualizar">Reler agora</button>
+      <button class="btn btn-primario" type="button" id="btnComPreparar">Preparar lote (prévia)</button>
+    </div>
+  </div>
+
+  <section class="bloco" id="secGate">
+    <div class="bloco-cab"><h2>Interruptores: banco × arquivo</h2><span class="sis" data-sistema="morpheus" title="Sistema de origem: Morpheus">Morpheus</span><small class="sis-papel">· comunicação</small></div>
+    <p class="sub">Estado real de cada interruptor de envio. Hoje a chave gravada no banco vence o padrão do arquivo; quando os dois divergem aparece «conflito». Só mostra: esta tela não liga nem desliga nada (decisão 1 do desenho, ainda com o David).</p>
+    <div class="tabela-wrap"><table class="t empilha">
+      <thead><tr><th>Interruptor</th><th>Banco</th><th>Arquivo</th><th>Efeito hoje</th><th>Situação</th></tr></thead>
+      <tbody id="tbGate"><tr><td colspan="5"><div class="sk-tabela"></div></td></tr></tbody>
+    </table></div>
+  </section>
+
+  <p class="aviso info" id="comPrevia" role="status" aria-live="polite" hidden></p>
+
+  <section class="bloco" id="secFila">
+    <div class="bloco-cab"><h2>Fila da comunicação</h2></div>
+    <p class="sub">Cada mensagem com os 6 estágios (Capturado → Redigido → Auditado → Liberado → Enviado → Recibo), o estado e o que falta para sair. Cliente e Time vêm separados do servidor. Enviado, pausado e não elegível ficam no Histórico (últimos 30 dias).</p>
+    <div class="filtros" id="comFaixa" role="group" aria-label="Faixa">
+      <button class="f-chip on" type="button" data-faixa="cliente" aria-pressed="true">Cliente <span class="n"></span></button>
+      <button class="f-chip" type="button" data-faixa="time" aria-pressed="false">Time <span class="n"></span></button>
+    </div>
+    <div class="filtros" id="comEstados" role="group" aria-label="Estado">
+      <button class="f-chip on" type="button" data-e="aguardando" aria-pressed="true">Aguardando você <span class="n"></span></button>
+      <button class="f-chip" type="button" data-e="processando" aria-pressed="false">Processando <span class="n"></span></button>
+      <button class="f-chip" type="button" data-e="falhou" aria-pressed="false">Falhou <span class="n"></span></button>
+      <button class="f-chip" type="button" data-e="prontos" aria-pressed="false">Prontos <span class="n"></span></button>
+      <button class="f-chip" type="button" data-e="todos" aria-pressed="false">Todos na fila <span class="n"></span></button>
+      <button class="f-chip" type="button" data-e="historico" aria-pressed="false">Histórico <span class="n"></span></button>
+    </div>
+    <div class="filtros" id="comModo" role="group" aria-label="Modo">
+      <button class="f-chip on" type="button" data-modo="lote" aria-pressed="true">Lote</button>
+      <button class="f-chip" type="button" data-modo="assistida" aria-pressed="false">Assistida</button>
+    </div>
+    <div id="comCorpo" aria-busy="true"><div class="sk-tabela"></div></div>
+    <p class="mini" id="comNota" role="status" aria-live="polite"></p>
+  </section>
+</main>
+<footer class="pg-rodape">Fonte: gatilho_lote, gatilho_cliente, relatorio_envio, relatorio_programacao, alerta_cliente, consultor_aviso, exec_ordem, incidente (recibos inclusos), sync_estado e config/*.json carregados · GET /api/comunicacao/fila · só leitura</footer>
+<script src="relatorio.js"></script>
+<script src="comunicacao.js"></script>
+<script src="/alerta.js" defer></script>
+<script src="/ajuda.js" defer></script>
+</body>
+</html>

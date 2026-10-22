@@ -110,6 +110,8 @@ import { criarSaudeSistema } from './lib/saude-sistema-real.js'
 import { criarRotasSaudeSistema } from './rotas-saude-sistema.js'
 import { criarRotasAjuda } from './rotas-ajuda.js'
 import { criarRotasEstrutura } from './rotas-estrutura.js'
+import { criarRotasComunicacao } from './rotas-comunicacao.js'
+import { filaReal as filaComunicacao } from './lib/comunicacao-fila-real.js'
 import { contextoReal as contextoEstrutura, estruturaReal, equipeReal } from './lib/estrutura-estado-real.js'
 import { criarRotasProgresso } from './rotas-progresso.js'
 import { criarRotasFoco } from './rotas-foco.js'
@@ -166,6 +168,7 @@ const saudeSis = criarSaudeSistema({ handle: db, getEstado, agora, log, notifica
 app.use(criarRotasSaudeSistema({ saude: saudeSis }))
 app.use(criarRotasAjuda({ contexto: () => contextoEstrutura({ saude: saudeSis }) }))   // ícone (i) «Como fazer»: texto de config/ajuda.json + estado real (F3)
 app.use(criarRotasEstrutura({ estrutura: () => estruturaReal({ saude: saudeSis }), equipe: equipeReal }))   // tela de Estruturas (F3): só leitura; Ligar/Desligar reusa as rotas de banco que já existem
+app.use(criarRotasComunicacao({ fila: () => filaComunicacao() }))   // Execução › Comunicação (F1 + tela, só leitura): fila em esteira das tabelas que já existem + interruptores banco × arquivo; nenhuma rota de escrita
 app.use(rotasSaude)       // GET /api/cliente/saude + POST /api/cliente/saude/atualizar (saúde da conta gravada: reputação, perguntas, reclamações, atrasos, Full; só leitura no ML)
 // encerramento por dependência do cliente (prévia por padrão; confirmar:true grava "Aguardando Devolutiva do Cliente" no Notion + registro local)
 const dependencias = criarDependencias({ handle: db, notion: { req: notionReq }, agora, hoje: hojeLocal, validarPor: validarLiderOuConsultor, mapeamento,
@@ -389,6 +392,7 @@ app.get('/promocoes', (req, res) => res.sendFile(join(ROOT, 'src', 'web', 'promo
 app.get('/resultados', (req, res) => res.sendFile(join(ROOT, 'src', 'web', 'resultados.html'))) // o que melhor funciona (padrões de tarefas)
 app.get('/estrutura', (req, res) => res.sendFile(join(ROOT, 'src', 'web', 'estrutura.html'))) // Estrutura › Estruturas e Equipe: estado real de cada chave (F3)
 app.get('/fila', (req, res) => res.sendFile(join(ROOT, 'src', 'web', 'fila.html')))           // Hoje: a fila do dia por papel, ≤ 5 blocos, 1 botão por item (F5)
+app.get('/comunicacao', (req, res) => res.sendFile(join(ROOT, 'src', 'web', 'comunicacao.html')))   // Execução › Comunicação: fila em esteira (docs/desenho-comunicacao-esteira.md), só leitura
 
 // ── webhook do Notion (sincronização por evento; agendada segue como reforço)
 let timerWebhook = null
