@@ -579,6 +579,9 @@ setInterval(async () => {
   if (h < 4 || coletandoML) return
   const { hojeLocal, setEstado } = await import('./lib/db.js')
   if (getEstado('coleta_ml_dia') === hojeLocal()) return
+  // ponytail (23/10): coleta que falhou em TODAS as contas (internet caiu) não fecha o dia — tenta de novo a cada 30 min até 3×
+  const falhou = String(getEstado('coleta_ml_falhou') || '').split('|')
+  if (falhou[0] === hojeLocal() && (Number(falhou[2]) >= 3 || Date.now() - Date.parse(falhou[1] || 0) < 30 * 60_000)) return
   coletandoML = true
   try {
     // ponytail (13/10): leitura incremental do Notion (SÓ LEITURA) antes da coleta — sem ela «o que a equipe fez» do plano de terça sai «sem a leitura» (o último sync manual era de 09/10)
@@ -591,7 +594,9 @@ setInterval(async () => {
     try { const v = alinhamentosReal().vencer(hojeLocal()); if (v.vencidos) logS('arquiteto', 'info', `alinhamentos: ${v.vencidos} vencido(s) para revisão, ${v.reabertas} ação(ões) descartada(s) de volta à fila`) }
     catch (e) { logS('arquiteto', 'erro', `alinhamentos (vencimento diário): ${String(e?.message).slice(0, 160)}`) }
     // listarConexoesColeta: sem conexão em erro e sem conta S90 fora de serviço (cancelada/exclusão agendada: dados só para consulta até o expurgo, nada novo é lido)
+    let okColeta = 0, totalColeta = 0
     for (const c of listarConexoesColeta()) {
+      totalColeta++
       // coleta → fotografias do acompanhamento (antes/24h/48h/72h/1 semana) → plano regerado COM a retroalimentação do Merovíngio
       try {
         await coletarCliente(c.cliente)
@@ -599,7 +604,7 @@ setInterval(async () => {
         // plano para que, com financeiro.margem_medida_nas_regras ligada, as regras leiam o frete do dia
         const fin = await coletarFinanceiro(c.cliente).catch(e => ({ erro: String(e?.message).slice(0, 160) }))
         logS('smith', fin.erro || fin.linhas?.erro || fin.cancelados?.erro || fin.fretes?.erro ? 'aviso' : 'info', `financeiro por pedido — ${c.cliente}: ${JSON.stringify(fin).slice(0, 300)}`)
-        capturarAcompanhamento(c.cliente); gerarPlanoConta(c.cliente); logS('trinity', 'info', `coleta diária ML ok — ${c.cliente}`)
+        capturarAcompanhamento(c.cliente); gerarPlanoConta(c.cliente); logS('trinity', 'info', `coleta diária ML ok — ${c.cliente}`); okColeta++
       }
       catch (e) { logS('trinity', 'erro', `coleta diária ML (${c.cliente}): ${e.message.slice(0, 160)}`) }   // chave S90 sai só como id: log() mascara (db.js)
       // fotografia completa do anúncio ("Como era": título, descrição, fotos, ficha, preço, frete) — A/B diário, C semanal, só grava quando muda (config/atribuicao.json → snapshot)
@@ -628,6 +633,12 @@ setInterval(async () => {
         catch (e) { logS('trinity', 'erro', `coleta de promoções (madrugada) ${c.cliente}: ${String(e.message).slice(0, 160)}`) }
       }
     } catch (e) { logS('trinity', 'erro', `coleta de promoções (madrugada): ${String(e.message).slice(0, 160)}`) }
+    if (totalColeta > 0 && okColeta === 0) {   // nenhuma conta coletada: não fecha o dia, nem dispara alertas/gatilhos sobre dado velho
+      const f = String(getEstado('coleta_ml_falhou') || '').split('|'), n = f[0] === hojeLocal() ? Number(f[2] || 0) + 1 : 1
+      setEstado('coleta_ml_falhou', `${hojeLocal()}|${new Date().toISOString()}|${n}`)
+      logS('trinity', 'erro', `coleta diária ML: 0 de ${totalColeta} contas coletadas (rede?) — nova tentativa ${n < 3 ? 'em 30 min' : 'só amanhã (3 tentativas)'}`)
+      return
+    }
     setEstado('coleta_ml_em', agora())   // carimbo com hora: a saúde do sistema e o vigia medem a idade da coleta (autogestão)
     setEstado('coleta_ml_dia', hojeLocal())
     Promise.resolve().then(() => alertas.varrer({ origem: 'coleta' })).catch(e => logS('morpheus', 'erro', `varredura de alertas (pós-coleta): ${sanitizarErp(e?.message)}`))   // estoque novo → pendência crítica avisada no ciclo da coleta diária

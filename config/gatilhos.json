@@ -37,7 +37,7 @@
   "retry_min": 5,
   "urgente": {
     "$comentario": "URGENTE NA HORA de ESTOQUE e PREÇO com impacto em R$ (pedido do David, 14/10/2026, com autorização para os grupos do ML): só os tipos de `tipos` saem fora do plano de terça, 1 mensagem por cliente por dia (teto.lotes_imediatos_dia) com até teto.itens_urgente pontos (o resto: «e mais N pontos»), fora do silêncio (item detectado no silêncio sai às 07:00+), a partir de inicio_envios (o plano semanal segue com o inicio_envios da raiz). O mesmo produto não volta antes de repeticao_dias, salvo piora (estoque abaixo da metade da cobertura avisada ou zerado; preço subiu de novo). liberacao_automatica (regra registrada): todo cliente Ativo com integração ML de fato, primeira coleta completa e grupo do ML (…@g.us) recebe SEM liberado_por manual; canal WhatsApp desligado de propósito continua fora; prospect nunca. Impacto em R$ = previsão da regra do plano do item (ou a MESMA fórmula sobre o diagnóstico). na_hora_ligado = true desde 14/10/2026 por decisão do David (prévia conferida em scripts/alerta-impacto.mjs); mudar o valor exige reiniciar o servidor. Sem ruptura_max_dias = sem corte de mensagem: a ruptura é o predicado do Algoritmo (lead-time.emRuptura).",
-    "na_hora_ligado": true,
+    "na_hora_ligado": false,
     "tipos": [
       "ruptura_curva_a",
       "estoque_zerado",
