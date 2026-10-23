@@ -179,7 +179,7 @@ await ok('liberação automática: integração ML + grupo do ML da central (sem
 })
 
 await ok('config real (14/10/2026): urgente.na_hora_ligado = true e piso de R$ 100 (o David ligou depois da prévia); com uma cópia desligada nada sai na hora; montarUrgente sem impacto = texto de antes', async () => {
-  assert.deepEqual([lerConfig().urgente.na_hora_ligado, lerConfig().urgente.impacto_min_reais], [true, 100])
+  assert.deepEqual([lerConfig().urgente.na_hora_ligado, lerConfig().urgente.impacto_min_reais], [false, 100])   // 23/10/2026: o David bloqueou as comunicações automáticas ao cliente
   const off = JSON.parse(JSON.stringify(lerConfig())); off.urgente.na_hora_ligado = false
   const m = mundo({ cfg: validarConfig(off) }); m.tudo('Acme'); m.grupo('Acme'); const t = await m.g.tick(); assert.deepEqual([t.imediatos, m.envios.length], [0, 0])
   const u = montarUrgente({ rotulo: 'Acme', itens: [{ tipo: 'envio_atrasado', texto: '2 pedidos com prazo de despacho vencido.' }] })
