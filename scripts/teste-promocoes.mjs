@@ -406,7 +406,7 @@ const fakeChamar = (variante = {}) => async (cliente, caminho, opts = {}) => {
     const base = [{ id: 'P-1', type: 'SMART', ref_id: `CANDIDATE-${m[1]}`, status: 'candidate', price: 90, original_price: 120, meli_percentage: 5, seller_percentage: 0 },
       { id: 'P-2', type: 'DEAL', status: 'candidate', price: 0, original_price: 120, min_discounted_price: 24, max_discounted_price: 100, start_date: '2026-09-28T00:00:00-03:00', finish_date: '2026-10-13T00:00:00-03:00' },
       { type: 'PRICE_DISCOUNT', status: 'candidate', price: 0, original_price: 120, name: '' }]
-    if (m[1] === 'MLB1' && !variante.semHidden) base.push({ id: 'P-HIDDEN', type: 'SMART', name: 'Wearables Geral Out', status: 'started', price: 95, original_price: 120, meli_percentage: 4, finish_date: '2026-10-30T03:00:00Z' })
+    if (m[1] === 'MLB1' && !variante.semHidden) base.push({ id: 'P-HIDDEN', type: 'SMART', name: 'Wearables Geral Out', status: 'started', price: 95, original_price: 120, meli_percentage: 4, finish_date: '2099-10-30T03:00:00Z' })
     if (m[1] === 'MLB2' && variante.relampago) base.push({ id: 'P-REL', type: 'SMART', ref_id: 'CANDIDATE-REL', status: 'candidate', price: 80, original_price: 120, meli_percentage: 7 })     // sem NOME no item
     if (m[1] === 'MLB2') base.push({ id: 'P-9', type: 'UNHEALTHY_STOCK', status: 'started', price: 100, original_price: 120, meli_percentage: 2, finish_date: '2026-11-01T03:00:00Z' })
     return base
