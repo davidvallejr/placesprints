@@ -39,9 +39,12 @@ export const FECHO_CURTO = 'Conte com a gente! 🤝'   // 14/10: vem logo depois
 export const PERGUNTA_FOCO = '💬 Esse resumo ajuda no seu dia a dia? Responda aqui o que achou ou o que você quer que a gente acompanhe mais de perto.'
 // MICRO-RELATÓRIO DE COMPRAS (pedido do David, 15/10/2026): frases fixas aprovadas (saem do crivo como as outras; «Merovíngio» conta como jargão no gabarito)
 const MICRO_UM = '! Aqui é o *Merovíngio*, da Place2u. Separei os produtos que dependem do próximo pedido de compra e quanto de venda está em jogo se a reposição não acontecer:'
+// abertura «ciclos» (texto do David, 30/10/2026) — escolhida por montarMicroCompras({ abertura: 'ciclos' }); o resto da mensagem é igual
+const MICRO_CICLOS = '! Eu vim te trazer uma mensagem sobre os seus ciclos de compra, uma parte importante para alcançarmos resultados. Separei os produtos que dependem do próximo pedido e quanto de venda está em jogo se a reposição não acontecer:'
+export const ABERTURAS_MICRO = { padrao: MICRO_UM, ciclos: MICRO_CICLOS }
 export const MICRO_RESPOSTA = 'Se o pedido já saiu, responda com a data prevista que ajustamos.'
 const MICRO_GARANTIA = '; não é garantia._'
-const FIXOS = [...ABERTURAS_FOCO, MICRO_UM, MICRO_RESPOSTA, MICRO_GARANTIA, ABERTURA, FECHO, FECHO_CURTO, PERGUNTA_FOCO, URG_FECHO, ASSINATURA, NOTA_COMPRAS, NOTA, IMPACTO_PREMISSA, IMPACTO_CEDO, URG_UM, URG_VARIOS, URG_ABRE]
+const FIXOS = [...ABERTURAS_FOCO, MICRO_UM, MICRO_CICLOS, MICRO_RESPOSTA, MICRO_GARANTIA, ABERTURA, FECHO, FECHO_CURTO, PERGUNTA_FOCO, URG_FECHO, ASSINATURA, NOTA_COMPRAS, NOTA, IMPACTO_PREMISSA, IMPACTO_CEDO, URG_UM, URG_VARIOS, URG_ABRE]
 const LINK_ML = /https:\/\/(?:produto|articulo|www|lista)\.mercadolivre\.com\.br\/[^\s]+/g
 // o MLB no começo da linha do micro-relatório de compras («• MLB123 · …», pedido do David) é o código do anúncio do PRÓPRIO cliente, como o link: só esse formato sai do crivo
 const MLB_MICRO = /^• MLB\d{5,15} · /gm
@@ -601,7 +604,7 @@ export function itensMicroCompras(diag, compras, { limiares: L, ciclo_dias }) {
 // texto curto, uma linha por produto (curva A/B primeiro, maior perda primeiro), até `max` linhas + «e mais N», total no topo, premissa + resposta + assinatura; ≤ maxCaracteres.
 // → { texto, n, resto, total, avisar: [{ id, snap }] } (avisar = os produtos DITOS, para a memória gatilho_avisado) | { texto: '' }
 const brlC = n => 'R$ ' + Number(n).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-export function montarMicroCompras({ rotulo, itens = [], max = 8, maxCaracteres = 2000, folga = 7, tituloOk = () => true }) {
+export function montarMicroCompras({ rotulo, itens = [], max = 8, maxCaracteres = 2000, folga = 7, tituloOk = () => true, abertura = 'padrao' }) {
   const rank = i => ['A', 'B'].includes(i.curva) ? 0 : 1
   const l = itens.filter(i => i && i.id && tituloOk(i.titulo)).sort((a, b) => rank(a) - rank(b) || (b.impacto?.b ?? -1) - (a.impacto?.b ?? -1) || (a.cobertura ?? Infinity) - (b.cobertura ?? Infinity))
   if (!l.length) return { texto: '', n: 0, resto: 0, total: null, avisar: [] }
@@ -611,7 +614,7 @@ export function montarMicroCompras({ rotulo, itens = [], max = 8, maxCaracteres 
     : `pedir ${i.pedir_ate ? `até ${dm(i.pedir_ate)}` : 'agora'} para não faltar`
   const linha = i => `• ${i.id} · ${nome(i.titulo)}${i.sufixo || ''}${i.preco != null ? ` · ${brlC(i.preco)}` : ''}${i.estoque === 0 ? ` · sem estoque${i.full ? ' no Full' : ''}` : i.estoque != null ? ` · estoque ${i.estoque} un${i.full ? ' no Full' : ''}${i.cobertura != null ? ` (${diasTxt(i.cobertura)})` : ''}` : ''} → ${perda(i)}`
   const leads = [...new Set(l.map(i => i.lead))].sort((a, b) => a - b), leadTxt = leads.length > 1 ? `${leads[0]} a ${leads.at(-1)}` : leads[0]
-  const topo = `${URG_ABRE}${rotulo}${MICRO_UM}${total ? `\n\n💰 *Total em jogo:* ${valorAprox(total.c)}${valorAprox(total.c) === valorAprox(total.b) ? '' : ` a ${valorAprox(total.b)}`}${dd.length === 1 ? ` em vendas nos próximos ${dd[0]} dias` : ''}` : ''}`
+  const topo = `${URG_ABRE}${rotulo}${ABERTURAS_MICRO[abertura] || MICRO_UM}${total ? `\n\n💰 *Total em jogo:* ${valorAprox(total.c)}${valorAprox(total.c) === valorAprox(total.b) ? '' : ` a ${valorAprox(total.b)}`}${dd.length === 1 ? ` em vendas nos próximos ${dd[0]} dias` : ''}` : ''}`
   const fim = `_Estimativa pelo ritmo de vendas dos últimos 28 dias e prazo de reposição de ${leadTxt} dias + ${folga} de folga${MICRO_GARANTIA}\n${MICRO_RESPOSTA}\n${ASSINATURA}`
   let n = Math.min(max, l.length), texto
   for (;; n--) {

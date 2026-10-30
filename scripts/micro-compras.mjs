@@ -20,7 +20,7 @@ export const SAIDA_PADRAO = '/private/tmp/claude-501/-Users-davidvallejr/21ae2e6
 export const INTERVALO_MS = 5000
 export function lerArgs(argv) {
   const tem = f => argv.includes(f), val = f => { const i = argv.indexOf(f), v = i >= 0 ? argv[i + 1] || '' : ''; return v.startsWith('--') ? '' : v }
-  if (!tem('--enviar') && !tem('--confirmar') && !tem('--arquivo')) return { modo: 'previa', saida: val('--saida') || SAIDA_PADRAO, ignorar24: tem('--ignorar-24h') }
+  if (!tem('--enviar') && !tem('--confirmar') && !tem('--arquivo')) return { modo: 'previa', saida: val('--saida') || SAIDA_PADRAO, ignorar24: tem('--ignorar-24h'), abertura: val('--abertura') || 'padrao' }
   if (!(tem('--enviar') && tem('--confirmar') && val('--arquivo'))) return { erro: 'o envio exige --enviar --confirmar --arquivo <previa.json> (nada foi enviado)' }
   return { modo: 'enviar', arquivo: val('--arquivo'), por: val('--por') || 'David do Valle' }
 }
@@ -51,13 +51,13 @@ export function avisado24h(avisar, avisados, agoraMs = Date.now()) {
 }
 
 // composer por cliente (fontes injetadas): diagnóstico do DIA + previsão de compras → itens → texto. Memo por cliente (montarLote roda 2–3 vezes no envio)
-export function criarCompor({ diagnostico, compras, rotulo, alg }) {
+export function criarCompor({ diagnostico, compras, rotulo, alg, abertura = 'padrao' }) {
   const memo = new Map()
   return c => {
     if (memo.has(c)) return memo.get(c)
     const diag = diagnostico(c), r = itensMicroCompras(diag, diag?.disponivel ? compras(c, diag) : null, { limiares: alg.limiares, ciclo_dias: alg.compras.ciclo_compra_dias })
     const rot = rotulo(c), tituloOk = t => !auditarTexto(String(t || ''), { permitidos: [c, rot] }).length
-    const m = r.disponivel ? montarMicroCompras({ rotulo: rot, itens: r.itens, folga: alg.limiares.estoque_seguranca_dias, tituloOk }) : { texto: '', motivo: `sem_dados:${r.motivo}` }
+    const m = r.disponivel ? montarMicroCompras({ rotulo: rot, itens: r.itens, folga: alg.limiares.estoque_seguranca_dias, tituloOk, abertura }) : { texto: '', motivo: `sem_dados:${r.motivo}` }
     const out = { ...m, motivo: m.motivo || (m.texto ? '' : 'nada_de_compras'), n_candidatos: r.itens?.length ?? 0 }
     memo.set(c, out); return out
   }
@@ -89,7 +89,7 @@ export function textoPrevia(p) {
   return [cab, ...msgs, pul].filter(Boolean).join('\n\n') + '\n'
 }
 
-async function previa({ saida, ignorar24 }) {
+async function previa({ saida, ignorar24, abertura = 'padrao' }) {
   const { default: Database } = await import('better-sqlite3')
   const { db, hojeLocal } = await import('../src/lib/db.js')
   if (db.name !== ':memory:') throw new Error('abriu o banco real em escrita')
@@ -106,7 +106,7 @@ async function previa({ saida, ignorar24 }) {
   const g = GR.criarGatilhosReal({ envio: null, clienteCanonico: nome => cand.find(c => c === nome) || '' })
   const auto = await g.autoLiberar({ gravar: true })                             // em memória: grupo da central de quem não tinha WhatsApp configurado
   const semGrupo = new Set(auto.sem_grupo), naoLido = new Map(auto.nao_lidos.map(x => [x.cliente, x.motivo]))
-  const compor = criarCompor({ diagnostico: diagnosticarConta, compras: (c, diag) => GR.comprasDoCliente(c, { diag }), rotulo: c => g.rotulo(c), alg: algoritmo })
+  const compor = criarCompor({ diagnostico: diagnosticarConta, compras: (c, diag) => GR.comprasDoCliente(c, { diag }), rotulo: c => g.rotulo(c), alg: algoritmo, abertura })
   const selAvisado = db.prepare("SELECT item_id, snap_json, enviado_em FROM gatilho_avisado WHERE cliente = ? AND familia = 'estoque'")
   const itens = [], data = hojeLocal(), R = lerCfgRelatorio()
   for (const c of [...cand].sort((a, b) => a.localeCompare(b, 'pt-BR'))) {
@@ -130,7 +130,7 @@ async function previa({ saida, ignorar24 }) {
   }
   itens.sort((a, b) => (b.total?.b ?? 0) - (a.total?.b ?? 0))
   const soma = k => itens.reduce((t, x) => t + (x.total?.[k] ?? 0), 0)
-  const p = { gerado_em: new Date().toISOString(), data, hora: new Date().toLocaleTimeString('pt-BR', { timeZone: CFG.fuso_padrao, hour: '2-digit', minute: '2-digit' }), modo: 'previa', ignorar_24h: !!ignorar24,
+  const p = { gerado_em: new Date().toISOString(), data, hora: new Date().toLocaleTimeString('pt-BR', { timeZone: CFG.fuso_padrao, hour: '2-digit', minute: '2-digit' }), modo: 'previa', ignorar_24h: !!ignorar24, abertura,
     total: itens.length ? { c: soma('c'), b: soma('b') } : null, n_itens: itens.reduce((t, x) => t + x.n, 0), itens, pulados }
   mkdirSync(saida, { recursive: true })
   const base = join(saida, `previa-${data}${ignorar24 ? '-ignorar-24h' : ''}`)
@@ -186,7 +186,7 @@ async function enviarArquivo({ arquivo, por }) {
   const selCentral = db.prepare('SELECT status_cs AS status, notificacao_json FROM clientes_central WHERE cliente = ?'), nomes = db.prepare('SELECT cliente FROM clientes_central').all().map(r => r.cliente)
   const selAvisado = db.prepare("SELECT item_id, snap_json, enviado_em FROM gatilho_avisado WHERE cliente = ? AND familia = 'estoque'")
   const g = GR.criarGatilhosReal({ clienteCanonico: nome => nomes.find(c => c === nome) || '' })      // config REAL, envio REAL (n8n)
-  const compor = criarCompor({ diagnostico: diagnosticarConta, compras: (c, diag) => GR.comprasDoCliente(c, { diag }), rotulo: c => g.rotulo(c), alg: algoritmo })
+  const compor = criarCompor({ diagnostico: diagnosticarConta, compras: (c, diag) => GR.comprasDoCliente(c, { diag }), rotulo: c => g.rotulo(c), alg: algoritmo, abertura: previaJson.abertura || 'padrao' })
   const horaOk = c => { const n = g.notificacao(c); return dentroDaJanela(horaNoFuso(Date.now(), n.fuso), { janela: CFG.janela, silencio: n.silencio }) }
   const desfazer = (c, json) => db.prepare('UPDATE clientes_central SET notificacao_json = ? WHERE cliente = ?').run(json, c)
   const r = await enviarItens({ previa: previaJson, hoje: hojeLocal(), g, compor, centralDe: c => selCentral.get(c) || null, horaOk, por, desfazer, avisados: c => selAvisado.all(c) })
