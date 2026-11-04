@@ -1,7 +1,32 @@
 {
-  "$doc": "Modo CLIENTES DE TESTE (pedido do David, 04/11/2026): com ativo=true, a central do Notion e a descoberta de fontes só enxergam os clientes desta lista — o sync não recria os outros. scripts/reduzir-para-teste.mjs usa a mesma lista para apagar o resto (prévia por padrão; --confirmar apaga e liga este modo). Nomes = exatamente como na central (clientes_central.cliente). Desligar = ativo:false (o próximo sync completo volta a trazer todos os ativos da central).",
-  "ativo": false,
+  "$doc": "Modo CLIENTES DE TESTE (pedido do David, 04/11/2026): com ativo=true, a central do Notion e a descoberta de fontes só enxergam os clientes desta lista — o sync não recria os outros. scripts/reduzir-para-teste.mjs usa a mesma lista para apagar o resto (prévia por padrão; --confirmar apaga e liga este modo). Nomes = exatamente como na central (clientes_central.cliente). Desligar = ativo:false (o próximo sync completo volta a trazer todos os ativos da central). ocultar = ids do catálogo de Estruturas (estrutura-estado.js CATALOGO) que somem da tela no modo teste (ficam desligadas; rotas continuam).",
+  "ativo": true,
   "escolhidos_em": "2026-11-04",
   "criterio": "28 d de receita no ML com queda e crescimento, muito histórico (dias de série, anúncios, mudanças, tarefas): Rei das Toalhas (−44 %, 1.074 anúncios), Prisma (+29 %), Moema (maior receita, estável), Photo K (1.101 tarefas), Uniaodog (piloto do Notion, Full, 630 mudanças)",
-  "clientes": ["Rei das Toalhas", "Prisma Indústria e Comércio LTDA", "Moema Comercio", "Photo K", "Uniaodog Artigos Pet"]
+  "clientes": [
+    "Rei das Toalhas",
+    "Prisma Indústria e Comércio LTDA",
+    "Moema Comercio",
+    "Photo K",
+    "Uniaodog Artigos Pet"
+  ],
+  "ligado_em": "2026-11-04T09:51:17.329Z",
+  "ocultar": [
+    "gatilhos",
+    "consultor_discord",
+    "relatorio_agendador",
+    "alerta_auto",
+    "dossie_mensal",
+    "financeiro_regras",
+    "nf",
+    "ciclos_terca",
+    "urgente_na_hora",
+    "sprint90_live",
+    "whatsapp_critico",
+    "n8n",
+    "erp_custos",
+    "sprint90",
+    "discord_time",
+    "enderecos"
+  ]
 }

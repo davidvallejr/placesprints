@@ -115,6 +115,9 @@ import { criarRotasComunicacao } from './rotas-comunicacao.js'
 import { filaReal as filaComunicacao } from './lib/comunicacao-fila-real.js'
 import { contextoReal as contextoEstrutura, estruturaReal, equipeReal } from './lib/estrutura-estado-real.js'
 import { criarRotasProgresso } from './rotas-progresso.js'
+import { criarRotasInicio } from './rotas-inicio.js'
+import { lerClientesTeste } from './lib/clientes-teste.js'
+import { gmvPortfolio } from './lib/gmv.js'
 import { criarRotasFoco } from './rotas-foco.js'
 import { criarRotasEncontros } from './rotas-encontros.js'
 import { criarEncontros } from './lib/encontros.js'
@@ -195,7 +198,8 @@ const relatorios = criarRelatorioEnvio({ handle: db, notion: { req: notionReq },
   // plano B (tarefa no quadro): quem é «Pamela» = usuário do Notion pelo nome (config/equipe.json → usuarios_notion primeiro, depois os colhidos dos quadros)
   usuarios: () => [...Object.entries(equipeCfg.usuarios_notion || {}).filter(([k]) => k !== '$comentario').map(([nome, id]) => ({ id, nome })), ...db.prepare('SELECT id, nome FROM usuarios_notion').all()] })
 app.use(criarRotasRelatorio({ relatorios, quem: lideresEConsultores, clienteCanonico: clienteDaCentral }))
-app.use(criarRotasProgresso({ progresso: criarProgressoReal({ relatorios }), clienteCanonico: clienteDaCentral }))   // progresso do processo, 10 etapas (F4): só leitura sobre números que já existem
+app.use(criarRotasProgresso({ progresso: criarProgressoReal({ relatorios }), clienteCanonico: clienteDaCentral }))
+app.use(criarRotasInicio({ modo: lerClientesTeste, gmv: () => gmvPortfolio({ dias: 28 }).clientes, progresso: criarProgressoReal({ relatorios }), livro: livroExec, hoje: hojeLocal }))   // «Sucesso do cliente» (modo teste): só leitura   // progresso do processo, 10 etapas (F4): só leitura sobre números que já existem
 app.use(criarRotasFoco({ foco: focoDoCliente, clienteCanonico: clienteDaCentral }))   // Foco 80/20 + atribuição por anúncio (F1): só leitura, GET /api/cliente/foco?cliente=&janela=
 // Encontros da consultoria + jornada Place Prime (docs/desenho-place-prime.md § D): card + sidecar encontro_info; «Registrar encontro» pelo distribuir() de sempre (prévia → confirmar:true);
 // transcrição .txt fora do banco (data/encontros/) com consentimento; agenda = projeção (Google Calendar NÃO ligado ao servidor); o portal do cliente (/c/ Prime) é a fase seguinte
@@ -267,6 +271,10 @@ app.use(criarRotasGuardiao({ raioX: c => raioXDoCliente(c).rx, pauta: (c, o) => 
 app.use(criarRotasCadastro({ cadastro: cadastroClientes, quem: lideresEConsultores, clienteCanonico: clienteDaCentral }))
 // Notion do cliente no painel (página, filhos e base Informações; só leitura no Notion; etapa do sync + atualização manual): docs/notion-cliente.md
 app.use(criarRotasNotionCliente({ nc: notionCliente, quem: lideresEConsultores }))
+// modo clientes de teste (config/clientes-teste.json): a página inicial vira «Sucesso do cliente»; o Painel executivo continua em /index.html
+app.get('/', (req, res, next) => (lerClientesTeste().ativo ? res.sendFile(join(ROOT, 'src', 'web', 'inicio.html')) : next()))
+app.get('/inicio', (req, res) => res.sendFile(join(ROOT, 'src', 'web', 'inicio.html')))
+app.get('/shell.js', (req, res) => res.type('application/javascript').set('Cache-Control', 'no-cache').send(`self.PS_MODO_TESTE = ${lerClientesTeste().ativo};\n` + readFileSync(join(ROOT, 'src', 'web', 'shell.js'), 'utf-8')))   // o shell não chama API: o modo vai na 1ª linha
 app.use(express.static(join(ROOT, 'src', 'web')))
 app.use('/evidencias', express.static(join(ROOT, 'data', 'evidencias')))
 app.use('/relatorios', express.static(join(ROOT, 'data', 'relatorios')))

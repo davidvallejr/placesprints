@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sucesso do cliente · Place Sprints</title>
+<link rel="stylesheet" href="/ui.css">
+<link rel="stylesheet" href="/tela-inicio.css">
+</head>
+<body data-pagina="inicio">
+<header class="ps-shell" id="psShell"></header>
+<script src="/shell.js"></script>
+<main class="pg">
+  <div class="pg-cab">
+    <div class="pg-titulo">
+      <h1>Sucesso do cliente</h1>
+      <p class="pg-meta"><span id="iLido">lendo…</span><span id="iModo">o sistema busca sozinho o que tem API e pede só o que falta, um dado por vez</span></p>
+    </div>
+    <div class="pg-acoes"><button class="btn" type="button" id="btnIAtualizar">Reler agora</button></div>
+  </div>
+
+  <section class="veredito" aria-label="Resumo">
+    <p class="veredito-frase" id="veredito">Lendo a carteira…</p>
+    <div class="kpis" id="kpis" aria-busy="true"><div class="kpi sk-kpi"></div><div class="kpi sk-kpi"></div><div class="kpi sk-kpi"></div><div class="kpi sk-kpi"></div></div>
+  </section>
+
+  <section class="cartao i-estado" id="cartaoEstado" hidden>
+    <div class="i-estado-icone" aria-hidden="true"></div>
+    <div><b id="estadoTitulo"></b><p class="mini" id="estadoTexto"></p></div>
+    <div class="i-estado-acao" id="estadoAcao"></div>
+  </section>
+
+  <section class="bloco" id="secClientes">
+    <div class="bloco-cab"><h2>Clientes</h2></div>
+    <p class="sub">Receita dos últimos 28 dias no Mercado Livre, a etapa em que cada um está e o próximo dado que o sistema pede. Ausente aparece como «—», nunca como zero.</p>
+    <div class="grade" id="iClientes" aria-busy="true"><div class="cartao sk-tabela"></div></div>
+  </section>
+
+  <section class="bloco" id="secHoje">
+    <div class="bloco-cab"><h2>O que o sistema fez nas últimas 24 h</h2></div>
+    <ol class="i-linha" id="iHoje"></ol>
+  </section>
+</main>
+<footer class="pg-rodape">Fonte: meli_serie_item (28 d), progresso do processo, jornada, execucao_sistema · só leitura; cada botão leva à tela onde o campo já existe</footer>
+<script src="inicio.js"></script>
+<script src="/alerta.js" defer></script>
+<script src="/ajuda.js" defer></script>
+</body>
+</html>

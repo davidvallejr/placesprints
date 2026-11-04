@@ -2,6 +2,7 @@
 // Lê: configs (os carregados no início do servidor, em BOOT, e a cópia atual do disco, para apontar reinício pendente), sync_estado só pelas chaves de
 // CHAVES_BANCO, a PRESENÇA das variáveis de VARIAVEIS (nunca o valor), a Saúde do sistema (ticks, sinais, incidentes) quando injetada, os agentes launchd
 // instalados (existência do plist em ~/Library/LaunchAgents) e a contagem de clientes com execução de promoções ligada. Nenhuma escrita.
+import { lerClientesTeste } from './clientes-teste.js'
 import { readFileSync, existsSync } from 'node:fs'
 import { join } from 'node:path'
 import { homedir } from 'node:os'
@@ -29,7 +30,7 @@ export function contextoReal({ saude = null, launchAgents = join(homedir(), 'Lib
     promocoes_exec_clientes: promo, equipe: { quem_pode: quem },
   }
 }
-export const estruturaReal = deps => montarEstrutura(contextoReal(deps))
+export const estruturaReal = deps => montarEstrutura({ ...contextoReal(deps), ocultar: lerClientesTeste().ocultar })
 
 // bloco Equipe (só leitura): config/equipe.json + config/discord-time.json + quem o servidor aceita como líder/consultor. Nenhum id de usuário do Notion sai daqui.
 export function equipeReal() {

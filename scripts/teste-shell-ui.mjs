@@ -27,6 +27,7 @@ const PAGINAS = [
   ['fila.html', 'fila', 'fila.js', 'fila'],                       // 13ª tela (F5, 21/10/2026): Hoje — a fila do dia por papel
   ['comunicacao.html', 'comunicacao', 'comunicacao.js', 'comunicacao'],   // 14ª tela (22/10/2026): Execução › Comunicação — fila em esteira, só leitura
   ['jornada.html', 'jornada', 'jornada.js', 'jornada'],                   // 15ª tela (04/11/2026): Consultor › Jornada — passos por etapa, onde alimentar
+  ['inicio.html', 'inicio', 'inicio.js', 'inicio'],                       // 16ª tela (04/11/2026): «Sucesso do cliente» — página inicial do modo clientes de teste
 ]
 const COMPARTILHADOS = ['src/web/ficha.js', 'src/web/acomp.js', 'src/web/relatorio.js', 'src/web/pendencias.js', 'src/web/alertas.js', 'src/web/gatilhos.js', 'src/web/alinhamentos.js', 'src/web/dossie.js', 'src/web/perfil-informacao.js', 'src/web/galeria-anuncio.js', 'src/web/produtos.js', 'src/web/executar.js', 'src/web/relatorios-ciclo.js', 'src/web/custos-upload.js', 'src/web/alerta.js', 'src/web/shell.js', 'src/web/ajuda.js', 'src/web/encontros.js', 'src/web/progresso.js'].map(ler).join('\n')
 

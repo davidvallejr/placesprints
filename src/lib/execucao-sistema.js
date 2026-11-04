@@ -2,7 +2,7 @@
 // Toda rodada (coleta diária, sync do Notion, medição, boot do processo, suíte de testes, aplicação do Neo) vira UMA linha com duração, ok/total/falhas e versão do código.
 // Antes disso nada era gravado: a coleta só deixava o carimbo coleta_ml_em e contagens em texto no sync_log (podado a 5.000 linhas).
 //  gravar(handle, linha)                 → insere 1 linha (nunca lança: o livro não derruba quem chamou)
-//  criarLivroExecucao({ handle, agora, versao }) → { abrir(sistema, operacao) → { fechar({ ok, total, falhas, detalhe }) }, gravar, resumo(operacao, dias), ultima(operacao, { ok }), contar(operacao, horas), podar(dias) }
+//  criarLivroExecucao({ handle, agora, versao }) → { abrir(sistema, operacao) → { fechar({ ok, total, falhas, detalhe }) }, gravar, resumo(operacao, dias), ultima(operacao, { ok }), contar(operacao, horas), recentes(horas, limite), podar(dias) }
 //  versaoGit(root)                        → short hash do HEAD ('' quando não há git)
 import { execFileSync } from 'node:child_process'
 
@@ -62,6 +62,7 @@ export function criarLivroExecucao({ handle, agora = () => new Date().toISOStrin
   // última linha da operação; { ok: true } = última em que falhas = 0 (ou ok = total) — para «horas desde a última suíte verde»
   const ultima = (operacao, { ok = false } = {}) => handle.prepare(`SELECT * FROM execucao_sistema WHERE operacao = ? ${ok ? 'AND (falhas = 0 OR (ok IS NOT NULL AND ok = total))' : ''} ORDER BY inicio DESC LIMIT 1`).get(operacao) || null
   const contar = (operacao, horas = 24) => handle.prepare('SELECT COUNT(*) n FROM execucao_sistema WHERE operacao = ? AND inicio >= ?').get(operacao, desde(horas / 24)).n
+  const recentes = (horas = 24, limite = 30) => handle.prepare('SELECT sistema, operacao, inicio, fim, ms, ok, total, falhas, detalhe_json FROM execucao_sistema WHERE inicio >= ? ORDER BY inicio DESC LIMIT ?').all(desde(horas / 24), limite)
   const podar = (dias = 180) => { try { return handle.prepare('DELETE FROM execucao_sistema WHERE inicio < ?').run(desde(dias)).changes } catch { return 0 } }
-  return { abrir, gravar: linha => gravar(handle, { versao, ...linha }), resumo, ultima, contar, podar, versao }
+  return { abrir, gravar: linha => gravar(handle, { versao, ...linha }), resumo, ultima, contar, recentes, podar, versao }
 }

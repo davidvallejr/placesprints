@@ -134,7 +134,8 @@ function linha(d, ctx) {
 // ctx: { configs, configs_disco?, estado (chaves de CHAVES_BANCO), env (presença por VARIAVEIS), mp_modo?, ticks?, sinais?, incidentes?, plists, promocoes_exec_clientes?, equipe?:{quem_pode}, agora? }
 export function montarEstrutura(ctx = {}) {
   const agora = ctx.agora || new Date().toISOString(), c = { plists: {}, env: {}, estado: {}, ...ctx, agoraMs: Date.parse(ctx.agora || agora) }
-  const linhas = CAT.map(d => linha(d, c)).sort((a, b) => ESTADOS.indexOf(a.estado) - ESTADOS.indexOf(b.estado))
+  const oc = new Set(ctx.ocultar || [])   // modo clientes de teste: estruturas ocultas somem da tela (continuam desligadas)
+  const linhas = CAT.filter(d => !oc.has(d.id)).map(d => linha(d, c)).sort((a, b) => ESTADOS.indexOf(a.estado) - ESTADOS.indexOf(b.estado))
   const n = k => linhas.filter(l => l.estado === k).length
   const abertos = ctx.incidentes?.abertos || []
   return { lido_em: agora, linhas, resumo: { total: linhas.length, ligadas: n('ligado'), prontas: n('pronto'), desligadas: n('desligado'), pendentes: n('pendente'), erros: n('erro') },

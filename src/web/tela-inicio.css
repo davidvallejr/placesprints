@@ -1,0 +1,22 @@
+/* Sucesso do cliente (/ no modo teste): só o que o ui.css não tem. Toda cor vem de var(--token). */
+.i-estado{display:grid;grid-template-columns:44px 1fr auto;gap:var(--e-4);align-items:center;margin-top:var(--e-4)}
+.i-estado-icone{width:44px;height:44px;border-radius:50%;background:var(--fundo-suave);border:1px solid var(--borda)}
+.i-estado.ok .i-estado-icone{background:var(--verde-suave);border-color:var(--verde)}
+.i-estado.atencao .i-estado-icone{background:var(--ambar-suave,var(--fundo-suave));border-color:var(--ambar)}
+.i-estado.ruim .i-estado-icone{background:var(--verm-suave);border-color:var(--verm)}
+.i-estado p{margin:2px 0 0}
+.i-cliente{display:grid;gap:var(--e-2);align-content:start}
+.i-cliente header{display:flex;justify-content:space-between;gap:var(--e-3);align-items:baseline;flex-wrap:wrap}
+.i-cliente h3{margin:0;font:600 var(--t-16)/1.3 var(--fonte)}
+.i-cliente h3 a{color:var(--tinta);text-decoration:none}
+.i-cliente h3 a:hover{text-decoration:underline}
+.i-num .valor{font:600 var(--t-24,1.5rem)/1.2 var(--fonte-display);color:var(--tinta)}
+.i-cliente p{margin:0}
+.i-prox{padding:10px 12px;border-radius:var(--raio-p);background:var(--fundo-suave)}
+.i-acoes{display:flex;gap:var(--e-2);flex-wrap:wrap;margin-top:var(--e-1)}
+.i-linha{margin:var(--e-3) 0 0;padding:0;list-style:none;background:var(--superficie);border:1px solid var(--borda);border-radius:var(--raio);overflow:hidden}
+.i-linha li{display:grid;grid-template-columns:52px auto 1fr;gap:var(--e-3);align-items:center;padding:8px 14px;border-top:1px solid var(--borda);font-size:var(--t-14)}
+.i-linha li:first-child{border-top:0}
+.i-linha time{color:var(--cinza);font-variant-numeric:tabular-nums}
+.i-linha li.falha span:last-child{color:var(--verm)}
+@media (max-width:640px){.i-estado{grid-template-columns:1fr}.i-estado-icone{display:none}.i-linha li{grid-template-columns:52px 1fr}.i-linha li .sis{display:none}}

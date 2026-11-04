@@ -11,10 +11,19 @@
     ['Empresa do cliente', [['cliente:produtos', 'Produtos e estoque', '/cliente?aba=produtos'], ['cliente:lucro', 'Lucro do mês', '/cliente?aba=produtos&visao=lucro'], ['cliente:compras', 'Compras', '/cliente?aba=relatorios&rc=ciclo_compras'], ['cliente:precos', 'Preços', '/cliente?aba=anuncios&sec=secPrecos'], ['cliente:financeiro', 'Raio-X e contrato', '/cliente?aba=empresa'], ['cliente:custos', 'Custos', '/cliente?aba=empresa&sec=secCustosUpload'], ['cliente:nf', 'Nota fiscal', '/cliente?aba=empresa&sec=secNotaFiscal'], ['cliente:relatorios', 'Ciclos do negócio', '/cliente?aba=relatorios']]],
     ['Estrutura', [['estrutura', 'Estruturas', '/estrutura'], ['integracoes', 'Conexões', '/integracoes'], ['distribuicao:comunicacao', 'Comunicação', '/planos?sec=secAvisosAuto'], ['cliente:configurar', 'Configurar cliente', '/cliente?aba=configurar'], ['estrutura:equipe', 'Equipe', '/estrutura?sec=secEquipe'], ['algoritmo:param', 'Regras do método', '/metodologia?sec=secParam']]],
   ]
+  // Modo clientes de teste (config/clientes-teste.json; docs/desenho-ambiente-teste.md § 3): 3 menus em vez de 5 e a página inicial «Sucesso do cliente».
+  // O servidor entrega /shell.js com `self.PS_MODO_TESTE` na 1ª linha (lido de config/clientes-teste.json a cada pedido): sem fetch, sem piscar.
+  const GT = [
+    ['Clientes', [['inicio', 'Sucesso do cliente', '/'], ['cliente:resumo', 'Resumo', '/cliente?aba=resumo'], ['cliente:anuncios', 'Anúncios', '/cliente?aba=anuncios'], ['cliente:produtos', 'Produtos e estoque', '/cliente?aba=produtos'], ['cliente:plano', 'Plano', '/cliente?aba=plano']]],
+    ['Jornada', [['jornada', 'Jornada', '/jornada'], ['cliente:configurar', 'Configurar cliente', '/cliente?aba=configurar'], ['cliente:custos', 'Custos', '/cliente?aba=empresa&sec=secCustosUpload']]],
+    ['Estrutura', [['estrutura', 'Estruturas', '/estrutura'], ['integracoes', 'Conexões', '/integracoes'], ['algoritmo', 'Acerto do algoritmo', '/metodologia'], ['estrutura:equipe', 'Equipe', '/estrutura?sec=secEquipe']]],
+  ]
+  const modoTeste = self.PS_MODO_TESTE === true   // injetado pelo servidor na 1ª linha de /shell.js (src/server.js): o shell continua sem chamar API
+  const GRUPOS = modoTeste ? GT : G
   const CLI = new Set(['/cliente', '/promocoes', '/jornada'])                      // rotas que carregam ?cliente=
   const pag = document.body.dataset.pagina
-  const itens = G.flatMap(([grupo, abas]) => abas.map(([id, rotulo, href]) => ({ id, rotulo, href, grupo, pagina: id.split(':')[0], params: [...new URL(href, location.origin).searchParams].filter(([k]) => k !== 'cliente') })))
-  const grupoDe = nome => G.find(g => g[0] === nome)
+  const itens = GRUPOS.flatMap(([grupo, abas]) => abas.map(([id, rotulo, href]) => ({ id, rotulo, href, grupo, pagina: id.split(':')[0], params: [...new URL(href, location.origin).searchParams].filter(([k]) => k !== 'cliente') })))
+  const grupoDe = nome => GRUPOS.find(g => g[0] === nome)
   // item ativo: data-pagina bate E todos os parâmetros do href (menos cliente) estão na URL; empate → mais parâmetros casados → primeiro de G.
   // Sem casamento completo (ex.: /cliente sem ?aba=), o 1º item da página. Nenhum parâmetro de menu na URL.
   const ativo = () => {
@@ -33,7 +42,7 @@
   // marca (wordmark Place2u em SVG, texto claro para o fundo navy), grupos, utilitários
   const img = el('img', { className: 'logo', src: '/assets/marca-shell.svg', alt: 'Place2u', width: 82, height: 24 }); img.onerror = () => img.remove()
   const marca = el('a', { className: 'ps-marca', href: '/' }, img, el('span', { textContent: 'Sprints' }))
-  const grupos = attr(el('nav', { className: 'ps-grupos' }, ...G.map(linkGrupo)), { 'aria-label': 'Principal' })
+  const grupos = attr(el('nav', { className: 'ps-grupos' }, ...GRUPOS.map(linkGrupo)), { 'aria-label': 'Principal' })
   const inp = el('input', { id: 'psBusca', name: 'busca', type: 'search', required: true, minLength: 3, autocomplete: 'off' })
   const resumo = attr(el('summary', { className: 'ps-busca-botao' }, el('span', { className: 'ps-rot', textContent: 'Buscar cliente' }), el('kbd', { textContent: '/' })), { 'aria-label': 'Buscar cliente (atalho /)' })
   const form = attr(el('form', { className: 'ps-busca-painel', action: '/cliente', method: 'get' }, el('label', { htmlFor: 'psBusca', textContent: 'Nome ou CNPJ' }), inp, el('button', { className: 'ps-btn', type: 'submit', textContent: 'Buscar' })), { role: 'search' })
@@ -72,12 +81,12 @@
   selProduto.value = lerProduto()
   selProduto.addEventListener('change', () => { try { localStorage.setItem('ps_produto', selProduto.value) } catch { /* sem armazenamento: só não lembra */ } sync() })
   const lista = attr(el('nav', { className: 'ps-menu-lista' }), { 'aria-label': 'Todas as páginas' })
-  for (const [nome, abas] of G) lista.append(el('p', { className: 'ps-menu-grupo', textContent: nome }), ...abas.map(a => link(itens.find(i => i.id === a[0]))))
+  for (const [nome, abas] of GRUPOS) lista.append(el('p', { className: 'ps-menu-grupo', textContent: nome }), ...abas.map(a => link(itens.find(i => i.id === a[0]))))
   const menu = el('details', { className: 'ps-menu' }, el('summary', { className: 'ps-menu-botao', textContent: 'Menu' }), lista)
   const pular = el('a', { className: 'ps-pular', href: '#', textContent: 'Pular para o conteúdo' })
   pular.onclick = e => { const m = document.querySelector('main'); if (m) { e.preventDefault(); m.tabIndex = -1; m.focus() } }
   topo.append(pular, el('div', { className: 'ps-barra' }, marca, grupos, el('div', { className: 'ps-util' }, hoje, quem, busca, slot, menu)))
-  topo.querySelector('.ps-util').prepend(selProduto)   // produto antes de Hoje
+  if (!modoTeste) topo.querySelector('.ps-util').prepend(selProduto)   // produto antes de Hoje
 
   // linha 2: submenus do menu ativo + contexto do cliente; reconstruída quando o item ativo muda de menu (ex.: ?aba=produtos → Empresa do cliente)
   const ctx = el('span', { className: 'ps-ctx' })

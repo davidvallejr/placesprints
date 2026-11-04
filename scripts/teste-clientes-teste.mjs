@@ -12,8 +12,8 @@ let n = 0, falhou = 0
 const ok = async (nome, fn) => { try { await fn(); n++; console.log(`✓ ${nome}`) } catch (e) { falhou++; console.log(`✗ ${nome}\n  ${e.message}`) } }
 const RAIZ = new URL('..', import.meta.url).pathname
 
-await ok('config real: 5 clientes, ativo=false até o David rodar --confirmar', () => {
-  const c = lerClientesTeste(); assert.equal(c.lista.length, 5); assert.equal(c.ativo, false)
+await ok('config real: 5 clientes; ativo desde a redução de 04/11; ocultar lista ids do catálogo de Estruturas', () => {
+  const c = lerClientesTeste(); assert.equal(c.lista.length, 5); assert.equal(c.ativo, true); assert.ok(c.ocultar.includes('gatilhos') && c.ocultar.every(id => /^[a-z0-9_]+$/.test(id)))
 })
 await ok('ausente/ilegível = desligado; ativo filtra por nome normalizado; desligado não filtra', () => {
   const dir = mkdtempSync(join(tmpdir(), 'ps-ct-'))

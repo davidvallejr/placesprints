@@ -1,0 +1,18 @@
+{
+ "id": "inicio",
+ "pergunta": "Modo clientes de teste: como está cada um dos clientes, qual dado o sistema está pedindo agora e o que ele fez sozinho hoje?",
+ "usuarios": ["CS/Consultor: o próximo dado a pedir por cliente, com o porquê e o botão que leva ao campo", "Dono: a carteira de teste num olhar (receita 28 d, etapa, pendências) e a prova de que o sistema rodou"],
+ "acao_principal": "O botão do passo mais urgente da carteira (único .btn-primario, no cartão de estado). Nenhuma rota de escrita nasce aqui.",
+ "acoes_secundarias": ["Reler agora (#btnIAtualizar → GET /api/inicio)", "Botão do próximo passo e «Jornada» em cada cartão de cliente (links)"],
+ "secoes": [
+  { "titulo": "Cabeçalho", "conteudo": "h1 «Sucesso do cliente»; hora da leitura (#iLido) e a frase do princípio (#iModo).", "ids_container": ["iLido", "iModo", "btnIAtualizar"], "importancia": "alta" },
+  { "titulo": "Veredito + 4 KPIs", "conteudo": "«N clientes · K pedem um dado ao cliente · A com passo atrasado · D em dia». KPIs sem cor.", "ids_container": ["veredito", "kpis"], "importancia": "alta" },
+  { "titulo": "Cartão de estado", "conteudo": "«Tudo em dia» ou «{cliente}: {próximo passo}» com quem alimenta, número, motivo, o que destrava e o único botão primário.", "ids_container": ["cartaoEstado", "estadoTitulo", "estadoTexto", "estadoAcao"], "importancia": "alta" },
+  { "titulo": "Clientes", "conteudo": "1 cartão por cliente: nome (link para a jornada), consultor, receita 28 d + variação (ou «—» sem coleta), etapa atual com selo de estado, passos feitos, próximo dado pedido com motivo e o que destrava, botões secundários.", "ids_container": ["secClientes", "iClientes"], "importancia": "alta" },
+  { "titulo": "O que o sistema fez nas últimas 24 h", "conteudo": "Linha do tempo do livro de execução (coleta, sync, medição, testes, boot) em frases de uma linha.", "ids_container": ["secHoje", "iHoje"], "importancia": "media" }
+ ],
+ "kpis": ["Clientes", "Pedem um dado", "Passo atrasado", "Em dia"],
+ "hooks_js": ["#iLido (textContent)", "#iModo (texto fixo)", "#btnIAtualizar (onclick → carregar)", "#veredito (innerHTML)", "#kpis (innerHTML dos 4 .kpi; aria-busy)", "#cartaoEstado (classe ok | atencao | ruim)", "#estadoTitulo (textContent)", "#estadoTexto (textContent)", "#estadoAcao (innerHTML do único .btn-primario)", "#iClientes (innerHTML dos article.i-cliente[data-cliente])", "#iHoje (innerHTML dos li)"],
+ "fontes": ["GET /api/inicio (src/rotas-inicio.js → gmv.js gmvPortfolio 28 d + progresso.carteira + progresso.jornada + livro.recentes)", "GET /api/modo"],
+ "regras_ui": ["1 .btn-primario", "valor de KPI nunca colorido", "sem emoji", "tokens só do ui.css", "ausente = «—» com motivo"]
+}
