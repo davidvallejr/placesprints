@@ -9,6 +9,7 @@ import { env, ROOT } from './env.js'
 import { resolverFontes, consultarPaginas, lerBlocos } from './notion.js'
 import { log, getEstado, setEstado } from './db.js'
 import { resolverPaginaCliente } from './plano-informacoes.js'
+import { filtrarClientesTeste } from './clientes-teste.js'
 
 export const fontesCfg = JSON.parse(readFileSync(join(ROOT, 'config', 'fontes.json'), 'utf-8'))
 export const norm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\s+/g, ' ').trim()
@@ -107,7 +108,7 @@ export async function clientesAtivos() {
       })
     }
   }
-  return clientes
+  return filtrarClientesTeste(clientes, c => c.nome)   // modo «clientes de teste» (config/clientes-teste.json): ativo=false não muda nada
 }
 
 // Devolve [{ dbId, modo, cliente, paginaClienteId }]. `filtroCliente` (nome

@@ -1,0 +1,7 @@
+{
+  "$doc": "Modo CLIENTES DE TESTE (pedido do David, 04/11/2026): com ativo=true, a central do Notion e a descoberta de fontes só enxergam os clientes desta lista — o sync não recria os outros. scripts/reduzir-para-teste.mjs usa a mesma lista para apagar o resto (prévia por padrão; --confirmar apaga e liga este modo). Nomes = exatamente como na central (clientes_central.cliente). Desligar = ativo:false (o próximo sync completo volta a trazer todos os ativos da central).",
+  "ativo": false,
+  "escolhidos_em": "2026-11-04",
+  "criterio": "28 d de receita no ML com queda e crescimento, muito histórico (dias de série, anúncios, mudanças, tarefas): Rei das Toalhas (−44 %, 1.074 anúncios), Prisma (+29 %), Moema (maior receita, estável), Photo K (1.101 tarefas), Uniaodog (piloto do Notion, Full, 630 mudanças)",
+  "clientes": ["Rei das Toalhas", "Prisma Indústria e Comércio LTDA", "Moema Comercio", "Photo K", "Uniaodog Artigos Pet"]
+}
