@@ -4,12 +4,51 @@
 //  • compararPrevisaoRealizado(): cada ação distribuída guarda a PREVISÃO; quando a tarefa (identificada pelo
 //    "· PS-xxxx" no título do card) é medida, comparamos previsto × realizado → viés e erro do algoritmo.
 //  • saudeRegras(): o registro de regras com sua saúde — regra que não funciona vira candidata à aposentadoria.
+//  • agruparCalibracao(comp, { por }) (puro) / fotografarCalibracao({ hoje }) / serieCalibracao(): Brier, erro, viés e taxa Wilson POR regra, família e cliente,
+//    gravados 1×/dia em calibracao_dia («Neo aprende sobre si», 04/11/2026) — antes só existia o Brier global sob demanda, sem série.
+//  • lerAprendido(): overrides que o Neo aplicou (config/algoritmo-aprendido.json: p_sucesso e ativa por regra). algoritmo.json NUNCA é reescrito; o aprendido
+//    tem precedência na premissa inicial de priorEfetivo e regraEmQuarentena(id) tira a regra do plano (plano-anuncios.montarAcoes).
 import { db } from './db.js'
 import { normNome } from './equipe.js'
 import { algoritmo } from './diagnostico-conta.js'
 import { padroesGlobais, analisarCliente, wilson, excluirDaAprendizagem } from './impacto-tarefas.js'
 import { cfgAtrib } from './meli-serie.js'
 import { familiaDeDemanda } from './processos.js'
+import { readFileSync, statSync } from 'node:fs'
+import { join } from 'node:path'
+import { ROOT } from './env.js'
+
+export const SCHEMA_CALIBRACAO = `
+CREATE TABLE IF NOT EXISTS calibracao_dia (
+  dia TEXT NOT NULL,
+  escopo TEXT NOT NULL CHECK (escopo IN ('global','regra','familia','cliente')),
+  chave TEXT NOT NULL,
+  n INTEGER NOT NULL,
+  acertos INTEGER NOT NULL,
+  brier REAL,
+  mae REAL,
+  vies REAL,
+  pct_intervalo REAL,
+  taxa REAL,
+  taxa_baixo REAL,
+  taxa_alto REAL,
+  versao TEXT NOT NULL DEFAULT '',
+  PRIMARY KEY (dia, escopo, chave)
+);
+`
+// overrides aprendidos (Neo): { regra: { p_sucesso?, ativa?, desde, proposta_id } } — lido com cache por mtime; arquivo ausente/ilegível = {} (a premissa vale)
+export const ARQUIVO_APRENDIDO = join(ROOT, 'config', 'algoritmo-aprendido.json')
+let aprendidoCache = { mtime: -1, v: {} }
+export function lerAprendido(caminho = ARQUIVO_APRENDIDO) {
+  try {
+    const m = statSync(caminho).mtimeMs
+    if (caminho === ARQUIVO_APRENDIDO && m === aprendidoCache.mtime) return aprendidoCache.v
+    const v = JSON.parse(readFileSync(caminho, 'utf-8')), regras = v && typeof v === 'object' && v.regras && typeof v.regras === 'object' ? v.regras : {}
+    if (caminho === ARQUIVO_APRENDIDO) aprendidoCache = { mtime: m, v: regras }
+    return regras
+  } catch { if (caminho === ARQUIVO_APRENDIDO) aprendidoCache = { mtime: -1, v: {} }; return {} }
+}
+export const regraEmQuarentena = (regraId, aprendido = lerAprendido()) => aprendido[String(regraId).replace(/^anuncio_/, '')]?.ativa === false
 
 const K_PSEUDO = 5
 let cache = { em: 0, p: null }
@@ -22,7 +61,8 @@ export const padroesGlobaisCache = padroes          // a retroalimentação reut
 
 export function priorEfetivo(regraId) {
   const id = String(regraId).replace(/^anuncio_/, '')
-  const p0 = algoritmo.priors_efeito[id]?.p_sucesso ?? 0.3
+  const ap = lerAprendido()[id]
+  const p0 = ap?.p_sucesso ?? algoritmo.priors_efeito[id]?.p_sucesso ?? 0.3   // aprendido (Neo) > premissa do algoritmo.json > 0,3
   const tipo = algoritmo.regras.find(r => r.id === id)?.tipo_demanda
   try {
     // por FAMÍLIA de demanda: "Duplicar anúncios", "Duplicação" e "Duplicação de Anuncio" são a mesma tarefa — somam a amostra
@@ -34,7 +74,7 @@ export function priorEfetivo(regraId) {
       return { p, n: g.n, fonte: `calibrado: ${g.melhorou} de ${g.n} tarefas "${familiaDeDemanda(tipo).nome}" melhoraram, mescladas à premissa ${Math.round(p0 * 100)}%` }
     }
   } catch { /* sem série medida: fica a premissa */ }
-  return { p: p0, n: 0, fonte: 'premissa inicial (ainda sem tarefas medidas suficientes desse tipo)' }
+  return { p: p0, n: 0, fonte: ap?.p_sucesso != null ? `premissa aprendida pelo Neo em ${String(ap.desde || '').slice(0, 10)} (proposta ${ap.proposta_id || '—'})` : 'premissa inicial (ainda sem tarefas medidas suficientes desse tipo)' }
 }
 
 const RX_PS = /PS-[0-9a-f]{7,10}/
@@ -91,4 +131,39 @@ export function saudeRegras() {
       prior: algoritmo.priors_efeito[r.id]?.p_sucesso ?? null, prior_efetivo: priorEfetivo(r.id),
     }
   })
+}
+
+// ── calibração por escopo, gravada por dia («Neo aprende sobre si») ──
+const acertou = l => l.estado === 'melhorou' || (l.estado === 'lancamento' && l.realizado > 0)
+const familiaDaRegra = regra => { const id = String(regra).replace(/^anuncio_/, ''), tipo = algoritmo.regras.find(r => r.id === id)?.tipo_demanda; return tipo ? familiaDeDemanda(tipo).id : 'sem_familia' }
+// PURO: comp = saída de compararPrevisaoRealizado(); por ∈ global|regra|familia|cliente → [{ chave, n, acertos, brier, mae, vies, pct_intervalo, taxa, taxa_baixo, taxa_alto }]
+export function agruparCalibracao(comp, { por = 'regra' } = {}) {
+  const chaveDe = l => por === 'global' ? 'global' : por === 'regra' ? String(l.regra).replace(/^anuncio_/, '') : por === 'familia' ? familiaDaRegra(l.regra) : String(l.cliente)
+  const grupos = new Map()
+  for (const l of comp.linhas || []) (grupos.get(chaveDe(l)) || grupos.set(chaveDe(l), []).get(chaveDe(l))).push(l)
+  return [...grupos].map(([chave, ls]) => {
+    const n = ls.length, k = ls.filter(acertou).length, w = wilson(k, n), r = x => Math.round(x * 1000) / 1000
+    return { chave, n, acertos: k,
+      brier: r(ls.reduce((t, l) => t + (l.p_sucesso - (acertou(l) ? 1 : 0)) ** 2, 0) / n),
+      mae: Math.round(ls.reduce((t, l) => t + Math.abs(l.previsto_base - l.realizado), 0) / n),
+      vies: Math.round(ls.reduce((t, l) => t + (l.previsto_base - l.realizado), 0) / n),
+      pct_intervalo: r(ls.filter(l => l.dentro_do_intervalo).length / n), taxa: r(w.p), taxa_baixo: r(w.baixo), taxa_alto: r(w.alto) }
+  }).sort((a, b) => b.n - a.n)
+}
+// 1×/dia (tick da medição): grava os 4 escopos; o mesmo dia regravado substitui (idempotente). Devolve quantas linhas gravou.
+export function fotografarCalibracao({ hoje, handle = db, comp = compararPrevisaoRealizado(), versao = String(algoritmo.versao || '') } = {}) {
+  handle.exec(SCHEMA_CALIBRACAO)
+  const ins = handle.prepare('INSERT OR REPLACE INTO calibracao_dia (dia, escopo, chave, n, acertos, brier, mae, vies, pct_intervalo, taxa, taxa_baixo, taxa_alto, versao) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)')
+  let n = 0
+  handle.transaction(() => {
+    for (const por of ['global', 'regra', 'familia', 'cliente']) for (const g of agruparCalibracao(comp, { por })) { ins.run(hoje, por, g.chave, g.n, g.acertos, g.brier, g.mae, g.vies, g.pct_intervalo, g.taxa, g.taxa_baixo, g.taxa_alto, versao); n++ }
+  })()
+  return n
+}
+export const serieCalibracao = ({ escopo = 'global', chave = 'global', dias = 90, handle = db } = {}) =>
+  handle.prepare('SELECT * FROM calibracao_dia WHERE escopo = ? AND chave = ? ORDER BY dia DESC LIMIT ?').all(escopo, chave, Math.max(1, Math.min(365, dias))).reverse()
+// últimas N fotos (dias distintos) de um escopo inteiro — é o que o Neo lê para exigir «2 fotos consecutivas»
+export const ultimasFotos = ({ escopo, fotos = 2, handle = db } = {}) => {
+  const dias = handle.prepare('SELECT DISTINCT dia FROM calibracao_dia WHERE escopo = ? ORDER BY dia DESC LIMIT ?').all(escopo, fotos).map(r => r.dia)
+  return dias.map(dia => ({ dia, linhas: handle.prepare('SELECT * FROM calibracao_dia WHERE escopo = ? AND dia = ?').all(escopo, dia) }))
 }

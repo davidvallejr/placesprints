@@ -4,6 +4,7 @@
   "description": "Relatórios visuais de evolução de sprints a partir do Notion — Place2u",
   "type": "module",
   "scripts": {
+    "teste": "node scripts/testar.mjs",
     "start": "node src/server.js",
     "sync": "node scripts/sync.mjs",
     "demo": "node scripts/seed-demo.mjs",

@@ -1,0 +1,35 @@
+{
+ "id": "jornada",
+ "pergunta": "Em que passo este cliente está, o que falta alimentar em cada etapa, quem alimenta e onde — e qual é o próximo passo?",
+ "usuarios": [
+  "CS: onboarding do cliente passo a passo (cadastro, conexão, dados da empresa, destinos), com o botão que leva ao campo",
+  "Consultor: o que ainda falta para o plano rodar inteiro (custos, metas, catálogo, aprovações, cards parados, pendências do cliente)",
+  "Líder/Dono: carteira por etapa (stepper agregado) e o próximo passo de cada cliente",
+  "Cliente (pelo CS): o que depende dele, em linguagem clara"
+ ],
+ "acao_principal": "O botão do próximo passo pendente (único .btn-primario, gerado por jornada.js). Nenhuma rota de escrita nasce aqui: cada botão leva à tela/seção onde o campo já existe (/cliente?aba=…&sec=…, /integracoes, /planos, /estrutura, /comunicacao, /analistas).",
+ "acoes_secundarias": [
+  "Buscar cliente (#q → GET /api/clientes/busca?q=; escolher recarrega /jornada?cliente=)",
+  "Reler agora (#btnJAtualizar → GET /api/jornada?cliente=)",
+  "Escolher a etapa ([data-etapa] na lista #jEtapas → painel #jPainel)",
+  "(i) «Como fazer» da etapa ([data-ajuda-id] → ajuda.js)",
+  "Carteira (#progressoCarteira via PSProgresso.montar escopo total; links de cliente apontam para /jornada?cliente=)"
+ ],
+ "secoes": [
+  { "titulo": "Cabeçalho", "conteudo": "h1 «Jornada · {cliente}»; meta com hora da leitura (#jLido) e a frase única; busca + Reler agora.", "ids_container": ["jTitulo", "jLido", "q", "btnBuscar", "btnJAtualizar", "resultados"], "importancia": "alta" },
+  { "titulo": "Veredito + 4 KPIs", "conteudo": "Frase «N de M passos feitos · K pendentes (A atrasados) · D por chave desligada · G aguardando». KPIs sem cor: Etapa atual, Passos feitos, Pedem ação, Aguardando.", "ids_container": ["veredito", "kpis"], "importancia": "alta" },
+  { "titulo": "Cartão de estado (referência Guesty)", "conteudo": "«Tudo em dia» ou «Próximo passo: …» com quem alimenta, número e motivo, e o único botão primário.", "ids_container": ["cartaoEstado", "estadoTitulo", "estadoTexto", "estadoAcao"], "importancia": "alta" },
+  { "titulo": "Passo a passo", "conteudo": "Grade: lista vertical das 10 etapas (#jEtapas, estado feito/atual/atrasado/pendente, «N de M passos») e o painel da etapa (#jPainel) com os passos: selo de estado · nome · número que prova · motivo · quem alimenta · o que destrava · botão. Estados fechados: feito · pendente · atrasado · desligado · aguardando · não se aplica.", "ids_container": ["secJornada", "jEtapas", "jPainel"], "importancia": "alta" },
+  { "titulo": "Carteira", "conteudo": "Stepper agregado + tabela por cliente (progresso.js, mesmo cálculo do Painel executivo).", "ids_container": ["secProgresso", "progressoCarteira"], "importancia": "media" }
+ ],
+ "kpis": ["Etapa atual", "Passos feitos (de N)", "Pedem ação (atrasados no detalhe)", "Aguardando (chave desligada no detalhe)"],
+ "hooks_js": [
+  "#jTitulo (textContent)", "#jLido (textContent: hora da leitura)", "#q (input: busca)", "#btnBuscar (onclick → buscar)", "#resultados (innerHTML dos .res-item[data-c])", "#btnJAtualizar (onclick → carregar)",
+  "#veredito (innerHTML da frase)", "#kpis (innerHTML dos 4 .kpi; aria-busy)",
+  "#cartaoEstado (classe ok | atencao | ruim; hidden sem cliente)", "#estadoTitulo (textContent)", "#estadoTexto (textContent)", "#estadoAcao (innerHTML do único .btn-primario)",
+  "#secJornada (hidden sem cliente)", "#jEtapas (innerHTML dos li[data-n] com button[data-etapa])", "#jPainel (innerHTML do painel da etapa; li.j-passo[data-id]; [data-ajuda-id] vira dataset.ajuda)",
+  "#secProgresso / #progressoCarteira (PSProgresso.montar(el, { escopo: { tipo: 'total' } }); links de cliente reescritos para /jornada?cliente=)"
+ ],
+ "fontes": ["GET /api/jornada?cliente= (src/rotas-progresso.js → progresso.jornada → src/lib/jornada.js montarJornada sobre contextoCliente + progressoCliente)", "GET /api/progresso?tipo=total", "GET /api/clientes/busca?q="],
+ "regras_ui": ["1 .btn-primario (o próximo passo)", "valor de KPI nunca colorido", "sem emoji em controle", "tokens só do ui.css", "ausente = pendente com motivo; chave desligada = desligado, nunca atrasado"]
+}

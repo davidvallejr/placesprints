@@ -107,6 +107,7 @@ import * as execChaveiro from './lib/chaveiro-executor-real.js'
 import { rotasHistorico } from './rotas-historico.js'
 import { rotasSaude } from './rotas-saude.js'
 import { criarSaudeSistema } from './lib/saude-sistema-real.js'
+import { criarLivroExecucao, versaoGit } from './lib/execucao-sistema.js'
 import { criarRotasSaudeSistema } from './rotas-saude-sistema.js'
 import { criarRotasAjuda } from './rotas-ajuda.js'
 import { criarRotasEstrutura } from './rotas-estrutura.js'
@@ -172,7 +173,10 @@ app.use(criarRotasChaveiroEstoque({ sync: syncEstoque, clienteCanonico: c => cli
 // Chaveiro F4+: console de execução (prévia/preparar/aprovar/executar/conferir/reverter/liberar/parar); escrita no ML só por executarOrdem, atrás de execucao_ligada + adaptadores_live (NASCEM false) + liberação + estreia
 app.use(criarRotasChaveiroExecutor({ exec: execChaveiro, clienteCanonico: c => clienteDaCentral(c), validarPor: (n, c) => validarDossie(n, c) }))
 // autogestão (docs/plano-autogestao.md A2/A3/A5): sinais por sistema + incidentes (dono Head de canais) + data/batimento.json p/ o vigia externo; GET /api/saude só no loopback
-const saudeSis = criarSaudeSistema({ handle: db, getEstado, agora, log, notificar, envio: criarEnvioSaude({ env: process.env, log }) })
+// livro de execução do próprio sistema («Neo aprende sobre si», 04/11): boot, coleta, sync, medição e testes viram 1 linha com duração/ok/falhas/versão
+const livroExec = criarLivroExecucao({ handle: db, agora, versao: versaoGit(ROOT) })
+livroExec.gravar({ sistema: 'trinity', operacao: 'boot', inicio: agora(), fim: agora(), ms: 0, detalhe: { pid: process.pid, node: process.version } })
+const saudeSis = criarSaudeSistema({ handle: db, getEstado, agora, log, notificar, envio: criarEnvioSaude({ env: process.env, log }), livro: livroExec })
 app.use(criarRotasSaudeSistema({ saude: saudeSis }))
 app.use(criarRotasAjuda({ contexto: () => contextoEstrutura({ saude: saudeSis }) }))   // ícone (i) «Como fazer»: texto de config/ajuda.json + estado real (F3)
 app.use(criarRotasEstrutura({ estrutura: () => estruturaReal({ saude: saudeSis }), equipe: equipeReal }))   // tela de Estruturas (F3): só leitura; Ligar/Desligar reusa as rotas de banco que já existem
@@ -405,7 +409,8 @@ app.get('/processos', (req, res) => res.sendFile(join(ROOT, 'src', 'web', 'proce
 app.get('/promocoes', (req, res) => res.sendFile(join(ROOT, 'src', 'web', 'promocoes.html'))) // promoções por cliente (campanhas, MC, analista, plano dry-run)
 app.get('/resultados', (req, res) => res.sendFile(join(ROOT, 'src', 'web', 'resultados.html'))) // o que melhor funciona (padrões de tarefas)
 app.get('/estrutura', (req, res) => res.sendFile(join(ROOT, 'src', 'web', 'estrutura.html'))) // Estrutura › Estruturas e Equipe: estado real de cada chave (F3)
-app.get('/fila', (req, res) => res.sendFile(join(ROOT, 'src', 'web', 'fila.html')))           // Hoje: a fila do dia por papel, ≤ 5 blocos, 1 botão por item (F5)
+app.get('/fila', (req, res) => res.sendFile(join(ROOT, 'src', 'web', 'fila.html')))
+app.get('/jornada', (req, res) => res.sendFile(join(ROOT, 'src', 'web', 'jornada.html')))   // Jornada do cliente: passos por etapa (04/11/2026)           // Hoje: a fila do dia por papel, ≤ 5 blocos, 1 botão por item (F5)
 app.get('/comunicacao', (req, res) => res.sendFile(join(ROOT, 'src', 'web', 'comunicacao.html')))   // Execução › Comunicação: fila em esteira (docs/desenho-comunicacao-esteira.md), só leitura
 
 // ── webhook do Notion (sincronização por evento; agendada segue como reforço)
@@ -595,6 +600,7 @@ setInterval(async () => {
     catch (e) { logS('arquiteto', 'erro', `alinhamentos (vencimento diário): ${String(e?.message).slice(0, 160)}`) }
     // listarConexoesColeta: sem conexão em erro e sem conta S90 fora de serviço (cancelada/exclusão agendada: dados só para consulta até o expurgo, nada novo é lido)
     let okColeta = 0, totalColeta = 0
+    const execColeta = livroExec.abrir('trinity', 'coleta_ml')
     for (const c of listarConexoesColeta()) {
       totalColeta++
       // coleta → fotografias do acompanhamento (antes/24h/48h/72h/1 semana) → plano regerado COM a retroalimentação do Merovíngio
@@ -637,8 +643,11 @@ setInterval(async () => {
       const f = String(getEstado('coleta_ml_falhou') || '').split('|'), n = f[0] === hojeLocal() ? Number(f[2] || 0) + 1 : 1
       setEstado('coleta_ml_falhou', `${hojeLocal()}|${new Date().toISOString()}|${n}`)
       logS('trinity', 'erro', `coleta diária ML: 0 de ${totalColeta} contas coletadas (rede?) — nova tentativa ${n < 3 ? 'em 30 min' : 'só amanhã (3 tentativas)'}`)
+      execColeta.fechar({ ok: 0, total: totalColeta, falhas: totalColeta, detalhe: { tentativa: n, dia_fechado: false } })
       return
     }
+    execColeta.fechar({ ok: okColeta, total: totalColeta, falhas: totalColeta - okColeta, detalhe: { dia_fechado: true } })
+    livroExec.podar(180)
     setEstado('coleta_ml_em', agora())   // carimbo com hora: a saúde do sistema e o vigia medem a idade da coleta (autogestão)
     setEstado('coleta_ml_dia', hojeLocal())
     Promise.resolve().then(() => alertas.varrer({ origem: 'coleta' })).catch(e => logS('morpheus', 'erro', `varredura de alertas (pós-coleta): ${sanitizarErp(e?.message)}`))   // estoque novo → pendência crítica avisada no ciclo da coleta diária
@@ -725,8 +734,11 @@ setInterval(async () => {
   saudeSis.bater('medicao')
   if (new Date().getHours() < 6 || getEstado('medicao_dia') === hojeLocal()) return
   setEstado('medicao_dia', hojeLocal())
-  try { const { medirResultados } = await import('./lib/aprendizado.js'); const r = medirResultados(); setEstado('medicao_em', agora()); logS('merovingio', 'info', `medição diária: ${JSON.stringify(r)}`) }
-  catch (e) { logS('merovingio', 'erro', `medição diária: ${String(e?.message).slice(0, 160)}`) }
+  const execMed = livroExec.abrir('merovingio', 'medicao')
+  try { const { medirResultados } = await import('./lib/aprendizado.js'); const r = medirResultados(); setEstado('medicao_em', agora()); logS('merovingio', 'info', `medição diária: ${JSON.stringify(r)}`); execMed.fechar({ ok: 1, total: 1, falhas: 0, detalhe: r })
+    // foto diária da calibração por regra/família/cliente (Oráculo; «Neo aprende sobre si») — falha não derruba a medição
+    try { const { fotografarCalibracao } = await import('./lib/calibracao.js'); const n = fotografarCalibracao({ hoje: hojeLocal() }); logS('oraculo', 'info', `calibração fotografada: ${n} linha(s) em calibracao_dia`) } catch (e) { logS('oraculo', 'erro', `foto da calibração: ${String(e?.message).slice(0, 160)}`) } }
+  catch (e) { logS('merovingio', 'erro', `medição diária: ${String(e?.message).slice(0, 160)}`); execMed.fechar({ ok: 0, total: 1, falhas: 1, detalhe: { erro: String(e?.message).slice(0, 160) } }) }
 }, 60 * 60 * 1000)
 
 // erros: nunca devolver stack trace nem mensagem interna crua (JSON inválido = 400; o resto = 500 genérico, detalhe só no log)

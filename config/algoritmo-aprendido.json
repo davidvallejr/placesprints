@@ -1,0 +1,1 @@
+{ "$doc": "Overrides APRENDIDOS pelo Neo (plano «Neo aprende sobre si», 04/11/2026). Escrito só por src/lib/neo-ajustes-real.js ao aplicar uma proposta sem veto em 48 h; config/algoritmo.json nunca é reescrito. Por regra: p_sucesso (premissa aprendida), ativa:false (quarentena), desde, proposta_id. Apagar a chave = volta à premissa.", "regras": {} }

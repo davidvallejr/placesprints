@@ -1166,7 +1166,7 @@ await ok('só semanal com a caixa «urgente na hora» MARCADA no cliente: config
     return { m, imediatos }
   }
   // 14/10/2026: o David LIGOU o urgente de estoque e preço no config real; o contrato «config false = nada sai» é testado com uma cópia desligada
-  assert.equal(lerConfig().urgente.na_hora_ligado, true, 'config real: urgente religado pelo David em 30/10')
+  assert.equal(lerConfig().urgente.na_hora_ligado, false, 'config real: urgente religado e DESLIGADO de novo pelo David em 30/10 (CLAUDE.md); o plano de ciclo de compras vai ao consultor no Discord')
   const off = JSON.parse(JSON.stringify(lerConfig())); off.urgente.na_hora_ligado = false
   const a = await rodar(validarConfig(off)); assert.deepEqual([a.m.envios.length, a.imediatos, a.m.lotes('Acme').length], [0, 0, 0], 'quarta, config desligado e caixa marcada: nada sai')
   const on = JSON.parse(JSON.stringify(lerConfig())); on.urgente.na_hora_ligado = true; on.urgente.impacto_min_reais = 0   // mecânica: fixture abaixo do piso real

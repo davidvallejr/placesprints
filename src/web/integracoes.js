@@ -462,7 +462,7 @@ async function carregarSaudeSistema() {
         <td>${s.valor == null ? '—' : esc(String(s.valor).replace('.', ','))}</td><td>${i ? `aberto ${esc(dataHora(i.aberto_em))} · prazo ${esc(dataHora(i.sla_ate))}` : '—'}</td><td>${i ? esc(i.dono) : '—'}</td></tr>`
     }).join('')
     const res = d.incidentes.resolvidos.length
-    $('saudeSistemaNota').textContent = `Leitura ${dataHora(d.em)} · ${d.incidentes.abertos.length} incidente(s) aberto(s)${res ? ` · ${res} resolvido(s) recentemente` : ''} · WhatsApp do ${d.dono || 'Head de canais'} no crítico: ${d.whatsapp_critico_ligado ? 'ligado' : 'desligado'}`
+    $('saudeSistemaNota').textContent = `Leitura ${dataHora(d.em)} · ${d.incidentes.abertos.length} incidente(s) aberto(s)${res ? ` · ${res} resolvido(s) recentemente` : ''} · WhatsApp do ${d.dono || 'Head de canais'} no crítico: ${d.whatsapp_critico_ligado ? 'ligado' : 'desligado'}${d.versao ? ` · código ${d.versao}` : ''}${d.execucoes?.coleta_ml?.p95_ms ? ` · coleta p95 ${Math.round(d.execucoes.coleta_ml.p95_ms / 6e4)} min (7 d)` : ''}`
   } catch (e) { $('saudeSistema').innerHTML = `<tr><td colspan="6">Saúde do sistema indisponível agora (${esc(e.message)}).</td></tr>` }
 }
 carregarSaudeSistema(); setInterval(carregarSaudeSistema, 120_000)

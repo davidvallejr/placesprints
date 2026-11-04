@@ -1,0 +1,21 @@
+# COPIAR para .github/workflows/testes.yml a partir de um git com escopo `workflow` (o token OAuth atual recusa criar workflows: push de 04/11/2026). Até lá, o CI de casa é o git-auto.sh (suíte antes do commit).
+# CI de casa («Neo aprende sobre si», habilidade Service Tools): roda a suíte inteira a cada push/PR. Sem .env, sem banco (PS_DB_MEMORIA=1 por teste), sem rede externa.
+name: testes
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  suite:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      TZ: America/Sao_Paulo
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: node scripts/testar.mjs --sem-banco

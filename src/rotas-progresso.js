@@ -17,6 +17,12 @@ export function criarRotasProgresso({ progresso, clienteCanonico }) {
     if (!canon) return res.status(404).json({ erro: 'cliente não encontrado na central' })
     res.set('Cache-Control', 'no-store').json(progresso.cliente(canon))
   }))
+  // Jornada do cliente (04/11/2026): passos por etapa, estado lido do dado real, onde alimentar — só leitura
+  r.get('/api/jornada', trata((req, res) => {
+    const c = um(req.query.cliente), canon = c && !ehProspecto(c) ? clienteCanonico(c) : ''
+    if (!canon) return res.status(404).json({ erro: 'cliente não encontrado na central' })
+    res.set('Cache-Control', 'no-store').json(progresso.jornada(canon))
+  }))
   r.get('/api/progresso', trata((req, res) => {
     const qq = req.query || {}, clientes = [].concat(qq.cliente || []).map(texto).filter(Boolean)
     const escopo = { tipo: texto(qq.tipo) || (clientes.length ? 'selecao' : 'total'), consultor: texto(qq.consultor), squad: texto(qq.squad), ...(texto(qq.produto) ? { produto: texto(qq.produto) } : {}), clientes }

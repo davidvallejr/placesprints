@@ -45,7 +45,7 @@ await ok('limiares: idade usa >, contagem ≥, disco menor; sem leitura = sem_da
   const av = avaliar({ 'trinity.coleta_ml': 1, ticks: { coleta: 25, gatilhos: 70, consultor: 5 } }, CFG), por = Object.fromEntries(av.map(s => [s.id, s]))
   assert.equal(por['trinity.coleta_ml'].estado, 'ok'); assert.equal(por['trinity.notion_sync'].estado, 'sem_dado', 'sem leitura nunca é ok')
   assert.equal(por['tick.coleta'].estado, 'ok'); assert.equal(por['tick.gatilhos'].estado, 'critico'); assert.equal(por['tick.relatorios'].estado, 'sem_dado')
-  assert.ok(av.every(s => ['trinity', 'morpheus', 'merovingio'].includes(s.sistema)), 'só sistemas do catálogo')
+  assert.ok(av.every(s => ['trinity', 'morpheus', 'merovingio', 'arquiteto'].includes(s.sistema)), 'só sistemas do catálogo')   // arquiteto.testes (livro de execução, 04/11)
 })
 
 // ═════════ (2) incidentes (puro + fiação com banco em memória) ═════════

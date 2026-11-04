@@ -13,7 +13,10 @@
     "trinity.tokens": { "rotulo": "Contas com «sem token» em 3 ciclos seguidos", "contagem": true, "atencao": 1, "critico": 5 },
     "trinity.disco": { "rotulo": "Disco livre (GB)", "menor": true, "atencao": 15, "critico": 5 },
     "morpheus.n8n": { "rotulo": "Entregas do n8n com erro (502/timeout/rede) nas últimas 6 h", "contagem": true, "atencao": 1, "critico": 3 },
-    "merovingio.medicao": { "rotulo": "Medição de resultados (horas desde a última)", "atencao": 26, "critico": 72 }
+    "merovingio.medicao": { "rotulo": "Medição de resultados (horas desde a última)", "atencao": 26, "critico": 72 },
+    "trinity.coleta_duracao": { "rotulo": "Duração da última coleta diária (minutos) — premissa 04/11, revisar com 30 dias de série", "atencao": 120, "critico": 240 },
+    "trinity.reinicios": { "rotulo": "Reinícios do servidor nas últimas 24 h", "contagem": true, "atencao": 3, "critico": 10 },
+    "arquiteto.testes": { "rotulo": "Suíte de testes (horas desde a última rodada verde)", "atencao": 30, "critico": 72 }
   },
   "ticks": {
     "$doc": "Batimento de cada tick do servidor: período em minutos e sistema. Parado = sem bater há mais de 3× o período (atenção) ou 6× (crítico).",

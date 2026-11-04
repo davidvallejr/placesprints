@@ -148,9 +148,9 @@ await caso('telas: cliente.js (#progresso entre #kpis e nav.abas; #prontoOperar 
 
 await caso('rotas-progresso: só GET (nenhuma escrita nasce aqui); 404 com mensagem fixa sem ecoar o nome; prospect = 404; escopo da query vai inteiro para carteira()', async () => {
   const chamadas = []
-  const r = criarRotasProgresso({ progresso: { cliente: c => ({ cliente: c, etapas: [] }), carteira: e => { chamadas.push(e); return { total: 0 } } }, clienteCanonico: n => n === 'Cliente Ok' ? 'Cliente Ok' : '' })
+  const r = criarRotasProgresso({ progresso: { cliente: c => ({ cliente: c, etapas: [] }), jornada: c => ({ cliente: c, etapas: [] }), carteira: e => { chamadas.push(e); return { total: 0 } } }, clienteCanonico: n => n === 'Cliente Ok' ? 'Cliente Ok' : '' })
   const pilha = r.stack.filter(l => l.route).map(l => [l.route.path, Object.keys(l.route.methods)[0]])
-  assert.deepEqual(pilha, [['/api/cliente/progresso', 'get'], ['/api/progresso', 'get']])
+  assert.deepEqual(pilha, [['/api/cliente/progresso', 'get'], ['/api/jornada', 'get'], ['/api/progresso', 'get']])   // /api/jornada (04/11/2026): passos por etapa, só GET
   const chamar = (path, query) => new Promise(okk => { const res = { status(c) { this.c = c; return this }, set() { return this }, json(j) { okk({ c: this.c || 200, j }) } }; r.stack.find(l => l.route?.path === path).route.stack[0].handle({ params: {}, query }, res, () => okk(null)) })
   const [a, b, c, d] = await Promise.all([chamar('/api/cliente/progresso', { cliente: 'Cliente Ok' }), chamar('/api/cliente/progresso', { cliente: '<script>x' }), chamar('/api/cliente/progresso', { cliente: '[Comercial] Loja' }), chamar('/api/progresso', { tipo: 'consultor', consultor: 'Ana', cliente: ['A', 'B'] })])
   assert.equal(a.j.cliente, 'Cliente Ok'); assert.deepEqual(b, { c: 404, j: { erro: 'cliente não encontrado na central' } }); assert.equal(c.c, 404)

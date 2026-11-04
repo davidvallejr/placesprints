@@ -5,6 +5,7 @@ import { mkdirSync, writeFileSync, statfsSync } from 'node:fs'
 import { join, extname } from 'node:path'
 import { execFileSync } from 'node:child_process'
 import { db, agora, hojeLocal, log, getEstado, setEstado } from './db.js'
+import { gravar as gravarExecucao } from './execucao-sistema.js'
 import { ROOT } from './env.js'
 import { resolverFontes, consultarPaginas, lerBlocos, baixarArquivo } from './notion.js'
 import { extrairTarefa, processarBlocos, hashConteudo, mapeamento } from './extrair.js'
@@ -214,5 +215,8 @@ export async function sincronizar({ completo = false, cliente, tetoMs = 0 } = {}
   log('info', `sync ok em ${seg}s — ${resumo.paginas} página(s) vistas, ${resumo.alteradas} alterada(s), ${resumo.evidencias} evidência(s), ${nSnap} snapshot(s)${resumo.pulados ? ` — ${resumo.pulados} fonte(s) para o próximo sync (teto de tempo)` : ''}`)
   if (resumo.camposAusentes.size)
     log('aviso', `campos sem propriedade correspondente nas bases: ${[...resumo.camposAusentes].join(', ')} — veja config/mapeamento.json e o README (seção "Campos recomendados")`)
+  // livro de execução do sistema: 1 linha por sync (duração, páginas vistas/alteradas, fontes puladas) — nunca derruba o sync
+  gravarExecucao(db, { sistema: 'trinity', operacao: 'sync_notion', inicio: new Date(inicio).toISOString(), fim: agora(), ms: Date.now() - inicio, ok: resumo.paginas, total: resumo.paginas, falhas: resumo.pulados || 0,
+    detalhe: { alteradas: resumo.alteradas, evidencias: resumo.evidencias, snapshots: nSnap, completo, parcial: !!resumo.pulados } })
   return { ...resumo, camposAusentes: [...resumo.camposAusentes], segundos: Number(seg) }
 }

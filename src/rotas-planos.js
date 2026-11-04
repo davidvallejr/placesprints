@@ -18,7 +18,7 @@ import { historico } from './lib/preco-historico.js'
 import { gerarPlanoConta, previsaoDoPlano } from './lib/plano-anuncios.js'
 import { diagnosticarConta, custosDoCliente, economiaAds, algoritmo } from './lib/diagnostico-conta.js'
 import { renderPlanoConta } from './lib/render-plano-conta.js'
-import { saudeRegras, compararPrevisaoRealizado, padroesGlobaisCache } from './lib/calibracao.js'
+import { saudeRegras, compararPrevisaoRealizado, padroesGlobaisCache, agruparCalibracao, serieCalibracao } from './lib/calibracao.js'
 import { env } from './lib/env.js'
 import { linkConectar } from './lib/meli-link.js'
 import { listarConexoes } from './lib/meli-contas.js'
@@ -956,7 +956,8 @@ rotasPlanos.post('/api/cliente/custos', trata((req, res) => {
 
 // ── metodologia viva: regras, saúde, calibração ──
 rotasPlanos.get('/api/metodologia', trata((req, res) => {
-  res.json({ versao: algoritmo.versao, foco: algoritmo.foco, limiares: algoritmo.limiares, ritual: algoritmo.ritual, regra_de_entrada: algoritmo.regra_de_entrada, regras: saudeRegras(), calibracao: compararPrevisaoRealizado() })
+  const comp = compararPrevisaoRealizado()
+  res.json({ versao: algoritmo.versao, foco: algoritmo.foco, limiares: algoritmo.limiares, ritual: algoritmo.ritual, regra_de_entrada: algoritmo.regra_de_entrada, regras: saudeRegras(), calibracao: comp, calibracao_familias: agruparCalibracao(comp, { por: 'familia' }), calibracao_serie: serieCalibracao({ dias: 60 }) })
 }))
 
 // ── documento do plano (HTML; /plano.pdf é servido no server.js com o mesmo servirPdf) ──

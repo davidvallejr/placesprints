@@ -1,0 +1,9 @@
+{
+  "$doc": "Runner da suíte (scripts/testar.mjs; «Neo aprende sobre si», 04/11/2026). precisam_dados: testes que leem data/db.sqlite de verdade (passam à mão, não no CI sem dados) — pulados com --sem-banco. conhecidos_vermelhos: testes quebrados ANTES do runner existir, registrados com motivo e data; contam à parte (não seguram o commit automático) e entram na lista de «melhorias de código sugeridas» do relatório de si até alguém consertá-los e tirá-los daqui. Vermelho NOVO (fora desta lista) = suíte vermelha.",
+  "precisam_dados": ["teste-analistas", "teste-merovingio", "teste-placeplan", "teste-planos"],
+  "conhecidos_vermelhos": [
+    { "nome": "teste-catalogo", "desde": "2026-11-04", "motivo": "massa com datas fixas (05/10) contra o «hoje» real da rota /api/plano-conta: as ações saíram da janela de 28 d — precisa de relógio injetável ou massa relativa a hoje" },
+    { "nome": "teste-diagnostico-motor", "desde": "2026-11-04", "motivo": "mesmo problema: cobertura.pedidos.lacunas vem null porque a massa de 05/10 ficou fora da janela real; relógio injetável ou massa relativa" },
+    { "nome": "teste-promocoes", "desde": "2026-11-04", "motivo": "HOJE fixo em 05/10 na massa, rota usa o hoje real: «protegido que vence em 27 dias» já venceu (01/11); massa relativa a hoje" }
+  ]
+}

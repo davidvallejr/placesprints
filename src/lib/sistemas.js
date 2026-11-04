@@ -21,12 +21,12 @@ const MAPA = {
     // regras/gatilhos lidos direto da coleta (saúde da conta, status do anúncio, estoque zerado)
     'anuncio_restrito', 'reputacao_em_risco', 'envio_atrasado', 'reclamacao_sem_resposta', 'pergunta_sem_resposta', 'reclamacao_mediacao', 'perguntas_sem_resposta', 'estoque_zerado',
     // avisos e eventos de conexão, coleta e sync
-    'cliente_conectado', 'cliente_reconectado', 'dados_prontos', 'coleta_falhou', 'conexao_caiu', 'conta_trocada', 'conexao_pendente', 'meli_credencial', 'prospect_conectado', 'coleta', 'sync', 'snapshot', 'saude',
+    'cliente_conectado', 'cliente_reconectado', 'dados_prontos', 'coleta_falhou', 'conexao_caiu', 'conta_trocada', 'conexao_pendente', 'meli_credencial', 'prospect_conectado', 'coleta', 'sync', 'snapshot', 'saude', 'boot',
   ],
   arquiteto: [
     'ima_conversao', 'catalogo_buybox', 'estoque_dividido', 'sku_ausente', 'ads_entrar', 'ads_escalar', 'ads_otimizar_antes', 'conteudo_fotos', 'frete_gratis', 'sazonal', 'urgencia_oculta',
     'duplicacao_estrategica', 'oferta_galeria', 'oferta_titulo_descricao', 'oferta_completa', 'oferta_ficha', 'oferta_cadastro', 'queda_conversao_anuncio', 'queda_exposicao_anuncio', 'queda_ctr_ads',
-    'concentracao_receita', 'full_estoque_antigo', 'diagnostico_pronto', 'plano', 'alinhamentos',
+    'concentracao_receita', 'full_estoque_antigo', 'diagnostico_pronto', 'plano', 'alinhamentos', 'testes', 'testes_vermelhos',   // suíte de testes (livro de execução, 04/11)
   ],
   oraculo: ['estoque_ruptura', 'full_envio', 'ruptura_curva_a', 'ciclo_estoque_previsto', 'envio_full_sugerido', 'previsao', 'calibracao', 'aprendizado'],
   merovingio: ['preco_mudou_vendas_cairam', 'queda_forte_conta', 'queda_conta', 'queda_por_preco', 'medicao'],

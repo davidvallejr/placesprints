@@ -32,7 +32,15 @@ function calib(c, dist, geradas) {
     <div class="kpi"><div class="rotulo">Erro médio</div><div class="valor">${brl(c.erro_absoluto_medio)}</div><div class="detalhe">diferença entre previsto e realizado</div></div>
     <div class="kpi ${vies[0]}"><div class="rotulo">Viés</div><div class="valor">${brl(c.vies)}</div><div class="detalhe">${vies[1]}</div></div>
     <div class="kpi"><div class="rotulo">Dentro do intervalo</div><div class="valor">${c.pct_no_intervalo == null ? '—' : c.pct_no_intervalo + '%'}</div><div class="detalhe">Brier ${c.brier ?? '—'} (perto de 0 = bem calibrado)</div></div>
-  </div><p class="nota mt-2">${esc(c.nota)}</p>`
+  </div><p class="nota mt-2">${esc(c.nota)}</p>${familias(c.familias || [], c.serie || [])}`
+}
+// por família de demanda (foto gravada 1×/dia em calibracao_dia; «Neo aprende sobre si»): ≤ 6 colunas, valor nunca colorido
+function familias(fams, serie) {
+  if (!fams.length) return ''
+  const n = x => x == null ? '—' : String(Math.round(x * 100)) + '%'
+  const linhas = fams.slice(0, 12).map(f => `<tr><td>${esc(f.chave)}</td><td class="num">${int(f.n)}</td><td class="num">${f.brier ?? '—'}</td><td class="num">${n(f.taxa)}</td><td class="num">${n(f.taxa_baixo)}–${n(f.taxa_alto)}</td><td class="num">${n(f.pct_intervalo)}</td></tr>`).join('')
+  const fotos = serie.length ? `<p class="nota">${int(serie.length)} foto(s) diária(s) gravada(s); Brier global na última: ${serie.at(-1).brier ?? '—'} (${esc(serie.at(-1).dia)}).</p>` : '<p class="nota">A primeira foto diária é gravada na próxima medição (06h).</p>'
+  return `<h3 class="mt-2">Por família de demanda</h3><table class="tabela"><thead><tr><th>Família</th><th class="num">Medidas</th><th class="num">Brier</th><th class="num">Taxa</th><th class="num">Intervalo (Wilson)</th><th class="num">Dentro da previsão</th></tr></thead><tbody>${linhas}</tbody></table>${fotos}`
 }
 
 function regras(lista) {
@@ -83,7 +91,7 @@ async function carregar() {
     for (const id of ['calib', 'regras', 'ritual', 'limiares']) erro(id, e)
     return
   }
-  const lista = Array.isArray(d.regras) ? d.regras : [], c = d.calibracao || { n: 0, nota: '' }
+  const lista = Array.isArray(d.regras) ? d.regras : [], c = { ...(d.calibracao || { n: 0, nota: '' }), familias: d.calibracao_familias || [], serie: d.calibracao_serie || [] }
   const geradas = lista.reduce((t, r) => t + (r.geradas || 0), 0), dist = lista.reduce((t, r) => t + (r.distribuidas || 0), 0)
   $('versao').textContent = 'versão ' + d.versao
   $('metaRegras').textContent = int(lista.filter(r => r.ativa).length) + ' regras ativas'

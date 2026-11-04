@@ -14,6 +14,7 @@ import { integracaoMlReal } from './gatilhos-real.js'
 import { resumoCustos } from './custos-db.js'
 import { dataNoFuso, horaNoFuso } from './relatorio-envio.js'
 import { progressoCliente, progressoCarteira, diasUteis, LIMIARES as L } from './progresso-cliente.js'
+import { montarJornada } from './jornada.js'
 
 const CHAVEIRO = (() => { try { return JSON.parse(readFileSync(join(ROOT, 'config', 'chaveiro.json'), 'utf-8')) } catch { return {} } })()   // o carregado no início (como estrutura-estado-real)
 const Q = {}
@@ -26,7 +27,7 @@ const segundaDa = iso => { const d = new Date(`${iso}T12:00:00Z`); return addDia
 // contexto de UM cliente (nome canônico da central). relatorio = item de relatorios.listar() para este cliente (ou null = não lido)
 export function contextoCliente(cliente, { relatorio = null, cfgGatilhos = null, agoraIso = agora() } = {}) {
   const cfg = cfgGatilhos || lerGatilhos()
-  const central = q('central', 'SELECT status_cs, cs_responsavel, canais_json, notificacao_json, tier FROM clientes_central WHERE cliente = ?').get(cliente) || {}
+  const central = q('central', 'SELECT status_cs, cs_responsavel, canais_json, notificacao_json, tier, nicho, consultores_json FROM clientes_central WHERE cliente = ?').get(cliente) || {}
   const notif = notificacaoDe(central.notificacao_json, cfg), fuso = notif.fuso
   const hoje = dataNoFuso(Date.parse(agoraIso), fuso), hora = horaNoFuso(Date.parse(agoraIso), fuso)
   const canais = tenta(() => JSON.parse(central.canais_json || '[]'), [])
@@ -77,7 +78,13 @@ export function contextoCliente(cliente, { relatorio = null, cfgGatilhos = null,
   const comunicacao = { chave_ligada: getEstado('gatilhos_ligado') === 'ligado', inicio_envios: cfg.inicio_envios || '', elegivel: !!integ?.ok, motivo_inelegivel: integ ? integ.motivo : 'sem_conexao_ml', liberado: !!notif.liberado_por, recibo_semana: lote?.estado || '',
     relatorio: relatorio ? { situacao: relatorio.situacao, situacao_rotulo: relatorio.situacao_rotulo, frequencia: relatorio.frequencia } : null,
     resposta_14d: !!tenta(() => q('resp', 'SELECT 1 FROM feedback_relatorio WHERE cliente = ? AND recebido_em >= ? LIMIT 1').get(cliente, addDias(hoje, -L.resposta_dias)), null) }
-  return { cliente, agora: agoraIso, hoje, hora, ativo: central.status_cs === 'Ativo', quadro, cs: central.cs_responsavel || '', conhecido_desde: conhecido, ml, coleta, empresa, plano, decisao, distribuicao, execucao, medicao, comunicacao }
+  // Jornada do cliente (04/11/2026, passos por etapa): o que a central e as tabelas já sabem sobre quem é o cliente e o que já foi informado
+  const consultorMl = tenta(() => String(JSON.parse(central.consultores_json || '{}')?.ML || '').trim(), '')
+  const metasMes = !!tenta(() => q('metasMes', 'SELECT 1 FROM metas_cliente WHERE cliente = ? AND mes = ? LIMIT 1').get(cliente, hoje.slice(0, 7)), null)
+  const perfil = tenta(() => q('perfilJ', 'SELECT coleta_promocoes FROM perfil_cliente WHERE cliente = ?').get(cliente), null)
+  const cadastro = { canais, tier: central.tier || '', nicho: central.nicho || '', consultor_ml: consultorMl, status_cs: central.status_cs || '' }
+  const canaisLigados = Object.entries(notif.canais || {}).filter(([, v]) => v?.ligado).map(([k]) => k)
+  return { cliente, agora: agoraIso, hoje, hora, ativo: central.status_cs === 'Ativo', quadro, cs: central.cs_responsavel || '', conhecido_desde: conhecido, cadastro, ml, coleta, empresa: { ...empresa, metas_mes: metasMes, promocoes_coleta: perfil ? perfil.coleta_promocoes === 1 : null }, plano, decisao, distribuicao, execucao, medicao, comunicacao: { ...comunicacao, canais_ligados: canaisLigados } }
 }
 
 // deps: relatorios = criarRelatorioEnvio(...) do server (listar() → { itens[] }); sem ele o relatório sai «não lido»
@@ -85,6 +92,8 @@ export function criarProgressoReal({ relatorios = null } = {}) {
   const relatorioDe = () => { const m = new Map(); for (const i of tenta(() => relatorios?.listar()?.itens, null) || []) m.set(normNome(i.cliente).trim(), i); return c => m.get(normNome(c).trim()) || null }
   return {
     cliente(c) { const cfg = lerGatilhos(); return progressoCliente(contextoCliente(c, { relatorio: relatorioDe()(c), cfgGatilhos: cfg })) },
+    // Jornada do cliente (04/11): passos por etapa sobre o MESMO contexto e as MESMAS 10 etapas
+    jornada(c) { const cfg = lerGatilhos(), ctx = contextoCliente(c, { relatorio: relatorioDe()(c), cfgGatilhos: cfg }); return montarJornada({ etapas: progressoCliente(ctx).etapas, ctx }) },
     // escopo = { tipo, clientes, consultor, squad } de equipe.resolverEscopo; no 'total' entram também os Ativos ainda sem quadro (ignorados «sem tarefa sincronizada»):
     // é exatamente a população parada na etapa 1, que o escopo dos planos esconde
     carteira(escopo = {}) {

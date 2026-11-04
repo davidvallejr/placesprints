@@ -24,7 +24,9 @@ export const lerCfg = () => JSON.parse(readFileSync(join(ROOT, 'config', 'autoge
 const horasDesde = (iso, agoraMs) => { const t = Date.parse(iso || ''); return Number.isFinite(t) ? Math.round((agoraMs - t) / 36e5 * 10) / 10 : null }
 
 // deps: handle (better-sqlite3), getEstado, agora() ISO, log, notificar, cfg, env, envio ({ postar } de gatilhos-envio.criarEnvio), dirDados, discoGb()
-export function criarSaudeSistema({ handle, getEstado, agora = () => new Date().toISOString(), log = () => {}, notificar = () => {}, cfg = lerCfg(), env = process.env,
+const minutosDe = ms => (Number.isFinite(ms) ? Math.round(ms / 6e4) : null)
+
+export function criarSaudeSistema({ handle, getEstado, agora = () => new Date().toISOString(), log = () => {}, notificar = () => {}, cfg = lerCfg(), env = process.env, livro = null,
   envio = null, dirDados = join(ROOT, 'data'), discoGb = () => { try { const f = statfsSync(dirDados); return Math.round(f.bavail * f.bsize / 1e8) / 10 } catch { return null } } }) {
   handle.exec(SCHEMA_INCIDENTE)
   const batidas = {}
@@ -45,6 +47,10 @@ export function criarSaudeSistema({ handle, getEstado, agora = () => new Date().
       'trinity.disco': discoGb(),
       'morpheus.n8n': n8nErros,                                       // n8n não configurado = sem_dado (a entrega já fica 'pendente' com o motivo)
       'merovingio.medicao': horasDesde(getEstado('medicao_em'), ms),
+      // livro de execução (04/11): sem livro = sem_dado (nunca ok inventado)
+      'trinity.coleta_duracao': livro ? minutosDe(livro.ultima('coleta_ml')?.ms) : null,          // minutos da última coleta diária fechada
+      'trinity.reinicios': livro ? livro.contar('boot', 24) : null,                                 // boots do processo nas últimas 24 h
+      'arquiteto.testes': livro ? horasDesde(livro.ultima('testes', { ok: true })?.inicio, ms) : null,   // horas desde a última suíte verde
       ticks: Object.fromEntries(Object.entries(batidas).map(([k, t]) => [k, Math.round((ms - t) / 6e4)])),
     }
   }
@@ -110,6 +116,7 @@ export function criarSaudeSistema({ handle, getEstado, agora = () => new Date().
     try { await reconciliarAgora(av) } catch (e) { log('erro', `Morpheus · incidentes: ${String(e?.message).slice(0, 120)}`) }
   }
 
-  const estado = () => { const av = avaliacao(); return { em: agora(), geral: geral(av), sinais: av, incidentes: listar(), whatsapp_critico_ligado: cfg.whatsapp_critico_ligado === true, dono: cfg.dono } }
+  const estado = () => { const av = avaliacao(); return { em: agora(), geral: geral(av), sinais: av, incidentes: listar(), whatsapp_critico_ligado: cfg.whatsapp_critico_ligado === true, dono: cfg.dono,
+    execucoes: livro ? Object.fromEntries(['coleta_ml', 'sync_notion', 'medicao', 'testes'].map(op => [op, livro.resumo(op, 7)])) : null, versao: livro?.versao || '' } }
   return { bater, registrarRenovacao, sinais, avaliacao, reconciliarAgora, avisarWhatsapp, escreverBatimento, tick, estado, listar }
 }

@@ -12,6 +12,7 @@ import { SCHEMA_ALERTA } from './alerta-cliente.js'
 import { SCHEMA_S90 } from './s90-schema.js'
 import { SCHEMA_NOTION_CLIENTE } from './notion-cliente.js'
 import { SCHEMA_SNAPSHOT } from './snapshot-schema.js'
+import { SCHEMA_EXECUCAO } from './execucao-sistema.js'
 import { SCHEMA_SAUDE } from './saude-schema.js'
 import { SCHEMA_GATILHOS } from './gatilhos-schema.js'
 import { SCHEMA_ALINHAMENTO } from './alinhamentos-schema.js'
@@ -293,6 +294,8 @@ db.exec(SCHEMA_PENDENCIAS)       // pendências do cliente registradas à mão (
 db.exec(SCHEMA_ALERTA)           // alerta de pendência crítica ao cliente (alerta_cliente; idempotente) — config/alerta-cliente.json
 db.exec(SCHEMA_S90)              // Place Sprint 90 (s90_*; aditivo, idempotente) — docs/desenho-place-sprint-90.md seção 2
 db.exec(SCHEMA_NOTION_CLIENTE)
+db.exec(`CREATE TABLE IF NOT EXISTS calibracao_dia (dia TEXT NOT NULL, escopo TEXT NOT NULL CHECK (escopo IN ('global','regra','familia','cliente')), chave TEXT NOT NULL, n INTEGER NOT NULL, acertos INTEGER NOT NULL, brier REAL, mae REAL, vies REAL, pct_intervalo REAL, taxa REAL, taxa_baixo REAL, taxa_alto REAL, versao TEXT NOT NULL DEFAULT '', PRIMARY KEY (dia, escopo, chave))`)   // calibração por regra/família/cliente, 1 foto/dia (mesmo DDL de calibracao.js SCHEMA_CALIBRACAO; aqui para não importar calibracao.js, que importa db.js)
+db.exec(SCHEMA_EXECUCAO)         // livro de execução do próprio sistema (execucao_sistema; aditivo, idempotente) — src/lib/execucao-sistema.js
 db.exec(SCHEMA_SNAPSHOT)         // "Como era" do anúncio (meli_item_snapshot; aditivo, idempotente) — src/lib/anuncio-historico.js   // Notion do cliente no painel (cliente_notion_pagina / cliente_informacoes; aditivo, idempotente) — docs/notion-cliente.md
 db.exec(SCHEMA_SAUDE)            // Saúde da conta gravada (meli_conta_saude/meli_claim/meli_pergunta/meli_envio_atraso/meli_full_estoque; aditivo, idempotente) — src/lib/saude-coleta.js
 db.exec(SCHEMA_GATILHOS)         // Gatilhos ao cliente (gatilho_cliente/gatilho_lote; aditivo, idempotente) — src/lib/gatilhos.js, config/gatilhos.json

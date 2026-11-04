@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jornada do cliente · Place Sprints</title>
+<link rel="stylesheet" href="/ui.css">
+<link rel="stylesheet" href="/tela-jornada.css">
+</head>
+<body data-pagina="jornada">
+<header class="ps-shell" id="psShell"></header>
+<script src="/shell.js"></script>
+<main class="pg">
+  <div class="pg-cab">
+    <div class="pg-titulo">
+      <h1 id="jTitulo">Jornada do cliente</h1>
+      <p class="pg-meta"><span id="jLido">lendo…</span><span>10 etapas, passos por etapa, estado lido do dado real; cada passo diz quem alimenta e onde</span></p>
+    </div>
+    <div class="pg-acoes">
+      <div class="busca"><label class="sr" for="q">Buscar cliente</label><input id="q" type="search" autocomplete="off" placeholder="Nome ou CNPJ"><button class="btn" id="btnBuscar" type="button">Buscar</button></div>
+      <button class="btn" type="button" id="btnJAtualizar">Reler agora</button>
+    </div>
+  </div>
+  <div class="resultados" id="resultados" hidden></div>
+
+  <section class="veredito" aria-label="Resumo">
+    <p class="veredito-frase" id="veredito">Escolha um cliente pela busca para ver a jornada passo a passo.</p>
+    <div class="kpis" id="kpis" aria-busy="true"><div class="kpi sk-kpi"></div><div class="kpi sk-kpi"></div><div class="kpi sk-kpi"></div><div class="kpi sk-kpi"></div></div>
+  </section>
+
+  <section class="cartao j-estado" id="cartaoEstado" hidden>
+    <div class="j-estado-icone" id="estadoIcone" aria-hidden="true"></div>
+    <div><b id="estadoTitulo"></b><p class="mini" id="estadoTexto"></p></div>
+    <div class="j-estado-acao" id="estadoAcao"></div>
+  </section>
+
+  <section class="bloco" id="secJornada" hidden>
+    <div class="bloco-cab"><h2>Passo a passo</h2><button class="btn-icone btn-ajuda" type="button" aria-label="Como fazer: a jornada do cliente" data-ajuda="cadastro_cs"></button></div>
+    <p class="sub">À esquerda, as 10 etapas da cadeia. À direita, os passos da etapa escolhida: o que prova, quem alimenta, o que destrava e o botão que leva ao campo. Nada aqui inventa estado: ausente aparece como pendente com o motivo.</p>
+    <div class="j-grade">
+      <ol class="j-etapas" id="jEtapas"></ol>
+      <div class="j-painel" id="jPainel"></div>
+    </div>
+  </section>
+
+  <section class="bloco" id="secProgresso">
+    <div class="bloco-cab"><h2>Carteira</h2></div>
+    <p class="sub">Onde cada cliente está na cadeia. Clique no nome para abrir a jornada dele.</p>
+    <div id="progressoCarteira" aria-busy="true"><div class="sk-tabela"></div></div>
+  </section>
+</main>
+<footer class="pg-rodape">Fonte: clientes_central, meli_contas, meli_coleta_dia, custos, metas_cliente, acoes_plano, tarefas, exec_ordem, aprendizado, gatilho_lote, relatorio_programacao · só leitura; cada botão leva à tela onde o campo já existe</footer>
+<script src="/progresso.js"></script>
+<script src="jornada.js"></script>
+<script src="/alerta.js" defer></script>
+<script src="/ajuda.js" defer></script>
+</body>
+</html>

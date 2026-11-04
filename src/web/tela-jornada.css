@@ -1,0 +1,43 @@
+/* Jornada do cliente (/jornada): só o que o ui.css não tem. Toda cor vem de var(--token). Esquerda = etapas (lista vertical), direita = passos da etapa. */
+.pg-acoes .busca{display:flex;gap:var(--e-2)}
+.pg-acoes .busca input{height:36px;min-width:220px;padding:0 12px;border:1px solid var(--borda-forte);border-radius:var(--raio-p);font:400 var(--t-14) var(--fonte)}
+.resultados{margin:var(--e-2) 0 0;display:grid;gap:var(--e-1);max-width:560px}
+.res-item{display:flex;justify-content:space-between;gap:var(--e-3);width:100%;padding:10px 14px;border:1px solid var(--borda);border-radius:var(--raio-p);background:var(--superficie);text-align:left;font:400 var(--t-14) var(--fonte);cursor:pointer}
+.res-item:hover{background:var(--fundo-suave)}
+.res-item .sub{color:var(--cinza);font-size:var(--t-13)}
+.j-estado{display:grid;grid-template-columns:44px 1fr auto;gap:var(--e-4);align-items:center;margin-top:var(--e-4)}
+.j-estado-icone{width:44px;height:44px;border-radius:50%;background:var(--fundo-suave);border:1px solid var(--borda)}
+.j-estado.ok .j-estado-icone{background:var(--verde-suave);border-color:var(--verde)}
+.j-estado.atencao .j-estado-icone{background:var(--ambar-suave,var(--fundo-suave));border-color:var(--ambar)}
+.j-estado.ruim .j-estado-icone{background:var(--verm-suave);border-color:var(--verm)}
+.j-estado p{margin:2px 0 0}
+.j-grade{display:grid;grid-template-columns:minmax(220px,1fr) minmax(0,3fr);gap:var(--e-4);align-items:start}
+.j-etapas{margin:0;padding:0;list-style:none;background:var(--superficie);border:1px solid var(--borda);border-radius:var(--raio);overflow:hidden;counter-reset:et}
+.j-etapas>li{border-top:1px solid var(--borda);counter-increment:et}
+.j-etapas>li:first-child{border-top:0}
+.j-etapas button{display:grid;grid-template-columns:24px 1fr;gap:var(--e-2) var(--e-3);width:100%;padding:10px 14px;border:0;background:transparent;text-align:left;font:500 var(--t-14) var(--fonte);color:var(--cinza);cursor:pointer}
+.j-etapas button::before{content:counter(et);grid-row:1/3;display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border:1px solid var(--borda-forte);border-radius:50%;font:600 var(--t-12)/1 var(--fonte);color:var(--cinza)}
+.j-etapas button small{grid-column:2;color:var(--cinza);font-size:var(--t-12)}
+.j-etapas>li.feito button{color:var(--verde)}
+.j-etapas>li.feito button::before{background:var(--verde);border-color:var(--verde);color:var(--superficie)}
+.j-etapas>li.atual button,.j-etapas>li.sel button{color:var(--tinta)}
+.j-etapas>li.atual button::before{background:var(--tinta);border-color:var(--tinta);color:var(--superficie)}
+.j-etapas>li.atrasado button{color:var(--verm)}
+.j-etapas>li.atrasado button::before{background:var(--verm);border-color:var(--verm);color:var(--superficie)}
+.j-etapas>li.sel{background:var(--fundo-suave)}
+.j-painel{background:var(--superficie);border:1px solid var(--borda);border-radius:var(--raio);padding:var(--e-4)}
+.j-painel-cab{display:flex;align-items:center;gap:var(--e-3);flex-wrap:wrap;margin-bottom:var(--e-3)}
+.j-painel-cab h3{margin:0;font:600 var(--t-16)/1.3 var(--fonte)}
+.j-passos{margin:0;padding:0;list-style:none}
+.j-passo{display:grid;grid-template-columns:96px minmax(0,1fr) auto;gap:var(--e-3);align-items:center;padding:var(--e-3) 0;border-top:1px solid var(--borda)}
+.j-passo:first-child{border-top:0}
+.j-p-num{font-size:var(--t-13);color:var(--tinta);font-variant-numeric:tabular-nums}
+.j-passo.atrasado .j-p-num{color:var(--verm)}
+.j-p-acao{display:flex;justify-content:flex-end}
+@media (max-width:899px){
+  .j-grade{grid-template-columns:1fr}
+  .j-passo{grid-template-columns:1fr}
+  .j-p-acao{justify-content:flex-start}
+  .j-estado{grid-template-columns:1fr}
+  .pg-acoes .busca input{min-width:0;width:100%}
+}
