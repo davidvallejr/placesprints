@@ -50,13 +50,17 @@ const t0 = Date.now(), inicio = agora()
 const j = JSON.parse(readFileSync(ARQUIVO_CLIENTES_TESTE, 'utf-8')); j.ativo = true; j.ligado_em = inicio
 writeFileSync(ARQUIVO_CLIENTES_TESTE + '.tmp', JSON.stringify(j, null, 2) + '\n'); renameSync(ARQUIVO_CLIENTES_TESTE + '.tmp', ARQUIVO_CLIENTES_TESTE)
 db.pragma('foreign_keys = OFF')
+// livros append-only (registro_cliente, perfil_informacao_hist, …) têm gatilho BEFORE DELETE com RAISE: só aqui, na redução para teste, o gatilho sai e volta na mesma transação
+const gatilhosDelete = db.prepare("SELECT name, sql FROM sqlite_master WHERE type='trigger' AND sql LIKE '%BEFORE DELETE%' AND sql LIKE '%RAISE%'").all()
 const total = db.transaction(() => {
   let n = 0
+  for (const g of gatilhosDelete) db.exec(`DROP TRIGGER IF EXISTS ${g.name}`)
   for (const p of plano) if (p.apagar) n += db.prepare(`DELETE FROM ${p.tabela} WHERE cliente NOT IN (${na})`).run(...manter).changes
   n += db.prepare(`DELETE FROM evidencias WHERE tarefa_id NOT IN (SELECT id FROM tarefas)`).run().changes
   for (const t of ['tarefa_acomp', 'tarefa_item', 'tarefa_dependencia']) { try { n += db.prepare(`DELETE FROM ${t} WHERE tarefa_id NOT IN (SELECT id FROM tarefas)`).run().changes } catch { /* sem a coluna */ } }
   try { n += db.prepare('DELETE FROM meli_contas_arquivo').run().changes } catch { /* sem a tabela */ }
   try { n += db.prepare("DELETE FROM sync_estado WHERE chave LIKE 'fonte_descoberta:%' AND substr(chave, 18) NOT IN (" + na + ')').run(...manter).changes } catch { /* ok */ }
+  for (const g of gatilhosDelete) db.exec(g.sql)
   return n
 })()
 let arquivos = 0
