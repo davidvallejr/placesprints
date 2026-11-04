@@ -1,0 +1,323 @@
+<title>Place Sprints · Arquitetura e Fluxo</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* layout: documento técnico em uma coluna de leitura; os fluxos em mermaid em faixas de largura total; sumário fixo no topo */
+:root{--bg:#f6f5f1;--fg:#141829;--mute:#5c6176;--line:#d9d7cf;--card:#ffffff;--azul:#050b21;--acento:#ff6a19;--acento-esc:#b8470c;--ok:#1e7b4d;--aviso:#b8860b;--nao:#b03a2e;
+  --display:"Fraunces",Georgia,serif;--body:"Source Sans 3","Segoe UI",system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,Menlo,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1020;--fg:#e8e9ef;--mute:#9aa0b8;--line:#2a2f45;--card:#151a2e;--azul:#e8e9ef;--acento:#ff8a4a;--acento-esc:#ffb48a;--ok:#5fcf8f;--aviso:#e2b84a;--nao:#f07a6a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0d1020;--fg:#e8e9ef;--mute:#9aa0b8;--line:#2a2f45;--card:#151a2e;--azul:#e8e9ef;--acento:#ff8a4a;--acento-esc:#ffb48a;--ok:#5fcf8f;--aviso:#e2b84a;--nao:#f07a6a;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.55;margin:0}
+.wrap{max-width:1040px;margin:0 auto;padding-block:0 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.capa{background:#050b21;color:#fff;padding-block:56px 48px}
+header.capa .wrap{padding-block:0}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--acento)}
+header h1{font-family:var(--display);font-weight:700;font-size:clamp(34px,5vw,56px);line-height:1.05;margin:10px 0 14px;text-wrap:balance}
+header p{max-width:62ch;color:#c8cbd8;margin:0;font-size:18px}
+nav.sumario{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);border-bottom:1px solid var(--line);z-index:5}
+nav.sumario .wrap{display:flex;gap:4px 18px;flex-wrap:wrap;padding-block:10px;font-size:14px}
+nav.sumario a{color:var(--mute);text-decoration:none;font-weight:600}
+nav.sumario a:hover,nav.sumario a:focus-visible{color:var(--acento-esc);outline:none}
+h2{font-family:var(--display);font-weight:600;font-size:30px;margin:56px 0 8px;text-wrap:balance}
+h2 small{display:block;font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--acento-esc);margin-bottom:6px}
+h3{font-size:19px;margin:28px 0 8px}
+p{max-width:70ch}
+.numeros{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:24px 0}
+.numeros div{border-top:2px solid var(--acento);padding-top:8px}
+.numeros b{display:block;font-family:var(--display);font-size:30px;font-variant-numeric:tabular-nums}
+.numeros span{font-size:13px;color:var(--mute)}
+pre.mermaid{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:16px;overflow-x:auto;margin:16px 0}
+table{border-collapse:collapse;width:100%;font-size:15px;margin:12px 0}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+.tbl{overflow-x:auto}
+code{font-family:var(--mono);font-size:.85em;background:var(--card);border:1px solid var(--line);border-radius:3px;padding:0 4px}
+.pill{display:inline-block;font-family:var(--mono);font-size:11px;padding:2px 8px;border-radius:999px;border:1px solid currentColor;white-space:nowrap}
+.ok{color:var(--ok)}.aviso{color:var(--aviso)}.nao{color:var(--nao)}
+.grade{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:16px 0}
+.cartao{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:16px;min-width:0}
+.cartao h4{margin:0 0 6px;font-size:16px}
+.cartao p{font-size:15px;color:var(--mute);margin:0}
+.cartao .mono{font-family:var(--mono);font-size:12px;color:var(--acento-esc)}
+ol.etapas{counter-reset:e;list-style:none;padding:0;margin:16px 0}
+ol.etapas li{display:grid;grid-template-columns:44px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+ol.etapas li::before{counter-increment:e;content:counter(e,decimal-leading-zero);font-family:var(--display);font-size:26px;color:var(--acento);line-height:1}
+ol.etapas b{display:block}
+ol.etapas span{color:var(--mute);font-size:15px}
+.legenda{font-size:13px;color:var(--mute)}
+.pergunta{border-left:3px solid var(--acento);padding:4px 14px;margin:10px 0;background:var(--card)}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+</style>
+
+<header class="capa"><div class="wrap">
+<div class="eyebrow">Place2u · documento técnico para o desenvolvedor · 03/11/2026</div>
+<h1>Place Sprints: como o ciclo de performance funciona de ponta a ponta</h1>
+<p>Da conexão do cliente até a medição do resultado: etapas, dependências entre módulos, ciclos de compras, estoque, financeiro e Full, integrações por API e o que falta para sair do Mac e ir para um servidor.</p>
+</div></header>
+
+<nav class="sumario"><div class="wrap">
+<a href="#visao">Visão</a><a href="#sistemas">8 sistemas</a><a href="#ciclo">Ciclo de 10 etapas</a><a href="#dependencias">Dependências</a><a href="#ciclos">Compras · Estoque · Financeiro · Full</a><a href="#cadastros">Cadastros mínimos</a><a href="#matriz">Curva ABC × margem</a><a href="#integracoes">Integrações</a><a href="#servidor">Servidor</a><a href="#estado">Funciona / não funciona</a><a href="#perguntas">Perguntas</a>
+</div></nav>
+
+<main class="wrap">
+
+<section id="visao">
+<h2><small>1</small>O que é o sistema, em uma frase</h2>
+<p>O Place Sprints lê os dados do Mercado Livre e do Notion de cada cliente, diagnostica a conta, gera um plano curto de ações com impacto em reais, distribui as tarefas para a equipe, mede antes × depois com grupo de controle e usa o resultado para melhorar a próxima prioridade. Um especialista com o sistema opera 50 clientes.</p>
+<div class="numeros">
+<div><b>177</b><span>clientes na central</span></div>
+<div><b>49</b><span>contas do Mercado Livre conectadas</span></div>
+<div><b>12.059</b><span>anúncios acompanhados</span></div>
+<div><b>18.233</b><span>tarefas do Notion sincronizadas</span></div>
+<div><b>4.018</b><span>ações geradas pelo plano</span></div>
+<div><b>193 / 129</b><span>módulos / arquivos de teste</span></div>
+</div>
+<p class="legenda">Números lidos do banco em 03/11/2026. Stack: Node 22, Express, SQLite (better-sqlite3), HTML/CSS/JS puro, porta 3012 local, túnel Cloudflare para os endereços públicos. Repositório: github.com/davidvallejr/placesprints.</p>
+</section>
+
+<section id="sistemas">
+<h2><small>2</small>Os 8 sistemas dentro do sistema</h2>
+<p>Cada módulo pertence a um destes oito papéis. A regra que vale para tudo: nenhum módulo novo decide sozinho. Dados entram pelo Trinity, viram regra no Arquiteto, previsão no Oráculo, execução no Chaveiro, medição no Merovíngio e comunicação no Morpheus.</p>
+<div class="grade">
+<div class="cartao"><h4>Trinity <span class="mono">coleta</span></h4><p>Lê o Mercado Livre e o Notion (só leitura) e entrega o dado limpo aos outros sistemas.</p></div>
+<div class="cartao"><h4>Arquiteto <span class="mono">algoritmo</span></h4><p>40 regras em <code>config/algoritmo.json</code>: diagnóstico → regra com evidência → prioridade = impacto em R$ × gravidade × evidência causal × facilidade. Foco 80/20.</p></div>
+<div class="cartao"><h4>Oráculo <span class="mono">previsão</span></h4><p>Probabilidade de sucesso calibrada, faixas de previsão, cobertura de estoque, aprendizado com o que já foi medido.</p></div>
+<div class="cartao"><h4>Merovíngio <span class="mono">medição</span></h4><p>Antes × depois com grupo de controle, atribuição por anúncio. Única assinatura que o cliente vê.</p></div>
+<div class="cartao"><h4>Chaveiro <span class="mono">execução</span></h4><p>Caminho de cada ação (automático, assistido, pelo cliente) e escrita no Mercado Livre com aprovação e conferência. Escrita ainda desligada.</p></div>
+<div class="cartao"><h4>Morpheus <span class="mono">comunicação</span></h4><p>Plano de terça, alertas, relatórios ao Notion, Discord do time, respostas do cliente, dossiê.</p></div>
+<div class="cartao"><h4>Agente Smith <span class="mono">financeiro</span></h4><p>Custo, preço, margem, caixa, Ads sem retorno. Raio-X financeiro e pauta de reunião.</p></div>
+<div class="cartao"><h4>Neo <span class="mono">autonomia</span></h4><p>Modo autônomo dentro de limites aprovados. Ainda não ligado.</p></div>
+</div>
+</section>
+
+<section id="ciclo">
+<h2><small>3</small>O ciclo de performance em 10 etapas</h2>
+<p>É o mesmo stepper que aparece no cabeçalho de cada cliente na tela. Cada etapa só fecha com um número; a próxima depende da anterior.</p>
+<pre class="mermaid">
+flowchart LR
+  A[1 Cadastrado<br/>cliente na central do Notion] --> B[2 Conectado<br/>OAuth do Mercado Livre]
+  B --> C[3 Coletado<br/>anúncios · pedidos · visitas · Ads · promoções · saúde]
+  C --> D[4 Dados da empresa<br/>custos · prazo do fornecedor · estoque físico]
+  D --> E[5 Plano<br/>diagnóstico + 40 regras → ações com R$]
+  E --> F[6 Aprovado<br/>líder ou consultor decide]
+  F --> G[7 Distribuído<br/>card no Notion com o roteiro]
+  G --> H[8 Executado<br/>analista · Chaveiro · cliente]
+  H --> I[9 Medido<br/>antes × depois com controle]
+  I --> J[10 Comunicado<br/>WhatsApp · Notion · Discord]
+  I -. fator de aprendizado .-> E
+  classDef feito fill:#ffe9db,stroke:#ff6a19,color:#141829
+  class A,B,C,D,E,F,G,H,I,J feito
+</pre>
+<ol class="etapas">
+<li><b>Cadastrado</b><span>O cliente existe na base Clientes do Notion com status Ativo, tier (que define o produto Performance ou Prime), grupo de WhatsApp e canal do Discord.</span></li>
+<li><b>Conectado</b><span>O cliente autoriza o app do Mercado Livre (OAuth). O token fica cifrado no banco com <code>MELI_TOKEN_KEY</code> e é renovado sozinho.</span></li>
+<li><b>Coletado</b><span>Todo dia entre 4h e 6h: anúncios em lote, pedidos, visitas, Ads, promoções, reputação, perguntas, reclamações, atrasos e estoque Full. Dia sem coleta nunca vira zero.</span></li>
+<li><b>Dados da empresa</b><span>O que só o cliente sabe: custo por SKU, prazo do fornecedor, estoque fora do canal, mensalidade. Sem isso o sistema diz "—", nunca inventa.</span></li>
+<li><b>Plano</b><span>Diagnóstico de 28 dias × 28 anteriores, curva ABC, benchmark da própria conta por categoria, e as regras geram poucas ações com impacto em reais, premissa e probabilidade.</span></li>
+<li><b>Aprovado</b><span>Toda ação nasce "proposta". Descartar exige motivo da lista e vira um alinhamento com o cliente (revisão em 30 dias).</span></li>
+<li><b>Distribuído</b><span>A ação vira card no quadro do cliente no Notion, com o roteiro do Manual do Analista. Dry-run por padrão; só grava com confirmação.</span></li>
+<li><b>Executado</b><span>Três caminhos: analista (card), Chaveiro (escrita no ML com aprovação, hoje desligada) ou cliente (pendência cobrada por WhatsApp).</span></li>
+<li><b>Medido</b><span>O Merovíngio compara o anúncio da tarefa com anúncios parecidos sem mudança (controle). Veredito: melhorou, piorou, sem efeito, confundido por preço ou promoção.</span></li>
+<li><b>Comunicado</b><span>Plano de terça no WhatsApp do cliente, relatório de sexta no Notion, resumo ao consultor no Discord, alerta de pendência crítica.</span></li>
+</ol>
+</section>
+
+<section id="dependencias">
+<h2><small>4</small>Quem depende de quem</h2>
+<p>O mapa abaixo mostra as cadeias de dependência entre módulos. Uma chave desligada nunca conta como atraso; uma etapa que depende de gente aparece na fila do dia como "falar com gente".</p>
+<pre class="mermaid">
+flowchart TB
+  subgraph Fontes
+    ML[(Mercado Livre API)]
+    NO[(Notion API)]
+    CL[Cliente: custos · prazos · estoque físico]
+  end
+  subgraph Trinity
+    COL[Coleta diária]
+    SYN[Sync de tarefas 2/2h]
+  end
+  subgraph Arquiteto
+    DIAG[Diagnóstico da conta]
+    REG[40 regras]
+    PLANO[Plano por cliente]
+  end
+  subgraph Oráculo
+    PREV[Previsão + calibração]
+    COMP[Compras: ponto de pedido · quando · quanto]
+  end
+  subgraph Smith
+    CUST[Custos por SKU]
+    LUCRO[Lucro por pedido · DRE]
+  end
+  subgraph Chaveiro
+    EXEC[Ordens de execução]
+  end
+  subgraph Merovíngio
+    MED[Antes × depois com controle]
+    FATOR[Fator de aprendizado]
+  end
+  subgraph Morpheus
+    WA[WhatsApp via n8n]
+    DISC[Discord via n8n]
+    NOT[Relatório no Notion]
+  end
+  ML --> COL --> DIAG
+  NO --> SYN --> MED
+  CL --> CUST --> LUCRO --> REG
+  CL --> COMP
+  DIAG --> REG --> PLANO --> EXEC
+  DIAG --> PREV --> PLANO
+  DIAG --> COMP --> WA
+  PLANO --> NO
+  PLANO --> WA
+  EXEC --> ML
+  MED --> FATOR --> REG
+  MED --> NOT
+  MED --> DISC
+</pre>
+<div class="tbl"><table>
+<tr><th>Módulo</th><th>Depende de</th><th>Alimenta</th><th>Estado</th></tr>
+<tr><td>Coleta do ML</td><td>token válido do cliente</td><td>diagnóstico, compras, saúde, medição</td><td><span class="pill ok">ligado</span></td></tr>
+<tr><td>Diagnóstico</td><td>≥ 14 dias de coleta</td><td>regras, previsão, compras, relatórios</td><td><span class="pill ok">ligado</span></td></tr>
+<tr><td>Custos por SKU</td><td>planilha, ERP ou digitação</td><td>margem, lucro, regras financeiras, matriz</td><td><span class="pill aviso">quase vazio</span></td></tr>
+<tr><td>Regras financeiras</td><td>custos ≥ 80% da receita</td><td>plano</td><td><span class="pill nao">desligado</span></td></tr>
+<tr><td>Diagnóstico por produto</td><td>mapeamento produto ↔ anúncio limpo</td><td>ruptura por estoque físico, kits, sync de estoque</td><td><span class="pill nao">desligado</span></td></tr>
+<tr><td>Escrita no ML (Chaveiro)</td><td>chave global + liberação por cliente + estreia</td><td>execução automática</td><td><span class="pill nao">desligado</span></td></tr>
+<tr><td>Medição</td><td>tarefa concluída há 17+ dias com anúncio vinculado</td><td>fator de aprendizado, relatórios</td><td><span class="pill aviso">0 medidas gravadas</span></td></tr>
+</table></div>
+</section>
+
+<section id="ciclos">
+<h2><small>5</small>Os ciclos: compras, estoque, financeiro e Full</h2>
+<h3>Ciclo de compras e estoque</h3>
+<p>Alimentado só pelo que o Mercado Livre entrega (estoque do anúncio, estoque do Full, vendas por dia) mais o que o cliente informa (prazo do fornecedor). O sistema não vê estoque em depósito fora do canal nem pedido já feito ao fornecedor; por isso a mensagem ao consultor pede para confirmar os dois.</p>
+<pre class="mermaid">
+flowchart LR
+  V[Vendas por dia<br/>média de 28 dias] --> COB[Cobertura em dias<br/>estoque ÷ vendas/dia]
+  LT[Prazo do fornecedor<br/>informado ou premissa de 21 d] --> PR[Ponto de reposição<br/>prazo + 7 d de segurança]
+  COB --> Q{cobertura ≤ ponto?}
+  PR --> Q
+  Q -- sim --> PED[Pedir agora · quanto: cobre prazo + ciclo + segurança]
+  Q -- não --> DATA[Pedir até dd/mm]
+  PED --> RISCO[Venda em risco em R$<br/>vendas/dia × dias sem estoque]
+  RISCO --> MSG[Micro-relatório ao cliente · plano de ciclo ao consultor]
+  RISCO --> PLANO[Ação «repor estoque» no plano]
+</pre>
+<h3>Ciclo financeiro</h3>
+<p>Custo por SKU é a chave que destrava tudo. Entra por planilha, Bling/Tiny (só leitura) ou digitação; cada item guarda a fonte e a data. A partir dele o sistema calcula o lucro por pedido, por anúncio e por produto, e a margem passa a entrar nas regras.</p>
+<pre class="mermaid">
+flowchart LR
+  C[Custo por SKU<br/>planilha · ERP · manual] --> L[Lucro por pedido<br/>receita − custo − comissão − frete − Ads]
+  L --> DRE[DRE por anúncio e por produto]
+  DRE --> M[Margem nas regras<br/>margem negativa · desconto máximo · ROAS alvo]
+  DRE --> MAT[Curva ABC × margem<br/>estrela · vaca leiteira · abacaxi · interrogação]
+  M --> PLANO[Plano]
+  MAT --> PLANO
+  PLANO --> MED[Medição] --> C2[Custo confere? fonte e data]
+</pre>
+<h3>Ciclo de envio ao Full</h3>
+<p>Para anúncios com logística Full, o sistema lê o estoque do Full, calcula a sugestão de envio em cenários (conservador e base) e marca estoque parado (60+ dias sem venda). O envio físico é do cliente; o sistema gera a pendência e a mede.</p>
+</section>
+
+<section id="cadastros">
+<h2><small>6</small>Cadastros mínimos por ciclo</h2>
+<p>O que precisa existir para cada ciclo rodar. Sem o cadastro, o sistema mostra "—" com o motivo e abre uma pendência; nunca preenche com zero.</p>
+<div class="tbl"><table>
+<tr><th>Ciclo</th><th>Cadastro mínimo</th><th>Quem faz</th><th>Onde</th><th>Sem ele</th></tr>
+<tr><td>Coleta</td><td>Cliente Ativo na central + OAuth do ML</td><td>CS + cliente</td><td>Notion · Estrutura › Conexões</td><td>nada roda</td></tr>
+<tr><td>Plano</td><td>14 dias de coleta; tier do cliente (produto)</td><td>automático · CS</td><td>—</td><td>plano "sem base"</td></tr>
+<tr><td>Compras</td><td>prazo do fornecedor por conta, SKU ou anúncio</td><td>consultor ou cliente</td><td>Empresa do cliente › Compras</td><td>premissa de 21 dias, rotulada</td></tr>
+<tr><td>Estoque por produto</td><td>SKU em cada anúncio; estoque físico declarado quando há vários anúncios do mesmo produto</td><td>cliente</td><td>Produtos e estoque</td><td>estoque contado por anúncio, risco de duplicar</td></tr>
+<tr><td>Financeiro</td><td>custo por SKU com fonte e data; alíquota do contador</td><td>cliente · contador</td><td>Empresa do cliente › Custos</td><td>sem margem, sem lucro, sem matriz</td></tr>
+<tr><td>Full</td><td>anúncio marcado como fulfillment no ML</td><td>automático</td><td>—</td><td>sem sugestão de envio</td></tr>
+<tr><td>Nota fiscal</td><td>regra fiscal por SKU do contador, certificado A1, conta no provedor</td><td>contador</td><td>Empresa do cliente › Nota fiscal</td><td>módulo desligado</td></tr>
+<tr><td>Comunicação</td><td>grupo de WhatsApp do ML, Webhook do Discord, ID do consultor</td><td>CS</td><td>base Clientes do Notion</td><td>cliente ou consultor fica sem receber</td></tr>
+<tr><td>ROI</td><td>mensalidade por cliente</td><td>CS</td><td>planilha do CS → importação</td><td>sem ROI por produto</td></tr>
+</table></div>
+</section>
+
+<section id="matriz">
+<h2><small>7</small>Curva ABC × margem: estrela, vaca leiteira, abacaxi</h2>
+<p>Hoje a curva ABC existe e é calculada por receita de 28 dias. O que falta para o produto "A" deixar de ser tratado como estrela quando na verdade é abacaxi é o custo: com o custo por SKU, cada item ganha a segunda dimensão (margem depois de comissão, frete e Ads) e a classificação muda a prioridade do plano.</p>
+<div class="tbl"><table>
+<tr><th></th><th>Margem alta</th><th>Margem baixa ou negativa</th></tr>
+<tr><td><b>Curva A ou B</b> (vende muito)</td><td><b>Estrela</b> · proteger estoque, escalar Ads, duplicar com estratégia</td><td><b>Abacaxi disfarçado</b> · subir preço, cortar Ads, rever custo ou frete antes de repor</td></tr>
+<tr><td><b>Curva C</b> (vende pouco)</td><td><b>Interrogação</b> · testar imagem, título e oferta; vaca leiteira se giro for estável</td><td><b>Abacaxi</b> · queimar estoque com promoção de giro ou descontinuar</td></tr>
+</table></div>
+<p class="legenda">Estado: curva ABC <span class="pill ok">ligada</span> · margem por item <span class="pill aviso">só com custo informado</span> · classificação nos quatro quadrantes como regra do plano <span class="pill nao">proposta, não construída</span>. A regra entraria em <code>config/algoritmo.json</code> com prior declarado, como as outras 40.</p>
+</section>
+
+<section id="integracoes">
+<h2><small>8</small>Integrações por API</h2>
+<pre class="mermaid">
+flowchart LR
+  PS[Place Sprints<br/>Node 22 · SQLite · porta 3012]
+  ML[(Mercado Livre<br/>OAuth2 · REST)]
+  NO[(Notion<br/>REST)]
+  N8N[n8n<br/>Hostinger]
+  EVO[Evolution API<br/>WhatsApp]
+  DC[Discord<br/>webhooks]
+  CF[Cloudflare Tunnel<br/>meli · diagnosticomeli · sprint90]
+  DRV[Google Drive<br/>backup cifrado + frio]
+  GH[GitHub<br/>commit diário]
+  ML <-- "ler: items/bulk, orders, visits, ads, promotions, questions, claims, shipments, fulfillment · webhook de notificações · escrever: desligado" --> PS
+  NO <-- "ler: base Clientes, quadros de tarefas, Informações · escrever: cards, relatório, alerta (dry-run por padrão)" --> PS
+  PS -- "POST assinado HMAC + x-place-key" --> N8N
+  N8N --> EVO
+  N8N --> DC
+  N8N -- "recibo de entrega" --> PS
+  CF --> PS
+  PS --> DRV
+  PS --> GH
+</pre>
+<div class="tbl"><table>
+<tr><th>Serviço</th><th>Para quê</th><th>Autenticação</th><th>Estado</th></tr>
+<tr><td>Mercado Livre</td><td>coleta diária, renovação de token, webhook de notificações, OAuth público do diagnóstico comercial; escrita (preço, pausa, ficha, estoque) construída</td><td>OAuth2 por cliente; tokens cifrados com <code>MELI_TOKEN_KEY</code></td><td><span class="pill ok">leitura ligada</span> <span class="pill nao">escrita desligada</span></td></tr>
+<tr><td>Notion</td><td>central de clientes, tarefas (sync a cada 2h), cards do plano, relatório curto, alerta, Informações do cliente</td><td>token de integração interna</td><td><span class="pill ok">ligado</span></td></tr>
+<tr><td>n8n + Evolution API</td><td>entrega de WhatsApp ao grupo do cliente, Discord ao time, e-mail (sem SMTP ainda); devolve recibo</td><td>HMAC nos dois sentidos + cabeçalho <code>x-place-key</code></td><td><span class="pill ok">ligado</span> · envios automáticos ao cliente <span class="pill nao">desligados em 30/10</span></td></tr>
+<tr><td>Discord</td><td>canal de cada cliente (só time), menção aos 3 cargos + consultor</td><td>webhook por cliente na base Clientes</td><td><span class="pill ok">ligado</span></td></tr>
+<tr><td>Cloudflare Tunnel</td><td>endereços públicos: callback do ML, diagnóstico comercial, Sprint 90</td><td>túnel neste Mac</td><td><span class="pill ok">ligado</span></td></tr>
+<tr><td>Google Drive (Mac)</td><td>backup cifrado diário e arquivamento frio de evidências</td><td>Drive para computador</td><td><span class="pill aviso">preso ao Mac</span></td></tr>
+<tr><td>Chrome headless</td><td>PDF do relatório, diagnóstico e dossiê</td><td>caminho fixo do macOS</td><td><span class="pill aviso">preso ao Mac</span></td></tr>
+<tr><td>Mercado Pago</td><td>assinatura do Place Sprint 90 (self-service)</td><td><code>MP_ACCESS_TOKEN</code> ausente</td><td><span class="pill nao">sem credencial</span></td></tr>
+<tr><td>Bling / Tiny / planilha</td><td>custos por SKU (só leitura)</td><td>OAuth não feito; planilha funciona</td><td><span class="pill aviso">só planilha</span></td></tr>
+<tr><td>Focus NFe / SEFAZ</td><td>emissão de nota fiscal</td><td>sem conta, sem certificado</td><td><span class="pill nao">desligado</span></td></tr>
+<tr><td>Anthropic API</td><td>redação do diagnóstico (a IA só escreve; as regras decidem)</td><td><code>ANTHROPIC_API_KEY</code> ausente</td><td><span class="pill nao">texto por modelo fixo</span></td></tr>
+<tr><td>fal.ai</td><td>imagens com IA para anúncios</td><td><code>FAL_KEY</code> ausente</td><td><span class="pill nao">sem credencial</span></td></tr>
+<tr><td>Shopee · Amazon · TikTok</td><td>sem API; só tarefas do Notion</td><td>—</td><td><span class="pill nao">não suportado</span></td></tr>
+</table></div>
+</section>
+
+<section id="servidor">
+<h2><small>9</small>Do Mac para um servidor</h2>
+<p>Tudo roda hoje neste Mac com launchd e um túnel. O checklist completo está em <code>docs/deploy-servidor.md</code>. Em resumo, o que o servidor precisa e o que ainda exige código antes de migrar.</p>
+<div class="grade">
+<div class="cartao"><h4>O servidor precisa ter</h4><p>Linux com Node 22, build tools para compilar o SQLite, Chromium headless, <code>TZ=America/Sao_Paulo</code>, ≥ 20 GB de disco, porta 3012 só local atrás de proxy ou túnel.</p></div>
+<div class="cartao"><h4>Preso ao Mac (exige código)</h4><p>Caminho fixo do Chrome; arquivamento frio pelo Drive com binário Swift; backup no Drive; Word do dossiê via <code>textutil</code>. Trocar por variável de ambiente, rclone/S3 e fallback já previsto.</p></div>
+<div class="cartao"><h4>Agendamentos</h4><p>launchd vira systemd/cron: servidor (sempre), vigia (5 min), backup (02:30), git (23:30). Coleta, sync, medição e envios já rodam dentro do Node.</p></div>
+<div class="cartao"><h4>Dados que migram</h4><p><code>data/db.sqlite</code> (≈ 400 MB), evidências, relatórios, dossiês, chave do backup. <code>MELI_TOKEN_KEY</code> e <code>ERP_TOKEN_KEY</code> têm de ser idênticas, senão todos os clientes reconectam.</p></div>
+<div class="cartao"><h4>Endereços</h4><p>meli.place2u.com.br, diagnosticomeli.place2u.com.br e sprint90.place2u.com.br apontam para o túnel do Mac. Mantendo os domínios, o app do ML e o n8n não mudam.</p></div>
+<div class="cartao"><h4>Ordem de ligação</h4><p>Corrigir os pontos presos → instalar → copiar .env e chave → parar o Mac, copiar data/ → rodar a suíte de testes → virar o DNS → conferir /estrutura e /api/saude → desligar o Mac.</p></div>
+</div>
+</section>
+
+<section id="estado">
+<h2><small>10</small>O que funciona, o que está pronto mas desligado, o que não funciona</h2>
+<div class="grade">
+<div class="cartao"><h4 class="ok">Funciona em uso real</h4><p>Coleta do ML (49 contas) · leitura do Notion · plano por cliente · plano de terça no WhatsApp (110 lotes) · relatório curto ao Notion (37) · resumo ao consultor no Discord · plano de ciclo de compras ao consultor (25 clientes em 30/10) · micro-relatório de compras · alertas com R$ · fila do dia · estrutura com estado real · backup cifrado · GitHub diário · funil comercial público.</p></div>
+<div class="cartao"><h4 class="aviso">Construído, desligado por decisão</h4><p>Escrita no ML pelo Chaveiro · sincronismo de estoque · diagnóstico por produto · lucro nas regras · nota fiscal · publicação real do Sprint 90 · execução de promoções · envios automáticos ao cliente (desligados em 30/10) · dossiê mensal · modo autônomo.</p></div>
+<div class="cartao"><h4 class="nao">Não funciona ainda</h4><p>Tudo que depende de credencial ausente (IA, Mercado Pago, ERP por OAuth, provedor fiscal, fal.ai) · Shopee, Amazon e TikTok (sem API) · medição com 0 medidas gravadas (poucas ações distribuídas há mais de 17 dias) · ROI por produto (mensalidade não está no sistema) · agenda e portal do Prime · reautorização dos clientes com os escopos novos do ML.</p></div>
+</div>
+</section>
+
+<section id="perguntas">
+<h2><small>11</small>Perguntas para o desenvolvedor</h2>
+<div class="pergunta"><b>1.</b> Com o que está construído, o que você vê como viável de ir para um servidor Linux nas próximas semanas, e o que precisa ser reescrito?</div>
+<div class="pergunta"><b>2.</b> SQLite com um processo único dá conta de 50 a 150 clientes? Em que ponto migrar para Postgres?</div>
+<div class="pergunta"><b>3.</b> O que falta para ligar a escrita no Mercado Livre com segurança (lista fechada de operações, aprovação, conferência por releitura, reversão)?</div>
+<div class="pergunta"><b>4.</b> Custos por SKU via Bling/Tiny por OAuth: esforço real para fechar o ciclo financeiro e a matriz ABC × margem?</div>
+<div class="pergunta"><b>5.</b> O que é inviável ou arriscado do jeito que está e que eu, montando pela IA, não estou enxergando?</div>
+<p class="legenda">Documentação de apoio no repositório: <code>CLAUDE.md</code> (regras e mapa de módulos), <code>docs/estado-do-sistema.md</code>, <code>docs/deploy-servidor.md</code>, <code>docs/metodologia-algoritmo.md</code>, <code>docs/manual-integracao-ml.md</code>, <code>docs/ux/arquitetura-5-menus.md</code>.</p>
+</section>
+
+</main>
