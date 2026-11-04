@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { montarPlacePlan, analistaDaConta } from '../src/lib/placeplan.js'
 import { listaOficial } from '../src/lib/analistas.js'
 
-const CLI = 'Damar Comercial'                       // cliente real com plano gerado
+const CLI = 'Uniaodog Artigos Pet'                 // cliente real com plano gerado (ambiente de teste, 04/11)
 const ac = analistaDaConta(CLI)
 assert.ok(ac.geral && ac.geral.nome_notion, 'analista geral da conta identificado')
 const oficiais = new Set(listaOficial().map(o => o.nome))

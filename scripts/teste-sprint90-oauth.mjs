@@ -197,7 +197,7 @@ fs.readFileSync = function (p, ...r) { return String(p).endsWith('config/sprint9
 const l0 = http.Server.prototype.listen; let srv; http.Server.prototype.listen = function (...a) { srv = this; return l0.apply(this, a) }
 console.log = () => {}; await import('./src/server.js'); await new Promise(ok => srv.listening ? ok() : srv.once('listening', ok))
 const porta = srv.address().port, HS = process.env.SPRINT90_PUBLIC_HOST, out = {}
-const get = (path, host) => new Promise((ok, f) => http.get({ host: '127.0.0.1', port: porta, path, headers: { host } }, r => { let t = ''; r.on('data', c => t += c); r.on('end', () => ok({ s: r.statusCode, interno: /Painel executivo/.test(t), t: t.slice(0, 300) })) }).on('error', f))
+const get = (path, host) => new Promise((ok, f) => http.get({ host: '127.0.0.1', port: porta, path, headers: { host } }, r => { let t = ''; r.on('data', c => t += c); r.on('end', () => ok({ s: r.statusCode, interno: /Painel executivo|Sucesso do cliente/.test(t), t: t.slice(0, 300) })) }).on('error', f))
 for (const [k, p, h] of [['raiz', '/', HS], ['painel', '/c/painel', HS], ['entrar', '/c/entrar', HS], ['app', '/app.js', HS], ['api', '/api/tarefas', HS], ['contas', '/api/sprint90/contas', 'localhost:' + porta], ['local', '/', 'localhost:' + porta]]) out[k] = await get(p, h)
 process.stdout.write('RES=' + JSON.stringify(out) + '\\n', () => process.exit(0))`
   const res = JSON.parse(execFileSync(process.execPath, ['--import', 'data:text/javascript,' + encodeURIComponent(pre), '--input-type=module', '-e', filho],
